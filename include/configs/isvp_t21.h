@@ -472,4 +472,6 @@
 #define CONFIG_MBR_P3_TYPE 	fat
 #endif
 
+#include "isvp_common.h"
+
 #endif /*__CONFIG_ISVP_H__*/
