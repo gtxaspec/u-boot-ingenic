@@ -70,6 +70,11 @@
 #undef CONFIG_SYS_PROMPT
 #define CONFIG_SYS_PROMPT	"OpenIPC # "
 
+#define CONFIG_AUTOBOOT_KEYED
+#define CONFIG_AUTOBOOT_PROMPT		\
+    "Press Ctrl-c to abort autoboot... %d \n", bootdelay
+#define CONFIG_AUTOBOOT_STOP_STR	"\x3"
+
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_CMDLINE_EDITING
 #define CONFIG_SYS_MAXARGS      64
