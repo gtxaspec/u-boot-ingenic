@@ -76,6 +76,16 @@ int misc_init_r(void)
 #endif
 	/* used for usb_dete */
 	gpio_enable_pull_up(GPIO_PB(24));//UART1 rx
+
+	// HiChip boards
+	gpio_request(62,"hichip_mmc_enable");
+	gpio_direction_output(62,0);
+	gpio_get_value(62);
+	// Wyze V3
+	gpio_request(48,"wyze_mmc_enable");
+	gpio_direction_output(48,0);
+	gpio_get_value(48);
+
 	return 0;
 }
 
