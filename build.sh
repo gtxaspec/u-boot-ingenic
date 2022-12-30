@@ -23,6 +23,7 @@ cfg[t31l]="isvp_t31_sfcnor_lite"
 cfg[t31x]="isvp_t31_sfcnor_ddr128M"
 cfg[t31a]="isvp_t31a_sfcnor_ddr128M"
 cfg[t31al]="isvp_t31al_sfcnor_ddr128M"
+cfg[t21n]="isvp_t21_sfcnor"
 
 OUTPUTDIR="${HOME}/uboot"
 mkdir -p ${OUTPUTDIR} 2>&1 > /dev/null

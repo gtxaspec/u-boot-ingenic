@@ -24,6 +24,7 @@
 
 #include <asm/arch/base.h>
 
+#define	MSC_CTRL		0x000
 #define	MSC_STRPCL		0x000
 #define	MSC_STAT		0x004
 #define	MSC_CLKRT		0x008
@@ -34,6 +35,7 @@
 #define	MSC_NOB			0x01C
 #define	MSC_SNOB		0x020
 #define	MSC_IMASK		0x024
+#define	MSC_IFLG		0x028
 #define	MSC_IREG		0x028
 #define	MSC_CMD			0x02C
 #define	MSC_ARG			0x030
@@ -52,11 +54,23 @@
 
 /* MSC Clock and Control Register (MSC_STRPCL) */
 
+#define MSC_CTRL_EXIT_MULTIPLE	(1 << 7)
+#define MSC_CTRL_EXIT_TRANSFER	(1 << 6)
+#define MSC_CTRL_START_READWAIT	(1 << 5)
+#define MSC_CTRL_STOP_READWAIT	(1 << 4)
+#define MSC_CTRL_RESET		    (1 << 3)
+#define MSC_CTRL_START_OP		    (1 << 2)
+#define MSC_CTRL_CLOCK_CONTROL_BIT	0
+#define MSC_CTRL_CLOCK_CONTROL_MASK	(0x3 << MSC_CTRL_CLOCK_CONTROL_BIT)
+#define MSC_CTRL_CLOCK_CONTROL_STOP	(0x1 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Stop MMC/SD clock */
+#define MSC_CTRL_CLOCK_CONTROL_START  (0x2 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Start MMC/SD clock */
+
 #define MSC_STRPCL_EXIT_MULTIPLE	(1 << 7)
 #define MSC_STRPCL_EXIT_TRANSFER	(1 << 6)
 #define MSC_STRPCL_START_READWAIT	(1 << 5)
 #define MSC_STRPCL_STOP_READWAIT	(1 << 4)
 #define MSC_STRPCL_RESET		(1 << 3)
+#define MSC_CTRL_START_OP		    (1 << 2)
 #define MSC_STRPCL_START_OP		(1 << 2)
 #define MSC_STRPCL_CLOCK_CONTROL_BIT	0
 #define MSC_STRPCL_CLOCK_CONTROL_MASK	(0x3 << MSC_STRPCL_CLOCK_CONTROL_BIT)

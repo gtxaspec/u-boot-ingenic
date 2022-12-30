@@ -61,6 +61,7 @@ struct jz_gpio_func_def {
 	int port;
 	int func;
 	unsigned long pins;
+    int driver_strength;
 };
 
 /*************************************************************************
@@ -98,6 +99,18 @@ struct jz_gpio_func_def {
 #define PXPEHS		0x124   /* Port Pull Disable Set Register */
 #define PXPEHC		0x128   /* Port Pull Disable Clear Register */
 
+#define PXPUEN		0x110   /* Port Pull-up status Register */
+#define PXPUENS		0x114   /* Port Pull-up status Set Register */
+#define PXPUENC		0x118   /* Port Pull-up status Clear Register */
+#define PXPDEN		0x120   /* Port Pull-down status Register */
+#define PXPDENS		0x124   /* Port Pull-down status Set Register */
+#define PXPDENC		0x128   /* Port Pull-down status Clear Register */
+#define PXPDSL		0x130   /* Port Driver-strength low  Register */
+#define PXPDSLS		0x134   /* Port Driver-strength low Set Register */
+#define PXPDSLC		0x138   /* Port Driver-strength low Clear Register */
+#define PXPDSH		0x140   /* Port Driver-strength high  Register */
+#define PXPDSHS		0x144   /* Port Driver-strength high Set Register */
+#define PXPDSHC		0x148   /* Port Driver-strength high Clear Register */
 
 #define GPIO_PXPIN(n)	(GPIO_BASE + (PXPIN + (n)*0x1000)) /* PIN Level Register */
 #define GPIO_PXINT(n)	(GPIO_BASE + (PXINT + (n)*0x1000)) /* Port Interrupt Register */

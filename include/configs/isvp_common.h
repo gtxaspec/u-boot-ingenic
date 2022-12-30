@@ -1,3 +1,9 @@
+#ifdef __CONFIG_ISVP_T21_H__
+    #define CONFIG_SOC "t21"
+#else
+    #define CONFIG_SOC "t31"
+#endif
+
 #define CONFIG_BOOTCOMMAND "setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sf read ${baseaddr} 0x50000 0x300000; bootm ${baseaddr}; reset"
 
 #if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
@@ -47,7 +53,7 @@
     "mtdpartsnand=setenv mtdparts jz_sfcnand:256k(boot),768k(wtf),3072k(kernel),10240k(rootfs),-(rootfs_data)\0" \
     "mtdpartsnor8m=setenv mtdparts jz_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)\0" \
     "mtdpartsnor16m=setenv mtdparts jz_sfc:256k(boot),64k(env),3072k(kernel),10240k(rootfs),-(rootfs_data)\0" \
-    "nfsroot=/srv/nfs/t31\0" \
+    "nfsroot=/srv/nfs/"CONFIG_SOC"\0" \
     "bootargsnfs=mem=\${osmem} console=ttyS1,115200n8 panic=20 root=/dev/nfs rootfstype=nfs ip=${ipaddr}:::255.255.255.0::eth0 nfsroot=${serverip}:${nfsroot},v3,nolock rw\0" \
     "bootargsubi=mem=\${osmem} console=ttyS1,115200n8 panic=20 init=/init root=ubi0:rootfs rootfstype=ubifs ubi.mtd=3,2048 mtdparts=\${mtdparts}\0" \
     "bootnfs=setenv setargs setenv bootargs ${bootargsnfs}; run setargs; tftpboot ${baseaddr} uImage.${soc}; bootm ${baseaddr}\0" \
@@ -58,7 +64,7 @@
     "setnor8m=run mtdpartsnor8m; setenv bootcmd ${bootcmdnor}; saveenv; reset\0" \
     "setnor16m=run mtdpartsnor16m; setenv bootcmd ${bootcmdnor}; saveenv; reset\0" \
     "restore=n\0" \
-    "soc=t31\0" \
+    "soc="CONFIG_SOC"\0" \
     CONFIG_EXTRA_SETTINGS
 
 #define CONFIG_SFC_MIN_ALIGN 0x10000
