@@ -16,7 +16,7 @@
 #endif
 
 enum gpio_cmd {
-	GPIO_INPUT,
+	GPIO_INPUT_,
 	GPIO_SET,
 	GPIO_CLEAR,
 	GPIO_TOGGLE,
@@ -58,8 +58,8 @@ static int do_gpio(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	/* grab the pin before we tweak it */
 	if (gpio_request(gpio, "cmd_gpio")) {
-		printf("gpio: requesting pin %u failed\n", gpio);
-		return -1;
+		printf("gpio: requesting pin %u failed... skipping\n", gpio);
+		// return -1;
 	}
 
 	/* finally, let's do it: set direction and exec command */

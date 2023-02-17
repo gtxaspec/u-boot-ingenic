@@ -624,7 +624,7 @@ int jz_net_initialize(bd_t *bis)
 #endif //CONFIG_NET_GMAC_PHY_MODE
 
 
-	return 1;
+	return phy_id;
 }
 
 static int do_ethphy(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
