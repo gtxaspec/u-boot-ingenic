@@ -378,6 +378,10 @@ extern void board_usb_init(void);
 	puts("Net:   ");
 	eth_initialize(gd->bd);
 #endif
+#ifdef CONFIG_AUTO_UPDATE
+	printf("Autoupdate... \n");
+	run_command("sdupdate",0);
+#endif
 
 	/* main_loop() can return to retry autoboot, if so just run it again. */
 	for (;;)

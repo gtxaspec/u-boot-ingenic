@@ -32,10 +32,10 @@
 #endif	/* AU_DEBUG */
 
 /* possible names of files on the medium. */
-#define AU_UBOOT	"u-boot"
-#define AU_KERNEL	"kernel"
-#define AU_ROOTFS	"rootfs"
-#define AU_FW		"demo.bin"
+#define AU_UBOOT	"autoupdate-uboot.img"
+#define AU_KERNEL	"autoupdate-kernel.img"
+#define AU_ROOTFS	"autoupdate-rootfs.img"
+#define AU_FW		"autoupdate-full.img"
 
 struct flash_layout {
 	long start;
@@ -52,10 +52,10 @@ struct medium_interface {
 /* layout of the FLASH. ST = start address, ND = end address. */
 #define AU_FL_UBOOT_ST	0x0
 #define AU_FL_UBOOT_ND	0x40000
-#define AU_FL_KERNEL_ST		0x40000
-#define AU_FL_KERNEL_ND		0x2C0000
-#define AU_FL_ROOTFS_ST		0x2C0000
-#define AU_FL_ROOTFS_ND		0x4C0000
+#define AU_FL_KERNEL_ST		0x50000
+#define AU_FL_KERNEL_ND		0x350000
+#define AU_FL_ROOTFS_ST		0x350000
+#define AU_FL_ROOTFS_ND		0xd50000
 #define AU_FL_FW_ST			0x000000
 #define AU_FL_FW_ND			0x1000000
 
@@ -215,8 +215,11 @@ static int au_do_update(int idx, long sz)
 
 	hdr = (image_header_t *)LOAD_ADDR;
 
-	start = aufl_layout[idx].start;
-	len = aufl_layout[idx].end - aufl_layout[idx].start;
+	// start = aufl_layout[idx].start;
+	// len = aufl_layout[idx].end - aufl_layout[idx].start;
+
+	start = ntohl(hdr->ih_load);
+	len = ntohl(hdr->ih_ep) - ntohl(hdr->ih_load);
 
 	/*
 	 * erase the address range.
@@ -235,7 +238,7 @@ static int au_do_update(int idx, long sz)
 	}
 
 	/* strip the header - except for the kernel and ramdisk */
-	if (hdr->ih_type == IH_TYPE_KERNEL || hdr->ih_type == IH_TYPE_RAMDISK) {
+	if (hdr->ih_type == IH_TYPE_RAMDISK) {
 		pbuf = buf;
 		write_len = sizeof(*hdr) + ntohl(hdr->ih_size);
 	} else {
@@ -390,7 +393,7 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	stor_dev = get_dev("mmc", 0);
 	if (NULL == stor_dev) {
 		debug("Unknow device type!\n");
-		return -1;
+		return 0;
 	}
 
 	if (fat_register_device(stor_dev, 1) != 0) {
@@ -424,6 +427,7 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	state = update_to_flash();
 
+
 	/* restore the old state */
 	disable_ctrlc(old_ctrlc);
 
@@ -439,7 +443,19 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	 * so just break here
 	 */
 
-	/*
+	if (state >= 0) {
+	if (flash->size > 8388608) {
+		printf("Setting partition layout for 16M flash \n");
+		run_command(
+			"run mtdpartsnor16m; setenv bootcmd ${bootcmdnor}; saveenv", 0);
+	}else{
+		printf("Setting partition layout for 8M flash \n");
+		run_command(
+			"run mtdpartsnor8m; setenv bootcmd ${bootcmdnor}; saveenv", 0);
+	}
+	}
+
+        /*
 	 * If u-boot has been updated, it's better to save environment to flash
 	 */
 	if (1 == state) {
@@ -457,7 +473,7 @@ U_BOOT_CMD(
 	"LOAD_ID: 0-->u-boot\n"
 	"	 1-->kernel\n"
 	"	 2-->rootfs\n"
-	"	 3-->demo.bin\n"
+	"	 3-->full\n"
 	"ex:\n"
 	"	sdupdate   (update all)\n"
 	"or \n"
