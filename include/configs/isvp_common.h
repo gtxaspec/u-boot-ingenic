@@ -1,5 +1,7 @@
 #ifdef __CONFIG_ISVP_T21_H__
     #define CONFIG_SOC "t21"
+#elif defined(__CONFIG_ISVP_T30_H__)
+    #define CONFIG_SOC "t30"
 #else
     #define CONFIG_SOC "t31"
 #endif
@@ -9,22 +11,22 @@
 #if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
 #define CONFIG_EXTRA_SETTINGS \
     "totalmem=128M\0" \
-    "osmem=64M\0"
-#define BOOTARGS_MEM "mem=64M@0x0 rmem=64M@0x4000000"
+    "osmem=64M\0" \
+    "rmem=64M@0x4000000\0"
 #else
 #define CONFIG_EXTRA_SETTINGS \
     "totalmem=64M\0" \
-    "osmem=42M\0"
-#define BOOTARGS_MEM "mem=40M@0x0 rmem=24M@0x2800000"
+    "osmem=40M\0" \
+    "rmem=24M@0x2800000\0"
 #endif
 
-/* USEFULL STUFF, BUT LATER...
+/* USEFUL STUFF, BUT LATER...
 #ifdef CONFIG_SPL_MMC_SUPPORT
-	#define CONFIG_BOOTARGS BOOTARGS_MEM " init=/init root=/dev/mmcblk0p2 rootdelay=1"
+	#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} init=/init root=/dev/mmcblk0p2 rootdelay=1"
 #elif defined(CONFIG_SFC_NOR)
-	#define CONFIG_BOOTARGS BOOTARGS_MEM " root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=jz_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)"
+	#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=jz_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)"
 #elif defined(CONFIG_SFC_NAND)
-	#define CONFIG_BOOTARGS BOOTARGS_MEM " ip=off init=/init ubi.mtd=2 root=ubi0:rootfs ubi.mtd=3 rootfstype=ubifs rw"
+	#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} ip=off init=/init ubi.mtd=2 root=ubi0:rootfs ubi.mtd=3 rootfstype=ubifs rw"
 #endif
 */
 
@@ -38,7 +40,7 @@
     #define CONFIG_BOOTCOMMAND "setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sfcnand read 0x50000 0x200000 ${baseaddr} ; bootm ${baseaddr}; reset"
 #endif
 
-#define CONFIG_BOOTARGS BOOTARGS_MEM " console=ttyS1,115200n8 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=\${mtdparts} \${extras}"
+#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} console=ttyS1,115200n8 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=\${mtdparts} \${extras}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
     "baseaddr=0x80600000\0" \
