@@ -109,6 +109,8 @@ struct norflash_partitions {
 #define TRAN_SPI_IO_QUAD   (0x6)
 #define POLLEN				(1 << 25)
 #define CMDEN				(1 << 24)
+#define	PHASE_FORMAT         		(1 << 23)
+#define	CMD_EN         		        (1 << 24)
 #define FMAT				(1 << 23)
 #define DMYBITS_OFFSET			(17)
 #define DMYBITS_MSK			(0x3f << DMYBITS_OFFSET)
@@ -138,6 +140,7 @@ struct norflash_partitions {
 #define CLR_RREQ		(1 << 2)
 #define CLR_OVER		(1 << 1)
 #define CLR_UNDER		(1 << 0)
+#define CLR_UNDR		(1 << 0)
 
 //For SFC_INTC
 #define	MASK_END		(1 << 4)

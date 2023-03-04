@@ -176,9 +176,22 @@
 #define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=42M@0x0 rmem=22M@0x2a00000"
 #endif
 
+#if defined(CONFIG_SPL_SFC_NOR) || defined(CONFIG_SPL_SFC_NAND)
+#define CONFIG_SPL_SFC_SUPPORT
+#define CONFIG_JZ_SFC
+#define CONFIG_SPL_VERSION     1
+#ifdef CONFIG_SPL_SFC_NOR
+#define CONFIG_SFC_NOR
+#else
+#define CONFIG_SFC_NAND
+#endif
+#define CONFIG_SPI_DUAL
+/*#define CONFIG_SPI_QUAD*/
+#endif /* defined(CONFIG_SPL_SFC_NOR) || defined(CONFIG_SPL_SFC_NAND) */
+
 #ifdef CONFIG_SPL_MMC_SUPPORT
 	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
-#elif CONFIG_SFC_NOR
+#elif defined(CONFIG_SFC_NOR)
 	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
 #endif
 
@@ -467,6 +480,21 @@
 #define CONFIG_MBR_P3_OFF	1609mb
 #define CONFIG_MBR_P3_END	7800mb
 #define CONFIG_MBR_P3_TYPE 	fat
+#endif
+
+/* JFFS2 configuration */
+#ifdef CONFIG_CMD_JFFS2
+#define CONFIG_CMD_FLASH
+#define CONFIG_SYS_MAX_FLASH_BANKS 1
+#define CONFIG_SYS_MAX_FLASH_SECT 256
+#undef CONFIG_CMD_MTDPARTS
+#undef CONFIG_JFFS2_CMDLINE
+#define COFIG_JFFS2_DEV "nor0"
+#define CONFIG_JFFS2_PART_OFFSET        0x4C0000
+#define CONFIG_JFFS2_PART_SIZE          0xB40000
+#define CONFIG_START_VIRTUAL_ADDRESS    0x80600000
+#else
+#define CONFIG_SYS_MAX_FLASH_SECT 0
 #endif
 
 #include "isvp_common.h"
