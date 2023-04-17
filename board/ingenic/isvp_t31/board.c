@@ -112,6 +112,9 @@ int board_eth_init(bd_t *bis)
 	ret += jz_net_initialize(bis);
 #if defined (CONFIG_T31)
 	if (ret < 0){
+		// PPS
+		gpio_request(61,"pps_mmc_enable");
+		gpio_direction_output(61,0);
 		// Wyze V3
 		gpio_request(48,"wyze_mmc_enable");
 		gpio_direction_output(48,0);
