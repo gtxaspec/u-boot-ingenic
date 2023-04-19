@@ -57,6 +57,12 @@ U_BOOT_CMD(
 	"[loadAddress] [[hostIPaddr:]bootfilename]"
 );
 
+U_BOOT_CMD(
+	tftp,	3,	1,	do_tftpb,
+	"boot image via network using TFTP protocol",
+	"[loadAddress] [[hostIPaddr:]bootfilename]"
+);
+
 #ifdef CONFIG_CMD_TFTPPUT
 int do_tftpput(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {

@@ -205,8 +205,11 @@ static void ddrc_config_creator(struct ddrc_reg *ddrc, struct ddr_params *p)
 	ddrc->cfg.b.ROW1 = p->row1 - 12;
 	ddrc->cfg.b.COL1 = p->col1 - 8;
 	ddrc->cfg.b.BA1 = p->bank8;
-//	ddrc->cfg.b.IMBA = 1;
+#if (defined(CONFIG_T10) || defined(CONFIG_T20))
+	ddrc->cfg.b.IMBA = 1;
+#else
 	ddrc->cfg.b.IMBA = 0;
+#endif
 	ddrc->cfg.b.BSL = (p->bl == 8) ? 1 : 0;
 #ifdef CONFIG_DDR_CHIP_ODT
 	ddrc->cfg.b.ODTEN = 1;
@@ -306,10 +309,17 @@ static void ddrp_base_params_creator_common(struct ddrp_reg *ddrp, struct ddr_pa
 	/* tRTP is differ for ddr2 */
 	DDRP_TIMING_SET(0,ddr_base_params,tWTR,3,1,15);
 	DDRP_TIMING_SET(0,ddr_base_params,tRP,4,2,20);
+#if (defined(CONFIG_T10) || defined(CONFIG_T20))
+	DDRP_TIMING_SET(0,ddr_base_params,tRCD,4,2,11);
+	DDRP_TIMING_SET(0,ddr_base_params,tRAS,5,2,31);
+	DDRP_TIMING_SET(0,ddr_base_params,tRRD,4,1,8);
+	DDRP_TIMING_SET(0,ddr_base_params,tRC,6,2,42);
+#else
 	DDRP_TIMING_SET(0,ddr_base_params,tRCD,4,2,12);
 	DDRP_TIMING_SET(0,ddr_base_params,tRAS,5,2,39);
 	DDRP_TIMING_SET(0,ddr_base_params,tRRD,4,1,9);
 	DDRP_TIMING_SET(0,ddr_base_params,tRC,6,2,58);
+#endif
 	/* tCCD is differ in lpddr ddr2 lpddr2 ddr3 */
 
 	/* DTPR1 registers */
@@ -322,8 +332,11 @@ static void ddrp_base_params_creator_common(struct ddrp_reg *ddrp, struct ddr_pa
 
 	/* tMOD is used by ddr3 */
 	/* tRTODT is used by ddr3 */
+#if (defined(CONFIG_T10) || defined(CONFIG_T20))
+	DDRP_TIMING_SET(1,ddr_base_params,tRFC,8,0,255);
+#else
 	DDRP_TIMING_SET(1,ddr_base_params,tRFC,6,0,63);
-
+#endif
 	/* tDQSCKmin is used by lpddr2 */
 	/* tDQSCKmax is used by lpddr2 */
 

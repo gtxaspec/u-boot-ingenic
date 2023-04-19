@@ -18,6 +18,10 @@ export CROSS_COMPILE="$(readlink -f $CROSS_PATH)/mips-linux-gnu-"
 # T31AL make isvp_t31al_msc0_ddr128M
 
 declare -A cfg
+cfg[t10]="isvp_t10_sfcnor"
+cfg[t10l]="isvp_t10_sfcnor_lite"
+cfg[t20]="isvp_t20_sfcnor"
+cfg[t20l]="isvp_t20_sfcnor_lite"
 cfg[t31n]="isvp_t31_sfcnor"
 cfg[t31l]="isvp_t31_sfcnor_lite"
 cfg[t31x]="isvp_t31_sfcnor_ddr128M"

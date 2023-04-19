@@ -1,2 +1,2 @@
-# u-boot-t31
-U-Boot for t31 group SoC's
+# u-boot-ingenic
+U-Boot for Ingenic Xburst T10-T31 SoC's

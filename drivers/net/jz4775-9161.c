@@ -532,6 +532,32 @@ int jz_net_initialize(bd_t *bis)
 	gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
 	mdelay(10);
 #endif/*CONFIG_GPIO_IP101G_RESET*/
+#elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_8710A)
+
+	/* reset 8710A */
+	gpio_direction_output(CONFIG_GPIO_8710A_RESET, CONFIG_GPIO_8710A_RESET_ENLEVEL);
+	mdelay(10);
+	/* MII/RMII Mode Configuration PB26 */
+#if (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_MII)
+	gpio_direction_output(32*1+26, 0);
+#elif(CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_RMII)
+	gpio_direction_output(32*1+26, 1);
+#endif  /* CONFIG_NET_GMAC_PHY_MODE */
+
+	/* PHY Address Configuration PB27 PB08 PB15 */
+	gpio_direction_output(32*1+27, 0);
+	gpio_direction_output(32*1+8, 0);
+	gpio_direction_output(32*1+15, 1);
+
+
+	/* Mode Configuration PB13 PB25 PB24 */
+	gpio_direction_output(32*1+13, 1);
+	gpio_direction_output(32*1+25, 1);
+	gpio_direction_output(32*1+24, 1);
+
+	gpio_direction_output(CONFIG_GPIO_8710A_RESET, !CONFIG_GPIO_8710A_RESET_ENLEVEL);
+	mdelay(10);
+	udelay(100000);
 #endif /* CONFIG_NET_PHY_TYPE */
 
 #if (CONFIG_NET_PHY_TYPE == PHY_TYPE_88E1111)
