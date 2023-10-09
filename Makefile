@@ -525,6 +525,13 @@ $(obj)u-boot.dis:	$(obj)u-boot
 $(obj)u-boot-with-spl.bin: $(obj)spl/u-boot-spl.bin $(obj)u-boot.bin
 		$(OBJCOPY) ${OBJCFLAGS} --pad-to=$(CONFIG_SPL_PAD_TO) \
 			-I binary -O binary $< $(obj)spl/u-boot-spl-pad.bin
+ifdef CONFIG_T31LC
+ifdef CONFIG_SPL_SFC_SUPPORT
+		cp $(TOPDIR)/firmware/t31lc_sfcnor.bin $(obj)spl/u-boot-spl-pad.bin
+else
+		$(error "T31LC unsupported option")
+endif
+endif
 		cat $(obj)spl/u-boot-spl-pad.bin $(obj)u-boot.bin > $@
 		rm $(obj)spl/u-boot-spl-pad.bin
 
@@ -925,11 +932,15 @@ tidy:	clean
 
 clobber:	tidy
 	@find $(OBJTREE) -type f \( -name '*.srec' \
-		-o -name '*.bin' -o -name u-boot.img \) \
+		 -o -name u-boot.img \) \
 		-print0 | xargs -0 rm -f
 	@rm -f $(OBJS) $(obj)*.bak $(obj)ctags $(obj)etags $(obj)TAGS \
 		$(obj)cscope.* $(obj)*.*~
 	@rm -f $(obj)u-boot $(obj)u-boot.map $(obj)u-boot.hex $(ALL-y)
+	@rm -f $(obj)spl/u-boot-spl.bin
+	@rm -f $(obj)u-boot-with-spl.bin
+	@rm -f $(obj)u-boot.bin
+	@rm -f $(obj)examples/standalone/hello_world.bin
 	@rm -f $(obj)u-boot.kwb
 	@rm -f $(obj)u-boot.pbl
 	@rm -f $(obj)u-boot.imx

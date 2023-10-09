@@ -44,6 +44,9 @@
 #elif defined(CONFIG_T31A)
 #define APLL_1392M
 #define DDR_750M
+#elif defined(CONFIG_T31LC)
+#define APLL_1104M
+#define DDR_500M
 #else
 /* T31N */
 #define APLL_1400M
@@ -65,9 +68,9 @@
 #elif defined APLL_1008M
 #define CONFIG_SYS_APLL_FREQ		1008000000	/*If APLL not use mast be set 0*/
 #define CONFIG_SYS_APLL_MNOD		((84 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1080M
-#define CONFIG_SYS_APLL_FREQ		1080000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((90 << 20) | (1 << 14) | (2 << 11) | (1<<8))
+#elif defined APLL_1104M
+#define CONFIG_SYS_APLL_FREQ		1104000000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_MNOD		((92 << 20) | (1 << 14) | (2 << 11) | (1<<8))
 #elif defined APLL_1200M
 #define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL not use mast be set 0*/
 #define CONFIG_SYS_APLL_MNOD		((100 << 20) | (1 << 14) | (2 << 11) | (1<<8))

@@ -46,7 +46,9 @@ struct cgu_clk_src cgu_clk_src[] = {
 
 int board_early_init_f(void)
 {
-#ifndef CONFIG_T31A
+#if defined(CONFIG_T31A) || defined(CONFIG_T31AL)
+	/* printf("support quad\n");*/
+#else
 	gpio_direction_input(25);
 	gpio_direction_input(26);
 	gpio_disable_pull_down(25);

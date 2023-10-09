@@ -205,7 +205,7 @@ static struct jz_spi_support jz_spi_support_table[] = {
 		},
 	},
 	{
-		.name           = "MX25L25645G",
+		.name           = "MX25L25645G/35F",
 		.id_manufactory = 0xc22019,
 		.page_size       = 256,
 		.sector_size      = (32 * 1024),
@@ -289,7 +289,7 @@ static struct jz_spi_support jz_spi_support_table[] = {
 		},
 	},
 	{
-		.name           = "GD25Q256",
+		.name           = "GD25Q256D/E",
 		.id_manufactory = 0xc84019,
 		.page_size       = 256,
 		.sector_size      = (64 * 1024),
@@ -1071,6 +1071,27 @@ static struct jz_spi_support jz_spi_support_table[] = {
 		.id_manufactory = 0xd84018,
 		.page_size       = 256,
 		.sector_size      = (32 * 1024),
+		.addr_size = 3,
+		.size           = (16 * 1024 * 1024),
+		.quad_mode = {
+			.dummy_byte = 8,
+			.RDSR_CMD = CMD_RDSR_1,
+			.WRSR_CMD = CMD_WRSR_1,
+			.RDSR_DATE = 0x2,//the data is write the spi status register for QE bit
+			.RD_DATE_SIZE = 1,
+			.WRSR_DATE = 0x2,//this bit should be the flash QUAD mode enable
+			.WD_DATE_SIZE = 1,
+			.cmd_read = CMD_QUAD_READ,
+#ifdef CONFIG_JZ_SFC
+			.sfc_mode = TRAN_SPI_QUAD,
+#endif
+		},
+	},
+	{
+		.name           = "PY25Q128HA",
+		.id_manufactory = 0x852018,
+		.page_size       = 256,
+		.sector_size      = (64 * 1024),
 		.addr_size = 3,
 		.size           = (16 * 1024 * 1024),
 		.quad_mode = {
