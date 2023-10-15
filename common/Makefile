@@ -107,6 +107,7 @@ COBJS-$(CONFIG_SYS_HUSH_PARSER) += cmd_exit.o
 COBJS-$(CONFIG_CMD_EXT4) += cmd_ext4.o
 COBJS-$(CONFIG_CMD_EXT2) += cmd_ext2.o
 COBJS-$(CONFIG_CMD_FAT) += cmd_fat.o
+COBJS-$(CONFIG_CMD_SDSTART) += cmd_sdstart.o
 COBJS-$(CONFIG_CMD_SDUPDATE) += cmd_sdupdate.o
 COBJS-$(CONFIG_CMD_TFTPDOWNLOAD) += cmd_tftpdownload.o
 COBJS-$(CONFIG_CMD_WATCHDOG) += cmd_watchdog.o

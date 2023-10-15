@@ -116,3 +116,4 @@
 #ifdef CONFIG_AUTO_UPDATE
     #define CONFIG_CMD_SDUPDATE	1
 #endif
+#define CONFIG_CMD_SDSTART	1
