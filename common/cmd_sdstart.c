@@ -186,13 +186,6 @@ static void configure_boot_environment(void) {
 
 // Main function when the "sdstart" command is run in U-Boot
 int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
-	// Check if we are called from the autoupdate function
-	bool skip_init = false;
-
-	if (argc > 2 && strcmp(argv[2], "skip_init") == 0) {
-		skip_init = true;
-	}
-
 	// Fetch 'baseaddr' from the U-Boot environment
 	const char *baseaddr_str = getenv("baseaddr");
 	if (!baseaddr_str) {
@@ -204,10 +197,8 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	LOAD_ADDR = (unsigned char *)simple_strtoul(baseaddr_str, NULL, 16);
 
 	// Validate the SD card
-	if (!skip_init) {
-		if (validate_sd_card() != 0) {
-			return -1; // Return early if SD card is not valid
-		}
+	if (validate_sd_card() != 0) {
+		return -1; // Return early if SD card is not valid
 	}
 
 	// Detect the kernel's presence without fully loading it

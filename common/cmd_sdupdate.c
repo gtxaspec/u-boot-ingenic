@@ -15,8 +15,6 @@
 
 #ifdef CONFIG_AUTO_UPDATE  /* cover the whole file */
 
-extern int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]);
-
 #ifdef CONFIG_AUTO_SD_UPDATE
 #ifndef CONFIG_MMC
 #error "should have defined CONFIG_MMC"
@@ -429,13 +427,6 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	state = update_to_flash();
 
-
-	// If no update files are found, call sdstart to check for kernel
-	if (state == -1) {
-		printf("No auto-update files found. Checking for kernel to start from MMC...\n");
-		char *args[] = {"sdstart", "1", "skip_init"};
-		return sdstart(cmdtp, flag, 3, args);
-	}
 
 	/* restore the old state */
 	disable_ctrlc(old_ctrlc);
