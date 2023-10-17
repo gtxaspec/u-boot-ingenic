@@ -186,6 +186,13 @@ static void configure_boot_environment(void) {
 
 // Main function when the "sdstart" command is run in U-Boot
 int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
+	// Check if we are called from the autoupdate function
+	bool skip_init = false;
+
+	if (argc > 2 && strcmp(argv[2], "skip_init") == 0) {
+		skip_init = true;
+	}
+
 	// Fetch 'baseaddr' from the U-Boot environment
 	const char *baseaddr_str = getenv("baseaddr");
 	if (!baseaddr_str) {
@@ -196,19 +203,34 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	// Convert string to pointer (address)
 	LOAD_ADDR = (unsigned char *)simple_strtoul(baseaddr_str, NULL, 16);
 
+	// Validate the SD card
+	if (!skip_init) {
+		if (validate_sd_card() != 0) {
+			return -1; // Return early if SD card is not valid
+		}
+	}
+
+	// Detect the kernel's presence without fully loading it
+	long file_size = file_fat_read(kernel_filename, LOAD_ADDR, 0); // Reading with size 0 to just detect
+	if (file_size <= 0) {
+		return handle_error(ERR_FILE_NOT_FOUND, kernel_filename);
+	}
+
+	// If kernel is detected, then show the Ctrl-C prompt
 	int delay = (argc > 1) ? simple_strtol(argv[1], NULL, 10) : DEFAULT_DELAY;
 	if (prompt_and_wait_for_interrupt(delay)) {
 		printf("Operation was canceled during the prompt.\n");
+		return 0; // Return early if user interrupted
+	}
+
+	// Load and validate the kernel
+	int old_ctrlc = disable_ctrlc(0);
+	if (load_kernel_and_validate() == 0) {
+		configure_boot_environment();
 		return 0;
 	}
-	if (validate_sd_card() == 0) {
-		int old_ctrlc = disable_ctrlc(0);
-		if(load_kernel_and_validate() == 0) {
-			configure_boot_environment();
-			return 0;
-		}
-		disable_ctrlc(old_ctrlc);
-	}
+	disable_ctrlc(old_ctrlc);
+
 	return 0;
 }
 
