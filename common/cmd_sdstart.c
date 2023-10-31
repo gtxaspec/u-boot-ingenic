@@ -113,7 +113,7 @@ static int handle_error(ErrorCode err, const char* context) {
 		default:
 			break;
 	}
-	return -1;
+	return 0; // Return success so u-Boot doesn't display usage
 }
 
 // Function to validate the header and checksum of the loaded image
@@ -160,18 +160,21 @@ static ErrorCode check_header_and_checksum_validity(long nbytes) {
 
 // Function to load the kernel from MMC into RAM and validate its contents
 static int load_kernel_and_validate(void) {
-	int i;  // Declare loop counter outside the for loop
+	int i;
 	for (i = 0; kernel_filenames[i] != NULL; i++) {
 		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, MAX_LOADSZ);
 		if (file_size > 0) {
 			ErrorCode err = check_header_and_checksum_validity(file_size);
-			if (err != ERR_NONE) {
+			if (err == ERR_NONE) {
+				return 0; // Successfully loaded and validated the kernel
+			}
+			// If there's an error other than ERR_FILE_NOT_FOUND, handle it and exit.
+			if (err != ERR_FILE_NOT_FOUND) {
 				return handle_error(err, kernel_filenames[i]);
 			}
-			return 0;  // Successfully loaded and validated
 		}
 	}
-	return handle_error(ERR_FILE_NOT_FOUND, "all files");
+	return handle_error(ERR_FILE_NOT_FOUND, kernel_filenames[0]);
 }
 
 // Function to check if the SD card is present and contains a valid FAT filesystem
@@ -232,8 +235,18 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	}
 
 	// Detect the kernel's presence without fully loading it
-	long file_size = file_fat_read(kernel_filenames[0], LOAD_ADDR, 0); // Reading with size 0 to just detect
-	if (file_size <= 0) {
+        printf("Checking for kernel image from MMC... \n");
+	int i;
+	int found_kernel = 0;
+	for (i = 0; kernel_filenames[i] != NULL; i++) {
+		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, 0); // Reading with size 0 to just detect
+		if (file_size > 0) {
+			found_kernel = 1;
+			break;
+		}
+	}
+
+	if (!found_kernel) {
 		return handle_error(ERR_FILE_NOT_FOUND, kernel_filenames[0]);
 	}
 
@@ -243,6 +256,8 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 		printf("Operation was canceled during the prompt.\n");
 		return 0; // Return early if user interrupted
 	}
+
+        printf("Loading external kernel image from MMC... \n");
 
 	// Load and validate the kernel
 	int old_ctrlc = disable_ctrlc(0);

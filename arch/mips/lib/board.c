@@ -383,7 +383,6 @@ extern void board_usb_init(void);
 	run_command("sdupdate",0);
 #endif
 #ifdef CONFIG_CMD_SDSTART
-	printf("Loading external kernel image from MMC... \n");
 	run_command("sdstart",0);
 #endif
 
