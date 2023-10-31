@@ -29,8 +29,35 @@ static unsigned char *LOAD_ADDR = NULL;
 #define MAX_LOADSZ 0xA00000  // Maximum load size, 10MB
 #define DEFAULT_DELAY 1      // Default delay is set to 1 second, begins only if the kernel image has been found
 
-// Name of the kernel file to load
-static const char * const kernel_filename = "factory_0P3N1PC_kernel";
+// Macro to generate kernel filenames based on SoC
+#define KERNEL_FILENAMES_FOR_SOC(soc) \
+    "factory_" #soc "_0P3N1PC_kernel", \
+    "factory_" #soc "_ZMC6tiIDQN", \
+    NULL  // sentinel value
+
+// Kernel filenames based on SoC
+#ifdef CONFIG_T10
+static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t10) };
+#elif defined(CONFIG_T15)
+static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t15) };
+#elif defined(CONFIG_T20)
+// Special case for T20 to match factory
+static const char* kernel_filenames[] = {
+	"factory_t20_0P3N1PC_kernel",
+	"factory_ZMC6tiIDQN",
+	NULL
+};
+#elif defined(CONFIG_T21)
+static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t21) };
+#elif defined(CONFIG_T30)
+static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t30) };
+#elif defined(CONFIG_T31)
+static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t31) };
+#elif defined(CONFIG_T40)
+static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t40) };
+#else
+static const char* kernel_filenames[] = { NULL };  // Default case, no files to attempt loading
+#endif
 
 // This function prompts the user to press Ctrl-C to interrupt the kernel loading, lasting for the specified delay (in seconds).
 static bool prompt_and_wait_for_interrupt(int delay) {
@@ -133,15 +160,18 @@ static ErrorCode check_header_and_checksum_validity(long nbytes) {
 
 // Function to load the kernel from MMC into RAM and validate its contents
 static int load_kernel_and_validate(void) {
-	long file_size = file_fat_read(kernel_filename, LOAD_ADDR, MAX_LOADSZ);
-	if (file_size <= 0) {
-		return handle_error(ERR_FILE_NOT_FOUND, kernel_filename);
+	int i;  // Declare loop counter outside the for loop
+	for (i = 0; kernel_filenames[i] != NULL; i++) {
+		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, MAX_LOADSZ);
+		if (file_size > 0) {
+			ErrorCode err = check_header_and_checksum_validity(file_size);
+			if (err != ERR_NONE) {
+				return handle_error(err, kernel_filenames[i]);
+			}
+			return 0;  // Successfully loaded and validated
+		}
 	}
-	ErrorCode err = check_header_and_checksum_validity(file_size);
-	if (err != ERR_NONE) {
-		return handle_error(err, kernel_filename);
-	}
-	return 0;
+	return handle_error(ERR_FILE_NOT_FOUND, "all files");
 }
 
 // Function to check if the SD card is present and contains a valid FAT filesystem
@@ -198,13 +228,13 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 
 	// Validate the SD card
 	if (validate_sd_card() != 0) {
-		return -1; // Return early if SD card is not valid
+		return 0; // Return early if SD card is not valid, silently
 	}
 
 	// Detect the kernel's presence without fully loading it
-	long file_size = file_fat_read(kernel_filename, LOAD_ADDR, 0); // Reading with size 0 to just detect
+	long file_size = file_fat_read(kernel_filenames[0], LOAD_ADDR, 0); // Reading with size 0 to just detect
 	if (file_size <= 0) {
-		return handle_error(ERR_FILE_NOT_FOUND, kernel_filename);
+		return handle_error(ERR_FILE_NOT_FOUND, kernel_filenames[0]);
 	}
 
 	// If kernel is detected, then show the Ctrl-C prompt
@@ -226,7 +256,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 }
 
 U_BOOT_CMD(
-	sdstart,	2,	0,	sdstart,
+	sdstart,	2,	1,	sdstart,
 	"Load a kernel from the MMC card with an interruptible delay.",
 	"[delay_in_seconds]"
 );
