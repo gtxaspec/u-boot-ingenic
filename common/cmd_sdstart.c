@@ -96,7 +96,7 @@ static int handle_error(ErrorCode err, const char* context) {
 			printf("Error: Invalid kernel type for %s.\n", context);
 			break;
 		case ERR_FILE_NOT_FOUND:
-			printf("Error: File %s not found.\n", context);
+			printf("Error: Kernel file not found.\n", context);
 			break;
 		case ERR_MMC_NOT_PRESENT:
 			printf("Error: MMC card is not present.\n");
@@ -181,18 +181,21 @@ static int load_kernel_and_validate(void) {
 static int validate_sd_card(void) {
 	block_dev_desc_t *stor_dev = get_dev("mmc", 0);
 	if(NULL == stor_dev) {
-		return handle_error(ERR_MMC_NOT_PRESENT, "");
+		handle_error(ERR_MMC_NOT_PRESENT, "");
+		return false;
 	}
 	int ret = fat_register_device(stor_dev, 1);
 	if(ret != 0) {
-		return handle_error(ERR_FAT_REGISTRATION_FAIL, "");
+		handle_error(ERR_FAT_REGISTRATION_FAIL, "");
+		return false;
 	}
 	ret = file_fat_detectfs();
 	if (ret != 0) {
-		return handle_error(ERR_FAT_DETECT_FAIL, "");
+		handle_error(ERR_FAT_DETECT_FAIL, "");
+		return false;
 	}
 	printf("FAT filesystem detected successfully.\n");
-	return 0;
+	return true;
 }
 
 // Function to set the environment variables for booting the kernel
@@ -230,7 +233,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	LOAD_ADDR = (unsigned char *)simple_strtoul(baseaddr_str, NULL, 16);
 
 	// Validate the SD card
-	if (validate_sd_card() != 0) {
+	if (!validate_sd_card() != 0) {
 		return 0; // Return early if SD card is not valid, silently
 	}
 
