@@ -967,6 +967,7 @@ clobber:	tidy
 	@rm -f $(obj)dts/*.tmp
 	@rm -f $(obj)spl/u-boot-spl{,-pad}.ais
 	@rm -f $(obj)u-boot-lzo.img
+	@rm -f $(obj)u-boot-lzo.bin
 	@rm -f $(obj)u-boot-lzo-with-spl.bin
 
 mrproper \
