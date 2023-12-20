@@ -12,6 +12,8 @@
 
 #define CONFIG_BOOTCOMMAND "setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sf read ${baseaddr} 0x50000 0x300000; bootm ${baseaddr}; reset"
 
+#define	CONFIG_SYS_HUSH_PARSER		1
+
 #if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
 #define CONFIG_EXTRA_SETTINGS \
     "totalmem=128M\0" \

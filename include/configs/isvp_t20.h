@@ -236,6 +236,7 @@
  * Command configuration.
  */
 #define CONFIG_CMD_NET		/* networking support			*/
+#define CONFIG_CMD_DHCP
 #define CONFIG_CMD_PING
 #define CONFIG_CMD_BOOTD	/* bootd			*/
 #define CONFIG_CMD_SAVEENV	/* saveenv			*/
@@ -243,6 +244,8 @@
 #define CONFIG_CMD_CONSOLE	/* coninfo			*/
 #define CONFIG_CMD_ECHO		/* echo arguments		*/
 #define CONFIG_CMD_FAT		/* FAT support			*/
+#define CONFIG_CMD_EXT2
+#define CONFIG_CMD_EXT4
 #define CONFIG_CMD_LOADB	/* loadb			*/
 #define CONFIG_CMD_LOADS	/* loads			*/
 #define CONFIG_CMD_MEMORY	/* md mm nm mw cp cmp crc base loop mtest */
@@ -256,13 +259,13 @@
 /*#define CONFIG_CMD_I2C*/
 
 /************************ USB CONFIG ***************************/
-#undef CONFIG_CMD_USB
+#define CONFIG_CMD_USB
 #ifdef CONFIG_CMD_USB
 #define CONFIG_USB_DWC2
 #define CONFIG_USB_DWC2_REG_ADDR 0x13500000
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
-/* #define CONFIG_USB_STORAGE */
+#define CONFIG_USB_STORAGE
 #endif
 
 /*#define CONFIG_AUTO_UPDATE			1*/
@@ -362,7 +365,7 @@
 
 #define CONFIG_SPL_MAX_SIZE		(26 * 1024)
 
-#undef CONFIG_SPL_LZOP
+#define CONFIG_SPL_LZOP
 #ifdef CONFIG_SPL_LZOP
 	#define CONFIG_DECMP_BUFFER_ADRS        0x80200000
 #endif
