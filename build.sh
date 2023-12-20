@@ -46,6 +46,6 @@ make distclean
 make ${cfg[$soc]}
 make -j`nproc`
 
-cp u-boot-with-spl.bin ${OUTPUTDIR}/u-boot-${soc}-universal.bin
+cp u-boot-lzo-with-spl.bin ${OUTPUTDIR}/u-boot-${soc}-universal.bin
 
 done
