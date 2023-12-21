@@ -96,7 +96,7 @@ static int handle_error(ErrorCode err, const char* context) {
 			printf("Error: Invalid kernel type for %s.\n", context);
 			break;
 		case ERR_FILE_NOT_FOUND:
-			printf("Error: Kernel file not found.\n", context);
+			printf("Error: Kernel file not found.\n");
 			break;
 		case ERR_MMC_NOT_PRESENT:
 			printf("Error: MMC card is not present.\n");
