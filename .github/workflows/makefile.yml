@@ -1,0 +1,50 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  TAG_NAME: latest
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-arm-linux-gnueabi gcc-mipsel-linux-gnu lzop u-boot-tools
+
+      - name: u-boot-ingenic
+        run: |
+          git clone https://github.com/gtxaspec/u-boot-ingenic.git --depth 1
+          cd u-boot-ingenic
+          cp -f .github/scripts/u-boot-ingenic.sh u-boot-ingenic.sh
+          bash u-boot-ingenic.sh
+
+      - name: Upload
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{env.TAG_NAME}}
+          files: |
+            u-boot-ingenic/output/u-boot-t10l-universal.bin
+            u-boot-ingenic/output/u-boot-t10-universal.bin
+            u-boot-ingenic/output/u-boot-t20l-universal.bin
+            u-boot-ingenic/output/u-boot-t20-universal.bin
+            u-boot-ingenic/output/u-boot-t21n-universal.bin
+            u-boot-ingenic/output/u-boot-t30a1-universal.bin
+            u-boot-ingenic/output/u-boot-t30a-universal.bin
+            u-boot-ingenic/output/u-boot-t30l-universal.bin
+            u-boot-ingenic/output/u-boot-t30n-universal.bin
+            u-boot-ingenic/output/u-boot-t30x-universal.bin
+            u-boot-ingenic/output/u-boot-t31al-universal.bin
+            u-boot-ingenic/output/u-boot-t31a-universal.bin
+            u-boot-ingenic/output/u-boot-t31l-universal.bin
+            u-boot-ingenic/output/u-boot-t31lc-universal.bin
+            u-boot-ingenic/output/u-boot-t31n-universal.bin
+            u-boot-ingenic/output/u-boot-t31x-universal.bin
