@@ -1,8 +1,9 @@
-#!/bin/sh -e
+#!/bin/bash
 
 export ARCH=mips
-export CROSS_PATH="../../../../pc/tools/toolchain/gcc_540/mips-gcc540-glibc222-32bit-r3.3.0/bin"
-export CROSS_COMPILE="$(readlink -f $CROSS_PATH)/mips-linux-gnu-"
+export CROSS_COMPILE=mipsel-linux-gnu-
+
+declare -A cfg
 
 # NOR
 # T31N make isvp_t31_sfcnor
@@ -17,7 +18,6 @@ export CROSS_COMPILE="$(readlink -f $CROSS_PATH)/mips-linux-gnu-"
 # T31A make isvp_t31a_msc0_ddr128M
 # T31AL make isvp_t31al_msc0_ddr128M
 
-declare -A cfg
 cfg[t10]="isvp_t10_sfcnor"
 cfg[t10l]="isvp_t10_sfcnor_lite"
 cfg[t20]="isvp_t20_sfcnor"
