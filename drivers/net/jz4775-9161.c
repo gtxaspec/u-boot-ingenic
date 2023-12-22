@@ -581,8 +581,8 @@ int jz_net_initialize(bd_t *bis)
 
 	phy_id = check_phy_config(gmacdev);
 	if (phy_id < 0) {
-		printf("Error: Invalid PHY configuration.\n");
-		printf("====>PHY not found!\n");
+		printf("Net:   Error: Invalid PHY configuration.\n");
+		printf("Net:   ====>PHY not found!\n");
 		return -1; // Return error
 	}
 
@@ -626,8 +626,8 @@ int jz_net_initialize(bd_t *bis)
 #else
     phy_id = check_phy_config(gmacdev);
     if (phy_id < 0) {
-      printf("Error: Invalid PHY configuration.\n");
-      printf("====>PHY not found!\n");
+      printf("Net:   Error: Invalid PHY configuration.\n");
+      printf("Net:   ====>PHY not found!\n");
       return -1;  // Return error
     }
 #endif //CONFIG_NET_PHY_TYPE

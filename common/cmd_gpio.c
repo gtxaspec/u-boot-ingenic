@@ -58,7 +58,7 @@ static int do_gpio(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	/* grab the pin before we tweak it */
 	if (gpio_request(gpio, "cmd_gpio")) {
-		printf("gpio: requesting pin %u failed... skipping\n", gpio);
+		printf("GPIO:  Requesting pin %u failed... skipping\n", gpio);
 		// return -1;
 	}
 
@@ -75,7 +75,7 @@ static int do_gpio(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		}
 		gpio_direction_output(gpio, value);
 	}
-	printf("gpio: pin %s (gpio %i) value is %lu\n",
+	printf("GPIO:  Pin %s (gpio %i) value is %lu\n",
 		str_gpio, gpio, value);
 
 	gpio_free(gpio);

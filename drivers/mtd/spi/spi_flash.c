@@ -109,7 +109,7 @@ int spi_flash_cmd_wait_ready(struct spi_flash *flash, unsigned long timeout)
 		return 0;
 
 	/* Timed out */
-	debug("SF: time out!\n");
+	debug("SF:    Timed out!\n");
 	return -1;
 }
 
@@ -267,7 +267,7 @@ int spi_flash_read_common(struct spi_flash *flash, const u8 *cmd,
 
 	ret = spi_flash_cmd_read(spi, cmd, cmd_len, data, data_len);
 	if (ret < 0) {
-		debug("SF: read cmd failed\n");
+		debug("SF:    Read cmd failed\n");
 		return ret;
 	}
 
@@ -313,7 +313,7 @@ int spi_flash_cmd_read_fast(struct spi_flash *flash, u32 offset,
 		ret = spi_flash_read_common(flash, cmd, sizeof(cmd),
 							data, read_len);
 		if (ret < 0) {
-			debug("SF: read failed\n");
+			debug("SF:    Read failed\n");
 			break;
 		}
 
@@ -587,10 +587,10 @@ struct spi_flash *spi_flash_probe(unsigned int bus, unsigned int cs,
 #endif
 
 	if (!flash) {
-		printf("SF: Unsupported manufacturer %02x\n", *idp);
+		printf("SF:    Vendor unsupported: %02x\n", *idp);
 		goto err_manufacturer_probe;
 	}else{
-		printf("the manufacturer %02x\n", *idp);
+		printf("SF:    Vendor: %02x\n", *idp);
 	}
 
 #ifdef CONFIG_SPI_FLASH_BAR
@@ -609,17 +609,17 @@ struct spi_flash *spi_flash_probe(unsigned int bus, unsigned int cs,
 
 
 #ifndef CONFIG_BURNER
-	printf("SF: Detected %s\n", flash->name);
+	printf("SF:    Detected %s\n", flash->name);
 #endif
 
 #ifdef DEBUG
-	printf("SF: Detected %s with page size ", flash->name);
+	printf("SF:    Detected %s with page size ", flash->name);
 	print_size(flash->sector_size, ", total ");
 	print_size(flash->size, "");
 #endif
 	if (flash->memory_map)
 		printf(", mapped at %p", flash->memory_map);
-	puts("\n");
+//	puts("\n");
 #ifndef CONFIG_SPI_FLASH_BAR
 	if (flash->size > SPI_FLASH_16MB_BOUN) {
 		puts("SF: Warning - Only lower 16MiB accessible,");

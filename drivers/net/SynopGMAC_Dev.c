@@ -1109,7 +1109,7 @@ s32 synopGMAC_search_phy (synopGMACdevice * gmacdev) {
         status += synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,phy_id, PHY_ID_HI_REG, &id1);
         status += synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,phy_id, PHY_ID_LOW_REG, &id2);
         if ((!status)&&(id2 != 0xffff)) {
-            printf("====>phy %d:0x%x-0x%x found\n", phy_id, id1, id2);
+            printf("Net:   ====>phy %d:0x%x-0x%x found\n", phy_id, id1, id2);
             if ((0x0 == id1) && ((0x128 == id2) || (0x118 == id2))) {
                 status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, 0, 0x1e, 0x50);
                 status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, 0, 0x1f, &data);
@@ -1160,7 +1160,7 @@ s32 synopGMAC_search_phy (synopGMACdevice * gmacdev) {
                     gmacdev->DuplexMode = HALFDUPLEX;
                 }
             }
-			printf("SPEED:%d, DUPLEX:%d\n", gmacdev->Speed, gmacdev->DuplexMode);
+			printf("Net:   SPEED:%d, DUPLEX:%d\n", gmacdev->Speed, gmacdev->DuplexMode);
             break;
         }
 	}

@@ -311,7 +311,7 @@ int eth_initialize(bd_t *bis)
 	 */
 	if (board_eth_init != __def_eth_init) {
 		if (board_eth_init(bis) < 0)
-			printf("Board Net Initialization Failed\n");
+			printf("Net:   Board Net Initialization Failed\n");
 	} else if (cpu_eth_init != __def_eth_init) {
 		if (cpu_eth_init(bis) < 0)
 			printf("CPU Net Initialization Failed\n");
@@ -319,7 +319,7 @@ int eth_initialize(bd_t *bis)
 		printf("Net Initialization Skipped\n");
 
 	if (!eth_devices) {
-		puts("No ethernet found.\n");
+		puts("Net:   No ethernet found.\n");
 		bootstage_error(BOOTSTAGE_ID_NET_ETH_START);
 	} else {
 		struct eth_device *dev = eth_devices;
@@ -330,7 +330,7 @@ int eth_initialize(bd_t *bis)
 			if (dev->index)
 				puts(", ");
 
-			printf("%s", dev->name);
+			printf("Net:   %s", dev->name);
 
 			if (ethprime && strcmp(dev->name, ethprime) == 0) {
 				eth_current = dev;
@@ -406,7 +406,7 @@ int eth_init(bd_t *bis)
 	struct eth_device *old_current, *dev;
 
 	if (!eth_current) {
-		puts("No ethernet found.\n");
+		puts("Net:   No ethernet found.\n");
 		return -1;
 	}
 
