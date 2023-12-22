@@ -499,6 +499,21 @@ static void jz_halt(struct eth_device *dev)
 	synopGMAC_tx_enable(gmacdev);
 }
 
+int check_phy_config(synopGMACdevice *gmacdev) {
+  printf("Searching for valid PHY\n");
+  int phy_id = synopGMAC_search_phy(gmacdev);
+  if (phy_id < 0) {
+      return -1; // PHY not found
+  }
+
+  // Lets assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
+  if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
+      printf("Invalid PHY configuration (speed or duplex) detected!\n");
+      return -1; // Invalid configuration
+  }
+   return phy_id;
+}
+
 extern s32 synopGMAC_read_phy_reg(u32 *RegBase,u32 PhyBase, u32 RegOffset, u16 * data);
 extern s32 synopGMAC_write_phy_reg(u32 *RegBase, u32 PhyBase, u32 RegOffset, u16 data);
 int jz_net_initialize(bd_t *bis)
@@ -564,11 +579,11 @@ int jz_net_initialize(bd_t *bis)
 
 #if (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_RGMII)
 
-	phy_id = synopGMAC_search_phy(gmacdev);
-	if (phy_id >= 0) {
-		gmacdev->PhyBase = phy_id;
-	} else {
+	phy_id = check_phy_config(gmacdev);
+	if (phy_id < 0) {
+		printf("Error: Invalid PHY configuration.\n");
 		printf("====>PHY not found!\n");
+		return -1; // Return error
 	}
 
 	/* configure 88e1111 in rgmii to copper mode
@@ -609,11 +624,11 @@ int jz_net_initialize(bd_t *bis)
 		}
 	}
 #else
-    phy_id = synopGMAC_search_phy(gmacdev);
-    if (phy_id >= 0) {
-        gmacdev->PhyBase = phy_id;
-    } else {
-        printf("====>PHY not found!");
+    phy_id = check_phy_config(gmacdev);
+    if (phy_id < 0) {
+      printf("Error: Invalid PHY configuration.\n");
+      printf("====>PHY not found!\n");
+      return -1;  // Return error
     }
 #endif //CONFIG_NET_PHY_TYPE
 	udelay(100000);
