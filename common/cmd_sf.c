@@ -86,6 +86,14 @@ static ulong bytes_per_second(unsigned int len, ulong start_ms)
 		return 1024 * len / max(get_timer(start_ms), 1);
 }
 
+
+
+
+// Define the offsets of the fields within the SquashFS superblock
+#define SQUASHFS_MAGIC_OFFSET    0
+#define SQUASHFS_BYTES_USED_OFFSET  40 // Offset of bytes_used in the superblock
+
+
 static int do_spi_flash_probe(int argc, char * const argv[])
 {
 	unsigned int bus = CONFIG_SF_DEFAULT_BUS;
@@ -131,49 +139,57 @@ static int do_spi_flash_probe(int argc, char * const argv[])
 		spi_flash_free(flash);
 	flash = new;
 ///begin mtd
-/*
- * Function to process SPI flash data and set environment variables
- * based on the content read from a specific address.
- */
+
+
+
     unsigned int addr = 0x250000; // Address to read from
     char buf[64]; // Buffer to store read data
-    unsigned int extracted_magic, extracted_size;
 
-    // Read data from SPI flash
+    // Read the superblock from SPI flash
     if (spi_flash_read(flash, addr, sizeof(buf), buf)) {
         printf("Failed to read from SPI flash\n");
         return 1;
     }
 
-    // Directly read the magic number and size from the buffer
-    memcpy(&extracted_magic, buf, sizeof(extracted_magic));
-    memcpy(&extracted_size, buf + 40, sizeof(extracted_size));
+    // Extract the magic number directly from the buffer
+    uint32_t magic_number;
+    memcpy(&magic_number, buf + SQUASHFS_MAGIC_OFFSET, sizeof(magic_number));
 
-    printf("Extracted magic: 0x%08X\n", extracted_magic);
-    printf("Extracted size: 0x%08X\n", extracted_size);
-
-    // Check if the magic number is as expected
-    if (extracted_magic == 0x73717368) { // "hsqs" magic number
-        // Set environment variables based on the extracted size
-        if (extracted_size + 0x1000 < 0x500000) {
-            setenv("rootmtd", "5120k");
-        } else {
-            setenv("rootmtd", "8192k");
-        }
-    } else {
-        printf("Invalid magic value: 0x%08X\n", extracted_magic);
+    // Check the magic number
+    if (magic_number != 0x73717368) { // "hsqs"
+        printf("Invalid SquashFS magic number: 0x%08X\n", magic_number);
         return 1;
     }
 
-// Get filesize from environment and set rootsize
+    // Extract bytes_used as two 32-bit values and combine them
+    uint32_t bytes_used_low, bytes_used_high;
+    memcpy(&bytes_used_low, buf + SQUASHFS_BYTES_USED_OFFSET, sizeof(uint32_t));
+    memcpy(&bytes_used_high, buf + SQUASHFS_BYTES_USED_OFFSET + sizeof(uint32_t), sizeof(uint32_t));
+    uint64_t bytes_used = ((uint64_t)bytes_used_high << 32) | bytes_used_low;
+
+    printf("SquashFS magic: 0x%08X, Size: %llu bytes\n", magic_number, bytes_used);
+
+    // Calculate and set the size based on the bytes_used field
+    char size_str[32];
+    sprintf(size_str, "%lluk", (bytes_used + 1023) / 1024); // Convert to kilobytes
+    setenv("rootmtd", size_str);
+
+// Set rootsize based on the actual file size in memory
 int file = getenv_ulong("filesize", 16, 0);
-if (file != 0) {
-    if (file < 0x500000) {
-        setenv("rootsize", "0x500000");
-    } else {
-        setenv("rootsize", "0x800000");
-    }
+char file_size_str[32];
+
+if (file > 0) {
+    // Convert the file size to a string representation in kilobytes
+    sprintf(file_size_str, "%luk", (file + 1023) / 1024); // Round up to the nearest kilobyte
+    setenv("rootsize", file_size_str);
+} else {
+    // Default value or error handling if file size is not available
+    // You can keep the existing logic or modify as needed
+    setenv("rootsize", "0x500000"); // Default value if file size is not available
 }
+
+ 
+
 
 
 ///end mtd /////////////////////////////
