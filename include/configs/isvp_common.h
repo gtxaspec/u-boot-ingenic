@@ -40,13 +40,13 @@
     #define CONFIG_BOOTCOMMAND "setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; mmc read ${baseaddr} 0x1800 0x3000; bootm ${baseaddr}"
 #endif
 #ifdef CONFIG_SFC_NOR
-    #define CONFIG_BOOTCOMMAND "setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe; sf read ${baseaddr} 0x50000 0x300000; bootm ${baseaddr}; reset"
+    #define CONFIG_BOOTCOMMAND "setenv bootcmd ${bootcmdnor}; sf probe 0; saveenv; run bootcmd"
 #endif
 #ifdef CONFIG_SFC_NAND
     #define CONFIG_BOOTCOMMAND "setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sfcnand read 0x50000 0x200000 ${baseaddr} ; bootm ${baseaddr}; reset"
 #endif
 
-#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} console=ttyS1,115200n8 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=\${mtdparts} \${extras}"
+#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} console=ttyS1,115200n8 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=jz_sfc:256k(boot),64k(env),2048k(kernel),\\${rootmtd}(rootfs),-(rootfs_data) \${extras}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
     "baseaddr=0x80600000\0" \
@@ -56,7 +56,7 @@
     "urnor16m=mw.b ${baseaddr} ff 1000000; tftpboot ${baseaddr} rootfs.squashfs.${soc} ; sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}\0" \
     "uknand=mw.b ${baseaddr} ff 1000000; tftpboot ${baseaddr} uImage.${soc} ; nand erase 0x100000 0x300000; nand write ${baseaddr} 0x100000 0x300000\0" \
     "urnand=mw.b ${baseaddr} ff 1000000; tftpboot ${baseaddr} rootfs.ubi.${soc} ; nand erase 0x400000 0x7c00000; nand write ${baseaddr} 0x400000 ${filesize}\0" \
-    "mtdparts=jz_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)\0" \
+    "mtdparts=jz_sfc:256k(boot),64k(env),2048k(kernel),\\${rootmtd}(rootfs),-(rootfs_data)\0" \
     "mtdpartsubi=setenv mtdparts jz_sfcnand:256k(boot),768k(wtf),3072k(kernel),-(ubi)\0" \
     "mtdpartsnand=setenv mtdparts jz_sfcnand:256k(boot),768k(wtf),3072k(kernel),10240k(rootfs),-(rootfs_data)\0" \
     "mtdpartsnor8m=setenv mtdparts jz_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)\0" \
@@ -67,7 +67,7 @@
     "bootnfs=setenv setargs setenv bootargs ${bootargsnfs}; run setargs; tftpboot ${baseaddr} uImage.${soc}; bootm ${baseaddr}\0" \
     "bootcmdnand=setenv setargs setenv bootargs ${bootargs}; run setargs; nand read ${baseaddr} 0x100000 0x300000; bootm ${baseaddr}\0" \
     "bootcmdubi=setenv setargs setenv bootargs ${bootargsubi}; run setargs; nand read ${baseaddr} 0x100000 0x300000; bootm ${baseaddr}\0" \
-    "bootcmdnor=setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sf read ${baseaddr} 0x50000 0x300000; bootm ${baseaddr}\0" \
+    "bootcmdnor=sf probe 0; setenv setargs setenv bootargs ${bootargs}; run setargs; sf read ${baseaddr} 0x50000 0x300000; bootm ${baseaddr}\0" \
     "setnand=run mtdpartsubi; setenv bootcmd ${bootcmdubi}; saveenv; reset\0" \
     "setnor8m=run mtdpartsnor8m; setenv bootcmd ${bootcmdnor}; saveenv; reset\0" \
     "setnor16m=run mtdpartsnor16m; setenv bootcmd ${bootcmdnor}; saveenv; reset\0" \

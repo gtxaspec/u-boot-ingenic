@@ -130,7 +130,53 @@ static int do_spi_flash_probe(int argc, char * const argv[])
 	if (flash)
 		spi_flash_free(flash);
 	flash = new;
+///begin mtd
+/*
+ * Function to process SPI flash data and set environment variables
+ * based on the content read from a specific address.
+ */
+    unsigned int addr = 0x250000; // Address to read from
+    char buf[64]; // Buffer to store read data
+    unsigned int extracted_magic, extracted_size;
 
+    // Read data from SPI flash
+    if (spi_flash_read(flash, addr, sizeof(buf), buf)) {
+        printf("Failed to read from SPI flash\n");
+        return 1;
+    }
+
+    // Directly read the magic number and size from the buffer
+    memcpy(&extracted_magic, buf, sizeof(extracted_magic));
+    memcpy(&extracted_size, buf + 40, sizeof(extracted_size));
+
+    printf("Extracted magic: 0x%08X\n", extracted_magic);
+    printf("Extracted size: 0x%08X\n", extracted_size);
+
+    // Check if the magic number is as expected
+    if (extracted_magic == 0x73717368) { // "hsqs" magic number
+        // Set environment variables based on the extracted size
+        if (extracted_size + 0x1000 < 0x500000) {
+            setenv("rootmtd", "5120k");
+        } else {
+            setenv("rootmtd", "8192k");
+        }
+    } else {
+        printf("Invalid magic value: 0x%08X\n", extracted_magic);
+        return 1;
+    }
+
+// Get filesize from environment and set rootsize
+int file = getenv_ulong("filesize", 16, 0);
+if (file != 0) {
+    if (file < 0x500000) {
+        setenv("rootsize", "0x500000");
+    } else {
+        setenv("rootsize", "0x800000");
+    }
+}
+
+
+///end mtd /////////////////////////////
 	return 0;
 }
 
