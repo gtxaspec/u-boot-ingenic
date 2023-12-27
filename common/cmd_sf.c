@@ -86,17 +86,13 @@ static ulong bytes_per_second(unsigned int len, ulong start_ms)
 		return 1024 * len / max(get_timer(start_ms), 1);
 }
 
-
-
 // Function declaration
 int process_spi_flash_data(struct spi_flash *flash);
-// Define the offsets of the fields within the SquashFS superblock
+
+// Constants
 #define SQUASHFS_MAGIC_OFFSET    0
 #define SQUASHFS_BYTES_USED_OFFSET  40 // Offset of bytes_used in the superblock
-// Constants for size alignment, replace with actual values as needed
-#define SECTOR_SIZE 4096 // sector size in bytes
-
-#define ERASE_BLOCK_SIZE 0x00008000 // 32KiB
+#define ERASE_BLOCK_SIZE 0x00008000 // 32KiB, erase block size
 
 // Function to align size to the nearest erase block size
 uint64_t align_to_erase_block(uint64_t size) {
@@ -106,13 +102,7 @@ uint64_t align_to_erase_block(uint64_t size) {
     return ((size / ERASE_BLOCK_SIZE) + 1) * ERASE_BLOCK_SIZE;
 }
 
-// Helper function to align size to the nearest sector size
-uint64_t align_size(uint64_t size) {
-    return (size + SECTOR_SIZE - 1) & ~(SECTOR_SIZE - 1);
-}
-
 int process_spi_flash_data(struct spi_flash *flash) {
-
     unsigned int addr = 0x250000; // Address to read from
     char buf[64]; // Buffer to store read data
 
@@ -147,17 +137,16 @@ int process_spi_flash_data(struct spi_flash *flash) {
     sprintf(size_str, "%lluk", aligned_bytes_used / 1024); // Convert to kilobytes
     setenv("rootmtd", size_str);
 
-    // Set rootsize based on actual file size in memory
+    // Set rootsize based on actual file size in memory, aligned to erase block size
     uint64_t file_size = getenv_ulong("filesize", 16, 0);
-    char file_size_str[32];
-
     if (file_size > 0) {
         uint64_t aligned_file_size = align_to_erase_block(file_size);
-        sprintf(file_size_str, "%lluk", aligned_file_size / 1024); // Convert to kilobytes
-        setenv("rootsize", file_size_str);
+        sprintf(size_str, "%lluk", aligned_file_size / 1024); // Convert to kilobytes
+        setenv("rootsize", size_str);
     } else {
-        sprintf(file_size_str, "%lluk", aligned_bytes_used / 1024);
-        setenv("rootsize", file_size_str);
+        // If filesize environment variable is not set, use aligned bytes used from SquashFS
+        sprintf(size_str, "%lluk", aligned_bytes_used / 1024);
+        setenv("rootsize", size_str);
     }
 
     return 0;
@@ -211,11 +200,8 @@ int do_spi_flash_probe(int argc, char * const argv[])
 
     int result = process_spi_flash_data(flash);
 
-    // Handle the result
-    if (result == 0) {
-		printf("OK");
-    } else {
-		printf("BAD");
+    if (result != 0) {
+		printf("SquashFS detection failed.");
     }
 
 	return 0;
