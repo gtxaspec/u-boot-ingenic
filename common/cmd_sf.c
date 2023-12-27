@@ -88,13 +88,23 @@ static ulong bytes_per_second(unsigned int len, ulong start_ms)
 
 
 
-// Function declaration (if the definition is later in the file)
+// Function declaration
 int process_spi_flash_data(struct spi_flash *flash);
 // Define the offsets of the fields within the SquashFS superblock
 #define SQUASHFS_MAGIC_OFFSET    0
 #define SQUASHFS_BYTES_USED_OFFSET  40 // Offset of bytes_used in the superblock
 // Constants for size alignment, replace with actual values as needed
-#define SECTOR_SIZE 4096 // Example sector size in bytes
+#define SECTOR_SIZE 4096 // sector size in bytes
+
+#define ERASE_BLOCK_SIZE 0x00008000 // 32KiB
+
+// Function to align size to the nearest erase block size
+uint64_t align_to_erase_block(uint64_t size) {
+    if (size % ERASE_BLOCK_SIZE == 0) {
+        return size; // Already aligned
+    }
+    return ((size / ERASE_BLOCK_SIZE) + 1) * ERASE_BLOCK_SIZE;
+}
 
 // Helper function to align size to the nearest sector size
 uint64_t align_size(uint64_t size) {
@@ -130,28 +140,27 @@ int process_spi_flash_data(struct spi_flash *flash) {
 
     printf("SquashFS magic: 0x%08X, Size: %llu bytes\n", magic_number, bytes_used);
 
-    // Align the SquashFS size to the nearest sector
-    uint64_t aligned_bytes_used = align_size(bytes_used);
+    // Align the SquashFS size to the nearest erase block
+    uint64_t aligned_bytes_used = align_to_erase_block(bytes_used);
+
     char size_str[32];
     sprintf(size_str, "%lluk", aligned_bytes_used / 1024); // Convert to kilobytes
     setenv("rootmtd", size_str);
 
-    // Set rootsize based on the actual file size in memory
+    // Set rootsize based on actual file size in memory
     uint64_t file_size = getenv_ulong("filesize", 16, 0);
     char file_size_str[32];
 
     if (file_size > 0) {
-        // Align the file size to the nearest sector
-        uint64_t aligned_file_size = align_size(file_size);
+        uint64_t aligned_file_size = align_to_erase_block(file_size);
         sprintf(file_size_str, "%lluk", aligned_file_size / 1024); // Convert to kilobytes
         setenv("rootsize", file_size_str);
     } else {
-        // Use the aligned SquashFS size as a fallback if file size is not available
         sprintf(file_size_str, "%lluk", aligned_bytes_used / 1024);
         setenv("rootsize", file_size_str);
     }
- 
-	return 0;
+
+    return 0;
 }
 
 
