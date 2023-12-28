@@ -93,6 +93,7 @@ int process_spi_flash_data(struct spi_flash *flash);
 #define SQUASHFS_MAGIC_OFFSET    0
 #define SQUASHFS_BYTES_USED_OFFSET  40 // Offset of bytes_used in the superblock
 #define ERASE_BLOCK_SIZE 0x00008000 // 32KiB, erase block size
+#define KERNEL_START_ADDR 0x50000 // Kernel start address
 
 // Function to align size to the nearest erase block size
 uint64_t align_to_erase_block(uint64_t size) {
@@ -103,53 +104,70 @@ uint64_t align_to_erase_block(uint64_t size) {
 }
 
 int process_spi_flash_data(struct spi_flash *flash) {
-    unsigned int addr = 0x250000; // Address to read from
-    char buf[64]; // Buffer to store read data
+    printf("Starting process_spi_flash_data\n");
 
-    // Read the superblock from SPI flash
-    if (spi_flash_read(flash, addr, sizeof(buf), buf)) {
-        printf("Failed to read from SPI flash\n");
-        return 1;
+    // Starting address is right after the kernel, adjust as necessary
+    unsigned int start_addr = 0x250000;
+    unsigned int end_addr = 0x360000; // Adjust as necessary
+    unsigned int addr; // Declare outside the for loop for compatibility
+
+    printf("Searching SquashFS from 0x%X to 0x%X\n", start_addr, end_addr);
+
+    for (addr = start_addr; addr < end_addr; addr += ERASE_BLOCK_SIZE) {
+        char buf[64];
+
+        printf("Reading from address 0x%X\n", addr);
+        if (spi_flash_read(flash, addr, sizeof(buf), buf)) {
+            printf("Failed to read from SPI flash at 0x%X\n", addr);
+            continue; // Skip to the next block
+        }
+
+        uint32_t magic_number;
+        memcpy(&magic_number, buf + SQUASHFS_MAGIC_OFFSET, sizeof(magic_number));
+
+        printf("Magic number at 0x%X: 0x%08X\n", addr, magic_number);
+
+        if (magic_number == 0x73717368) {
+            printf("SquashFS found at 0x%X\n", addr);
+
+            // Calculate kernel size
+            uint64_t kernel_size = addr - KERNEL_START_ADDR;
+            uint64_t aligned_kernel_size = align_to_erase_block(kernel_size);
+            char kern_size_str[32];
+            sprintf(kern_size_str, "%lluk", aligned_kernel_size / 1024);
+            setenv("kernsize", kern_size_str);
+
+            // Extract and process SquashFS size
+            uint32_t bytes_used_low, bytes_used_high;
+            memcpy(&bytes_used_low, buf + SQUASHFS_BYTES_USED_OFFSET, sizeof(uint32_t));
+            memcpy(&bytes_used_high, buf + SQUASHFS_BYTES_USED_OFFSET + sizeof(uint32_t), sizeof(uint32_t));
+            uint64_t bytes_used = ((uint64_t)bytes_used_high << 32) | bytes_used_low;
+
+            printf("Size at 0x%X: %llu bytes\n", addr, bytes_used);
+
+            // Align and set SquashFS environment variables
+            uint64_t aligned_bytes_used = align_to_erase_block(bytes_used);
+            char size_str[32];
+            sprintf(size_str, "%lluk", aligned_bytes_used / 1024);
+            setenv("rootmtd", size_str);
+
+            // Set rootsize based on actual file size in memory
+            uint64_t file_size = getenv_ulong("filesize", 16, 0);
+            if (file_size > 0) {
+                uint64_t aligned_file_size = align_to_erase_block(file_size);
+                sprintf(size_str, "%lluk", aligned_file_size / 1024);
+                setenv("rootsize", size_str);
+            } else {
+                sprintf(size_str, "%lluk", aligned_bytes_used / 1024);
+                setenv("rootsize", size_str);
+            }
+
+            return 0; // Success
+        }
     }
 
-    // Extract the magic number directly from the buffer
-    uint32_t magic_number;
-    memcpy(&magic_number, buf + SQUASHFS_MAGIC_OFFSET, sizeof(magic_number));
-
-    // Check the magic number
-    if (magic_number != 0x73717368) { // "hsqs"
-        printf("Invalid SquashFS magic number: 0x%08X\n", magic_number);
-        return 1;
-    }
-
-    // Extract bytes_used as two 32-bit values and combine them
-    uint32_t bytes_used_low, bytes_used_high;
-    memcpy(&bytes_used_low, buf + SQUASHFS_BYTES_USED_OFFSET, sizeof(uint32_t));
-    memcpy(&bytes_used_high, buf + SQUASHFS_BYTES_USED_OFFSET + sizeof(uint32_t), sizeof(uint32_t));
-    uint64_t bytes_used = ((uint64_t)bytes_used_high << 32) | bytes_used_low;
-
-    printf("SquashFS magic: 0x%08X, Size: %llu bytes\n", magic_number, bytes_used);
-
-    // Align the SquashFS size to the nearest erase block
-    uint64_t aligned_bytes_used = align_to_erase_block(bytes_used);
-
-    char size_str[32];
-    sprintf(size_str, "%lluk", aligned_bytes_used / 1024); // Convert to kilobytes
-    setenv("rootmtd", size_str);
-
-    // Set rootsize based on actual file size in memory, aligned to erase block size
-    uint64_t file_size = getenv_ulong("filesize", 16, 0);
-    if (file_size > 0) {
-        uint64_t aligned_file_size = align_to_erase_block(file_size);
-        sprintf(size_str, "%lluk", aligned_file_size / 1024); // Convert to kilobytes
-        setenv("rootsize", size_str);
-    } else {
-        // If filesize environment variable is not set, use aligned bytes used from SquashFS
-        sprintf(size_str, "%lluk", aligned_bytes_used / 1024);
-        setenv("rootsize", size_str);
-    }
-
-    return 0;
+    printf("SquashFS not found within the search range\n");
+    return 1; // SquashFS not found
 }
 
 
@@ -198,11 +216,8 @@ int do_spi_flash_probe(int argc, char * const argv[])
 		spi_flash_free(flash);
 	flash = new;
 
-    int result = process_spi_flash_data(flash);
+    process_spi_flash_data(flash);
 
-    if (result != 0) {
-		printf("SquashFS detection failed.");
-    }
 
 	return 0;
 }

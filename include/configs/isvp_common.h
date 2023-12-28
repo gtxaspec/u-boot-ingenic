@@ -46,7 +46,7 @@
     #define CONFIG_BOOTCOMMAND "setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sfcnand read 0x50000 0x200000 ${baseaddr} ; bootm ${baseaddr}; reset"
 #endif
 
-#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} console=ttyS1,115200n8 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=jz_sfc:256k(boot),64k(env),2048k(kernel),\\${rootmtd}(rootfs),-(rootfs_data) \${extras}"
+#define CONFIG_BOOTARGS "mem=\${osmem} rmem=\${rmem} console=ttyS1,115200n8 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=jz_sfc:256k(boot),64k(env),\\$kernsize(kernel),\\${rootmtd}(rootfs),-(rootfs_data) \${extras}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
     "baseaddr=0x80600000\0" \
