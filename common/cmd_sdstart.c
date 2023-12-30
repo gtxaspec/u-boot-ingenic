@@ -26,20 +26,25 @@ typedef enum {
 static unsigned char *LOAD_ADDR = NULL;
 
 // Format strings for boot arguments and commands
-#define MAX_LOADSZ 0xA00000  // Maximum load size, 10MB
-#define DEFAULT_DELAY 1      // Default delay is set to 1 second, begins only if the kernel image has been found
+
+// Maximum load size
+#define SDSTART_MAX_LOADSZ	0xA00000 // 10MB
+
+// Delay before loading the kernel, in seconds.
+// The countdown will only start if a kernel image is found.
+#define SDSTART_DEFAULT_DELAY	1
 
 // Macro to generate kernel filenames based on SoC
-#define KERNEL_FILENAMES_FOR_SOC(soc) \
+#define SDSTART_KERNEL_FILENAMES(soc) \
     "factory_" #soc "_0P3N1PC_kernel", \
     "factory_" #soc "_ZMC6tiIDQN", \
     NULL  // sentinel value
 
 // Kernel filenames based on SoC
 #ifdef CONFIG_T10
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t10) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t10) };
 #elif defined(CONFIG_T15)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t15) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t15) };
 #elif defined(CONFIG_T20)
 // Special case for T20 to match factory
 static const char* kernel_filenames[] = {
@@ -48,13 +53,13 @@ static const char* kernel_filenames[] = {
 	NULL
 };
 #elif defined(CONFIG_T21)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t21) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t21) };
 #elif defined(CONFIG_T30)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t30) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t30) };
 #elif defined(CONFIG_T31)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t31) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t31) };
 #elif defined(CONFIG_T40)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t40) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t40) };
 #else
 static const char* kernel_filenames[] = { NULL };  // Default case, no files to attempt loading
 #endif
@@ -162,7 +167,7 @@ static ErrorCode check_header_and_checksum_validity(long nbytes) {
 static int load_kernel_and_validate(void) {
 	int i;
 	for (i = 0; kernel_filenames[i] != NULL; i++) {
-		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, MAX_LOADSZ);
+		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, SDSTART_MAX_LOADSZ);
 		if (file_size > 0) {
 			ErrorCode err = check_header_and_checksum_validity(file_size);
 			if (err == ERR_NONE) {
@@ -254,7 +259,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	}
 
 	// If kernel is detected, then show the Ctrl-C prompt
-	int delay = (argc > 1) ? simple_strtol(argv[1], NULL, 10) : DEFAULT_DELAY;
+	int delay = (argc > 1) ? simple_strtol(argv[1], NULL, 10) : SDSTART_DEFAULT_DELAY;
 	if (prompt_and_wait_for_interrupt(delay)) {
 		printf("Operation was canceled during the prompt.\n");
 		return 0; // Return early if user interrupted
