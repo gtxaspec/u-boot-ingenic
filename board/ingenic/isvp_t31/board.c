@@ -39,8 +39,8 @@ struct cgu_clk_src cgu_clk_src[] = {
 	{SSI, MPLL},
 	{CIM, VPLL},
 	{ISP, MPLL},
-	{I2S_SPK, APLL}, //i2s使用APLL
-	{I2S_MIC, APLL}, //i2s使用APLL
+	{I2S_SPK, APLL}, // i2s uses APLL
+	{I2S_MIC, APLL}, // i2s uses APLL
 	{SRC_EOF,SRC_EOF}
 };
 
