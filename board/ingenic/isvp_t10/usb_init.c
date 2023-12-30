@@ -1,47 +1,41 @@
-
-
 #include <common.h>
 #include <usb.h>
 
-
-#define USBRDT_VBFIL_LD_EN		25
-#define USBRDT_IDDIG_EN			24
-#define USBRDT_IDDIG_REG		23
-#define USBPCR_TXPREEMPHTUNE		6
-#define USBPCR_POR			22
-#define USBPCR_USB_MODE			31
-#define USBPCR_COMMONONN		25
-#define USBPCR_VBUSVLDEXT		24
-#define USBPCR_VBUSVLDEXTSEL		23
-#define USBPCR_OTG_DISABLE		20
-#define USBPCR_SIDDQ			21
-#define USBPCR_IDPULLUP_MASK		28
-#define OPCR_SPENDN0			7
-#define USBPCR1_USB_SEL			28
-#define USBPCR1_WORD_IF0		19
-#define USBPCR1_WORD_IF1		18
-#define SRBC_USB_SR			12
+#define OPCR_SPENDN0		7
+#define SRBC_USB_SR		12
+#define USBPCR1_USB_SEL		28
+#define USBPCR1_WORD_IF0	19
+#define USBPCR1_WORD_IF1	18
+#define USBPCR_COMMONONN	25
+#define USBPCR_IDPULLUP_MASK	28
+#define USBPCR_OTG_DISABLE	20
+#define USBPCR_POR		22
+#define USBPCR_SIDDQ		21
+#define USBPCR_TXPREEMPHTUNE	6
+#define USBPCR_USB_MODE		31
+#define USBPCR_VBUSVLDEXT	24
+#define USBPCR_VBUSVLDEXTSEL	23
+#define USBRDT_IDDIG_EN		24
+#define USBRDT_IDDIG_REG	23
+#define USBRDT_VBFIL_LD_EN	25
 
 #define CPM_SRBC		0x100000c4
 #define CPM_USBPCR1		0x10000048
 #define CPM_USBVBFIL		0x10000044
 #define CPM_USBRDT		0x10000040
-#define CPM_USBPCR              0x1000003c
-#define CPM_CLKGR0              0x10000020
-#define CPM_CLKGR1              0x10000028
+#define CPM_USBPCR		0x1000003c
+#define CPM_CLKGR0		0x10000020
+#define CPM_CLKGR1		0x10000028
 #define CPM_OPCR		0x10000024
-#define CPM_CPAPCR              0x10000010
+#define CPM_CPAPCR		0x10000010
 
-
-
-#define reg_set_bit(bit,reg)           *(volatile unsigned int *)(reg) |= 1UL<<(bit)
-#define reg_clr_bit(bit,reg)	       *(volatile unsigned int *)(reg) &= ~(1UL<<(bit))
-#define reg_wr(val,reg)       	       *(volatile unsigned int *)(reg) = (val)
-#define reg_rd(reg)		       *(volatile unsigned int *)(reg)
+#define reg_set_bit(bit,reg)	*(volatile unsigned int *)(reg) |= 1UL<<(bit)
+#define reg_clr_bit(bit,reg)	*(volatile unsigned int *)(reg) &= ~(1UL<<(bit))
+#define reg_wr(val,reg)		*(volatile unsigned int *)(reg) = (val)
+#define reg_rd(reg)		*(volatile unsigned int *)(reg)
 
 int board_usb_init(void)
 {
-
 	unsigned int usbpcr1, usbrdt;
 
 	/* select dwc otg */
@@ -88,5 +82,5 @@ int board_usb_init(void)
 	reg_clr_bit(USBPCR_POR, CPM_USBPCR);
 	mdelay(1);
 
-     return 0;
+	return 0;
 }

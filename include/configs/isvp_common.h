@@ -1,4 +1,7 @@
-#ifdef __CONFIG_ISVP_H__
+#ifndef __CONFIG_ISVP_COMMON_H__
+#define __CONFIG_ISVP_COMMON_H__
+
+#ifdef __CONFIG_ISVP_T10_H__
     #define CONFIG_SOC "t10"
 #elif defined(__CONFIG_ISVP_T20_H__)
     #define CONFIG_SOC "t20"
@@ -89,3 +92,4 @@
     "soc="CONFIG_SOC"\0" \
     CONFIG_EXTRA_SETTINGS
 
+#endif /*__CONFIG_ISVP_COMMON__*/
