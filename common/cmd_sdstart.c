@@ -61,10 +61,11 @@ static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t31) };
 #elif defined(CONFIG_T40)
 static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t40) };
 #else
-static const char* kernel_filenames[] = { NULL };  // Default case, no files to attempt loading
+static const char* kernel_filenames[] = { NULL };  // Default case, do not load anything
 #endif
 
-// This function prompts the user to press Ctrl-C to interrupt the kernel loading, lasting for the specified delay (in seconds).
+// This function prompts the user to press Ctrl-C to cancel the kernel loading,
+// lasting for the specified delay (in seconds).
 static bool prompt_and_wait_for_interrupt(int delay) {
 	printf("To cancel loading the kernel, press Ctrl-C within the next %d second(s)...\n", delay);
 	unsigned long start = get_timer(0);
@@ -171,9 +172,9 @@ static int load_kernel_and_validate(void) {
 		if (file_size > 0) {
 			ErrorCode err = check_header_and_checksum_validity(file_size);
 			if (err == ERR_NONE) {
-				return 0; // Successfully loaded and validated the kernel
+				return 0; // Kernel loaded and validated
 			}
-			// If there's an error other than ERR_FILE_NOT_FOUND, handle it and exit.
+			// Handle errors other than ERR_FILE_NOT_FOUND, and exit
 			if (err != ERR_FILE_NOT_FOUND) {
 				return handle_error(err, kernel_filenames[i]);
 			}
@@ -185,12 +186,12 @@ static int load_kernel_and_validate(void) {
 // Function to check if the SD card is present and contains a valid FAT filesystem
 static int validate_sd_card(void) {
 	block_dev_desc_t *stor_dev = get_dev("mmc", 0);
-	if(NULL == stor_dev) {
+	if (NULL == stor_dev) {
 		handle_error(ERR_MMC_NOT_PRESENT, "");
 		return false;
 	}
 	int ret = fat_register_device(stor_dev, 1);
-	if(ret != 0) {
+	if (ret != 0) {
 		handle_error(ERR_FAT_REGISTRATION_FAIL, "");
 		return false;
 	}
@@ -247,7 +248,8 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	int i;
 	int found_kernel = 0;
 	for (i = 0; kernel_filenames[i] != NULL; i++) {
-		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, 0); // Reading with size 0 to just detect
+		// Reading with size 0 to just detect
+		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, 0);
 		if (file_size > 0) {
 			found_kernel = 1;
 			break;
@@ -283,4 +285,3 @@ U_BOOT_CMD(
 	"Load a kernel from the MMC card with an interruptible delay.",
 	"[delay_in_seconds]"
 );
-
