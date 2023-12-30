@@ -66,12 +66,12 @@ static const char* kernel_filenames[] = { NULL };  // Default case, no files to 
 
 // This function prompts the user to press Ctrl-C to interrupt the kernel loading, lasting for the specified delay (in seconds).
 static bool prompt_and_wait_for_interrupt(int delay) {
-	printf("You can interrupt kernel loading by pressing Ctrl-C within the next %d second(s)...\n", delay);
+	printf("To cancel loading the kernel, press Ctrl-C within the next %d second(s)...\n", delay);
 	unsigned long start = get_timer(0);
 
 	while (get_timer(0) - start < delay * 1000) {
 		if (ctrlc()) {
-			printf("Kernel loading interrupted by user.\n");
+			printf("Kernel loading cancel by user.\n");
 			return true;
 		}
 		udelay(10000);  // Check every 10ms
