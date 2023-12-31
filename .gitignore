@@ -1,10 +1,11 @@
 build/
 .vscode
-boards.depend
+*boards.depend
 System.map
 include/generated
 .depend*
 u-boot*
+*.s
 *.o
 *.su
 *.log
