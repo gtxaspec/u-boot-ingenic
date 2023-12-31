@@ -95,7 +95,7 @@ HOSTCC		 = $(call os_x_before, 10, 5, "cc", "gcc")
 HOSTCFLAGS	+= $(call os_x_before, 10, 4, "-traditional-cpp")
 HOSTLDFLAGS	+= $(call os_x_before, 10, 5, "-multiply_defined suppress")
 else
-HOSTCC		= gcc
+HOSTCC		= $(CCACHE) gcc
 endif
 
 ifeq ($(HOSTOS),cygwin)
@@ -140,13 +140,13 @@ binutils-version = $(shell $(SHELL) $(SRCTREE)/tools/binutils-version.sh $(AS))
 #
 # Include the make variables (CC, etc...)
 #
-AS	= $(CROSS_COMPILE)as
+AS	= $(CCACHE) $(CROSS_COMPILE)as
 
 # Always use GNU ld
 LD	= $(shell if $(CROSS_COMPILE)ld.bfd -v > /dev/null 2>&1; \
 		then echo "$(CROSS_COMPILE)ld.bfd"; else echo "$(CROSS_COMPILE)ld"; fi;)
 
-CC	= $(CROSS_COMPILE)gcc
+CC	= $(CCACHE) $(CROSS_COMPILE)gcc
 CPP	= $(CC) -E
 AR	= $(CROSS_COMPILE)ar
 NM	= $(CROSS_COMPILE)nm
@@ -342,7 +342,7 @@ endif
 
 #########################################################################
 
-export	HOSTCC HOSTCFLAGS HOSTLDFLAGS PEDCFLAGS HOSTSTRIP CROSS_COMPILE \
+export	HOSTCC HOSTCFLAGS HOSTLDFLAGS PEDCFLAGS HOSTSTRIP CROSS_COMPILE CCACHE \
 	AS LD CC CPP AR NM STRIP OBJCOPY OBJDUMP MAKE
 export	CONFIG_SYS_TEXT_BASE PLATFORM_CPPFLAGS PLATFORM_RELFLAGS CPPFLAGS CFLAGS AFLAGS
 
