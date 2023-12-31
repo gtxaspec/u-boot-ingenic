@@ -93,7 +93,7 @@ int board_eth_init(bd_t *bis)
 	if (ret < 0){
 		// Wyze V2
 		gpio_request(47,"wyze_usb_enable");
-		gpio_direction_output(47,0);
+		gpio_direction_output(47,1);
 
 		gpio_request(43,"wyze_cd_enable");
 		gpio_direction_output(43,1);
