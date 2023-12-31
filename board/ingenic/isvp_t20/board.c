@@ -31,6 +31,7 @@
 #include <asm/arch/clk.h>
 #include <power/d2041_core.h>
 
+extern int jz_net_initialize(bd_t *bis);
 struct cgu_clk_src cgu_clk_src[] = {
 	{VPU, MPLL},
 	{MACPHY, MPLL},
@@ -86,7 +87,7 @@ int board_mmc_init(bd_t *bd)
 
 int board_eth_init(bd_t *bis)
 {
-	return 0;
+	return ret;
 }
 
 #ifdef CONFIG_SPL_NOR_SUPPORT
@@ -95,6 +96,12 @@ int spl_start_uboot(void)
 	return 1;
 }
 #endif
+/* U-Boot common routines */
+int checkboard(void)
+{
+	puts("Board: ISVP (Ingenic XBurst T20 SoC)\n");
+	return 0;
+}
 
 #ifdef CONFIG_SPL_BUILD
 
