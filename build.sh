@@ -2,6 +2,7 @@
 
 export ARCH=mips
 export CROSS_COMPILE=mipsel-linux-gnu-
+#export CCACHE=/usr/bin/ccache
 
 declare -A cfg
 
@@ -36,15 +37,36 @@ cfg[t31a]="isvp_t31a_sfcnor_ddr128M"
 cfg[t31al]="isvp_t31al_sfcnor_ddr128M"
 cfg[t31lc]="isvp_t31lc_sfcnor"
 
+OUTPUTDIR="./uboot_build"
 
-OUTPUTDIR="${HOME}/uboot"
-mkdir -p ${OUTPUTDIR} 2>&1 > /dev/null
+# Collecting platform names and formatting output
+platforms=""
+column_count=0
+for key in "${!cfg[@]}"; do
+	platforms+="${cfg[$key]}\t"
+	((++column_count))
+	if [ $column_count -eq 1 ]; then
+		platforms+="\n"
+		column_count=0
+	fi
+done
 
+echo -e "Building U-Boot 2013.07 on Ingenic XBurst1 for:\n$platforms"
+
+# Start timer
+SECONDS=0
+
+# Building process
 for soc in "${!cfg[@]}"; do
 	echo "Building U-Boot for ${soc}"
 	log=building-${soc}.log; :>$log
 	make distclean    >>$log 2>&1
+	mkdir -p ${OUTPUTDIR} 2>&1 > /dev/null
 	make ${cfg[$soc]} >>$log 2>&1
-	make -j`nproc`    >>$log 2>&1
+	make -j$(nproc)   >>$log 2>&1
 	cp u-boot-lzo-with-spl.bin ${OUTPUTDIR}/u-boot-${soc}-gtxaspec.bin
 done
+
+# End timer and report
+duration=$SECONDS
+echo "Total build time: $(($duration / 60)) minutes and $(($duration % 60)) seconds."
