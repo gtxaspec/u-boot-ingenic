@@ -918,7 +918,6 @@ clean:
 	@rm -f $(obj)include/generated/asm-offsets.h
 	@rm -f $(obj)$(CPUDIR)/$(SOC)/asm-offsets.s
 	@rm -f $(TIMESTAMP_FILE) $(VERSION_FILE)
-	@rm -f uboot_build/*
 	@$(MAKE) -s -C doc/DocBook/ cleandocs
 	@$(MAKE) -s -C $(TOPTREE)tools/ingenic-tools/ clean
 	@find $(OBJTREE) -type f \
@@ -970,7 +969,6 @@ clobber:	tidy
 	@rm -f $(obj)u-boot-lzo.img
 	@rm -f $(obj)u-boot-lzo.bin
 	@rm -f $(obj)u-boot-lzo-with-spl.bin
-	@rm -rf uboot_build
 
 mrproper \
 distclean:	clobber unconfig
