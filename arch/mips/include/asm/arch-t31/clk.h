@@ -24,6 +24,7 @@
 
 #include <asm/arch/base.h>
 #include <linux/types.h>
+
 enum clk_id {
 	DDR,
 	AVPU,
