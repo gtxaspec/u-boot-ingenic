@@ -70,6 +70,9 @@ void board_usb_init(void)
 
 int misc_init_r(void)
 {
+	// Read GPIOs from ENV
+    handle_gpio_settings();
+	
 #if 0 /* TO DO */
 	uint8_t mac[6] = { 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc };
 
