@@ -356,3 +356,58 @@ void dump_gpio_func( unsigned int gpio)
 	d = d | ((readl(base + PXPAT0) >> pin) & 1) << 0;
     printf("gpio[%d] fun %x\n",gpio,d);
 }
+
+#define MAX_GPIO_SET_LEN 256  // Define a maximum length for the GPIO settings string
+
+void handle_gpio_settings() {
+    const char *env_gpio_set_str = getenv("gpio_set");
+    if (!env_gpio_set_str || *env_gpio_set_str == '\0') {
+        printf("GPIO:  gpio_set: No default GPIO env settings provided.\n");
+        return;
+    }
+
+    char gpio_set_copy[MAX_GPIO_SET_LEN];
+    strncpy(gpio_set_copy, env_gpio_set_str, MAX_GPIO_SET_LEN - 1);
+    gpio_set_copy[MAX_GPIO_SET_LEN - 1] = '\0';  // Ensure null-termination
+
+    char *token = strtok(gpio_set_copy, " ");
+    while (token) {
+        if (strncmp(token, "gpio", 4) == 0) {
+            token = strtok(NULL, " ");
+            continue;
+        }
+
+        char *endptr;
+        unsigned gpio = simple_strtoul(token, &endptr, 10);
+        if (*endptr) {
+            char mode = *endptr;
+            gpio_request(gpio, "gpio_set");
+
+            switch (mode) {
+                case 'i': // Input low
+                    gpio_direction_input(gpio);
+                    printf("GPIO:  gpio_set: %u set to input low\n", gpio);
+                    break;
+                case 'I': // Input high
+                    gpio_direction_input(gpio);
+                    printf("GPIO:  gpio_set: %u set to input high\n", gpio);
+                    break;
+                case 'o': // Output low
+                    gpio_direction_output(gpio, 0);
+                    printf("GPIO:  gpio_set: %u set to output low\n", gpio);
+                    break;
+                case 'O': // Output high
+                    gpio_direction_output(gpio, 1);
+                    printf("GPIO:  gpio_set: %u set to output high\n", gpio);
+                    break;
+                default:
+                    printf("GPIO:  gpio_set: Unknown GPIO mode '%c' for GPIO %u\n", mode, gpio);
+                    break;
+            }
+        } else {
+            printf("GPIO:  gpio_set: Invalid GPIO token: %s\n", token);
+        }
+
+        token = strtok(NULL, " ");
+    }
+}
