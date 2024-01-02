@@ -21,82 +21,83 @@
 
 #ifndef __CPM_H__
 #define __CPM_H__
+
 #include <asm/arch/base.h>
 /**********CGU registers Configuration*****/
-#define CPM_CPCCR	 (0x00)
-#define CPM_CPPCR	 (0x0c)
-#define CPM_CPAPCR	 (0x10)
-#define CPM_CPMPCR	 (0x14)
-#define CPM_CPAPACR	 (0X18) //T31 add
-#define CPM_CPMPACR	 (0X1c) //T31 add
-#define CPM_DDRCDR	 (0x2c)
-#define CPM_AVPUCDR	 (0x30)
-//#define CPM_HELIXCDR (0x30)
+#define CPM_CPCCR		(0x00)
+#define CPM_CPPCR		(0x0c)
+#define CPM_CPAPCR		(0x10)
+#define CPM_CPMPCR 		(0x14)
+#define CPM_CPAPACR 		(0X18) //T31 add
+#define CPM_CPMPACR 		(0X1c) //T31 add
+#define CPM_DDRCDR		(0x2c)
+#define CPM_AVPUCDR		(0x30)
+//#define CPM_HELIXCDR		(0x30)
 
-#define CPM_CPSPR 	 (0x34)
-#define CPM_CPSPPR	 (0x38)
-#define CPM_USBPCR	 (0x3c)
-#define CPM_USBRDT	 (0x40)
-#define CPM_USBVBFIL (0x44)
-#define CPM_USBPCR1	 (0x48)
-#define CPM_RSACDR   (0x4c)
+#define CPM_CPSPR		(0x34)
+#define CPM_CPSPPR		(0x38)
+#define CPM_USBPCR		(0x3c)
+#define CPM_USBRDT		(0x40)
+#define CPM_USBVBFIL		(0x44)
+#define CPM_USBPCR1		(0x48)
+#define CPM_RSACDR		(0x4c)
 
-#define CPM_MACCDR	 (0x54)
-#define CPM_CPEPCR   (0x58) //T31 delete
-#define CPM_LPCDR	 (0x64)
-#define CPM_MSC0CDR	 (0x68)
+#define CPM_MACCDR		(0x54)
+#define CPM_CPEPCR		(0x58) //T31 delete
+#define CPM_LPCDR		(0x64)
+#define CPM_MSC0CDR		(0x68)
 
-/*#define CPM_I2SCDR 	 (0x60) //T31 delete*/
-#define CPM_I2SSPKCDR   (0x70) //T31 change
-#define CPM_SSICDR	 (0x74)
-#define CPM_I2SSPKCDR1  (0x78) //T31 change
-#define CPM_CIMCDR	 (0x7c)
-#define CPM_ISPCDR	 (0x80)
-#define CPM_I2SMICCDR	 (0x84) //T31 add
-#define CPM_I2SMICCDR1 (0x88) //T31 add
-/*#define CPM_EXCLK_DS (0x8C)*/
-#define CPM_OSC_CTRL (0x8C)
-#define CPM_MSC1CDR	 (0xa4)
-#define CPM_INTR	 (0xb0)
-#define CPM_INTRE	 (0xb4)
-#define CPM_DRCG	 (0xd0)
-#define CPM_CPCSR	 (0xd4)
-#define CPM_CPVPCR	 (0xe0)
-#define CPM_CPVPACR	 (0Xe4) //T31 add
-#define CPM_GMACPHYC (0xe8)
+/*#define CPM_I2SCDR		(0x60) //T31 delete*/
+#define CPM_I2SSPKCDR		(0x70) //T31 change
+#define CPM_SSICDR		(0x74)
+#define CPM_I2SSPKCDR1  	(0x78) //T31 change
+#define CPM_CIMCDR		(0x7c)
+#define CPM_ISPCDR		(0x80)
+#define CPM_I2SMICCDR	 	(0x84) //T31 add
+#define CPM_I2SMICCDR1 		(0x88) //T31 add
+/*#define CPM_EXCLK_DS 		(0x8C)*/
+#define CPM_OSC_CTRL 		(0x8C)
+#define CPM_MSC1CDR	 	(0xa4)
+#define CPM_INTR	 	(0xb0)
+#define CPM_INTRE	 	(0xb4)
+#define CPM_DRCG	 	(0xd0)
+#define CPM_CPCSR	 	(0xd4)
+#define CPM_CPVPCR	 	(0xe0)
+#define CPM_CPVPACR		(0Xe4) //T31 add
+#define CPM_GMACPHYC		(0xe8)
 
 
 /************power/reset management*********/
-#define CPM_LCR		(0x04)
-#define CPM_CLKGR0  (0x20)
-#define CPM_OPCR    (0x24)
-#define CPM_CLKGR1  (0x28)
+#define CPM_LCR			(0x04)
+#define CPM_CLKGR0  		(0x20)
+#define CPM_OPCR    		(0x24)
+#define CPM_CLKGR1  		(0x28)
 
-#define CPM_SRBC0   (0xc4)
-#define CPM_SRBC1   (0xAC) //T31 delete
-#define CPM_MESTSEL (0xEC)
-#define CPM_ERNG    (0xD8) //T31 delete
-#define CPM_RNG     (0xDC) //T31 delete
+#define CPM_SRBC0   		(0xc4)
+#define CPM_SRBC1   		(0xAC) //T31 delete
+#define CPM_MESTSEL 		(0xEC)
+#define CPM_ERNG    		(0xD8) //T31 delete
+#define CPM_RNG     		(0xDC) //T31 delete
 /*
-#define MEMSCR0     (0xF0)
-#define MEMSCR1     (0xF4)
-#define MEMPDR0     (0xF8)
+#define MEMSCR0     		(0xF0)
+#define MEMSCR1     		(0xF4)
+#define MEMPDR0     		(0xF8)
 */
-#define MEMCTRL_MA0     (0xF0)
-#define MEMCTRL_MA1     (0xF4)
-#define MEMCTRL_MA2     (0xF8)
+#define MEMCTRL_MA0     	(0xF0)
+#define MEMCTRL_MA1     	(0xF4)
+#define MEMCTRL_MA2     	(0xF8)
 
 /******************************************/
 
-#define CPM_RSR     (0x08)
+#define CPM_RSR     		(0x08)
 /*
-#define CPM_PSWC0ST     (0x90)
-#define CPM_PSWC1ST     (0x94)
-#define CPM_PSWC2ST     (0x98)
-#define CPM_PSWC3ST     (0x9c)
+#define CPM_PSWC0ST     	(0x90)
+#define CPM_PSWC1ST     	(0x94)
+#define CPM_PSWC2ST     	(0x98)
+#define CPM_PSWC3ST     	(0x9c)
 
-#define CPM_SLBC	(0xc8)
-#define CPM_SLPC	(0xcc)
+#define CPM_SLBC		(0xc8)
+#define CPM_SLPC		(0xcc)
 */
 #define LCR_LPM_MASK		(0x3)
 #define LCR_LPM_SLEEP		(0x1)
@@ -107,8 +108,8 @@
 #define CPM_LCR_PD_GPU		(0x1<<28)
 #define CPM_LCR_PD_ISP		(0x1<<27)
 #define CPM_LCR_PD_H2D		(0x1<<26)
-#define CPM_LCR_P0S			(0x1<<25)
-#define CPM_LCR_P1S			(0x1<<24)
+#define CPM_LCR_P0S		(0x1<<25)
+#define CPM_LCR_P1S		(0x1<<24)
 #define CPM_LCR_VPUS 		(0x1<<23)
 #define CPM_LCR_GPUS		(0x1<<22)
 #define CPM_LCR_ISPS		(0x1<<21)
@@ -151,18 +152,18 @@
 /*********CLKGR1 0x28***************/
 #define CPM_CLKGR1_CPU		(1 << 15)
 #define CPM_CLKGR1_APB0		(1 << 14)
-#define CPM_CLKGR1_RADIX    (1 << 12) //T31 delete
+#define CPM_CLKGR1_RADIX    	(1 << 12) //T31 delete
 #define CPM_CLKGR1_SYS_OST	(1 << 11)
 #define CPM_CLKGR1_AHB0		(1 << 10)
-#define CPM_CLKGR1_LDC      (1 << 9) //T31 delete
-#define CPM_CLKGR1_AHB1     (1 << 6)
+#define CPM_CLKGR1_LDC      	(1 << 9) //T31 delete
+#define CPM_CLKGR1_AHB1     	(1 << 6)
 #define CPM_CLKGR1_AES		(1 << 5)
 #define CPM_CLKGR1_GMAC		(1 << 4)
-#define CPM_CLKGR1_NCU      (1 << 3)
+#define CPM_CLKGR1_NCU     	(1 << 3)
 #define CPM_CLKGR1_IPU		(1 << 2)
 #define CPM_CLKGR1_DTRNG	(1 << 1)
 /*#define CPM_CLKGR1_HELIX	(1 << 0)*/
-#define CPM_CLKGR1_AVPU	    (1 << 0)
+#define CPM_CLKGR1_AVPU	    	(1 << 0)
 
 #define CPM_RSR_HR		(1 << 3)
 #define CPM_RSR_WR		(1 << 1)
@@ -226,10 +227,10 @@
 #define cpm_set_scrpad(data)                    \
 do {                                            \
 	volatile int i = 0x3fff;                \
-	writel(0x5a5a,CPM_BASE + CPM_CPSPPR);		\
+	writel(0x5a5a,CPM_BASE + CPM_CPSPPR);	\
 	while(i--);				\
-	writel(data,CPM_BASE + CPM_CPSPR);			\
-	writel(0xa5a5,CPM_BASE + CPM_CPSPPR);      	\
+	writel(data,CPM_BASE + CPM_CPSPR);	\
+	writel(0xa5a5,CPM_BASE + CPM_CPSPPR);   \
 } while (0)
 
 #endif /* __CPM_H__ */

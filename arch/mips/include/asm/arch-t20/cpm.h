@@ -50,9 +50,9 @@
 #define CPM_CPAPCR		(0x10)
 #define CPM_CPMPCR		(0x14)
 #define CPM_CPVPCR		(0xe0)
-#define CPM_CPAPACR		(0X18)
-#define CPM_CPMPACR		(0X1c)
-#define CPM_CPVPACR		(0Xe4)
+#define CPM_CPAPACR		(0x18)
+#define CPM_CPMPACR		(0x1c)
+#define CPM_CPVPACR		(0xe4)
 
 #define CPM_INTR		(0xb0)
 #define CPM_INTRE		(0xb4)
