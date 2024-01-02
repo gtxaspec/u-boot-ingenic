@@ -1,5 +1,6 @@
 /*
  * T30 GPIO definitions
+ *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *
  * This program is free software; you can redistribute it and/or
