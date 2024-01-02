@@ -206,30 +206,16 @@ static int validate_sd_card(void) {
 
 // Function to set the environment variables for booting the kernel
 static void configure_boot_environment(void) {
-	char bootargs[512];
-	const char* osmem	  = getenv("osmem");
-	const char* rmem	  = getenv("rmem");
-	const char* serial_port	  = getenv("serial_port");
-	const char* serial_baud	  = getenv("serial_baud");
-	const char* panic_timeout = getenv("panic_timeout");
-	const char* mtdparts	  = getenv("mtdparts");
-	const char* extras	  = getenv("extras");
-
-	snprintf(bootargs, sizeof(bootargs), "mem=%s rmem=%s console=%s,%sn8" \
-			" panic=%s root=/dev/mtdblock3 rootfstype=squashfs" \
-			" init=/init mtdparts=%s %s",
-		osmem ? osmem : "default_value",
-		rmem ? rmem : "default_value",
-		serial_port ? serial_port : "ttyS1",
-		serial_baud ? serial_baud : "115200",
-		panic_timeout ? panic_timeout : "5",
-		mtdparts ? mtdparts : "default_value",
-		extras ? extras : "");
-
 	char bootcmd[512];
-	snprintf(bootcmd, sizeof(bootcmd), "bootm %p", LOAD_ADDR);
-	setenv("bootargs", bootargs);
+
+	// Construct the bootcmd using the LOAD_ADDR
+	snprintf(bootcmd, sizeof(bootcmd),
+			"sf probe; setenv setargs setenv bootargs ${bootargs}; run setargs; bootm %p", (void*)LOAD_ADDR);
+
+	// Update the bootcmd environment variable
 	setenv("bootcmd", bootcmd);
+
+	// Run the boot command
 	run_command("boot", 0);
 }
 
