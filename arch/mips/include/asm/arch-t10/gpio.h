@@ -68,7 +68,7 @@ struct jz_gpio_func_def {
 	int port;
 	int func;
 	unsigned long pins;
-    int driver_strength;
+	int driver_strength;
 };
 
 /*************************************************************************
