@@ -42,6 +42,10 @@ DECLARE_GLOBAL_DATA_PTR;
 
 ulong monitor_flash_len;
 
+extern int jz_net_initialize(bd_t *bis);
+
+void handle_gpio_settings(const char *env_var_name);
+
 static char *failed = "*** failed ***\n";
 
 /*
@@ -381,15 +385,24 @@ extern void board_usb_init(void);
 	bb_miiphy_init();
 #endif
 #if defined(CONFIG_CMD_NET)
-	puts("Net:   ");
-	int ret = board_eth_init(gd->bd);
-	if (ret < 0) {
-		printf("Net:   Board Net Initialization Failed\n");
-		// GPIOs to be set after net initialization fails
-		printf("GPIO:  gpio_net_set \n");
-		handle_gpio_settings("gpio_dev_net");
-	}
-	eth_initialize(gd->bd);
+	/*puts("Net:   ");
+	eth_initialize(gd->bd); */
+
+	int ret = 0;
+	#ifdef CONFIG_USB_ETHER_ASIX
+		if (0 == strncmp(getenv("ethact"), "asx", 3)) {
+			run_command("usb start", 0);
+		}
+	#endif
+		ret += jz_net_initialize(gd->bd);
+		if (ret < 0){
+			// GPIOs to be set after net initialization fails
+			printf("GPIO:  gpio_net_set \n");
+			handle_gpio_settings("gpio_dev_net");
+
+			if(!getenv("extras"))
+				setenv("extras", "nogmac");
+		}
 #endif
 
 /* User defined GPIO set */
