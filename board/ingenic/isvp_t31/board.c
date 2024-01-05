@@ -31,6 +31,7 @@
 #include <asm/arch/clk.h>
 #include <power/d2041_core.h>
 
+extern int jz_net_initialize(bd_t *bis);
 struct cgu_clk_src cgu_clk_src[] = {
 	{AVPU, MPLL},
 	{MACPHY, MPLL},
@@ -45,9 +46,8 @@ struct cgu_clk_src cgu_clk_src[] = {
 
 int board_early_init_f(void)
 {
-/*
 #if defined(CONFIG_T31A) || defined(CONFIG_T31AL)
-	 printf("support quad\n");
+	/* printf("support quad\n");*/
 #else
 	gpio_direction_input(25);
 	gpio_direction_input(26);
@@ -56,7 +56,6 @@ int board_early_init_f(void)
 	gpio_disable_pull_down(26);
 	gpio_disable_pull_up(26);
 #endif
-*/
 	return 0;
 }
 
@@ -72,8 +71,12 @@ void board_usb_init(void)
 int misc_init_r(void)
 {
 	// Read GPIOs from ENV
-    handle_gpio_settings();
-	
+
+	// User GPIOs
+	handle_gpio_settings("gpio_set");
+	// Platform default GPIO set
+	handle_gpio_settings("gpio_dev");
+
 #if 0 /* TO DO */
 	uint8_t mac[6] = { 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc };
 
@@ -82,6 +85,10 @@ int misc_init_r(void)
 #endif
 	/* used for usb_dete */
 	gpio_enable_pull_up(GPIO_PB(24));//UART1 rx
+
+	// HiChip boards
+	gpio_request(62,"hichip_mmc_enable");
+	gpio_direction_output(62,0);
 
 	return 0;
 }
@@ -105,7 +112,23 @@ void board_nand_init(void)
 
 int board_eth_init(bd_t *bis)
 {
-	return 0;
+	int ret = 0;
+#ifdef CONFIG_USB_ETHER_ASIX
+	if (0 == strncmp(getenv("ethact"), "asx", 3)) {
+		run_command("usb start", 0);
+	}
+#endif
+	ret += jz_net_initialize(bis);
+	if (ret < 0){
+		// If PHY doesn't exist on this device, enable MMC
+
+		// GPIOs to be set after net initialize fails
+		handle_gpio_settings("gpio_dev_net");
+
+		if(!getenv("extras"))
+			setenv("extras", "nogmac");
+	}
+	return ret;
 }
 
 #ifdef CONFIG_SPL_NOR_SUPPORT
@@ -114,6 +137,12 @@ int spl_start_uboot(void)
 	return 1;
 }
 #endif
+/* U-Boot common routines */
+int checkboard(void)
+{
+	puts("Board: ISVP (Ingenic XBurst T31 SoC)\n");
+	return 0;
+}
 
 #ifdef CONFIG_SPL_BUILD
 

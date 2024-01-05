@@ -61,7 +61,11 @@ void board_usb_init(void)
 int misc_init_r(void)
 {
 	// Read GPIOs from ENV
-    handle_gpio_settings();
+
+	// User GPIOs
+	handle_gpio_settings("gpio_set");
+	// Platform default GPIO set
+	handle_gpio_settings("gpio_dev");
 
 #if 0 /* TO DO */
 	uint8_t mac[6] = { 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc };
@@ -87,6 +91,22 @@ int board_mmc_init(bd_t *bd)
 
 int board_eth_init(bd_t *bis)
 {
+	int ret = 0;
+#ifdef CONFIG_USB_ETHER_ASIX
+	if (0 == strncmp(getenv("ethact"), "asx", 3)) {
+		run_command("usb start", 0);
+	}
+#endif
+	ret += jz_net_initialize(bis);
+	if (ret < 0){
+		// If PHY doesn't exist on this device, enable MMC
+
+		// GPIOs to be set after net initialize fails
+		handle_gpio_settings("gpio_dev_net");
+
+		if(!getenv("extras"))
+			setenv("extras", "nogmac");
+	}
 	return ret;
 }
 
