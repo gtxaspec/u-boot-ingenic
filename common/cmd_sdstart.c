@@ -26,20 +26,25 @@ typedef enum {
 static unsigned char *LOAD_ADDR = NULL;
 
 // Format strings for boot arguments and commands
-#define MAX_LOADSZ 0xA00000  // Maximum load size, 10MB
-#define DEFAULT_DELAY 1      // Default delay is set to 1 second, begins only if the kernel image has been found
+
+// Maximum load size
+#define SDSTART_MAX_LOADSZ	0xA00000 // 10MB
+
+// Delay before loading the kernel, in seconds.
+// The countdown will only start if a kernel image is found.
+#define SDSTART_DEFAULT_DELAY	1
 
 // Macro to generate kernel filenames based on SoC
-#define KERNEL_FILENAMES_FOR_SOC(soc) \
+#define SDSTART_KERNEL_FILENAMES(soc) \
     "factory_" #soc "_0P3N1PC_kernel", \
     "factory_" #soc "_ZMC6tiIDQN", \
     NULL  // sentinel value
 
 // Kernel filenames based on SoC
 #ifdef CONFIG_T10
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t10) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t10) };
 #elif defined(CONFIG_T15)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t15) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t15) };
 #elif defined(CONFIG_T20)
 // Special case for T20 to match factory
 static const char* kernel_filenames[] = {
@@ -48,25 +53,26 @@ static const char* kernel_filenames[] = {
 	NULL
 };
 #elif defined(CONFIG_T21)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t21) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t21) };
 #elif defined(CONFIG_T30)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t30) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t30) };
 #elif defined(CONFIG_T31)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t31) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t31) };
 #elif defined(CONFIG_T40)
-static const char* kernel_filenames[] = { KERNEL_FILENAMES_FOR_SOC(t40) };
+static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t40) };
 #else
-static const char* kernel_filenames[] = { NULL };  // Default case, no files to attempt loading
+static const char* kernel_filenames[] = { NULL };  // Default case, do not load anything
 #endif
 
-// This function prompts the user to press Ctrl-C to interrupt the kernel loading, lasting for the specified delay (in seconds).
+// This function prompts the user to press Ctrl-C to cancel the kernel loading,
+// lasting for the specified delay (in seconds).
 static bool prompt_and_wait_for_interrupt(int delay) {
-	printf("You can interrupt kernel loading by pressing Ctrl-C within the next %d second(s)...\n", delay);
+	printf("To cancel loading the kernel, press Ctrl-C within the next %d second(s)...\n", delay);
 	unsigned long start = get_timer(0);
 
 	while (get_timer(0) - start < delay * 1000) {
 		if (ctrlc()) {
-			printf("Kernel loading interrupted by user.\n");
+			printf("Kernel loading cancel by user.\n");
 			return true;
 		}
 		udelay(10000);  // Check every 10ms
@@ -162,13 +168,13 @@ static ErrorCode check_header_and_checksum_validity(long nbytes) {
 static int load_kernel_and_validate(void) {
 	int i;
 	for (i = 0; kernel_filenames[i] != NULL; i++) {
-		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, MAX_LOADSZ);
+		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, SDSTART_MAX_LOADSZ);
 		if (file_size > 0) {
 			ErrorCode err = check_header_and_checksum_validity(file_size);
 			if (err == ERR_NONE) {
-				return 0; // Successfully loaded and validated the kernel
+				return 0; // Kernel loaded and validated
 			}
-			// If there's an error other than ERR_FILE_NOT_FOUND, handle it and exit.
+			// Handle errors other than ERR_FILE_NOT_FOUND, and exit
 			if (err != ERR_FILE_NOT_FOUND) {
 				return handle_error(err, kernel_filenames[i]);
 			}
@@ -180,12 +186,12 @@ static int load_kernel_and_validate(void) {
 // Function to check if the SD card is present and contains a valid FAT filesystem
 static int validate_sd_card(void) {
 	block_dev_desc_t *stor_dev = get_dev("mmc", 0);
-	if(NULL == stor_dev) {
+	if (NULL == stor_dev) {
 		handle_error(ERR_MMC_NOT_PRESENT, "");
 		return false;
 	}
 	int ret = fat_register_device(stor_dev, 1);
-	if(ret != 0) {
+	if (ret != 0) {
 		handle_error(ERR_FAT_REGISTRATION_FAIL, "");
 		return false;
 	}
@@ -200,23 +206,16 @@ static int validate_sd_card(void) {
 
 // Function to set the environment variables for booting the kernel
 static void configure_boot_environment(void) {
-	char bootargs[512];
-	const char* osmem = getenv("osmem");
-	const char* rmem = getenv("rmem");
-	const char* mtdparts = getenv("mtdparts");
-	const char* extras = getenv("extras");
-
-	snprintf(bootargs, sizeof(bootargs),
-			"mem=%s rmem=%s console=ttyS1,115200n8 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=%s %s",
-			osmem ? osmem : "default_value",
-			rmem ? rmem : "default_value",
-			mtdparts ? mtdparts : "default_value",
-			extras ? extras : "");
-
 	char bootcmd[512];
-	snprintf(bootcmd, sizeof(bootcmd), "bootm %p", LOAD_ADDR);
-	setenv("bootargs", bootargs);
+
+	// Construct the bootcmd using the LOAD_ADDR
+	snprintf(bootcmd, sizeof(bootcmd),
+			"sf probe; setenv setargs setenv bootargs ${bootargs}; run setargs; bootm %p", (void*)LOAD_ADDR);
+
+	// Update the bootcmd environment variable
 	setenv("bootcmd", bootcmd);
+
+	// Run the boot command
 	run_command("boot", 0);
 }
 
@@ -242,7 +241,8 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	int i;
 	int found_kernel = 0;
 	for (i = 0; kernel_filenames[i] != NULL; i++) {
-		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, 0); // Reading with size 0 to just detect
+		// Reading with size 0 to just detect
+		long file_size = file_fat_read(kernel_filenames[i], LOAD_ADDR, 0);
 		if (file_size > 0) {
 			found_kernel = 1;
 			break;
@@ -254,7 +254,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	}
 
 	// If kernel is detected, then show the Ctrl-C prompt
-	int delay = (argc > 1) ? simple_strtol(argv[1], NULL, 10) : DEFAULT_DELAY;
+	int delay = (argc > 1) ? simple_strtol(argv[1], NULL, 10) : SDSTART_DEFAULT_DELAY;
 	if (prompt_and_wait_for_interrupt(delay)) {
 		printf("Operation was canceled during the prompt.\n");
 		return 0; // Return early if user interrupted
@@ -278,4 +278,3 @@ U_BOOT_CMD(
 	"Load a kernel from the MMC card with an interruptible delay.",
 	"[delay_in_seconds]"
 );
-

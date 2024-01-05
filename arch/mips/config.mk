@@ -21,7 +21,7 @@
 # MA 02111-1307 USA
 #
 
-CROSS_COMPILE ?= mips-linux-gnu-
+CROSS_COMPILE ?= mipsel-linux-gnu-
 
 # Handle special prefix in ELDK 4.0 toolchain
 ifneq (,$(findstring 4KCle,$(CROSS_COMPILE)))
