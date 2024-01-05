@@ -71,8 +71,12 @@ void board_usb_init(void)
 int misc_init_r(void)
 {
 	// Read GPIOs from ENV
-    handle_gpio_settings();
-	
+
+	// User GPIOs
+	handle_gpio_settings("gpio_set");
+	// Platform default GPIO set
+	handle_gpio_settings("gpio_dev");
+
 #if 0 /* TO DO */
 	uint8_t mac[6] = { 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc };
 
@@ -81,10 +85,6 @@ int misc_init_r(void)
 #endif
 	/* used for usb_dete */
 	gpio_enable_pull_up(GPIO_PB(24));//UART1 rx
-
-	// HiChip boards
-	gpio_request(62,"hichip_mmc_enable");
-	gpio_direction_output(62,0);
 
 	return 0;
 }
@@ -115,18 +115,15 @@ int board_eth_init(bd_t *bis)
 	}
 #endif
 	ret += jz_net_initialize(bis);
-#if defined (CONFIG_T31)
 	if (ret < 0){
-		// PPS
-		gpio_request(61,"pps_mmc_enable");
-		gpio_direction_output(61,0);
-		// Wyze V3
-		gpio_request(48,"wyze_mmc_enable");
-		gpio_direction_output(48,0);
+		// If PHY doesn't exist on this device, enable MMC
+
+		// GPIOs to be set after net initialize fails
+		handle_gpio_settings("gpio_dev_net");
+
 		if(!getenv("extras"))
 			setenv("extras", "nogmac");
 	}
-#endif
 	return ret;
 }
 

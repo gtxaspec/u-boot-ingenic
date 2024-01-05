@@ -705,4 +705,16 @@
 
 #include "isvp_common.h"
 
+/*
+	Platform Default GPIOs:
+
+	hichip_mmc_enable = 62
+	pps_mmc_enable = 61
+	wyze_mmc_enable = 48
+*/
+
+#define CONFIG_GPIO_SETTINGS \
+    "gpio_dev=62O\0" \
+    "gpio_dev_net=61o 48o\0"
+
 #endif /*__CONFIG_ISVP_T10_H__*/
