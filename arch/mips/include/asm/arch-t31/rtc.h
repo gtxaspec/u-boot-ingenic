@@ -27,20 +27,20 @@
 /*************************************************************************
  * RTC (Real Time Clock)
  *************************************************************************/
-#define RTC_RTCCR	0x00
-#define RTC_RTCSR	0x04
-#define RTC_RTCSAR	0x08
-#define RTC_RTCGR	0x0C
+#define RTC_RTCCR		0x00
+#define RTC_RTCSR		0x04
+#define RTC_RTCSAR		0x08
+#define RTC_RTCGR		0x0C
 
-#define RTC_HCR		0x20 //T31 delete
-#define RTC_HWFCR	0x24 //T31 delete
-#define RTC_HRCR	0x28 //T31 delete
-#define RTC_HWCR	0x2C //T31 delete
-#define RTC_HWRSR	0x30 //T31 delete
-#define RTC_HSPR	0x34 //T31 delete
-#define RTC_WENR	0x3C
-#define RTC_CKPCR	0x40 //T31 delete
-#define RTC_PWRONCR	0x48
+#define RTC_HCR			0x20 //T31 delete
+#define RTC_HWFCR		0x24 //T31 delete
+#define RTC_HRCR		0x28 //T31 delete
+#define RTC_HWCR		0x2C //T31 delete
+#define RTC_HWRSR		0x30 //T31 delete
+#define RTC_HSPR		0x34 //T31 delete
+#define RTC_WENR		0x3C
+#define RTC_CKPCR		0x40 //T31 delete
+#define RTC_PWRONCR		0x48
 
 /* RTC Control Register */
 #define RTC_RTCCR_WRDY		(1 << 7)
@@ -65,7 +65,7 @@
 #define RTC_HWRSR_PIN		(1 << 1)
 #define RTC_HWRSR_ALM		(1 << 0)
 
-#define RTC_HCR_PD	1
+#define RTC_HCR_PD		1
 /*********************end*******************************/
 
 /* HIBERNATE mode Wakeup Filter Counter Register */
