@@ -24,16 +24,15 @@
 
 #include <asm/arch/base.h>
 
-
-#define WDT_TDR				0x0
-#define WDT_TCER			0x4
-#define WDT_TCNT			0x8
-#define WDT_TCSR			0xc
-
-#define TCU_TSSR            0x2c /* close watchdog */
 #define TCU_TSCR			0x3c /* open watchdog */
+#define TCU_TSSR           		0x2c /* close watchdog */
 
-#define TSSR_WDTSC          (1 << 16)
+#define WDT_TCSR			0xc
+#define WDT_TCER			0x4
+#define WDT_TDR				0x0
+#define WDT_TCNT			0x8
+
+#define TSSR_WDTSC          		(1 << 16)
 #define TSCR_WDTSC			(1 << 16) //T31 delete
 
 #define TCSR_PRESCALE_1			(0 << 3)

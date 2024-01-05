@@ -47,27 +47,27 @@
 
 
 /* SPI Flash Instructions */
-#define CMD_WREN 	0x06	/* Write Enable */
-#define CMD_WRDI 	0x04	/* Write Disable */
-#define CMD_RDSR 	0x05	/* Read Status Register */
-#define CMD_RDSR_1 	0x35	/* Read Status1 Register */
-#define CMD_RDSR_2 	0x15	/* Read Status2 Register */
-#define CMD_WRSR 	0x01	/* Write Status Register */
-#define CMD_WRSR_1 	0x31	/* Write Status1 Register */
-#define CMD_WRSR_2 	0x11	/* Write Status2 Register */
-#define CMD_PP 		0x02	/* Page Program(write data) */
-#define CMD_QPP 	0x32	/* QUAD Page Program(write data) */
-#define CMD_SE 		0xD8	/* Sector Erase */
-#define CMD_BE 		0xC7	/* Bulk or Chip Erase */
-#define CMD_DP 		0xB9	/* Deep Power-Down */
-#define CMD_RES 	0xAB	/* Release from Power-Down and Read Electronic Signature */
-#define CMD_RDID 	0x9F	/* Read Identification */
-#define CMD_SR_WIP          (1 << 0)
-#define CMD_SR_QEP          (1 << 1)
-#define CMD_ERASE_4K            0x20
-#define CMD_ERASE_32K           0x52
-#define CMD_ERASE_64K           0xd8
-#define CMD_ERASE_CE            0x60
+#define CMD_WREN 			0x06	/* Write Enable */
+#define CMD_WRDI 			0x04	/* Write Disable */
+#define CMD_RDSR 			0x05	/* Read Status Register */
+#define CMD_RDSR_1 			0x35	/* Read Status1 Register */
+#define CMD_RDSR_2 			0x15	/* Read Status2 Register */
+#define CMD_WRSR 			0x01	/* Write Status Register */
+#define CMD_WRSR_1 			0x31	/* Write Status1 Register */
+#define CMD_WRSR_2 			0x11	/* Write Status2 Register */
+#define CMD_PP 				0x02	/* Page Program(write data) */
+#define CMD_QPP 			0x32	/* QUAD Page Program(write data) */
+#define CMD_SE 				0xD8	/* Sector Erase */
+#define CMD_BE 				0xC7	/* Bulk or Chip Erase */
+#define CMD_DP 				0xB9	/* Deep Power-Down */
+#define CMD_RES 			0xAB	/* Release from Power-Down and Read Electronic Signature */
+#define CMD_RDID 			0x9F	/* Read Identification */
+#define CMD_SR_WIP      		(1 << 0)
+#define CMD_SR_QEP      		(1 << 1)
+#define CMD_ERASE_4K            	0x20
+#define CMD_ERASE_32K           	0x52
+#define CMD_ERASE_64K           	0xd8
+#define CMD_ERASE_CE            	0x60
 
 
 #define CMD_SR_WIP			(1 << 0)

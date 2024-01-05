@@ -1,5 +1,6 @@
 /*
  * T30 GPIO definitions
+ *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *
  * This program is free software; you can redistribute it and/or
@@ -61,7 +62,7 @@ struct jz_gpio_func_def {
 	int port;
 	int func;
 	unsigned long pins;
-    int driver_strength;
+	int driver_strength;
 };
 
 /*************************************************************************
@@ -90,7 +91,6 @@ struct jz_gpio_func_def {
 #define PXPDIR		0x90   /* Port Pull Direction Register */
 #define PXPDIRS		0x94   /* Port Pull Direction Set Register */
 #define PXPDIRC		0x98   /* Port Pull Direction Clear Register */
-
 
 #define PXPEL		0x110   /* Port Pull Disable Register */
 #define PXPELS		0x114   /* Port Pull Disable Set Register */

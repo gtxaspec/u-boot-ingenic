@@ -27,18 +27,18 @@
 /*************************************************************************
  * SADC (SAR A/D Controller)
  *************************************************************************/
-#define SADC_ADENA	0x00
-#define SADC_ADCFG	0x04
-#define SADC_ADCTRL	0x08
-#define SADC_ADSTATE	0x0C
-#define SADC_ADSAME	0x10
-#define SADC_ADWAIT	0x14
-#define SADC_ADTCH	0x18
-#define SADC_ADVDAT	0x1C
-#define SADC_ADADAT	0x20
-#define SADC_ADCMD	0x24
-#define SADC_ADCLK	0x28
-#define SADC_ADSTB	0x34
+#define SADC_ADENA		0x00
+#define SADC_ADCFG		0x04
+#define SADC_ADCTRL		0x08
+#define SADC_ADSTATE		0x0C
+#define SADC_ADSAME		0x10
+#define SADC_ADWAIT		0x14
+#define SADC_ADTCH		0x18
+#define SADC_ADVDAT		0x1C
+#define SADC_ADADAT		0x20
+#define SADC_ADCMD		0x24
+#define SADC_ADCLK		0x28
+#define SADC_ADSTB		0x34
 
 /* ADC Enable Register */
 #define SADC_ADENA_POWER	(1 << 7)

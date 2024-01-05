@@ -29,18 +29,18 @@
 #define TCU_OSTCNTL			0xe4
 #define TCU_OSTCNTH			0xe8
 #define TCU_OSTCSR			0xec
-#define TCU_OSTCNTHBUF		0xfc
+#define TCU_OSTCNTHBUF			0xfc
 
-#define TER_OSTEN			    (1 << 15)
+#define TER_OSTEN			(1 << 15)
 
 #define OSTCSR_CNT_MD			(1 << 15)
-#define OSTCSR_SD			    (1 << 9)
+#define OSTCSR_SD			(1 << 9)
 #define OSTCSR_PRESCALE_1		(0 << 3)
 #define OSTCSR_PRESCALE_4		(1 << 3)
 #define OSTCSR_PRESCALE_16		(2 << 3)
 #define OSTCSR_PRESCALE_64		(3 << 3)
 #define OSTCSR_PRESCALE_256		(4 << 3)
-#define OSTCSR_PRESCALE_1024	(5 << 3)
+#define OSTCSR_PRESCALE_1024		(5 << 3)
 
 #define OST_DIV				4
 #if (OST_DIV == 1)
