@@ -369,6 +369,12 @@ extern void board_usb_init(void);
 #if defined(CONFIG_MISC_INIT_R)
 	/* miscellaneous platform dependent initialisations */
 	misc_init_r();
+	/* Platform Default GPIO Set */
+	printf("GPIO:  gpio_dev \n");
+	handle_gpio_settings("gpio_dev");
+	/* IRCUT default GPIO set */
+	printf("GPIO:  gpio_dev_ircut \n");
+	handle_gpio_settings("gpio_dev_ircut");
 #endif
 
 #ifdef CONFIG_BITBANGMII
@@ -376,8 +382,18 @@ extern void board_usb_init(void);
 #endif
 #if defined(CONFIG_CMD_NET)
 	puts("Net:   ");
-	eth_initialize(gd->bd);
+	int ret = eth_initialize(gd->bd);
+	if (ret == 0) {
+		printf("GPIO:  gpio_dev_net \n");
+		/* GPIOs to be set if net initialization fails */
+		handle_gpio_settings("gpio_dev_net");
+	}
 #endif
+
+/* User defined GPIO set */
+printf("GPIO:  gpio_set \n");
+handle_gpio_settings("gpio_set");
+
 #ifdef CONFIG_AUTO_UPDATE
 	printf("Autoupdate... \n");
 	run_command("sdupdate",0);
