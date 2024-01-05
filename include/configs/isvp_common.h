@@ -158,6 +158,6 @@ CONFIG_GPIO_IRCUT_SETTINGS
 */
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
-    "gpio_default_ircut=25o 26o 52o 53o 49o 50o\0"
+"gpio_dev_ircut=25o 26o 52o 53o 49o 50o\0"
 
 #endif /*__CONFIG_ISVP_COMMON__*/
