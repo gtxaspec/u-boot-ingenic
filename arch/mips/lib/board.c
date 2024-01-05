@@ -382,12 +382,14 @@ extern void board_usb_init(void);
 #endif
 #if defined(CONFIG_CMD_NET)
 	puts("Net:   ");
-	int ret = eth_initialize(gd->bd);
-	if (ret == 0) {
-		printf("GPIO:  gpio_dev_net \n");
-		/* GPIOs to be set if net initialization fails */
+	int ret = board_eth_init(gd->bd);
+	if (ret < 0) {
+		printf("Net:   Board Net Initialization Failed\n");
+		// GPIOs to be set after net initialization fails
+		printf("GPIO:  gpio_net_set \n");
 		handle_gpio_settings("gpio_dev_net");
 	}
+	eth_initialize(gd->bd);
 #endif
 
 /* User defined GPIO set */
