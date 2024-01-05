@@ -119,6 +119,16 @@
     "restore=n\0" \
     "soc="CONFIG_SOC"\0" \
     CONFIG_EXTRA_SETTINGS \
-    CONFIG_GPIO_SETTINGS
+    CONFIG_GPIO_SETTINGS \
+	CONFIG_GPIO_IRCUT_SETTINGS
+
+	/*
+	IRCUT Default GPIOs:
+
+
+*/
+
+#define CONFIG_GPIO_IRCUT_SETTINGS \
+    "gpio_dev_ircut=25o 26o 52o 53o 49o 50o\0"
 
 #endif /*__CONFIG_ISVP_COMMON__*/
