@@ -374,11 +374,11 @@ extern void board_usb_init(void);
 	/* miscellaneous platform dependent initialisations */
 	misc_init_r();
 	/* Platform Default GPIO Set */
-	printf("GPIO:  gpio_dev \n");
-	handle_gpio_settings("gpio_dev");
+	printf("GPIO:  gpio_default \n");
+	handle_gpio_settings("gpio_default");
 	/* IRCUT default GPIO set */
-	printf("GPIO:  gpio_dev_ircut \n");
-	handle_gpio_settings("gpio_dev_ircut");
+	printf("GPIO:  gpio_default_ircut \n");
+	handle_gpio_settings("gpio_default_ircut");
 #endif
 
 #ifdef CONFIG_BITBANGMII
@@ -397,8 +397,8 @@ extern void board_usb_init(void);
 		ret += jz_net_initialize(gd->bd);
 		if (ret < 0){
 			// GPIOs to be set after net initialization fails
-			printf("GPIO:  gpio_net_set \n");
-			handle_gpio_settings("gpio_dev_net");
+			printf("GPIO:  gpio_default_net \n");
+			handle_gpio_settings("gpio_default_net");
 
 			if(!getenv("extras"))
 				setenv("extras", "nogmac");
