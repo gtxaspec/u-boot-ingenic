@@ -450,4 +450,4 @@
 
 #include "isvp_common.h"
 
-#endif /*__CONFIG_ISVP_T10_H__*/
+#endif /*__CONFIG_ISVP_T20_H__*/
