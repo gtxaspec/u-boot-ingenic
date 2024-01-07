@@ -114,7 +114,7 @@
 #define CONFIG_JZ_MMC_MSC1_PE		1
 #endif
 
-#ifdef CONFIG_SFC_COMMOND
+#ifdef CONFIG_SFC_COMMAND
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH
 #define CONFIG_JZ_SFC_PA
