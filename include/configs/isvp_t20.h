@@ -52,9 +52,11 @@
 #define SEL_CPU				1
 #define SEL_H0				2
 #define SEL_H2				2
+
 #define DIV_PCLK			10
 #define DIV_H2				5
 #define DIV_H0				5
+
 #define DIV_L2				2
 #define DIV_CPU				1
 #define CONFIG_SYS_CPCCR_SEL		(((SEL_SCLKA & 3) << 30)		\
@@ -70,6 +72,7 @@
 #define CONFIG_CPU_SEL_PLL		APLL
 #define CONFIG_DDR_SEL_PLL		MPLL
 #define CONFIG_SYS_CPU_FREQ		CONFIG_SYS_APLL_FREQ
+
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 
 #define CONFIG_SYS_EXTAL		24000000	/* EXTAL freq: 24 MHz */
@@ -82,10 +85,10 @@
 #define CONFIG_SYS_UART_INDEX		1
 #define CONFIG_BAUDRATE			115200
 
-/*#define CONFIG_DDR_TEST_CPU
-#define CONFIG_DDR_TEST*/
-
-#define CONFIG_DDR_TYPE_DDR2
+/*
+#define CONFIG_DDR_TEST_CPU
+#define CONFIG_DDR_TEST
+*/
 #define CONFIG_DDR_PARAMS_CREATOR
 #define CONFIG_DDR_HOST_CC
 #define CONFIG_DDR_FORCE_SELECT_CS1
@@ -99,18 +102,25 @@
 #else
 #define CONFIG_DDR2_M14D5121632A
 #endif
+#define CONFIG_DDR_TYPE_DDR2
 
 #define CONFIG_DDR_PHY_IMPEDANCE	40000
 #define CONFIG_DDR_PHY_ODT_IMPEDANCE	50000 //75000
-/*#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf*/
-/*#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf*/
+/*
+#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf
+#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf
+*/
 
-/* #define CONFIG_DDR_DLL_OFF */
+/*
+#define CONFIG_DDR_DLL_OFF
+*/
 
-/*#define CONFIG_DDR_CHIP_ODT*/
-/*#define CONFIG_DDR_PHY_ODT*/
-/*#define CONFIG_DDR_PHY_DQ_ODT*/
-/*#define CONFIG_DDR_PHY_DQS_ODT*/
+/*
+#define CONFIG_DDR_CHIP_ODT
+#define CONFIG_DDR_PHY_ODT
+#define CONFIG_DDR_PHY_DQ_ODT
+#define CONFIG_DDR_PHY_DQS_ODT
+*/
 
 /**
  * Boot arguments definitions.
@@ -124,7 +134,7 @@
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
 #elif defined(CONFIG_SFC_NOR)
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
+#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
 #endif
 
 /**
@@ -136,7 +146,7 @@
 
 #if defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
-#endif /* CONFIG_SFC_NOR */
+#endif
 
 /**
  * Drivers configuration.
@@ -209,6 +219,7 @@
 #define GMAC_PHY_RMII			2
 #define GMAC_PHY_GMII			3
 #define GMAC_PHY_RGMII			4
+
 #define CONFIG_NET_GMAC_PHY_MODE	GMAC_PHY_RMII
 
 #define PHY_TYPE_DM9161			1
@@ -285,7 +296,7 @@
 #define CONFIG_SYS_MAXARGS		64
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT		CONFIG_SYS_BOARD "# "
-#define CONFIG_SYS_CBSIZE		1024 /* Console I/O Buffer Size */
+#define CONFIG_SYS_CBSIZE		1024
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
@@ -336,7 +347,9 @@
 
 #define CONFIG_SPL_PAD_TO		26624 /* equal to spl max size in M200 */
 
-#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	86 //0x5A //wli changed 0x20 /* 16KB offset */
+#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
+#define CONFIG_MMC_RAW_UBOOT_OFFSET	(CONFIG_UBOOT_OFFSET / 1024 + 17)
+#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	(CONFIG_MMC_RAW_UBOOT_OFFSET * 2)//0x5A //wli changed 0x20 /* 16KB offset */
 #define CONFIG_SYS_U_BOOT_MAX_SIZE_SECTORS	0x400 /* 512 KB */
 
 #define CONFIG_SPL_BOARD_INIT
@@ -383,11 +396,11 @@
 /* USE MBR + zero-GPT-table instead if no gpt table defined*/
 #define CONFIG_MBR_P0_OFF		64mb
 #define CONFIG_MBR_P0_END		556mb
-#define CONFIG_MBR_P0_TYPE 		linux
+#define CONFIG_MBR_P0_TYPE		linux
 
 #define CONFIG_MBR_P1_OFF		580mb
-#define CONFIG_MBR_P1_END 		1604mb
-#define CONFIG_MBR_P1_TYPE 		linux
+#define CONFIG_MBR_P1_END		1604mb
+#define CONFIG_MBR_P1_TYPE		linux
 
 #define CONFIG_MBR_P2_OFF		28mb
 #define CONFIG_MBR_P2_END		58mb
@@ -413,8 +426,6 @@
 #define CONFIG_SYS_MAX_FLASH_SECT	0
 #endif
 
-#include "isvp_common.h"
-
 /*
 	Platform Default GPIOs:
 
@@ -426,5 +437,7 @@
 #define CONFIG_GPIO_SETTINGS \
     "gpio_dev=47O\0" \
     "gpio_dev_net=43O 48o 43o\0"
+
+#include "isvp_common.h"
 
 #endif /*__CONFIG_ISVP_T10_H__*/

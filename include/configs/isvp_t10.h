@@ -51,9 +51,11 @@
 #define SEL_CPU				1
 #define SEL_H0				2
 #define SEL_H2				2
+
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
+
 #define DIV_L2				2
 #define DIV_CPU				1
 #define CONFIG_SYS_CPCCR_SEL		(((SEL_SCLKA & 3) << 30)		\
@@ -69,6 +71,7 @@
 #define CONFIG_CPU_SEL_PLL		APLL
 #define CONFIG_DDR_SEL_PLL		MPLL
 #define CONFIG_SYS_CPU_FREQ		CONFIG_SYS_APLL_FREQ
+
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 3)
 
 #define CONFIG_SYS_EXTAL		24000000	/* EXTAL freq: 24 MHz */
@@ -81,10 +84,11 @@
 #define CONFIG_SYS_UART_INDEX		1
 #define CONFIG_BAUDRATE			115200
 
-/*#define CONFIG_DDR_TEST_CPU
-#define CONFIG_DDR_TEST*/
+/*
+#define CONFIG_DDR_TEST_CPU
+#define CONFIG_DDR_TEST
+*/
 
-#define CONFIG_DDR_TYPE_DDR2
 #define CONFIG_DDR_PARAMS_CREATOR
 #define CONFIG_DDR_HOST_CC
 #define CONFIG_DDR_FORCE_SELECT_CS1
@@ -92,19 +96,27 @@
 #define CONFIG_DDR_CS1			0	/* 1-connected, 0-disconnected */
 #define CONFIG_DDR_DW32			0	/* 1-32bit-width, 0-16bit-width */
 #define CONFIG_DDRC_CTRL_PDT		DDRC_CTRL_PDT_128
+
 #define CONFIG_DDR2_M14D5121632A
+#define CONFIG_DDR_TYPE_DDR2
 
 #define CONFIG_DDR_PHY_IMPEDANCE	40000
 #define CONFIG_DDR_PHY_ODT_IMPEDANCE	50000 //75000
-/*#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf*/
-/*#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf*/
+/*
+#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf
+#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf
+*/
 
-/* #define CONFIG_DDR_DLL_OFF */
+/*
+#define CONFIG_DDR_DLL_OFF
+*/
 
-/*#define CONFIG_DDR_CHIP_ODT*/
-/*#define CONFIG_DDR_PHY_ODT*/
-/*#define CONFIG_DDR_PHY_DQ_ODT*/
-/*#define CONFIG_DDR_PHY_DQS_ODT*/
+/*
+#define CONFIG_DDR_CHIP_ODT
+#define CONFIG_DDR_PHY_ODT
+#define CONFIG_DDR_PHY_DQ_ODT
+#define CONFIG_DDR_PHY_DQS_ODT
+*/
 
 /**
  * Boot arguments definitions.
@@ -172,7 +184,7 @@
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH_INGENIC
 #define CONFIG_SPI_FLASH
-#define CONFIG_UBOOT_OFFSET		(26  * 1024)
+#define CONFIG_UBOOT_OFFSET		(26 * 1024)
 #define CONFIG_SPL_SFC_NOR
 #define CONFIG_SPI_DUAL
 /*#define CONFIG_SPI_QUAD*/
@@ -276,7 +288,7 @@
 #define CONFIG_SYS_MAXARGS		64
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT		CONFIG_SYS_BOARD "# "
-#define CONFIG_SYS_CBSIZE		1024 /* Console I/O Buffer Size */
+#define CONFIG_SYS_CBSIZE		1024
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
@@ -403,6 +415,17 @@
 #else
 #define CONFIG_SYS_MAX_FLASH_SECT	0
 #endif
+
+/*
+	Platform Default GPIOs:
+
+	hichip_mmc_enable = 62
+	pps_mmc_enable = 61
+	wyze_mmc_enable = 48
+*/
+
+#define CONFIG_GPIO_SETTINGS \
+""
 
 #include "isvp_common.h"
 

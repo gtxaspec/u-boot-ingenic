@@ -127,8 +127,10 @@
 #define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_UART_CONTROLLER_STEP	0x1000
 
-/*#define CONFIG_DDR_TEST_CPU
-#define CONFIG_DDR_TEST*/
+/*
+#define CONFIG_DDR_TEST_CPU
+#define CONFIG_DDR_TEST
+*/
 #define CONFIG_DDR_INNOPHY
 #define CONFIG_DDR_PARAMS_CREATOR
 #define CONFIG_DDR_HOST_CC
@@ -151,15 +153,21 @@
 
 #define CONFIG_DDR_PHY_IMPEDANCE	40000
 #define CONFIG_DDR_PHY_ODT_IMPEDANCE	50000 //75000
-/*#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf*/
-/*#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf*/
+/*
+#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf
+#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf
+*/
 
-/* #define CONFIG_DDR_DLL_OFF */
+/*
+#define CONFIG_DDR_DLL_OFF
+*/
 
-/*#define CONFIG_DDR_CHIP_ODT*/
-/*#define CONFIG_DDR_PHY_ODT*/
-/*#define CONFIG_DDR_PHY_DQ_ODT*/
-/*#define CONFIG_DDR_PHY_DQS_ODT*/
+/*
+#define CONFIG_DDR_CHIP_ODT
+#define CONFIG_DDR_PHY_ODT
+#define CONFIG_DDR_PHY_DQ_ODT
+#define CONFIG_DDR_PHY_DQS_ODT
+*/
 
 /**
  * Boot arguments definitions.
@@ -186,7 +194,7 @@
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
 #elif defined(CONFIG_SFC_NOR)
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
+#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
 #endif
 
 /**
@@ -198,7 +206,7 @@
 
 #if defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
-#endif /* CONFIG_SFC_NOR */
+#endif
 
 /**
  * Drivers configuration.
@@ -368,7 +376,7 @@
 #define CONFIG_SYS_MAXARGS		64
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT		CONFIG_SYS_BOARD "# "
-#define CONFIG_SYS_CBSIZE		1024 /* Console I/O Buffer Size */
+#define CONFIG_SYS_CBSIZE		1024
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
@@ -466,11 +474,11 @@
 /* USE MBR + zero-GPT-table instead if no gpt table defined*/
 #define CONFIG_MBR_P0_OFF		64mb
 #define CONFIG_MBR_P0_END		556mb
-#define CONFIG_MBR_P0_TYPE 		linux
+#define CONFIG_MBR_P0_TYPE		linux
 
 #define CONFIG_MBR_P1_OFF		580mb
-#define CONFIG_MBR_P1_END 		1604mb
-#define CONFIG_MBR_P1_TYPE 		linux
+#define CONFIG_MBR_P1_END		1604mb
+#define CONFIG_MBR_P1_TYPE		linux
 
 #define CONFIG_MBR_P2_OFF		28mb
 #define CONFIG_MBR_P2_END		58mb
@@ -495,6 +503,13 @@
 #else
 #define CONFIG_SYS_MAX_FLASH_SECT	0
 #endif
+
+/*
+	Platform Default GPIOs:
+*/
+
+#define CONFIG_GPIO_SETTINGS \
+	""
 
 #include "isvp_common.h"
 
