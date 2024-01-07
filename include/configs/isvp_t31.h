@@ -53,117 +53,62 @@
 #define DDR_500M
 #endif
 
-#ifdef APLL_804M
-#define CONFIG_SYS_APLL_FREQ		804000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((67 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_864M
-#define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((72 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_900M
-#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((75 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1000M
-#define CONFIG_SYS_APLL_FREQ		1000000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((125 << 20) | (1 << 14) | (3 << 11) | (1<<8))
-#elif defined APLL_1008M
-#define CONFIG_SYS_APLL_FREQ		1008000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((84 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1104M
-#define CONFIG_SYS_APLL_FREQ		1104000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((92 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1200M
-#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((100 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1392M
-#define CONFIG_SYS_APLL_FREQ		1392000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((116 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1400M
-#define CONFIG_SYS_APLL_FREQ		1404000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((117 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1500M
-#define CONFIG_SYS_APLL_FREQ		1500000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((125 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined APLL_1800M
-#define CONFIG_SYS_APLL_FREQ		1800000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_APLL_MNOD		((150 << 20) | (1 << 14) | (2 << 11) | (1<<8))
+#if defined(APLL_804M)
 #define CONFIG_SYS_APLL_FREQ		804000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_864M)
 #define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_900M)
 #define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_1000M)
 #define CONFIG_SYS_APLL_FREQ		1000000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_1008M)
 #define CONFIG_SYS_APLL_FREQ		1008000000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_FREQ		1104000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_1200M)
 #define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_1392M)
 #define CONFIG_SYS_APLL_FREQ		1392000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_1400M)
 #define CONFIG_SYS_APLL_FREQ		1404000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_1500M)
 #define CONFIG_SYS_APLL_FREQ		1500000000	/*If APLL is not used it must be set to 0*/
+#elif defined(APLL_1800M)
 #define CONFIG_SYS_APLL_FREQ		1800000000	/*If MPLL is not used it must be set to 0*/
 #else
 #error please define APLL_FREQ
 #endif
 
-#ifdef DDR_400M
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((100 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_450M
-#define CONFIG_SYS_MPLL_FREQ		900000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((75 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_500M
-#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((125 << 20) | (1 << 14) | (3 << 11) | (1<<8))
-#elif defined DDR_540M
-#define CONFIG_SYS_MPLL_FREQ		1080000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((90 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_600M
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((100 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_650M
-#define CONFIG_SYS_MPLL_FREQ		1308000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((109 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_700M
-#define CONFIG_SYS_MPLL_FREQ		1404000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((117 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_750M
-#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((125 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_762M
-#define CONFIG_SYS_MPLL_FREQ		1524000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((127 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_774M
-#define CONFIG_SYS_MPLL_FREQ		1548000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((129 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_786M
-#define CONFIG_SYS_MPLL_FREQ		1572000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((131 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_798M
-#define CONFIG_SYS_MPLL_FREQ		1596000000	/*If APLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((133 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_800M
-#define CONFIG_SYS_MPLL_FREQ		1608000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((134 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_810M
-#define CONFIG_SYS_MPLL_FREQ		1620000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((135 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_816M
-#define CONFIG_SYS_MPLL_FREQ		1632000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((136 << 20) | (1 << 14) | (2 << 11) | (1<<8))
-#elif defined DDR_900M
-#define CONFIG_SYS_MPLL_FREQ		1800000000	/*If MPLL not use mast be set 0*/
-#define CONFIG_SYS_MPLL_MNOD		((150 << 20) | (1 << 14) | (2 << 11) | (1<<8))
+#if defined(DDR_400M)
 #define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_450M)
 #define CONFIG_SYS_MPLL_FREQ		900000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_500M)
 #define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_540M)
 #define CONFIG_SYS_MPLL_FREQ		1080000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_600M)
 #define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_650M)
 #define CONFIG_SYS_MPLL_FREQ		1308000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_700M)
 #define CONFIG_SYS_MPLL_FREQ		1404000000	/*If APLL is not used it must be set to 0*/
+#elif defined(DDR_750M)
 #define CONFIG_SYS_MPLL_FREQ		1500000000	/*If APLL is not used it must be set to 0*/
+#elif defined(DDR_762M)
 #define CONFIG_SYS_MPLL_FREQ		1524000000	/*If APLL is not used it must be set to 0*/
+#elif defined(DDR_774M)
 #define CONFIG_SYS_MPLL_FREQ		1548000000	/*If APLL is not used it must be set to 0*/
+#elif defined(DDR_786M)
 #define CONFIG_SYS_MPLL_FREQ		1572000000	/*If APLL is not used it must be set to 0*/
+#elif defined(DDR_798M)
 #define CONFIG_SYS_MPLL_FREQ		1596000000	/*If APLL is not used it must be set to 0*/
+#elif defined(DDR_800M)
 #define CONFIG_SYS_MPLL_FREQ		1608000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_810M)
 #define CONFIG_SYS_MPLL_FREQ		1620000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_816M)
 #define CONFIG_SYS_MPLL_FREQ		1632000000	/*If MPLL is not used it must be set to 0*/
+#elif defined(DDR_900M)
 #define CONFIG_SYS_MPLL_FREQ		1800000000	/*If MPLL is not used it must be set to 0*/
 #else
 #error please define DDR_FREQ
@@ -175,67 +120,67 @@
 #define SEL_H0				2
 #define SEL_H2				2
 
-#ifdef DDR_400M
+#if defined(DDR_400M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_450M
+#elif defined(DDR_450M)
 #define DIV_PCLK			8
 #define DIV_H2				4
 #define DIV_H0				4
-#elif defined DDR_500M
+#elif defined(DDR_500M)
 #define DIV_PCLK			8
 #define DIV_H2				4
 #define DIV_H0				4
-#elif defined DDR_540M
+#elif defined(DDR_540M)
 #define DIV_PCLK			8
 #define DIV_H2				4
 #define DIV_H0				4
-#elif defined DDR_600M
+#elif defined(DDR_600M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_650M
+#elif defined(DDR_650M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_700M
+#elif defined(DDR_700M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_750M
+#elif defined(DDR_750M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_762M
+#elif defined(DDR_762M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_774M
+#elif defined(DDR_774M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_786M
+#elif defined(DDR_786M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_798M
+#elif defined(DDR_798M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_800M
+#elif defined(DDR_800M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_810M
+#elif defined(DDR_810M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_816M
+#elif defined(DDR_816M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
-#elif defined DDR_900M
+#elif defined(DDR_900M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
@@ -259,37 +204,37 @@
 #define CONFIG_DDR_SEL_PLL		MPLL
 #define CONFIG_SYS_CPU_FREQ		CONFIG_SYS_APLL_FREQ
 
-#ifdef DDR_400M
+#if defined(DDR_400M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 3)
-#elif defined DDR_450M
+#elif defined(DDR_450M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_500M
+#elif defined(DDR_500M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_540M
+#elif defined(DDR_540M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_600M
+#elif defined(DDR_600M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_650M
+#elif defined(DDR_650M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_700M
+#elif defined(DDR_700M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_750M
+#elif defined(DDR_750M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_762M
+#elif defined(DDR_762M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_774M
+#elif defined(DDR_774M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_786M
+#elif defined(DDR_786M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_798M
+#elif defined(DDR_798M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_800M
+#elif defined(DDR_800M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_810M
+#elif defined(DDR_810M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_816M
+#elif defined(DDR_816M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
-#elif defined DDR_900M
+#elif defined(DDR_900M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #else
 #error please define DDR_FREQ
@@ -317,7 +262,7 @@
 #define CONFIG_DDR_DW32			0	/* 1-32bit-width, 0-16bit-width */
 #define CONFIG_DDRC_CTRL_PDT		DDRC_CTRL_PDT_128
 
-#ifdef CONFIG_DDR2_128M
+#if defined(CONFIG_DDR2_128M)
 #define CONFIG_DDR2_M14D1G1664A
 #define CONFIG_DDR_TYPE_DDR2
 #elif defined(CONFIG_DDR3_128M)
@@ -347,6 +292,7 @@
 #define CONFIG_OF_LIBFDT		1
 #endif
 #ifdef CONFIG_OF_LIBFDT
+#if defined(CONFIG_OF_LIBFDT)
 #define IMAGE_ENABLE_OF_LIBFDT		1
 #define CONFIG_LMB
 #endif
@@ -354,7 +300,7 @@
 /**
  * Boot arguments definitions.
  */
-#if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
+#if defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M)
 #define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=64M@0x0 rmem=64M@0x4000000"
 #else
 #define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=42M@0x0 rmem=22M@0x2a00000"
@@ -364,7 +310,7 @@
 #define CONFIG_SPL_SFC_SUPPORT
 #define CONFIG_JZ_SFC
 #define CONFIG_SPL_VERSION		1
-#ifdef CONFIG_SPL_SFC_NOR
+#if defined(CONFIG_SPL_SFC_NOR)
 #define CONFIG_SFC_NOR
 #else
 #define CONFIG_SFC_NAND
@@ -373,11 +319,10 @@
 /*#define CONFIG_SPI_QUAD*/
 #endif /* defined(CONFIG_SPL_SFC_NOR) || defined(CONFIG_SPL_SFC_NAND) */
 
-#ifdef CONFIG_SPL_MMC_SUPPORT
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
+#if defined(CONFIG_SPL_MMC_SUPPORT)
+#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
 #elif defined(CONFIG_SFC_NOR)
-#ifdef CONFIG_OF_LIBFDT
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:320k(boot),2496k(kernel),2048k(root),64k(dtb),-(appfs)"
+#if defined(CONFIG_OF_LIBFDT)
 #else
 	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
 #endif
@@ -388,19 +333,19 @@
 /**
  * Boot command definitions.
  */
-#ifdef CONFIG_SPL_MMC_SUPPORT
+#if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
 
-#ifdef CONFIG_SFC_NOR
-#ifdef CONFIG_OF_LIBFDT
+#if defined(CONFIG_SFC_NOR)
+#if defined(CONFIG_OF_LIBFDT)
 	#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x50000 0x270000;sf read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
 #else
 	#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
 #endif
 #endif /* CONFIG_SFC_NOR */
 
-#ifdef CONFIG_SFC_NAND
+#if defined(CONFIG_SFC_NAND)
 	#define CONFIG_BOOTCOMMAND "nand read 0x80600000 0x100000 0x800000;bootm 0x80600000"
 #endif
 
@@ -414,20 +359,19 @@
 #define CONFIG_JZ_MMC			1
 #endif  /* JZ_MMC_MSC0 || JZ_MMC_MSC1 */
 
-#ifdef CONFIG_JZ_MMC_MSC0
+#if defined(CONFIG_JZ_MMC_MSC0)
 #define CONFIG_JZ_MMC_SPLMSC		0
 #define CONFIG_JZ_MMC_MSC0_PB		1
 #endif
 
-#ifdef CONFIG_SFC_COMMAND/* SD card start */
-#if 1
+#if defined(CONFIG_SFC_COMMAND)/* SD card start */
 #define CONFIG_SFC_NOR_COMMAND /* support nor command */
 #else
 #define CONFIG_SFC_NAND_COMMAND /* support nand command */
 #endif
 #endif /* CONFIG_SFC_COMMAND */
 
-#ifdef CONFIG_SFC_NOR_COMMAND
+#if defined(CONFIG_SFC_NOR_COMMAND)
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH
 #define CONFIG_JZ_SFC_PA
@@ -466,7 +410,7 @@
 #define CONFIG_SPI_STANDARD //if the nand is QUAD mode, please annotate it. the default is one lan.
 #endif
 
-#ifdef CONFIG_SPL_SFC_SUPPORT
+#if defined(CONFIG_SPL_SFC_SUPPORT)
 /*SFCNAND env*/
 /* spi nand environment */
 #define CONFIG_SYS_REDUNDAND_ENVIRONMENT
@@ -490,7 +434,7 @@
 #endif
 #endif /* CONFIG_SPL_SFC_SUPPORT */
 
-#ifdef CONFIG_NORFLASH_32M
+#if defined(CONFIG_NORFLASH_32M)
 #define CONFIG_SPI_FLASH_BAR
 #endif
 
@@ -556,7 +500,7 @@
 
 /************************ USB CONFIG ***************************/
 #define CONFIG_CMD_USB
-#ifdef CONFIG_CMD_USB
+#if defined(CONFIG_CMD_USB)
 #define CONFIG_USB_DWC2
 #define CONFIG_USB_DWC2_REG_ADDR 0x13500000
 #define CONFIG_USB_HOST_ETHER
@@ -596,7 +540,7 @@
 #if defined(CONFIG_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
 #define CONFIG_SYS_MONITOR_LEN		(400 * 1024)
 #else
-#ifdef CONFIG_OF_LIBFDT /* support device tree */
+#if defined(CONFIG_OF_LIBFDT)
 #define CONFIG_SYS_MONITOR_LEN		(246 * 1024)
 #else
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
@@ -618,11 +562,11 @@
 /**
  * Environment
  */
-#ifdef CONFIG_ENV_IS_IN_MMC
+#if defined(CONFIG_ENV_IS_IN_MMC)
 #define CONFIG_SYS_MMC_ENV_DEV		0
 #define CONFIG_ENV_SIZE			(32 << 10)
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
-#elif CONFIG_ENV_IS_IN_SPI_FLASH
+#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
 #define CONFIG_ENV_SECT_SIZE		(1024 * 16)
 #define CONFIG_ENV_SIZE			(1024 * 16)
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
@@ -637,7 +581,7 @@
 #define CONFIG_SPL_NO_CPU_SUPPORT_CODE
 #define CONFIG_SPL_START_S_PATH		"$(CPUDIR)/$(SOC)"
 
-#ifdef CONFIG_SPL_NOR_SUPPORT
+#if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-nor-spl.lds"
 #else /* CONFIG_SPL_NOR_SUPPORT */
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-spl.lds"
@@ -660,7 +604,7 @@
 #define CONFIG_SPL_LIBGENERIC_SUPPORT
 #define CONFIG_SPL_GPIO_SUPPORT
 
-#ifdef CONFIG_SPL_NOR_SUPPORT
+#if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_TEXT_BASE		0xba000000
 #else
 #define CONFIG_SPL_TEXT_BASE		0x80001000
@@ -669,21 +613,21 @@
 #define CONFIG_SPL_MAX_SIZE		(26 * 1024)
 
 #define CONFIG_SPL_LZOP
-#ifdef CONFIG_SPL_LZOP
+#if defined(CONFIG_SPL_LZOP)
 #define CONFIG_DECMP_BUFFER_ADRS	0x80200000
 #endif
 
-#ifdef CONFIG_SPL_MMC_SUPPORT
+#if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_SPL_SERIAL_SUPPORT
 #endif /* CONFIG_SPL_MMC_SUPPORT */
 
-#ifdef CONFIG_SPL_SPI_SUPPORT
+#if defined(CONFIG_SPL_SPI_SUPPORT)
 #define CONFIG_SPL_SERIAL_SUPPORT
 #define CONFIG_SPI_SPL_CHECK
 #define CONFIG_SYS_SPI_BOOT_FREQ	1000000
 #endif /* CONFIG_SPL_SPI_SUPPORT */
 
-#ifdef CONFIG_SPL_NOR_SUPPORT
+#if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_SERIAL_SUPPORT
 #define CONFIG_SYS_UBOOT_BASE		(CONFIG_SPL_TEXT_BASE + CONFIG_SPL_PAD_TO - 0x40) //0x40 = sizeof (image_header)
 #define CONFIG_SYS_OS_BASE		0
@@ -694,7 +638,7 @@
 /**
  * GPT configuration
  */
-#ifdef CONFIG_GPT_CREATOR
+#if defined(CONFIG_GPT_CREATOR)
 #define CONFIG_GPT_TABLE_PATH		"$(TOPDIR)/board/$(BOARDDIR)"
 #else
 /* USE MBR + zero-GPT-table instead if no gpt table defined*/
@@ -716,7 +660,7 @@
 #endif
 
 /* JFFS2 configuration */
-#ifdef CONFIG_CMD_JFFS2
+#if defined(CONFIG_CMD_JFFS2)
 #define CONFIG_CMD_FLASH
 #define CONFIG_SYS_MAX_FLASH_BANKS	1
 #define CONFIG_SYS_MAX_FLASH_SECT	256
