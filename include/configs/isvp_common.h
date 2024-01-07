@@ -44,9 +44,9 @@
 #define CONFIG_CMD_TFTPPUT		1
 #define CONFIG_CMD_FAT			1
 #define CONFIG_FAT_WRITE		1
-#define CONFIG_CMD_FS_GENERIC	1
+#define CONFIG_CMD_FS_GENERIC		1
 #define CONFIG_CMD_GPIO			1
-#define	CONFIG_SYS_HUSH_PARSER	1
+#define	CONFIG_SYS_HUSH_PARSER		1
 
 #define CONFIG_NETMASK			255.255.255.0
 #define CONFIG_GATEWAYIP		192.168.1.1
@@ -61,72 +61,57 @@
 
 #define CONFIG_CMD_SDSTART		1
 
-#define CONFIG_BOOTCOMMAND \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"sf probe 0;" \
-	"sf read ${baseaddr} 0x50000 0x300000;" \
-	"bootm ${baseaddr}"
-
-#if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
+#if defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M)
 #define CONFIG_EXTRA_SETTINGS \
-    "totalmem=128M\0" \
-    "osmem=64M\0" \
-    "rmem=64M@0x4000000\0"
+"totalmem=128M\0" \
+"osmem=64M\0" \
+"rmem=64M@0x4000000\0"
 #else
 #define CONFIG_EXTRA_SETTINGS \
-    "totalmem=64M\0" \
-    "osmem=40M\0" \
-    "rmem=24M@0x2800000\0"
+"totalmem=64M\0" \
+"osmem=40M\0" \
+"rmem=24M@0x2800000\0"
 #endif
 
-#ifdef CONFIG_SPL_MMC_SUPPORT
+#if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND \
-	"mmc rescan;" \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"mmc read ${baseaddr} 0x1800 0x3000;"\
-	"bootm ${baseaddr}"
-#endif
-
-#ifdef CONFIG_SFC_NOR
+"setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"mmc rescan;mmc read ${baseaddr} 0x1800 0x3000;"\
+"bootm ${baseaddr};"
+#elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND \
-	"sf probe;" \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"sf read ${baseaddr} 0x50000 \\${kern_len};" \
-	"bootm ${baseaddr}"
-#endif
-
-#ifdef CONFIG_SFC_NAND
+"sf probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf read ${baseaddr} 0x50000 \\${kern_len};" \
+"bootm ${baseaddr}"
+#elif defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND \
-	"sf probe;" \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"sfcnand read 0x50000 0x200000 ${baseaddr};" \
-	"bootm ${baseaddr}"
+"sf probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sfcnand read 0x50000 0x200000 ${baseaddr};" \
+"bootm ${baseaddr}"
+#else
+#define CONFIG_BOOTCOMMAND \
+"sf probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf read ${baseaddr} 0x50000 0x300000;" \
+"bootm ${baseaddr}"
 #endif
 
 #define CONFIG_BOOTARGS \
-	"mem=\${osmem} rmem=\${rmem} console=\${serialport},\${baudrate}n8" \
-	" panic=\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs" \
-	" init=/init mtdparts=jz_sfc:256k(boot),64k(env)," \
-	"\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)"
+"mem=\${osmem} rmem=\${rmem} console=\${serialport},\${baudrate}n8" \
+" panic=\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs init=/init" \
+" mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
-    "baseaddr=0x80600000\0" \
-    "panic_timeout=10\0" \
-    "serialport=ttyS1\0" \
-    "restore=n\0" \
-    "soc="CONFIG_SOC"\0" \
-    CONFIG_EXTRA_SETTINGS \
-    CONFIG_GPIO_SETTINGS \
-	CONFIG_GPIO_IRCUT_SETTINGS
+"baseaddr=0x80600000\0" \
+"panic_timeout=10\0" \
+"serialport=ttyS1\0" \
+"restore=n\0" \
+"soc="CONFIG_SOC"\0" \
+CONFIG_EXTRA_SETTINGS \
+CONFIG_GPIO_SETTINGS \
+CONFIG_GPIO_IRCUT_SETTINGS
 
-	/*
+/*
 	IRCUT Default GPIOs:
-
-
 */
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
