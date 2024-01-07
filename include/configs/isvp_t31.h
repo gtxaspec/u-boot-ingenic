@@ -375,14 +375,14 @@
 
 #if defined(CONFIG_SFC_NOR)
 #if defined(CONFIG_OF_LIBFDT)
-	#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x50000 0x270000;sf read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
+#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x50000 0x270000;sf read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
 #else
-	#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
+#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
 #endif
 #endif
 
 #if defined(CONFIG_SFC_NAND)
-	#define CONFIG_BOOTCOMMAND "nand read 0x80600000 0x100000 0x800000;bootm 0x80600000"
+#define CONFIG_BOOTCOMMAND "nand read 0x80600000 0x100000 0x800000;bootm 0x80600000"
 #endif
 
 /**
@@ -404,7 +404,6 @@
 #define CONFIG_SFC_NOR_COMMAND /* support nor command */
 #else
 #define CONFIG_SFC_NAND_COMMAND /* support nand command */
-#endif
 #endif /* CONFIG_SFC_COMMAND */
 
 #if defined(CONFIG_SFC_NOR_COMMAND)
