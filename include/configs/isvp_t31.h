@@ -86,6 +86,17 @@
 #elif defined APLL_1800M
 #define CONFIG_SYS_APLL_FREQ		1800000000	/*If MPLL not use mast be set 0*/
 #define CONFIG_SYS_APLL_MNOD		((150 << 20) | (1 << 14) | (2 << 11) | (1<<8))
+#define CONFIG_SYS_APLL_FREQ		804000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1000000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1008000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1104000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1392000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1404000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1500000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1800000000	/*If MPLL is not used it must be set to 0*/
 #else
 #error please define APLL_FREQ
 #endif
@@ -138,11 +149,27 @@
 #elif defined DDR_900M
 #define CONFIG_SYS_MPLL_FREQ		1800000000	/*If MPLL not use mast be set 0*/
 #define CONFIG_SYS_MPLL_MNOD		((150 << 20) | (1 << 14) | (2 << 11) | (1<<8))
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		900000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1080000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1308000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1404000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1524000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1548000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1572000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1596000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1608000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1620000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1632000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1800000000	/*If MPLL is not used it must be set to 0*/
 #else
 #error please define DDR_FREQ
 #endif
 
-#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL not use mast be set 0*/
+#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used it must be set to 0*/
 #define SEL_SCLKA			2
 #define SEL_CPU				1
 #define SEL_H0				2

@@ -37,16 +37,17 @@
 
 #ifdef CONFIG_LITE_VERSION
 #define CONFIG_SYS_APLL_FREQ		712704000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		712704000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((59 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0x645a1c
 #else
-#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((71 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0xae147a
 #endif
-#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((125 << 20) | (3 << 14) | (1 << 11) | (1 << 8))
-#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL not use mast be set 0*/
+#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used it must be set to 0*/
 
 #define SEL_SCLKA			2
 #define SEL_CPU				1

@@ -37,31 +37,36 @@
 
 #ifdef CONFIG_HIGH_PERF
 #define CONFIG_SYS_APLL_FREQ		1200000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((49 << 20) | (0 << 14) | (1 << 11) | (3<<5))
 #define DDR_500M
 #else
-#define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((71 << 20) | (1 << 14) | (1 << 11) | (2<<5))
 #define DDR_450M
 #endif
 
 #ifdef DDR_400M
 #define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
 #elif defined DDR_450M
 #define CONFIG_SYS_MPLL_FREQ		900000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		900000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((74 << 20) | (1 << 14) | (1 << 11) | (2<<5))
 #elif defined DDR_500M
 #define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((124 << 20) | (2 << 14) | (1 << 11) | (1<<5))
 #elif defined DDR_600M
 #define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
 #else
 #error please define DDR_FREQ
 #endif
 
-#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL not use mast be set 0*/
+#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used it must be set to 0*/
 
 #define SEL_SCLKA			2
 #define SEL_CPU				1
