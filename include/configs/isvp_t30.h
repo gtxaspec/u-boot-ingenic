@@ -37,13 +37,13 @@
 
 
 #if defined(CONFIG_LITE_VERSION)
-#define CONFIG_SYS_APLL_FREQ		750000000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		750000000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((124 << 20) | (1 << 14) | (2 << 11) | (2<<5))
 #elif defined(CONFIG_T30A)
-#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
 #else
-#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((74 << 20) | (1 << 14) | (1 << 11) | (2<<5))
 #endif
 
@@ -55,23 +55,25 @@
 
 #ifdef DDR_400M
 #define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
 #elif defined DDR_500M
 #if 1
-#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((124 << 20) | (2 << 14) | (1 << 11) | (1<<5))
 #else
-#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((249 << 20) | (3 << 14) | (1 << 11) | (1<<5))
 #endif
 #elif defined DDR_600M
 #define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
 #else
 #error please define DDR_FREQ
 #endif
 
-#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL not use mast be set 0*/
+#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used it must be set to 0*/
 #define CONFIG_SYS_EPLL_MNOD		((197 << 20) | (3 << 14) | (1 << 11) | (1<<5))
 #define CONFIG_SYS_EPLL_FREQ		1188000000
 #define SEL_SCLKA			2
