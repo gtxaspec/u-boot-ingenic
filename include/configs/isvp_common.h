@@ -22,7 +22,7 @@
 #define CONFIG_SYS_PROMPT		"OpenIPC # "
 
 #define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_AUTOBOOT_PROMPT		"Press Ctrl-c to abort autoboot... %d \n", bootdelay
+#define CONFIG_AUTOBOOT_PROMPT		"Press Ctrl-c to abort autoboot... %d %d\n", bootdelay
 #define CONFIG_AUTOBOOT_STOP_STR	"\x3"
 
 #define CONFIG_SYS_LONGHELP
@@ -59,6 +59,49 @@
 
 #define CONFIG_CMD_SDSTART		1
 
+/**
+ * Command configuration.
+ */
+
+/*
+#define CONFIG_AUTO_COMPLETE
+#define CONFIG_CMD_BOOTD
+#define CONFIG_CMD_CONSOLE
+#define CONFIG_CMD_DHCP
+#define CONFIG_CMD_ECHO
+#define CONFIG_CMD_EXT2
+#define CONFIG_CMD_EXT4
+#define CONFIG_CMD_FLASH
+#define CONFIG_CMD_FLOCK
+#define CONFIG_CMD_GETTIME
+#define CONFIG_CMD_I2C
+#define CONFIG_CMD_JFFS2
+#define CONFIG_CMD_LOADB
+#define CONFIG_CMD_LOADS
+#define CONFIG_CMD_MEMORY
+#define CONFIG_CMD_MISC
+#define CONFIG_CMD_MMC
+#define CONFIG_CMD_MTDPARTS
+#define CONFIG_CMD_NET
+#define CONFIG_CMD_PING
+#define CONFIG_CMD_RUN
+#define CONFIG_CMD_SAVEENV
+#define CONFIG_CMD_SF
+#define CONFIG_CMD_SOURCE
+#define CONFIG_CMD_TFTPDOWNLOAD
+#define CONFIG_CMD_USB
+#define CONFIG_CMD_WATCHDOG
+
+#if defined(CONFIG_SPL_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
+#define CONFIG_CMD_MTDPARTS
+#define CONFIG_CMD_NAND
+#define CONFIG_CMD_SFCNAND
+#define CONFIG_CMD_SFC_NAND
+#define CONFIG_CMD_UBI
+#define CONFIG_CMD_UBIFS
+#endif
+*/
+
 #if defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M)
 #define CONFIG_EXTRA_SETTINGS \
 "totalmem=128M\0" \
@@ -94,8 +137,8 @@
 #endif
 
 #define CONFIG_BOOTARGS \
-"mem=\${osmem} rmem=\${rmem} console=\${serialport},\${baudrate}n8" \
-" panic=\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs init=/init" \
+"mem=\\${osmem} rmem=\\${rmem} console=\\${serialport},\\${baudrate}n8" \
+" panic=\\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs init=/init" \
 " mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
