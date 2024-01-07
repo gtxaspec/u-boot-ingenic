@@ -269,9 +269,9 @@ static int update_to_flash(void) {
 		}
 
 		if (strcmp(aufile[i], AU_FW) == 0) {
-			// Check if .autoupdate-full.flag exists
-			if (file_fat_read(".autoupdate-full.flag", LOAD_ADDR, 1) >= 0) {
-				printf("Flag file .autoupdate-full.flag exists, skipping %s\n", AU_FW);
+			// Check if .autoupdate-full.done exists
+			if (file_fat_read(".autoupdate-full.done", LOAD_ADDR, 1) >= 0) {
+				printf("Flag file .autoupdate-full.done exists, skipping %s\n", AU_FW);
 				continue; // Skip this file
 			}
 		}
@@ -310,12 +310,12 @@ static int update_to_flash(void) {
 		}
 
 		if (res == 0 && strcmp(aufile[i], AU_FW) == 0) {
-			// Write the .autoupdate-full.flag file after successful flash
+			// Write the .autoupdate-full.done file after successful flash
 			char empty_flag[1] = {0};
-			if (file_fat_write(".autoupdate-full.flag", empty_flag, sizeof(empty_flag)) < 0) {
-				printf("Error creating flag file .autoupdate-full.flag\n");
+			if (file_fat_write(".autoupdate-full.done", empty_flag, sizeof(empty_flag)) < 0) {
+				printf("Error creating flag file .autoupdate-full.done\n");
 			} else {
-				printf("Flag file .autoupdate-full.flag created\n");
+				printf("Flag file .autoupdate-full.done created\n");
 			}
 		}
 
