@@ -32,10 +32,10 @@
 #endif	/* AU_DEBUG */
 
 /* possible names of files on the medium. */
-#define AU_UBOOT	"autoupdate-uboot.img"
-#define AU_KERNEL	"autoupdate-kernel.img"
-#define AU_ROOTFS	"autoupdate-rootfs.img"
-#define AU_FW		"autoupdate-full.img"
+#define AU_UBOOT	"autoupdate-uboot.bin"
+#define AU_KERNEL	"autoupdate-kernel.bin"
+#define AU_ROOTFS	"autoupdate-rootfs.bin"
+#define AU_FW		"autoupdate-full.bin"
 
 struct flash_layout {
 	long start;
