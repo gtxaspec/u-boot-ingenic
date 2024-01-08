@@ -536,4 +536,4 @@
 
 #include "isvp_common.h"
 
-#endif /*__CONFIG_ISVP_T20_H__*/
+#endif /*__CONFIG_ISVP_T21_H__*/
