@@ -1,11 +1,20 @@
-# u-boot-ingenic
-unofficial, improved OpenIPC U-Boot for Ingenic Xburst T10-T31 SoC's
-featuring:
-* hush
-* networking support via asix usb adapters
-* ext4
-* ext2
-* dhcp
-* usb-storage
-* sdstart
-# ** USE AT YOUR OWN RISK **
+# Ingenic OpenIPC U-Boot
+
+This repository hosts the unofficial, enhanced OpenIPC U-Boot tailored for the Ingenic Xburst T10-T31 SoCs. It comes packed with a range of features to enhance usability and functionality for these specific SoCs.
+
+## Features
+
+- **Automatic Partition Recognition**: Seamless compatibility with OpenIPC or custom firmware, recognizing partitions automatically.
+- **DHCP Client**: DHCP functionality for automatic network configuration.
+- **FAT-Write Capability**: Allows writing to FAT file systems, enhancing file management flexibility.
+- **Filesystem Compatibility**: Supports ext2 and ext4 filesystems for broader storage options.
+- **Functional Autoupdate**: An effective, built-in system for automatic firmware updates via SD card.
+- **GPIO Environment Variable Storage**: Store and set GPIO configurations right at the device's startup.
+- **Hush Command Shell**: An advanced, interactive command-line interface.
+- **SDStart**: Specialized command for automated loading of the linux kernel from an SD card.
+- **USB Networking Support**: Integrated support for ASIX USB adapters, facilitating network connectivity.
+- **USB Storage**: Enables the use of USB storage devices.
+
+## Disclaimer
+### **USE AT YOUR OWN RISK**
+While this U-Boot version is designed to enhance functionality, its usage comes with inherent risks, particularly when modifying firmware or device settings. Users should proceed with caution and at their own risk.
