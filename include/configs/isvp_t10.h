@@ -366,4 +366,7 @@
 
 #include "isvp_common.h"
 
+#define CONFIG_GPIO_SETTINGS \
+""
+
 #endif /*__CONFIG_ISVP_T10_H__*/
