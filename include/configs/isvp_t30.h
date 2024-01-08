@@ -498,10 +498,8 @@
 	Platform Default GPIOs:
 */
 #define CONFIG_GPIO_SETTINGS \
-	""
+""
 
 #include "isvp_common.h"
-
-#define CONFIG_GPIO_SETTINGS
 
 #endif /*__CONFIG_ISVP_T30_H__*/

@@ -436,4 +436,8 @@
 
 #include "isvp_common.h"
 
+#define CONFIG_GPIO_SETTINGS \
+"gpio_dev=47O\0" \
+"gpio_dev_net=43O 48o 43o\0"
+	
 #endif /*__CONFIG_ISVP_T10_H__*/

@@ -123,18 +123,18 @@
 "bootm ${baseaddr};"
 #elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND \
-"setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"sf probe;sf read ${baseaddr} 0x50000 \\${kern_len};" \
+"sf probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf read ${baseaddr} 0x50000 \\${kern_len};" \
 "bootm ${baseaddr};"
 #elif defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND \
-"setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"sf probe;sfcnand read 0x50000 0x200000 ${baseaddr};" \
+"sf probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sfcnand read 0x50000 0x200000 ${baseaddr};" \
 "bootm ${baseaddr};"
 #else
 #define CONFIG_BOOTCOMMAND \
-"setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"sf probe;sf read ${baseaddr} 0x50000 0x250000;" \
+"sf probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf read ${baseaddr} 0x50000 0x250000;" \
 "bootm ${baseaddr};"
 #endif
 
@@ -158,6 +158,6 @@ CONFIG_GPIO_IRCUT_SETTINGS
 */
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
-"gpio_dev_ircut=25o 26o 52o 53o 49o 50o\0"
+"gpio_default_ircut=25o 26o 52o 53o 49o 50o\0"
 
 #endif /*__CONFIG_ISVP_COMMON__*/
