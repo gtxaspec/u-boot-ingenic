@@ -502,4 +502,6 @@
 
 #include "isvp_common.h"
 
-#endif /*__CONFIG_ISVP_T10_H__*/
+#define CONFIG_GPIO_SETTINGS
+
+#endif /*__CONFIG_ISVP_T30_H__*/
