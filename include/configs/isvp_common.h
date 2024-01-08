@@ -22,8 +22,7 @@
 #define CONFIG_SYS_PROMPT		"OpenIPC # "
 
 #define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_AUTOBOOT_PROMPT		\
-    "Press Ctrl-c to abort autoboot... %d \n", bootdelay
+#define CONFIG_AUTOBOOT_PROMPT		"Press Ctrl-c to abort autoboot... %d %d\n", bootdelay
 #define CONFIG_AUTOBOOT_STOP_STR	"\x3"
 
 #define CONFIG_SYS_LONGHELP
@@ -61,75 +60,101 @@
 
 #define CONFIG_CMD_SDSTART		1
 
-#define CONFIG_BOOTCOMMAND \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"sf probe 0;" \
-	"sf read ${baseaddr} 0x50000 0x300000;" \
-	"bootm ${baseaddr}"
+/**
+ * Command configuration.
+ */
 
-#if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
+/*
+#define CONFIG_AUTO_COMPLETE
+#define CONFIG_CMD_BOOTD
+#define CONFIG_CMD_CONSOLE
+#define CONFIG_CMD_DHCP
+#define CONFIG_CMD_ECHO
+#define CONFIG_CMD_EXT2
+#define CONFIG_CMD_EXT4
+#define CONFIG_CMD_FLASH
+#define CONFIG_CMD_FLOCK
+#define CONFIG_CMD_GETTIME
+#define CONFIG_CMD_I2C
+#define CONFIG_CMD_JFFS2
+#define CONFIG_CMD_LOADB
+#define CONFIG_CMD_LOADS
+#define CONFIG_CMD_MEMORY
+#define CONFIG_CMD_MISC
+#define CONFIG_CMD_MMC
+#define CONFIG_CMD_MTDPARTS
+#define CONFIG_CMD_NET
+#define CONFIG_CMD_PING
+#define CONFIG_CMD_RUN
+#define CONFIG_CMD_SAVEENV
+#define CONFIG_CMD_SF
+#define CONFIG_CMD_SOURCE
+#define CONFIG_CMD_TFTPDOWNLOAD
+#define CONFIG_CMD_USB
+#define CONFIG_CMD_WATCHDOG
+
+#if defined(CONFIG_SPL_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
+#define CONFIG_CMD_MTDPARTS
+#define CONFIG_CMD_NAND
+#define CONFIG_CMD_SFCNAND
+#define CONFIG_CMD_SFC_NAND
+#define CONFIG_CMD_UBI
+#define CONFIG_CMD_UBIFS
+#endif
+*/
+
+#if defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M)
 #define CONFIG_EXTRA_SETTINGS \
-    "totalmem=128M\0" \
-    "osmem=64M\0" \
-    "rmem=64M@0x4000000\0"
+"totalmem=128M\0" \
+"osmem=64M\0" \
+"rmem=64M@0x4000000\0"
 #else
 #define CONFIG_EXTRA_SETTINGS \
-    "totalmem=64M\0" \
-    "osmem=40M\0" \
-    "rmem=24M@0x2800000\0"
+"totalmem=64M\0" \
+"osmem=40M\0" \
+"rmem=24M@0x2800000\0"
 #endif
 
-#ifdef CONFIG_SPL_MMC_SUPPORT
+#if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND \
-	"mmc rescan;" \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"mmc read ${baseaddr} 0x1800 0x3000;"\
-	"bootm ${baseaddr}"
-#endif
-
-#ifdef CONFIG_SFC_NOR
+"setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"mmc rescan;mmc read ${baseaddr} 0x1800 0x3000;" \
+"bootm ${baseaddr};"
+#elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND \
-	"sf probe;" \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"sf read ${baseaddr} 0x50000 \\${kern_len};" \
-	"bootm ${baseaddr}"
-#endif
-
-#ifdef CONFIG_SFC_NAND
+"setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf probe;sf read ${baseaddr} 0x50000 \\${kern_len};" \
+"bootm ${baseaddr};"
+#elif defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND \
-	"sf probe;" \
-	"setenv setargs setenv bootargs ${bootargs};" \
-	"run setargs;" \
-	"sfcnand read 0x50000 0x200000 ${baseaddr};" \
-	"bootm ${baseaddr}"
+"setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf probe;sfcnand read 0x50000 0x200000 ${baseaddr};" \
+"bootm ${baseaddr};"
+#else
+#define CONFIG_BOOTCOMMAND \
+"setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf probe;sf read ${baseaddr} 0x50000 0x250000;" \
+"bootm ${baseaddr};"
 #endif
 
 #define CONFIG_BOOTARGS \
-	"mem=\${osmem} rmem=\${rmem} console=\${serialport},\${baudrate}n8" \
-	" panic=\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs" \
-	" init=/init mtdparts=jz_sfc:256k(boot),64k(env)," \
-	"\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data) \${extras}"
+"mem=\\${osmem} rmem=\\${rmem} console=\\${serialport},\\${baudrate}n8" \
+" panic=\\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs init=/init" \
+" mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
-    "baseaddr=0x80600000\0" \
-    "panic_timeout=10\0" \
-    "serialport=ttyS1\0" \
-    "restore=n\0" \
-    "soc="CONFIG_SOC"\0" \
-    CONFIG_EXTRA_SETTINGS \
-    CONFIG_GPIO_SETTINGS \
-	CONFIG_GPIO_IRCUT_SETTINGS
+"baseaddr=0x80600000\0" \
+"panic_timeout=10\0" \
+"serialport=ttyS1\0" \
+"restore=n\0" \
+"soc="CONFIG_SOC"\0" \
+CONFIG_EXTRA_SETTINGS \
+CONFIG_GPIO_SETTINGS \
+CONFIG_GPIO_IRCUT_SETTINGS
 
-	/*
-	IRCUT Default GPIOs:
-
-
-*/
+/* IRCUT Default GPIOs */
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
-    "gpio_default_ircut=25o 26o 52o 53o 49o 50o\0"
+"gpio_dev_ircut=25o 26o 52o 53o 49o 50o\0"
 
 #endif /*__CONFIG_ISVP_COMMON__*/

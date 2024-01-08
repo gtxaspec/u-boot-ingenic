@@ -35,26 +35,28 @@
 /*#define CONFIG_DDR_AUTO_SELF_REFRESH*/
 #define CONFIG_SPL_DDR_SOFT_TRAINING
 
-#ifdef CONFIG_LITE_VERSION
-#define CONFIG_SYS_APLL_FREQ		712704000	/*If APLL not use mast be set 0*/
+#if defined(CONFIG_LITE_VERSION)
+#define CONFIG_SYS_APLL_FREQ		712704000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((59 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0x645a1c
 #else
-#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLL not use mast be set 0*/
+#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLL is not used it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((71 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0xae147a
 #endif
-#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL not use mast be set 0*/
+#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((125 << 20) | (3 << 14) | (1 << 11) | (1 << 8))
-#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL not use mast be set 0*/
+#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used it must be set to 0*/
 
 #define SEL_SCLKA			2
 #define SEL_CPU				1
 #define SEL_H0				2
 #define SEL_H2				2
+
 #define DIV_PCLK			10
 #define DIV_H2				5
 #define DIV_H0				5
+
 #define DIV_L2				2
 #define DIV_CPU				1
 #define CONFIG_SYS_CPCCR_SEL		(((SEL_SCLKA & 3) << 30)		\
@@ -70,6 +72,7 @@
 #define CONFIG_CPU_SEL_PLL		APLL
 #define CONFIG_DDR_SEL_PLL		MPLL
 #define CONFIG_SYS_CPU_FREQ		CONFIG_SYS_APLL_FREQ
+
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 
 #define CONFIG_SYS_EXTAL		24000000	/* EXTAL freq: 24 MHz */
@@ -82,10 +85,10 @@
 #define CONFIG_SYS_UART_INDEX		1
 #define CONFIG_BAUDRATE			115200
 
-/*#define CONFIG_DDR_TEST_CPU
-#define CONFIG_DDR_TEST*/
-
-#define CONFIG_DDR_TYPE_DDR2
+/*
+#define CONFIG_DDR_TEST_CPU
+#define CONFIG_DDR_TEST
+*/
 #define CONFIG_DDR_PARAMS_CREATOR
 #define CONFIG_DDR_HOST_CC
 #define CONFIG_DDR_FORCE_SELECT_CS1
@@ -94,49 +97,60 @@
 #define CONFIG_DDR_DW32			0	/* 1-32bit-width, 0-16bit-width */
 #define CONFIG_DDRC_CTRL_PDT		DDRC_CTRL_PDT_128
 
-#ifdef CONFIG_DDR2_128M
+#if defined(CONFIG_DDR2_128M)
 #define CONFIG_DDR2_M14D1G1664A
 #else
 #define CONFIG_DDR2_M14D5121632A
 #endif
+#define CONFIG_DDR_TYPE_DDR2
 
 #define CONFIG_DDR_PHY_IMPEDANCE	40000
-#define CONFIG_DDR_PHY_ODT_IMPEDANCE	50000 //75000
-/*#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf*/
-/*#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf*/
+#define CONFIG_DDR_PHY_ODT_IMPEDANCE	50000 /* 75000 */
+/*
+#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf
+#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf
+*/
 
-/* #define CONFIG_DDR_DLL_OFF */
+/*
+#define CONFIG_DDR_DLL_OFF
+*/
 
-/*#define CONFIG_DDR_CHIP_ODT*/
-/*#define CONFIG_DDR_PHY_ODT*/
-/*#define CONFIG_DDR_PHY_DQ_ODT*/
-/*#define CONFIG_DDR_PHY_DQS_ODT*/
+/*
+#define CONFIG_DDR_CHIP_ODT
+#define CONFIG_DDR_PHY_ODT
+#define CONFIG_DDR_PHY_DQ_ODT
+#define CONFIG_DDR_PHY_DQS_ODT
+*/
 
 /**
  * Boot arguments definitions.
  */
-#ifdef CONFIG_DDR2_128M
+#if defined(CONFIG_DDR2_128M)
 #define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=96M@0x0 ispmem=8M@0x6000000 rmem=24M@0x6800000"
 #else
 #define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=32M@0x0 ispmem=8M@0x2000000 rmem=24M@0x2800000"
 #endif
 
-#ifdef CONFIG_SPL_MMC_SUPPORT
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
+/*
+#if defined(CONFIG_SPL_MMC_SUPPORT)
+#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
 #elif defined(CONFIG_SFC_NOR)
-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
+#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
 #endif
+*/
 
 /**
  * Boot command definitions.
  */
-#ifdef CONFIG_SPL_MMC_SUPPORT
+#if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
 
-#ifdef CONFIG_SFC_NOR
+/*
+#if defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
-#endif /* CONFIG_SFC_NOR */
+#endif
+*/
 
 /**
  * Drivers configuration.
@@ -148,12 +162,12 @@
 #define CONFIG_JZ_MMC			1
 #endif  /* JZ_MMC_MSC0 || JZ_MMC_MSC1 */
 
-#ifdef CONFIG_JZ_MMC_MSC0
+#if defined(CONFIG_JZ_MMC_MSC0)
 #define CONFIG_JZ_MMC_SPLMSC		0
 #define CONFIG_JZ_MMC_MSC0_PB		1
 #endif
 
-#ifdef CONFIG_SFC_COMMOND
+#if defined(CONFIG_SFC_COMMAND)
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH
 #define CONFIG_JZ_SFC_PA
@@ -161,7 +175,7 @@
 #define CONFIG_SFC_NOR
 #define CONFIG_SPI_FLASH_INGENIC
 #define CONFIG_SPI_DUAL
-/*#define CONFIG_SPI_QUAD*/
+/* #define CONFIG_SPI_QUAD */
 #endif
 
 /* SFC */
@@ -169,8 +183,8 @@
 #define CONFIG_SPL_SERIAL_SUPPORT
 #define CONFIG_SPI_SPL_CHECK
 #define CONFIG_JZ_SFC_PA
-#ifdef CONFIG_SPI_NAND
-#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE	/*(26 * 1024)*/
+#if defined(CONFIG_SPI_NAND)
+#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
 #define CONFIG_SPI_NAND_BPP		(2048 + 64)	/*Bytes Per Page*/
 #define CONFIG_SPI_NAND_PPB		(64)		/*Page Per Block*/
 #define CONFIG_SPL_SFC_NAND
@@ -182,14 +196,14 @@
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH_INGENIC
 #define CONFIG_SPI_FLASH
-#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE	/*(26 * 1024)*/
+#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
 #define CONFIG_SPL_SFC_NOR
 #define CONFIG_SPI_DUAL
-/*#define CONFIG_SPI_QUAD*/
+/* #define CONFIG_SPI_QUAD */
 #endif
 #endif /* CONFIG_SPL_SFC_SUPPORT */
 
-#ifdef CONFIG_JZ_SFC
+#if defined(CONFIG_JZ_SFC)
 #define CONFIG_SPIFLASH_PART_OFFSET	0x3c00
 #define CONFIG_SPI_NORFLASH_PART_OFFSET	0x3c74
 #define CONFIG_NOR_MAJOR_VERSION_NUMBER	1
@@ -209,6 +223,7 @@
 #define GMAC_PHY_RMII			2
 #define GMAC_PHY_GMII			3
 #define GMAC_PHY_RGMII			4
+
 #define CONFIG_NET_GMAC_PHY_MODE	GMAC_PHY_RMII
 
 #define PHY_TYPE_DM9161			1
@@ -226,32 +241,35 @@
 /**
  * Command configuration.
  */
-#define CONFIG_CMD_NET		/* networking support		*/
+#define CONFIG_CMD_TFTPDOWNLOAD
+/* #define CONFIG_CMD_WATCHDOG */
+#define CONFIG_CMD_NET
 #define CONFIG_CMD_DHCP
 #define CONFIG_CMD_PING
-#define CONFIG_CMD_BOOTD	/* bootd			*/
-#define CONFIG_CMD_SAVEENV	/* saveenv			*/
-
-#define CONFIG_CMD_CONSOLE	/* coninfo			*/
-#define CONFIG_CMD_ECHO		/* echo arguments		*/
-#define CONFIG_CMD_FAT		/* FAT support			*/
+#define CONFIG_CMD_BOOTD
+#define CONFIG_CMD_SAVEENV
+#define CONFIG_CMD_CONSOLE
+#define CONFIG_CMD_ECHO
+/* #define CONFIG_CMD_FAT */
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
-#define CONFIG_CMD_LOADB	/* loadb			*/
-#define CONFIG_CMD_LOADS	/* loads			*/
-#define CONFIG_CMD_MEMORY	/* md mm nm mw cp cmp crc base loop mtest */
-#define CONFIG_CMD_MISC		/* Misc functions like sleep etc*/
-#define CONFIG_CMD_MMC		/* MMC/SD support		*/
-#define CONFIG_CMD_RUN		/* run command in env variable	*/
-#define CONFIG_CMD_SOURCE	/* "source" command support	*/
+/* #define CONFIG_CMD_JFFS2 */
+#define CONFIG_CMD_LOADB
+#define CONFIG_CMD_LOADS
+#define CONFIG_CMD_MEMORY
+#define CONFIG_CMD_MISC
+#define CONFIG_CMD_MMC
+#define CONFIG_CMD_RUN
+#define CONFIG_CMD_SOURCE
 #define CONFIG_CMD_GETTIME
 #define CONFIG_CMDLINE_EDITING
 #define CONFIG_AUTO_COMPLETE
-/*#define CONFIG_CMD_I2C*/
+/* #define CONFIG_CMD_I2C */
+/* #define CONFIG_CMD_FLOCK */
 
 /************************ USB CONFIG ***************************/
 #define CONFIG_CMD_USB
-#ifdef CONFIG_CMD_USB
+#if defined(CONFIG_CMD_USB)
 #define CONFIG_USB_DWC2
 #define CONFIG_USB_DWC2_REG_ADDR	0x13500000
 #define CONFIG_USB_HOST_ETHER
@@ -285,12 +303,14 @@
 #define CONFIG_SYS_MAXARGS		64
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT		CONFIG_SYS_BOARD "# "
-#define CONFIG_SYS_CBSIZE		1024 /* Console I/O Buffer Size */
+/* #define CONFIG_SYS_CBSIZE		1024 */
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
+/*
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
 #define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
+*/
 
 #define CONFIG_SYS_SDRAM_BASE		0x80000000 /* cached (KSEG0) address */
 #define CONFIG_SYS_SDRAM_MAX_TOP	0x84000000 /* don't run into IO space */
@@ -305,11 +325,12 @@
 /**
  * Environment
  */
-#ifdef CONFIG_ENV_IS_IN_MMC
+/*
+#if defined(CONFIG_ENV_IS_IN_MMC)
 #define CONFIG_SYS_MMC_ENV_DEV		0
 #define CONFIG_ENV_SIZE			(32 << 10)
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
-#elif CONFIG_ENV_IS_IN_SPI_FLASH
+#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
 #define CONFIG_ENV_SECT_SIZE		(1024 * 16)
 #define CONFIG_ENV_SIZE			(1024 * 16)
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
@@ -318,6 +339,7 @@
 #define CONFIG_ENV_SIZE			(32 << 10)
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
 #endif
+*/
 
 /**
  * SPL configuration
@@ -328,45 +350,46 @@
 #define CONFIG_SPL_NO_CPU_SUPPORT_CODE
 #define CONFIG_SPL_START_S_PATH		"$(CPUDIR)/$(SOC)"
 
-#ifdef CONFIG_SPL_NOR_SUPPORT
+#if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-nor-spl.lds"
 #else /* CONFIG_SPL_NOR_SUPPORT */
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-spl.lds"
 #endif /* CONFIG_SPL_NOR_SUPPORT */
 
-#define CONFIG_SPL_PAD_TO		26624 /* equal to spl max size in M200 */
+#define CONFIG_SPL_PAD_TO		26624
+#define CONFIG_SPL_MAX_SIZE		(26 * 1024)
 
-#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	86 //0x5A //wli changed 0x20 /* 16KB offset */
+#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
+#define CONFIG_MMC_RAW_UBOOT_OFFSET	(CONFIG_UBOOT_OFFSET / 1024 + 17)
+#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	(CONFIG_MMC_RAW_UBOOT_OFFSET * 2)
 #define CONFIG_SYS_U_BOOT_MAX_SIZE_SECTORS	0x400 /* 512 KB */
 
 #define CONFIG_SPL_BOARD_INIT
 #define CONFIG_SPL_LIBGENERIC_SUPPORT
 #define CONFIG_SPL_GPIO_SUPPORT
 
-#ifdef CONFIG_SPL_NOR_SUPPORT
+#if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_TEXT_BASE		0xba000000
 #else
 #define CONFIG_SPL_TEXT_BASE		0x80001000
 #endif	/*CONFIG_SPL_NOR_SUPPORT*/
 
-#define CONFIG_SPL_MAX_SIZE		(26 * 1024)
-
 #define CONFIG_SPL_LZOP
-#ifdef CONFIG_SPL_LZOP
+#if defined(CONFIG_SPL_LZOP)
 #define CONFIG_DECMP_BUFFER_ADRS	0x80200000
 #endif
 
-#ifdef CONFIG_SPL_MMC_SUPPORT
+#if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_SPL_SERIAL_SUPPORT
 #endif /* CONFIG_SPL_MMC_SUPPORT */
 
-#ifdef CONFIG_SPL_SPI_SUPPORT
+#if defined(CONFIG_SPL_SPI_SUPPORT)
 #define CONFIG_SPL_SERIAL_SUPPORT
 #define CONFIG_SPI_SPL_CHECK
 #define CONFIG_SYS_SPI_BOOT_FREQ	1000000
 #endif /* CONFIG_SPL_SPI_SUPPORT */
 
-#ifdef CONFIG_SPL_NOR_SUPPORT
+#if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_SERIAL_SUPPORT
 #define CONFIG_SYS_UBOOT_BASE		(CONFIG_SPL_TEXT_BASE + CONFIG_SPL_PAD_TO - 0x40) //0x40 = sizeof (image_header)
 #define CONFIG_SYS_OS_BASE		0
@@ -377,17 +400,17 @@
 /**
  * GPT configuration
  */
-#ifdef CONFIG_GPT_CREATOR
+#if defined(CONFIG_GPT_CREATOR)
 #define CONFIG_GPT_TABLE_PATH		"$(TOPDIR)/board/$(BOARDDIR)"
 #else
 /* USE MBR + zero-GPT-table instead if no gpt table defined*/
 #define CONFIG_MBR_P0_OFF		64mb
 #define CONFIG_MBR_P0_END		556mb
-#define CONFIG_MBR_P0_TYPE 		linux
+#define CONFIG_MBR_P0_TYPE		linux
 
 #define CONFIG_MBR_P1_OFF		580mb
-#define CONFIG_MBR_P1_END 		1604mb
-#define CONFIG_MBR_P1_TYPE 		linux
+#define CONFIG_MBR_P1_END		1604mb
+#define CONFIG_MBR_P1_TYPE		linux
 
 #define CONFIG_MBR_P2_OFF		28mb
 #define CONFIG_MBR_P2_END		58mb
@@ -399,7 +422,7 @@
 #endif
 
 /* JFFS2 configuration */
-#ifdef CONFIG_CMD_JFFS2
+#if defined(CONFIG_CMD_JFFS2)
 #define CONFIG_CMD_FLASH
 #define CONFIG_SYS_MAX_FLASH_BANKS	1
 #define CONFIG_SYS_MAX_FLASH_SECT	256
@@ -413,8 +436,6 @@
 #define CONFIG_SYS_MAX_FLASH_SECT	0
 #endif
 
-#include "isvp_common.h"
-
 /*
 	Platform Default GPIOs:
 
@@ -424,7 +445,9 @@
 */
 
 #define CONFIG_GPIO_SETTINGS \
-    "gpio_default=47O\0" \
-    "gpio_default_net=43O 48o 43o\0"
+"gpio_dev=47O\0" \
+"gpio_dev_net=43O 48o 43o\0"
 
-#endif /*__CONFIG_ISVP_T10_H__*/
+#include "isvp_common.h"
+
+#endif /*__CONFIG_ISVP_T20_H__*/
