@@ -500,7 +500,7 @@ static void jz_halt(struct eth_device *dev)
 }
 
 int check_phy_config(synopGMACdevice *gmacdev) {
-  printf("Searching for valid PHY\n");
+  printf("Net:   Searching for valid PHY\n");
   int phy_id = synopGMAC_search_phy(gmacdev);
   if (phy_id < 0) {
       return -1; // PHY not found
@@ -508,7 +508,7 @@ int check_phy_config(synopGMACdevice *gmacdev) {
 
   // Lets assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
   if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
-      printf("Invalid PHY configuration (speed or duplex) detected!\n");
+      printf("Net:  Invalid PHY configuration (speed or duplex) detected!\n");
       return -1; // Invalid configuration
   }
    return phy_id;
