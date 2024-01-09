@@ -91,12 +91,6 @@ int spl_start_uboot(void)
 	return 1;
 }
 #endif
-/* U-Boot common routines */
-int checkboard(void)
-{
-	puts("Board: ISVP (Ingenic XBurst T10 SoC)\n");
-	return 0;
-}
 
 #ifdef CONFIG_SPL_BUILD
 

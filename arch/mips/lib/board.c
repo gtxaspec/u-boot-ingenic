@@ -422,3 +422,12 @@ handle_gpio_settings("gpio_set");
 		main_loop();
 	/* NOTREACHED - no way out of command loop except booting */
 }
+
+int checkboard(void)
+{
+	char output[100];
+	puts("Platform: ISVP (Ingenic XBurst)\n");
+	sprintf(output, "Built profile: %s\n", SOC_VAR);
+	puts(output);
+	return 0;
+}

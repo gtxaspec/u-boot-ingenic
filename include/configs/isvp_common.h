@@ -13,6 +13,87 @@
 #define CONFIG_SOC "t31"
 #endif
 
+#define T10N "T10N"
+#define T10L "T10L"
+
+#define T20N "T20N"
+#define T20L "T20L"
+#define T20X "T20X"
+
+#define T21N "T21N"
+
+#define T30N "T30N"
+#define T30L "T30L"
+#define T30X "T30X"
+#define T30A "T30A"
+#define T30A1 "T30A1"
+
+#define T31N "T31N"
+#define T31L "T31L"
+#define T31LC "T31LC"
+#define T31X "T31X"
+#define T31A "T31A"
+#define T31AL "T31AL"
+
+
+#ifdef CONFIG_T10
+    #ifdef CONFIG_LITE_VERSION
+        #define SOC_VAR T10L
+    #else
+        #define SOC_VAR T10N
+    #endif
+#endif
+
+#ifdef CONFIG_T20
+    #ifdef CONFIG_DDR2_128M
+        #define SOC_VAR T20X
+    #elif defined(CONFIG_LITE_VERSION)
+        #define SOC_VAR T20L
+    #else
+        #define SOC_VAR T20N
+    #endif
+#endif
+
+#ifdef CONFIG_T21
+    #define SOC_VAR T21N
+#endif
+
+#ifdef CONFIG_T30
+    #ifdef CONFIG_DDR2_128M
+        #ifdef CONFIG_T30A
+            #define SOC_VAR T30A
+        #elif defined(CONFIG_T30A1)
+            #define SOC_VAR T30A1
+        #else
+            #define SOC_VAR T30X
+        #endif
+    #elif defined(CONFIG_LITE_VERSION)
+        #define SOC_VAR T30L
+    #else
+        #define SOC_VAR T30N
+    #endif
+#endif
+
+#ifdef CONFIG_T31
+    #ifdef CONFIG_DDR2_128M
+        #ifdef CONFIG_T31A
+            #define SOC_VAR T31A
+        #elif defined(CONFIG_T31AL)
+            #define SOC_VAR T31AL
+        #else
+            #define SOC_VAR T31X
+        #endif
+    #elif defined(CONFIG_LITE_VERSION)
+        #ifdef CONFIG_T31LC
+            #define SOC_VAR T31LC
+        #else
+            #define SOC_VAR T31L
+        #endif
+    #else
+        #define SOC_VAR T31N
+    #endif
+#endif
+
 #define CONFIG_SFC_MIN_ALIGN		0x10000 /*0x1000->4K Erase, 0x8000->32K, 0x10000->64K*/
 #define CONFIG_ENV_OFFSET		0x40000
 #define CONFIG_ENV_SIZE			0x10000
