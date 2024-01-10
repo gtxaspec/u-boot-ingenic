@@ -399,9 +399,6 @@ extern void board_usb_init(void);
 			// GPIOs to be set after net initialization fails
 			printf("GPIO:  gpio_default_net \n");
 			handle_gpio_settings("gpio_default_net");
-
-			if(!getenv("extras"))
-				setenv("extras", "nogmac");
 		}
 #endif
 
