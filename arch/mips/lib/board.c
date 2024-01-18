@@ -374,10 +374,8 @@ extern void board_usb_init(void);
 	/* miscellaneous platform dependent initialisations */
 	misc_init_r();
 	/* Platform Default GPIO Set */
-	printf("GPIO:  gpio_default \n");
 	handle_gpio_settings("gpio_default");
 	/* IRCUT default GPIO set */
-	printf("GPIO:  gpio_default_ircut \n");
 	handle_gpio_settings("gpio_default_ircut");
 #endif
 
@@ -403,8 +401,10 @@ extern void board_usb_init(void);
 #endif
 
 /* User defined GPIO set */
-printf("GPIO:  gpio_set \n");
 handle_gpio_settings("gpio_set");
+/* User defined MOTOR GPIO set */
+handle_gpio_settings("gpio_motor_v");
+handle_gpio_settings("gpio_motor_h");
 
 #ifdef CONFIG_AUTO_UPDATE
 	printf("Autoupdate... \n");
