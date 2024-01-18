@@ -53,14 +53,17 @@ totalmem=128M
 - `gpio_default_ircut`: GPIOs set at device boot for IR cut.
 - `gpio_default_net`: GPIOs configured at boot only if the device lacks a physical ethernet connection.
 
-The format utilized for GPIO (General Purpose Input/Output) variables in this context adheres to a concise syntax that delineates the GPIO number and its designated mode of operation.  Furthermore, it is crucial to separate each GPIO definition with a space to ensure proper interpretation and execution. Here’s how the syntax is structured:
-
-- **GPIO Number**: This is a numerical identifier for the specific GPIO.
-- **Operation Mode**: This is indicated by appending a letter to the GPIO number:
+- **GPIO Configuration Format:**
+  - **GPIO Number**: This is a numerical identifier for the specific GPIO.
+  - **Operation Mode**: This is indicated by appending a letter to the GPIO number.
     - `I` (uppercase 'i'): Configures the GPIO as an Input.
     - `O` (uppercase 'o'): Sets the GPIO as an Output with a High (logic 1) state.
     - `o` (lowercase 'o'): Sets the GPIO as an Output with a Low (logic 0) state.
     - Space Separation: Each GPIO setting must be separated by a space to distinguish individual configurations
+
+### GPIO Specific MOTOR Variables:
+- **Different Format Alert**: Unlike other GPIO configurations, `gpio_motor_v` and `gpio_motor_h` use a unique format.
+- **`gpio_motor_v` and `gpio_motor_h`**: These variables configure the GPIOs for vertical and horizontal motors. They use a space-separated format for GPIO numbers, each critical for managing motor operation phases. For example, `gpio_motor_v=12 13 14 15` assigns GPIOs 12 to 15 to different phases of the vertical motor's function. This setup prevents motor overheating, particularly if the unit is stuck in the bootloader, thereby ensuring motor integrity and efficient, safe operation.
 
 #### Examples:
 - `gpio_default=62O`:
@@ -70,6 +73,8 @@ The format utilized for GPIO (General Purpose Input/Output) variables in this co
   - GPIO 54 is set as an Output with a High state.
   - GPIO 64 is configured as an Input.
   - Each GPIO configuration is distinctly separated by spaces.
+- `gpio_motor_h=52 53 57 51`:
+  - GPIOs 52, 53, 57, and 51 correspond to Phases A, B, C, and D of the horizontal motor, respectively.
 
 This format provides a straightforward and efficient method for defining the state and direction (input or output) of GPIO pins in the system.
 
