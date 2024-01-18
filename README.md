@@ -50,7 +50,7 @@ totalmem=128M
 
 ### GPIO Specific Variables:
 - `gpio_default`: GPIOs configured during device boot.
-- `gpio_default_ircut`: GPIOs set at device boot for IR cut.
+- `gpio_default_ircut`: GPIOs set at device boot for IRCUT saftey.  De-energizes common IRCUT GPIOs to prevent damage to IRCUT coils.
 - `gpio_default_net`: GPIOs configured at boot only if the device lacks a physical ethernet connection.
 
 - **GPIO Configuration Format:**
@@ -63,9 +63,9 @@ totalmem=128M
 
 ### GPIO Specific MOTOR Variables:
 - **Different Format Alert**: Unlike other GPIO configurations, `gpio_motor_v` and `gpio_motor_h` use a unique format.
-- **`gpio_motor_v` and `gpio_motor_h`**: These variables configure the GPIOs for vertical and horizontal motors. They use a space-separated format for GPIO numbers, each critical for managing motor operation phases. For example, `gpio_motor_v=12 13 14 15` assigns GPIOs 12 to 15 to different phases of the vertical motor's function. This setup prevents motor overheating, particularly if the unit is stuck in the bootloader, thereby ensuring motor integrity and efficient, safe operation.
+- **`gpio_motor_v` and `gpio_motor_h`**: These variables configure the GPIOs for vertical and horizontal motors. They use a space-separated format for GPIO numbers, each critical for managing motor operation phases. For example, `gpio_motor_v=12 13 14 15` assigns GPIOs 12 to 15 to different phases of the vertical motor's function.  These motor-specific GPIOs will be set to an input state at boot.  This setup prevents motor overheating, particularly if the unit is stuck in the bootloader, thereby ensuring motor integrity and efficient, safe operation.
 
-#### Examples:
+#### GPIO Examples:
 - `gpio_default=62O`:
   - This sets GPIO 62 as an Output with a High state.
 - `gpio_default=62o 54O 64I`:
