@@ -64,6 +64,7 @@ extern void reset_dll(void);
 #ifdef DEBUG
 #define FUNC_ENTER()    debug("%s enter.\n",__FUNCTION__);
 #define FUNC_EXIT()     debug("%s exit.\n",__FUNCTION__);
+#endif
 
 static void dump_ddrc_register(void)
 {
