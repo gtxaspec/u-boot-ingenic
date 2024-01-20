@@ -36,9 +36,9 @@ jobs:
           - t31x
           - t31a
           - t31al
-          - t31n
+          - t31n_msc0
           - t31a_msc0
-          - t31al_msc0 
+          - t31al_msc0
     steps:
       - name: Checkout
         uses: actions/checkout@v3

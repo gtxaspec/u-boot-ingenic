@@ -44,7 +44,7 @@ cfg[t31lc]="isvp_t31lc_sfcnor"
 cfg[t31x]="isvp_t31_sfcnor_ddr128M"
 cfg[t31a]="isvp_t31a_sfcnor_ddr128M"
 cfg[t31al]="isvp_t31al_sfcnor_ddr128M"
-cfg[t31n]="isvp_t31_msc0"
+cfg[t31n_msc0]="isvp_t31_msc0"
 cfg[t31a_msc0]="isvp_t31a_msc0_ddr128M"
 cfg[t31al_msc0]="isvp_t31al_msc0_ddr128M"
 
