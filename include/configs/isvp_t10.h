@@ -28,24 +28,17 @@
 /**
  * Basic configuration(SOC, Cache, UART, DDR).
  */
-#define CONFIG_MIPS32		/* MIPS32 CPU core */
-#define CONFIG_CPU_XBURST
-#define CONFIG_SYS_LITTLE_ENDIAN
-#define CONFIG_T10		/* T10 SoC */
-/*#define CONFIG_DDR_AUTO_SELF_REFRESH*/
-#define CONFIG_SPL_DDR_SOFT_TRAINING
-
 #if defined(CONFIG_LITE_VERSION)
-#define CONFIG_SYS_APLL_FREQ		712704000	/*If APLLis not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		712704000	/*If APLLis not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((59 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0x645a1c
 #else
-#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLLis not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLLis not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((71 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0xae147a
 #endif
 
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLLis not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLLis not used, it must be set to 0*/
 
 #define SEL_SCLKA			2
 #define SEL_CPU				1
@@ -80,9 +73,6 @@
 #define CONFIG_SYS_DCACHE_SIZE		32768
 #define CONFIG_SYS_ICACHE_SIZE		32768
 #define CONFIG_SYS_CACHELINE_SIZE	32
-
-#define CONFIG_SYS_UART_INDEX		1
-#define CONFIG_BAUDRATE			115200
 
 /*
 #define CONFIG_DDR_TEST_CPU
@@ -229,35 +219,6 @@
 /* GPIO */
 #define CONFIG_JZ_GPIO
 
-/**
- * Command configuration.
- */
-#define CONFIG_CMD_TFTPDOWNLOAD
-/* #define CONFIG_CMD_WATCHDOG */
-#define CONFIG_CMD_NET
-#define CONFIG_CMD_DHCP
-#define CONFIG_CMD_PING
-#define CONFIG_CMD_BOOTD
-#define CONFIG_CMD_SAVEENV
-#define CONFIG_CMD_CONSOLE
-#define CONFIG_CMD_ECHO
-/* #define CONFIG_CMD_FAT */
-#define CONFIG_CMD_EXT2
-#define CONFIG_CMD_EXT4
-/* #define CONFIG_CMD_JFFS2 */
-#define CONFIG_CMD_LOADB
-#define CONFIG_CMD_LOADS
-#define CONFIG_CMD_MEMORY
-#define CONFIG_CMD_MISC
-#define CONFIG_CMD_MMC
-#define CONFIG_CMD_RUN
-#define CONFIG_CMD_SOURCE
-#define CONFIG_CMD_GETTIME
-#define CONFIG_CMDLINE_EDITING
-#define CONFIG_AUTO_COMPLETE
-/* #define CONFIG_CMD_I2C */
-/* #define CONFIG_CMD_FLOCK */
-
 /************************ USB CONFIG ***************************/
 #define CONFIG_CMD_USB
 #if defined(CONFIG_CMD_USB)
@@ -312,25 +273,6 @@
 
 #define CONFIG_SYS_TEXT_BASE		0x80100000
 #define CONFIG_SYS_MONITOR_BASE		CONFIG_SYS_TEXT_BASE
-
-/**
- * Environment
- */
-/*
-#if defined(CONFIG_ENV_IS_IN_MMC)
-#define CONFIG_SYS_MMC_ENV_DEV		0
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
-#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
-#define CONFIG_ENV_SECT_SIZE		(1024 * 16)
-#define CONFIG_ENV_SIZE			(1024 * 16)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
-#else
-#define CONFIG_ENV_IS_NOWHERE
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
-#endif
-*/
 
 /**
  * SPL configuration

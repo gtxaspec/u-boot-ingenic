@@ -28,13 +28,6 @@
 /**
  * Basic configuration(SOC, Cache, UART, DDR).
  */
-#define CONFIG_MIPS32		/* MIPS32 CPU core */
-#define CONFIG_CPU_XBURST
-#define CONFIG_SYS_LITTLE_ENDIAN
-#define CONFIG_T31		/* T31 SoC */
-/*#define CONFIG_DDR_AUTO_SELF_REFRESH*/
-#define CONFIG_SPL_DDR_SOFT_TRAINING
-
 #if defined(CONFIG_LITE_VERSION)
 #define APLL_1008M
 #define DDR_500M
@@ -54,95 +47,95 @@
 #endif
 
 #if defined(APLL_804M)
-#define CONFIG_SYS_APLL_FREQ		804000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		804000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((67 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_864M)
-#define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((72 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_900M)
-#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((75 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_1000M)
-#define CONFIG_SYS_APLL_FREQ		1000000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1000000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((125 << 20) | (1 << 14) | (3 << 11) | (1 << 8))
 #elif defined(APLL_1008M)
-#define CONFIG_SYS_APLL_FREQ		1008000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1008000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((84 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_1104M)
-#define CONFIG_SYS_APLL_FREQ		1104000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1104000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((92 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_1200M)
-#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((100 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_1392M)
-#define CONFIG_SYS_APLL_FREQ		1392000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1392000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((116 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_1400M)
-#define CONFIG_SYS_APLL_FREQ		1404000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1404000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((117 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_1500M)
-#define CONFIG_SYS_APLL_FREQ		1500000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1500000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((125 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(APLL_1800M)
-#define CONFIG_SYS_APLL_FREQ		1800000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		1800000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((150 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #else
 #error please define APLL_FREQ
 #endif
 
 #if defined(DDR_400M)
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((100 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_450M)
-#define CONFIG_SYS_MPLL_FREQ		900000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		900000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((75 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_500M)
-#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((125 << 20) | (1 << 14) | (3 << 11) | (1 << 8))
 #elif defined(DDR_540M)
-#define CONFIG_SYS_MPLL_FREQ		1080000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1080000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((90 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_600M)
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((100 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_650M)
-#define CONFIG_SYS_MPLL_FREQ		1308000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1308000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((109 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_700M)
-#define CONFIG_SYS_MPLL_FREQ		1404000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1404000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((117 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_750M)
-#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((125 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_762M)
-#define CONFIG_SYS_MPLL_FREQ		1524000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1524000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((127 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_774M)
-#define CONFIG_SYS_MPLL_FREQ		1548000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1548000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((129 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_786M)
-#define CONFIG_SYS_MPLL_FREQ		1572000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1572000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((131 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_798M)
-#define CONFIG_SYS_MPLL_FREQ		1596000000	/*If APLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1596000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((133 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_800M)
-#define CONFIG_SYS_MPLL_FREQ		1608000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1608000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((134 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_810M)
-#define CONFIG_SYS_MPLL_FREQ		1620000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1620000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((135 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_816M)
-#define CONFIG_SYS_MPLL_FREQ		1632000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1632000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((136 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #elif defined(DDR_900M)
-#define CONFIG_SYS_MPLL_FREQ		1800000000	/*If MPLL is not used it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1800000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((150 << 20) | (1 << 14) | (2 << 11) | (1 << 8))
 #else
 #error please define DDR_FREQ
 #endif
 
-#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used it must be set to 0*/
+#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used, it must be set to 0*/
 
 #define SEL_SCLKA			2
 #define SEL_CPU				1
@@ -275,10 +268,6 @@
 #define CONFIG_SYS_DCACHE_SIZE		32768
 #define CONFIG_SYS_ICACHE_SIZE		32768
 #define CONFIG_SYS_CACHELINE_SIZE	32
-
-#define CONFIG_SYS_UART_INDEX		1
-#define CONFIG_BAUDRATE			115200
-#define CONFIG_SYS_UART_CONTROLLER_STEP	0x1000
 
 /*
 #define CONFIG_DDR_TEST_CPU
@@ -510,40 +499,6 @@
 /* GPIO */
 #define CONFIG_JZ_GPIO
 
-/**
- * Command configuration.
- */
-/*
-#ifdef CONFIG_SFC_NOR
-#define CONFIG_CMD_TFTPDOWNLOAD		1
-#endif
-*/
-#define CONFIG_CMD_WATCHDOG
-#define CONFIG_CMD_NET
-#define CONFIG_CMD_DHCP
-#define CONFIG_CMD_PING
-#define CONFIG_CMD_BOOTD
-#define CONFIG_CMD_SAVEENV
-
-#define CONFIG_CMD_CONSOLE
-#define CONFIG_CMD_ECHO
-/* #define CONFIG_CMD_FAT */
-#define CONFIG_CMD_EXT2
-#define CONFIG_CMD_EXT4
-/* #define CONFIG_CMD_JFFS2 */
-#define CONFIG_CMD_LOADB
-#define CONFIG_CMD_LOADS
-#define CONFIG_CMD_MEMORY
-#define CONFIG_CMD_MISC
-#define CONFIG_CMD_MMC
-#define CONFIG_CMD_RUN
-#define CONFIG_CMD_SOURCE
-#define CONFIG_CMD_GETTIME
-#define CONFIG_CMDLINE_EDITING
-#define CONFIG_AUTO_COMPLETE
-/* #define CONFIG_CMD_I2C */
-/* #define CONFIG_CMD_FLOCK */
-
 /************************ USB CONFIG ***************************/
 #define CONFIG_CMD_USB
 #if defined(CONFIG_CMD_USB)
@@ -606,21 +561,6 @@
 
 #define CONFIG_SYS_TEXT_BASE		0x80100000
 #define CONFIG_SYS_MONITOR_BASE		CONFIG_SYS_TEXT_BASE
-
-/**
- * Environment
- */
-/*
-#if defined(CONFIG_ENV_IS_IN_MMC)
-#define CONFIG_SYS_MMC_ENV_DEV		0
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
-#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
-#define CONFIG_ENV_SECT_SIZE		(1024 * 16)
-#define CONFIG_ENV_SIZE			(1024 * 16)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
-#endif
-*/
 
 /**
  * SPL configuration
@@ -733,7 +673,6 @@
 	pps_mmc_enable = 61
 	wyze_mmc_enable = 48
 */
-
 #define CONFIG_GPIO_SETTINGS \
 "gpio_default=62O\0" \
 "gpio_default_net=61o 48o\0"
