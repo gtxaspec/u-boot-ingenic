@@ -31,6 +31,7 @@
 #include <asm/arch/clk.h>
 #include <power/d2041_core.h>
 
+extern int jz_net_initialize(bd_t *bis);
 struct cgu_clk_src cgu_clk_src[] = {
 	{VPU, MPLL},
 	{MACPHY, MPLL},
@@ -83,7 +84,18 @@ int board_mmc_init(bd_t *bd)
 
 int board_eth_init(bd_t *bis)
 {
-	return 0;
+	int ret = 0;
+#ifdef CONFIG_USB_ETHER_ASIX
+	if (0 == strncmp(getenv("ethact"), "asx", 3)) {
+		run_command("usb start", 0);
+	}
+#endif
+	ret += jz_net_initialize(bis);
+	if (ret < 0){
+		if(!getenv("extras"))
+			setenv("extras", "nogmac");
+	}
+	return ret;
 }
 
 #ifdef CONFIG_SPL_NOR_SUPPORT

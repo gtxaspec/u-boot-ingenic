@@ -1,5 +1,5 @@
 /*
- * Startup Code for MIPS32 XBURST T31 CPU-core
+ * Startup Code for MIPS32 XBURST T23 CPU-core
  *
  * Copyright (c) 2019 Ingenic Semiconductor Co.,Ltd
  *
@@ -86,34 +86,29 @@ _start:
 	la t9, 0xb0010148
 	sw t8, 0(t9)
 
-	la t8, 0x55555555
+	la t8, 0xaaaaaaaa
 	la t9, 0xb0010134
 	sw t8, 0(t9)
 
-	la t8, 0x55555555
+	la t8, 0xaaaaaaaa
 	la t9, 0xb0010144
 	sw t8, 0(t9)
-#ifdef CONFIG_NET_GMAC
-	la t8, 0xFCFFF000
+
+	la t8, 0xffffffff
 	la t9, 0xb0011138
 	sw t8, 0(t9)
 
-	la t8, 0x55559555
+	la t8, 0xffffffff
+	la t9, 0xb0011148
+	sw t8, 0(t9)
+
+	la t8, 0xaaaaaaaa
 	la t9, 0xb0011134
 	sw t8, 0(t9)
 
-	la t8, 0x55555555
+	la t8, 0xaaaaaaaa
 	la t9, 0xb0011144
 	sw t8, 0(t9)
-#else
-	la t8, 0x69aa5555
-	la t9, 0xb0011134
-	sw t8, 0(t9)
-
-	la t8, 0x55555555
-	la t9, 0xb0011144
-	sw t8, 0(t9)
-#endif
 
 #ifdef CONFIG_SPL_NOR_SUPPORT
 	.word 0
@@ -122,14 +117,14 @@ _start:
 	/* Invalidate BTB */
 	mfc0	v0, CP0_CONFIG, 7
 	nop
-	ori	v0, v0, 2
+	ori v0, v0, 2
 	mtc0	v0, CP0_CONFIG, 7
 	nop
 #if 1
 	mfc0	v0, $12, 2
 	nop
 	li	v1, 0x7fffffff
-	and	v0, v0, v1
+	and v0, v0, v1
 	mtc0	v0, $12, 2
 	nop
 #endif
@@ -147,46 +142,46 @@ _start:
 	/* enable bridge radical mode */
 //	la	t0, CPM_BASE
 //	lw	t1, 0x24(t0)
-//	ori	t1, t1, 0x22
+//	ori t1, t1, 0x22
 //	sw	t1, 0x24(t0)
 
 #ifdef CONFIG_PALLADIUM
 	.set	mips32
 init_caches:
 	la	$25, 0x80000000
-	li	$2, 3					// cacheable for kseg0 access
+	li		$2, 3					// cacheable for kseg0 access
 	mtc0	$2, $16					// CP0_CONFIG
 	nop
 
 #if 1
-//	li	$2, 0x20000000				// enable idx-store-data cache insn
+//	li		$2, 0x20000000			// enable idx-store-data cache insn
 //	mtc0	$2, $26					// CP0_ERRCTL
 #else
 	mtc0	$0, $26					// CP0_ERRCTL
 #endif
-	mfc0	$3, $4,7				//enable rdhwr
-	ori	$3, $3,1
+	mfc0	$3, $4,7		//enable rdhwr
+	ori		$3, $3,1
 	mtc0	$3, $4,7
 
-	ori	$2, $25, 0				// start address
-	ori	$3, $2, CONFIG_SYS_DCACHE_SIZE		// end address, total 32KB
+	ori		$2, $25, 0				// start address
+	ori		$3, $2, CONFIG_SYS_DCACHE_SIZE			// end address, total 32KB
 	mtc0	$0, $28, 0				// CP0_TAGLO
 	mtc0	$0, $28, 1				// CP0_DATALO
 cache_clear_a_line:
 	cache	0x8, 0($2)				// Index_Store_Tag_I
 	cache	0x9, 0($2)				// Index_Store_Tag_D
-	bne	$2, $3, cache_clear_a_line
+	bne		$2, $3, cache_clear_a_line
 	addiu	$2, $2, 32				// increment CACHE_LINE_SIZE
-	ori	$2, $25, 0				// start address
-	ori	$3, $2, CONFIG_SYS_ICACHE_SIZE		// end address, total 32KB spl stack space
-	la	$4, 0x1ffff000				// physical address and 4KB page mask
+	ori		$2, $25, 0				// start address
+	ori		$3, $2, CONFIG_SYS_ICACHE_SIZE			// end address, total 32KB spl stack space
+	la		$4, 0x1ffff000			// physical address and 4KB page mask
 cache_alloc_a_line:
-	and	$5, $2, $4
-	ori	$5, $5, 1				// V bit of the physical tag
+	and		$5, $2, $4
+	ori		$5, $5, 1				// V bit of the physical tag
 	mtc0	$5, $28, 0				// CP0_TAGLO
 	cache	0x8, 0($2)				// Index_Store_Tag_I
 	cache	0x9, 0($2)				// Index_Store_Tag_D
-	bne	$2, $3, cache_alloc_a_line
+	bne		$2, $3, cache_alloc_a_line
 	addiu	$2, $2, 32				// increment CACHE_LINE_SIZE
 
 	li	sp, 0x80008000
@@ -208,7 +203,7 @@ cache_alloc_a_line:
 	addiu	t0, t0, 4
 	sw	t3, 0(t2)
 	addiu	t2, t2, 4
-	bne	t0, t1, 1b
+	bne t0, t1, 1b
 	nop
 #endif
 	j	board_init_f

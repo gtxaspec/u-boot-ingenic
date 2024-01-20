@@ -28,22 +28,15 @@
 /**
  * Basic configuration(SOC, Cache, UART, DDR).
  */
-#define CONFIG_MIPS32		/* MIPS32 CPU core */
-#define CONFIG_CPU_XBURST
-#define CONFIG_SYS_LITTLE_ENDIAN
-#define CONFIG_T30		/* T30 SoC */
-/*#define CONFIG_DDR_AUTO_SELF_REFRESH*/
-#define CONFIG_SPL_DDR_SOFT_TRAINING
-
 #if defined(CONFIG_LITE_VERSION)
-#define CONFIG_SYS_APLL_FREQ		750000000	/*If APLL is not used it must be set to 0*/
-#define CONFIG_SYS_APLL_MNOD		((124 << 20) | (1 << 14) | (2 << 11) | (2<<5))
+#define CONFIG_SYS_APLL_FREQ		750000000	/*If APLL is not used, it must be set to 0*/
+#define CONFIG_SYS_APLL_MNOD		((124 << 20) | (1 << 14) | (2 << 11) | (2 << 5))
 #elif defined(CONFIG_T30A)
-#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL is not used it must be set to 0*/
-#define CONFIG_SYS_APLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
+#define CONFIG_SYS_APLL_FREQ		1200000000	/*If APLL is not used, it must be set to 0*/
+#define CONFIG_SYS_APLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1 << 5))
 #else
-#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL is not used it must be set to 0*/
-#define CONFIG_SYS_APLL_MNOD		((74 << 20) | (1 << 14) | (1 << 11) | (2<<5))
+#define CONFIG_SYS_APLL_FREQ		900000000	/*If APLL is not used, it must be set to 0*/
+#define CONFIG_SYS_APLL_MNOD		((74 << 20) | (1 << 14) | (1 << 11) | (2 << 5))
 #endif
 
 #if defined(CONFIG_T30A) || defined(CONFIG_DDR3_128M)
@@ -53,26 +46,27 @@
 #endif
 
 #if defined(DDR_400M)
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
-#define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
+#define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1 << 5))
 #elif defined(DDR_500M)
 #if 1
-#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used it must be set to 0*/
-#define CONFIG_SYS_MPLL_MNOD		((124 << 20) | (2 << 14) | (1 << 11) | (1<<5))
+#define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used, it must be set to 0*/
+#define CONFIG_SYS_MPLL_MNOD		((124 << 20) | (2 << 14) | (1 << 11) | (1 << 5))
 #else
-#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If MPLL is not used it must be set to 0*/
-#define CONFIG_SYS_MPLL_MNOD		((249 << 20) | (3 << 14) | (1 << 11) | (1<<5))
+#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If MPLL is not used, it must be set to 0*/
+#define CONFIG_SYS_MPLL_MNOD		((249 << 20) | (3 << 14) | (1 << 11) | (1 << 5))
 #endif
 #elif defined(DDR_600M)
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used it must be set to 0*/
-#define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1<<5))
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
+#define CONFIG_SYS_MPLL_MNOD		((149 << 20) | (2 << 14) | (1 << 11) | (1 << 5))
 #else
 #error please define DDR_FREQ
 #endif
 
-#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used it must be set to 0*/
-#define CONFIG_SYS_EPLL_MNOD		((197 << 20) | (3 << 14) | (1 << 11) | (1<<5))
+#define CONFIG_SYS_VPLL_FREQ		1200000000	/*If VPLL is not used, it must be set to 0*/
+#define CONFIG_SYS_EPLL_MNOD		((197 << 20) | (3 << 14) | (1 << 11) | (1 << 5))
 #define CONFIG_SYS_EPLL_FREQ		1188000000
+
 #define SEL_SCLKA			2
 #define SEL_CPU				1
 #define SEL_H0				2
@@ -82,11 +76,63 @@
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
+#elif defined(DDR_450M)
+#define DIV_PCLK			8
+#define DIV_H2				4
+#define DIV_H0				4
 #elif defined(DDR_500M)
 #define DIV_PCLK			8
 #define DIV_H2				4
 #define DIV_H0				4
+#elif defined(DDR_540M)
+#define DIV_PCLK			8
+#define DIV_H2				4
+#define DIV_H0				4
 #elif defined(DDR_600M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_650M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_700M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_750M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_762M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_774M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_786M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_798M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_800M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_810M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_816M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_900M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
@@ -112,9 +158,35 @@
 
 #if defined(DDR_400M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 3)
+#elif defined(DDR_450M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #elif defined(DDR_500M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_540M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #elif defined(DDR_600M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_650M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_700M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_750M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_762M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_774M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_786M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_798M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_800M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_810M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_816M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_900M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #else
 #error please define DDR_FREQ
@@ -126,10 +198,6 @@
 #define CONFIG_SYS_DCACHE_SIZE		32768
 #define CONFIG_SYS_ICACHE_SIZE		32768
 #define CONFIG_SYS_CACHELINE_SIZE	32
-
-#define CONFIG_SYS_UART_INDEX		1
-#define CONFIG_BAUDRATE			115200
-#define CONFIG_SYS_UART_CONTROLLER_STEP	0x1000
 
 /*
 #define CONFIG_DDR_TEST_CPU
@@ -197,11 +265,13 @@
 /*#define CONFIG_SPI_QUAD*/
 #endif /* defined(CONFIG_SPL_SFC_NOR) || defined(CONFIG_SPL_SFC_NAND) */
 
+/*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
 #elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
 #endif
+*/
 
 /**
  * Boot command definitions.
@@ -237,7 +307,7 @@
 #define CONFIG_SFC_NOR
 #define CONFIG_SPI_FLASH_INGENIC
 #define CONFIG_SPI_DUAL
-/*#define CONFIG_SPI_QUAD*/
+/* #define CONFIG_SPI_QUAD */
 #endif
 
 /* SFC */
@@ -246,7 +316,7 @@
 #define CONFIG_SPI_SPL_CHECK
 #define CONFIG_JZ_SFC_PA
 #if defined(CONFIG_SPI_NAND)
-#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE	/*(26 * 1024)*/
+#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
 #define CONFIG_SPI_NAND_BPP		(2048 + 64)	/*Bytes Per Page*/
 #define CONFIG_SPI_NAND_PPB		(64)		/*Page Per Block*/
 #define CONFIG_SPL_SFC_NAND
@@ -258,7 +328,7 @@
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH_INGENIC
 #define CONFIG_SPI_FLASH
-#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE	/*(26 * 1024)*/
+#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
 /*#define CONFIG_SPL_SFC_NOR*/
 #define CONFIG_SPI_DUAL
 /*#define CONFIG_SPI_QUAD*/
@@ -303,32 +373,6 @@
 
 /* GPIO */
 #define CONFIG_JZ_GPIO
-
-/**
- * Command configuration.
- */
-#define CONFIG_CMD_NET		/* networking support		*/
-#define CONFIG_CMD_PING
-#define CONFIG_CMD_DHCP
-#define CONFIG_CMD_BOOTD	/* bootd			*/
-#define CONFIG_CMD_SAVEENV	/* saveenv			*/
-
-#define CONFIG_CMD_CONSOLE	/* coninfo			*/
-#define CONFIG_CMD_ECHO		/* echo arguments		*/
-#define CONFIG_CMD_FAT		/* FAT support			*/
-#define CONFIG_CMD_EXT2
-#define CONFIG_CMD_EXT4
-#define CONFIG_CMD_LOADB	/* loadb			*/
-#define CONFIG_CMD_LOADS	/* loads			*/
-#define CONFIG_CMD_MEMORY	/* md mm nm mw cp cmp crc base loop mtest */
-#define CONFIG_CMD_MISC		/* Misc functions like sleep etc*/
-#define CONFIG_CMD_MMC		/* MMC/SD support		*/
-#define CONFIG_CMD_RUN		/* run command in env variable	*/
-#define CONFIG_CMD_SOURCE	/* "source" command support	*/
-#define CONFIG_CMD_GETTIME
-#define CONFIG_CMDLINE_EDITING
-#define CONFIG_AUTO_COMPLETE
-/*#define CONFIG_CMD_I2C*/
 
 /************************ USB CONFIG ***************************/
 #define CONFIG_CMD_USB
@@ -384,25 +428,6 @@
 #define CONFIG_SYS_MONITOR_BASE		CONFIG_SYS_TEXT_BASE
 
 /**
- * Environment
- */
-/*
-#if defined(CONFIG_ENV_IS_IN_MMC)
-#define CONFIG_SYS_MMC_ENV_DEV		0
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
-#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
-#define CONFIG_ENV_SECT_SIZE		(1024 * 16)
-#define CONFIG_ENV_SIZE			(1024 * 16)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
-#else
-#define CONFIG_ENV_IS_NOWHERE
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
-#endif
-*/
-
-/**
  * SPL configuration
  */
 #define CONFIG_SPL
@@ -417,9 +442,12 @@
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-spl.lds"
 #endif /* CONFIG_SPL_NOR_SUPPORT */
 
-#define CONFIG_SPL_PAD_TO		26624 /* equal to spl max size in M200 */
+#define CONFIG_SPL_PAD_TO		26624
+#define CONFIG_SPL_MAX_SIZE		(26 * 1024)
 
-#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	86 //0x5A //wli changed 0x20 /* 16KB offset */
+#define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
+#define CONFIG_MMC_RAW_UBOOT_OFFSET	(CONFIG_UBOOT_OFFSET / 1024 + 17)
+#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	(CONFIG_MMC_RAW_UBOOT_OFFSET * 2)
 #define CONFIG_SYS_U_BOOT_MAX_SIZE_SECTORS	0x400 /* 512 KB */
 
 #define CONFIG_SPL_BOARD_INIT
@@ -431,8 +459,6 @@
 #else
 #define CONFIG_SPL_TEXT_BASE		0x80001000
 #endif	/*CONFIG_SPL_NOR_SUPPORT*/
-
-#define CONFIG_SPL_MAX_SIZE		(26 * 1024)
 
 #define CONFIG_SPL_LZOP
 #if defined(CONFIG_SPL_LZOP)
@@ -451,7 +477,7 @@
 
 #if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_SERIAL_SUPPORT
-#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SPL_TEXT_BASE + CONFIG_SPL_PAD_TO - 0x40) //0x40 = sizeof (image_header)
+#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SPL_TEXT_BASE + CONFIG_SPL_PAD_TO - 0x40) /* 0x40 = sizeof (image_header) */
 #define CONFIG_SYS_OS_BASE		0
 #define CONFIG_SYS_SPL_ARGS_ADDR	0
 #define CONFIG_SYS_FDT_BASE		0

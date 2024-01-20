@@ -31,6 +31,7 @@
 #include <asm/arch/clk.h>
 #include <power/d2041_core.h>
 
+extern int jz_net_initialize(bd_t *bis);
 struct cgu_clk_src cgu_clk_src[] = {
 	{AVPU, MPLL},
 	{MACPHY, MPLL},
@@ -45,9 +46,8 @@ struct cgu_clk_src cgu_clk_src[] = {
 
 int board_early_init_f(void)
 {
-/*
 #if defined(CONFIG_T31A) || defined(CONFIG_T31AL)
-	 printf("support quad\n");
+	/* printf("support quad\n");*/
 #else
 	gpio_direction_input(25);
 	gpio_direction_input(26);
@@ -56,7 +56,6 @@ int board_early_init_f(void)
 	gpio_disable_pull_down(26);
 	gpio_disable_pull_up(26);
 #endif
-*/
 	return 0;
 }
 
@@ -102,7 +101,18 @@ void board_nand_init(void)
 
 int board_eth_init(bd_t *bis)
 {
-	return 0;
+	int ret = 0;
+#ifdef CONFIG_USB_ETHER_ASIX
+	if (0 == strncmp(getenv("ethact"), "asx", 3)) {
+		run_command("usb start", 0);
+	}
+#endif
+	ret += jz_net_initialize(bis);
+	if (ret < 0){
+		if(!getenv("extras"))
+			setenv("extras", "nogmac");
+	}
+	return ret;
 }
 
 #ifdef CONFIG_SPL_NOR_SUPPORT
