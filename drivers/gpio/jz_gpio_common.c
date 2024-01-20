@@ -360,62 +360,58 @@ void dump_gpio_func( unsigned int gpio)
 #define MAX_GPIO_SET_LEN 256  // Define a maximum length for the GPIO settings string
 
 void process_gpio_token(char* token) {
-    char *endptr;
-    unsigned gpio = simple_strtoul(token, &endptr, 10);
-    if (*endptr) {
-        char mode = *endptr;
-        gpio_request(gpio, "gpio_set");
+	char *endptr;
+	unsigned gpio = simple_strtoul(token, &endptr, 10);
+	
+	// Check if the mode character is present and valid
+	char mode = (*endptr) ? *endptr : 'i'; // Default to 'i' (input) if no mode specified
 
-        switch (mode) {
-            case 'i': // Input low
-                gpio_direction_input(gpio);
-                printf("GPIO:  %u set to input low\n", gpio);
-                break;
-            case 'I': // Input high
-                gpio_direction_input(gpio);
-                printf("GPIO:  %u set to input high\n", gpio);
-                break;
-            case 'o': // Output low
-                gpio_direction_output(gpio, 0);
-                printf("GPIO:  %u set to output low\n", gpio);
-                break;
-            case 'O': // Output high
-                gpio_direction_output(gpio, 1);
-                printf("GPIO:  %u set to output high\n", gpio);
-                break;
-            default:
-                printf("GPIO:  Unknown GPIO mode '%c' for GPIO %u\n", mode, gpio);
-                break;
-        }
-    } else {
-        printf("GPIO:  Invalid GPIO token: %s\n", token);
-    }
+	gpio_request(gpio, "gpio_set");
+
+	switch (mode) {
+		case 'i': // Input
+		case 'I': // Also treat uppercase 'I' as Input for consistency
+			gpio_direction_input(gpio);
+			printf("GPIO:  %u set to input\n", gpio);
+			break;
+		case 'o': // Output low
+			gpio_direction_output(gpio, 0);
+			printf("GPIO:  %u set to output low\n", gpio);
+			break;
+		case 'O': // Output high
+			gpio_direction_output(gpio, 1);
+			printf("GPIO:  %u set to output high\n", gpio);
+			break;
+		default:
+			printf("GPIO:  Unknown GPIO mode '%c' for GPIO %u\n", mode, gpio);
+			break;
+	}
 }
 
 void handle_gpio_settings(const char *env_var_name) {
-    if (!env_var_name) {
-        printf("GPIO:  Error: gpio_settings called without variable name. \n");
-        return;
-    }
+	if (!env_var_name) {
+		printf("GPIO:  Error: gpio_settings called without variable name. \n");
+		return;
+	}
 
-    const char *env_gpio_str = getenv(env_var_name);
-    if (!env_gpio_str || *env_gpio_str == '\0') {
-        printf("GPIO:  %s: No GPIO env settings provided.\n", env_var_name);
-        return;
-    }
+	const char *env_gpio_str = getenv(env_var_name);
+	if (!env_gpio_str || *env_gpio_str == '\0') {
+		printf("GPIO:  %s: No GPIO env settings provided.\n", env_var_name);
+		return;
+	}
 
-    char gpio_str_copy[MAX_GPIO_SET_LEN];
-    strncpy(gpio_str_copy, env_gpio_str, MAX_GPIO_SET_LEN - 1);
-    gpio_str_copy[MAX_GPIO_SET_LEN - 1] = '\0';
+	char gpio_str_copy[MAX_GPIO_SET_LEN];
+	strncpy(gpio_str_copy, env_gpio_str, MAX_GPIO_SET_LEN - 1);
+	gpio_str_copy[MAX_GPIO_SET_LEN - 1] = '\0';
 
-    char *token = strtok(gpio_str_copy, " ");
-    while (token) {
-        if (strncmp(token, "gpio", 4) == 0) {
-            token = strtok(NULL, " ");
-            continue;
-        }
-        process_gpio_token(token);
+	char *token = strtok(gpio_str_copy, " ");
+	while (token) {
+		if (strncmp(token, "gpio", 4) == 0) {
+			token = strtok(NULL, " ");
+			continue;
+		}
+		process_gpio_token(token);
 		udelay(1000); // Add a delay after setting each GPIO
-        token = strtok(NULL, " ");
-    }
+		token = strtok(NULL, " ");
+	}
 }
