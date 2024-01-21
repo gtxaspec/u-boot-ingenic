@@ -105,6 +105,7 @@
     #endif
 #endif
 
+#define CONFIG_U_BOOT_BUILD_NAME	"openipc_flex"
 #define CONFIG_SFC_MIN_ALIGN		0x10000 /*0x1000->4K Erase, 0x8000->32K, 0x10000->64K*/
 
 #undef CONFIG_SYS_PROMPT

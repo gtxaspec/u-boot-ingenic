@@ -33,7 +33,8 @@ const char __weak version_string[] = U_BOOT_VERSION_STRING;
 
 static int do_version(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
-	printf("\n%s\n", version_string);
+	printf("build: %s\n", CONFIG_U_BOOT_BUILD_NAME);
+	printf("%s\n", version_string);
 #ifdef CC_VERSION_STRING
 	puts(CC_VERSION_STRING "\n");
 #endif
