@@ -339,6 +339,26 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	/* relocate environment function pointers etc. */
 	env_relocate();
 
+	/* Once the environment has been setup, generate a random mac address, and save it */
+	uchar enetaddr[6];
+
+	#ifdef CONFIG_RANDOM_MACADDR
+	// Check if a valid ethaddr is already set
+	if (!eth_getenv_enetaddr("ethaddr", enetaddr)) {
+		// No valid ethaddr set, generate and set a new one
+		eth_random_enetaddr(enetaddr);
+		if (eth_setenv_enetaddr("ethaddr", enetaddr)) {
+			printf("Net:   Failed to set ethernet address\n");
+		} else {
+			printf("Net:   Random MAC address set successfully\n");
+			saveenv();
+		}
+	} else {
+		// A valid ethaddr is already set, so no need to set it again
+		printf("Net:   HW Ethernet address exists\n");
+	}
+	#endif
+
 #if defined(CONFIG_PCI)
 	/*
 	 * Do pci configuration
@@ -387,16 +407,23 @@ extern void board_usb_init(void);
 	eth_initialize(gd->bd); */
 
 	int ret = 0;
+
 	#ifdef CONFIG_USB_ETHER_ASIX
-		if (0 == strncmp(getenv("ethact"), "asx", 3)) {
-			run_command("usb start", 0);
+	char* ethact = getenv("ethact");
+	if (ethact && strncmp(ethact, "asx", 3) == 0) {
+		if (run_command("usb start", 0) != 0) {
+			printf("USB start failed\n");
+			return;
 		}
+	}
 	#endif
-		ret += jz_net_initialize(gd->bd);
-		if (ret < 0){
-			// GPIOs to be set after net initialization fails
-			handle_gpio_settings("gpio_default_net");
-		}
+
+	// Attempt network initialization
+	ret = jz_net_initialize(gd->bd);
+	if (ret < 0) {
+		// GPIOs to be set after net initialization fails
+		handle_gpio_settings("gpio_default_net");
+	}
 #endif
 
 /* User defined GPIO set */
