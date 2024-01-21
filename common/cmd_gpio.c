@@ -59,7 +59,8 @@ static int do_gpio(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	/* grab the pin before we tweak it */
 	if (gpio_request(gpio, "cmd_gpio")) {
-		printf("GPIO:  Requesting pin %u failed... skipping\n", gpio);
+		// This always reports "failed", lets silence it for now to avoid spam
+		// printf("GPIO:  Requesting pin %u failed... skipping\n", gpio);
 		// return -1;
 	}
 

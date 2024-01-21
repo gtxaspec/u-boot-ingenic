@@ -395,13 +395,12 @@ extern void board_usb_init(void);
 		ret += jz_net_initialize(gd->bd);
 		if (ret < 0){
 			// GPIOs to be set after net initialization fails
-			printf("GPIO:  gpio_default_net \n");
 			handle_gpio_settings("gpio_default_net");
 		}
 #endif
 
 /* User defined GPIO set */
-handle_gpio_settings("gpio_set");
+handle_gpio_settings("gpio_user");
 /* User defined MOTOR GPIO set */
 handle_gpio_settings("gpio_motor_v");
 handle_gpio_settings("gpio_motor_h");
