@@ -265,6 +265,7 @@
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
 "restore=n\0" \
+"sd_present=true\0" \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \

@@ -405,6 +405,12 @@ handle_gpio_settings("gpio_user");
 handle_gpio_settings("gpio_motor_v");
 handle_gpio_settings("gpio_motor_h");
 
+// Try to get the value of the 'sd_present' environment variable
+char* sd_present = getenv("sd_present");
+
+// Check if 'sd_present' was found and compare its value
+if (sd_present != NULL && strcmp(sd_present, "true") == 0) {
+	// The environment variable 'sd_present' exists and its value is "true"
 #ifdef CONFIG_AUTO_UPDATE
 	printf("Autoupdate... \n");
 	run_command("sdupdate",0);
@@ -412,6 +418,10 @@ handle_gpio_settings("gpio_motor_h");
 #ifdef CONFIG_CMD_SDSTART
 	run_command("sdstart",0);
 #endif
+} else {
+	// 'sd_present' does not exist or is not "true"
+	printf("SD card disabled\n");
+}
 
 	/* main_loop() can return to retry autoboot, if so just run it again. */
 	for (;;)
