@@ -501,6 +501,9 @@ void handle_gpio_settings(const char *env_var_name) {
 	gpio_str_copy[MAX_GPIO_SET_LEN - 1] = '\0';
 
 	char *token = strtok(gpio_str_copy, " ");
+
+	printf("GPIO:  Setting %s\n", env_var_name);
+
 	while (token) {
 		if (strncmp(token, "gpio", 4) == 0) {
 			token = strtok(NULL, " ");
