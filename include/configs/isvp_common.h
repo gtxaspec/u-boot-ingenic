@@ -8,7 +8,6 @@
 #define CONFIG_SPL_DDR_SOFT_TRAINING
 
 #if defined(__CONFIG_ISVP_T10_H__)
-#define CONFIG_T10		/* T10 SoC */
 #define CONFIG_SOC "t10"
 #elif defined(__CONFIG_ISVP_T20_H__)
 #define CONFIG_T20		/* T20 SoC */
@@ -105,6 +104,23 @@
     #endif
 #endif
 
+/**
+ * Environment
+ */
+#if defined(CONFIG_ENV_IS_IN_MMC)
+#define CONFIG_SYS_MMC_ENV_DEV		0
+#define CONFIG_ENV_SIZE			(32 << 10)
+#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
+#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
+#define CONFIG_ENV_SECT_SIZE		(1024 * 16)
+#define CONFIG_ENV_SIZE			(1024 * 16)
+#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
+#else
+#define CONFIG_ENV_IS_NOWHERE
+#define CONFIG_ENV_SIZE			(32 << 10)
+#define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
+#endif
+
 #define CONFIG_SFC_MIN_ALIGN		0x10000 /*0x1000->4K Erase, 0x8000->32K, 0x10000->64K*/
 #define CONFIG_ENV_OFFSET		0x40000
 #define CONFIG_ENV_SIZE			0x10000
@@ -114,8 +130,7 @@
 #define CONFIG_SYS_PROMPT		"OpenIPC # "
 
 #define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_AUTOBOOT_PROMPT		\
-    "Press Ctrl-c to abort autoboot... %d \n", bootdelay
+#define CONFIG_AUTOBOOT_PROMPT		"Press Ctrl-c to abort autoboot... %d %d\n", bootdelay
 #define CONFIG_AUTOBOOT_STOP_STR	"\x3"
 
 #define CONFIG_SYS_LONGHELP
@@ -143,6 +158,7 @@
 #define CONFIG_CMD_FS_GENERIC		1
 #define CONFIG_CMD_GPIO			1
 #define	CONFIG_SYS_HUSH_PARSER		1
+#define CONFIG_CMD_TFTPDOWNLOAD		1
 
 #define CONFIG_NETMASK			255.255.255.0
 #define CONFIG_GATEWAYIP		192.168.1.1
@@ -156,24 +172,6 @@
 #endif
 
 #define CONFIG_CMD_SDSTART		1
-
-/**
- * Environment
- */
-#if defined(CONFIG_ENV_IS_IN_MMC)
-#define CONFIG_SYS_MMC_ENV_DEV		0
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR * 512)
-#elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
-#define CONFIG_ENV_SECT_SIZE		(1024 * 16)
-#define CONFIG_ENV_SIZE			(1024 * 16)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_MONITOR_LEN + CONFIG_UBOOT_OFFSET)
-#else
-#define CONFIG_ENV_IS_NOWHERE
-#define CONFIG_ENV_SIZE			(32 << 10)
-#define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
-#endif
-
 
 /**
  * Command configuration.
@@ -222,7 +220,7 @@
 #endif
 */
 
-#if defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M)
+#if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
 #define CONFIG_EXTRA_SETTINGS \
 "totalmem=128M\0" \
 "osmem=64M\0" \

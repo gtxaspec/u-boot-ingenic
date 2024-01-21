@@ -1,4 +1,5 @@
 name: Build
+
 on:
   push:
     branches:
@@ -11,6 +12,33 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        u-boot-version:
+          - t10n
+          - t10l
+          - t10n_msc0
+          - t20n
+          - t20l
+          - t20x
+          - t20n_msc0
+          - t21n
+          - t21n_msc0
+          - t30n
+          - t30l
+          - t30x
+          - t30a
+          - t30a1
+          - t30n_msc0
+          - t31n
+          - t31l
+          - t31lc
+          - t31x
+          - t31a
+          - t31al
+          - t31n
+          - t31a_msc0
+          - t31al_msc0 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -20,31 +48,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install gcc-mipsel-linux-gnu lzop u-boot-tools
 
-      - name: u-boot-ingenic
+      - name: u-boot-ingenic Build
         run: |
           git clone https://github.com/gtxaspec/u-boot-ingenic.git --depth 1
           cd u-boot-ingenic
           cp -f .github/scripts/u-boot-ingenic.sh u-boot-ingenic.sh
-          bash u-boot-ingenic.sh
+          VERSION=${{ matrix.u-boot-version }}
+          bash u-boot-ingenic.sh $VERSION
 
-      - name: Upload
+      - name: Upload ${{ matrix.u-boot-version }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{env.TAG_NAME}}
           files: |
-            u-boot-ingenic/output/u-boot-t10l-universal.bin
-            u-boot-ingenic/output/u-boot-t10-universal.bin
-            u-boot-ingenic/output/u-boot-t20l-universal.bin
-            u-boot-ingenic/output/u-boot-t20-universal.bin
-            u-boot-ingenic/output/u-boot-t21n-universal.bin
-            u-boot-ingenic/output/u-boot-t30a1-universal.bin
-            u-boot-ingenic/output/u-boot-t30a-universal.bin
-            u-boot-ingenic/output/u-boot-t30l-universal.bin
-            u-boot-ingenic/output/u-boot-t30n-universal.bin
-            u-boot-ingenic/output/u-boot-t30x-universal.bin
-            u-boot-ingenic/output/u-boot-t31al-universal.bin
-            u-boot-ingenic/output/u-boot-t31a-universal.bin
-            u-boot-ingenic/output/u-boot-t31l-universal.bin
-            u-boot-ingenic/output/u-boot-t31lc-universal.bin
-            u-boot-ingenic/output/u-boot-t31n-universal.bin
-            u-boot-ingenic/output/u-boot-t31x-universal.bin
+            u-boot-ingenic/output/u-boot-${{ matrix.u-boot-version }}-universal.bin

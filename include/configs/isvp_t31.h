@@ -673,6 +673,7 @@
 	pps_mmc_enable = 61
 	wyze_mmc_enable = 48
 */
+
 #define CONFIG_GPIO_SETTINGS \
 "gpio_default=62O\0" \
 "gpio_default_net=61o 48o\0"

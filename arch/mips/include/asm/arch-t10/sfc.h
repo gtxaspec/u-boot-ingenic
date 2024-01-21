@@ -106,7 +106,7 @@ struct norflash_partitions {
 #define TRAN_SPI_STANDARD		(0x0)
 #define TRAN_SPI_DUAL			(0x1)
 #define TRAN_SPI_QUAD			(0x5)
-#define TRAN_SPI_IO_QUAD			(0x6)
+#define TRAN_SPI_IO_QUAD		(0x6)
 #define POLLEN				(1 << 25)
 #define CMDEN				(1 << 24)
 #define	PHASE_FORMAT			(1 << 23)

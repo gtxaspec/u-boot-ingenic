@@ -31,7 +31,6 @@
 #include <asm/arch/clk.h>
 #include <power/d2041_core.h>
 
-extern int jz_net_initialize(bd_t *bis);
 struct cgu_clk_src cgu_clk_src[] = {
 	{VPU, MPLL},
 	{MACPHY, MPLL},
@@ -69,6 +68,7 @@ int misc_init_r(void)
 	/* used for usb_dete */
 	/*gpio_set_pull_dir(GPIO_PB(22), 1);*/
 
+
 	return 0;
 }
 
@@ -84,18 +84,7 @@ int board_mmc_init(bd_t *bd)
 
 int board_eth_init(bd_t *bis)
 {
-	int ret = 0;
-#ifdef CONFIG_USB_ETHER_ASIX
-	if (0 == strncmp(getenv("ethact"), "asx", 3)) {
-		run_command("usb start", 0);
-	}
-#endif
-	ret += jz_net_initialize(bis);
-	if (ret < 0){
-		if(!getenv("extras"))
-			setenv("extras", "nogmac");
-	}
-	return ret;
+	return 0;
 }
 
 #ifdef CONFIG_SPL_NOR_SUPPORT
