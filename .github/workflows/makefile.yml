@@ -12,7 +12,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: ubuntu:23.10
     strategy:
+      fail-fast: false
       matrix:
         u-boot-version:
           - t10n
@@ -43,10 +45,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Prepare
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install gcc-mipsel-linux-gnu lzop u-boot-tools
+          apt-get update
+          apt-get install -y --no-install-recommends --no-install-suggests build-essential gcc-mipsel-linux-gnu lzop u-boot-tools git make ca-certificates
+          update-ca-certificates
 
       - name: u-boot-ingenic Build
         run: |
