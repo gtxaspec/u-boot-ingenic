@@ -175,6 +175,7 @@ COBJS-$(CONFIG_CMD_REISER) += cmd_reiser.o
 COBJS-$(CONFIG_SANDBOX) += cmd_sandbox.o
 COBJS-$(CONFIG_CMD_SATA) += cmd_sata.o
 COBJS-$(CONFIG_CMD_SF) += cmd_sf.o
+COBJS-$(CONFIG_CMD_SQUASH_PROBE) += cmd_sq.o
 COBJS-$(CONFIG_CMD_SPI_BURNER) += cmd_spi_burner.o
 COBJS-$(CONFIG_CMD_SCSI) += cmd_scsi.o
 COBJS-$(CONFIG_CMD_SHA1SUM) += cmd_sha1sum.o
