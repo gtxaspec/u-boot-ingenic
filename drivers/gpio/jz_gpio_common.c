@@ -407,7 +407,7 @@ void handle_gpio_settings(const char *env_var_name) {
 
 	char *token = strtok(gpio_str_copy, " ");
 
-	printf("GPIO:  Setting %s\n", env_var_name);
+	printf("GPIO:  Loading %s\n", env_var_name);
 
 	while (token) {
 		if (strncmp(token, "gpio", 4) == 0) {
