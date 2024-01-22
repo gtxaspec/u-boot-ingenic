@@ -405,8 +405,8 @@ extern void board_usb_init(void);
 #if defined(CONFIG_CMD_NET)
 	/*puts("Net:   ");
 	eth_initialize(gd->bd); */
-
 	int ret = 0;
+	char* eth_disable = getenv("eth_disable");
 
 	#ifdef CONFIG_USB_ETHER_ASIX
 	char* ethact = getenv("ethact");
@@ -418,11 +418,21 @@ extern void board_usb_init(void);
 	}
 	#endif
 
-	// Attempt network initialization
-	ret = jz_net_initialize(gd->bd);
-	if (ret < 0) {
-		// GPIOs to be set after net initialization fails
+	// Check if eth_disable is set to "true"
+	if (eth_disable && strcmp(eth_disable, "true") == 0) {
+		// eth_disable is true, so skip network initialization
+		printf("Net:   Network disabled\n");
+		// Handle GPIO settings since network init is skipped
 		handle_gpio_settings("gpio_default_net");
+	} else {
+		// Attempt network initialization
+		ret = jz_net_initialize(gd->bd);
+		if (ret < 0) {
+			debug("Net:   Network initialization failed.\n");
+			// Network initialization failed, handle GPIO settings here
+			handle_gpio_settings("gpio_default_net");
+		}
+		// Note: jz_net_initialize succeeds here
 	}
 #endif
 
@@ -432,12 +442,12 @@ handle_gpio_settings("gpio_user");
 handle_gpio_settings("gpio_motor_v");
 handle_gpio_settings("gpio_motor_h");
 
-// Try to get the value of the 'sd_present' environment variable
-char* sd_present = getenv("sd_present");
+// Try to get the value of the 'sd_disable' environment variable
+char* sd_disable = getenv("sd_disable");
 
-// Check if 'sd_present' was found and compare its value
-if (sd_present != NULL && strcmp(sd_present, "true") == 0) {
-	// The environment variable 'sd_present' exists and its value is "true"
+// Check if 'sd_disable' was found and compare its value
+if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
+	// The environment variable 'sd_disable' exists and its value is "false"
 #ifdef CONFIG_AUTO_UPDATE
 	printf("Autoupdate... \n");
 	run_command("sdupdate",0);
@@ -446,7 +456,7 @@ if (sd_present != NULL && strcmp(sd_present, "true") == 0) {
 	run_command("sdstart",0);
 #endif
 } else {
-	// 'sd_present' does not exist or is not "true"
+	// 'sd_disable' does not exist or is not "true"
 	printf("MMC:   SD card disabled\n");
 }
 
