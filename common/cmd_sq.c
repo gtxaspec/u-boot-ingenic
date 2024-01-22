@@ -5,7 +5,7 @@
 
 #include <asm/io.h>
 
-extern struct spi_flash *flash;
+extern struct spi_flash *get_flash(void);
 
 #define SQUASHFS_MAGIC_OFFSET       0
 #define SQUASHFS_BYTES_USED_OFFSET  40
