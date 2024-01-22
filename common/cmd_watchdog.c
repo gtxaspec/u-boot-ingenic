@@ -11,7 +11,6 @@
 #include <asm/byteorder.h>
 #include <asm/io.h>
 #include <linux/mtd/mtd.h>
-#include <asm/arch/tcu.h>
 #include <asm/arch/wdt.h>
 #include <linux/ctype.h>
 

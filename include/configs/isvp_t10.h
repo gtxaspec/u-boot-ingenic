@@ -123,10 +123,11 @@
 /**
  * Boot command definitions.
  */
+/*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
-
+*/
 /*
 #if defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
@@ -354,25 +355,9 @@
 #define CONFIG_MBR_P3_TYPE 		fat
 #endif
 
-/* JFFS2 configuration */
-#if defined(CONFIG_CMD_JFFS2)
-#define CONFIG_CMD_FLASH
-#define CONFIG_SYS_MAX_FLASH_BANKS	1
-#define CONFIG_SYS_MAX_FLASH_SECT	256
-#undef CONFIG_CMD_MTDPARTS
-#undef CONFIG_JFFS2_CMDLINE
-#define COFIG_JFFS2_DEV			"nor0"
-#define CONFIG_JFFS2_PART_OFFSET	0x4C0000
-#define CONFIG_JFFS2_PART_SIZE		0xB40000
-#define CONFIG_START_VIRTUAL_ADDRESS	0x80600000
-#else
-#define CONFIG_SYS_MAX_FLASH_SECT	0
-#endif
-
 /*
 	Platform Default GPIOs:
 */
-
 #define CONFIG_GPIO_SETTINGS \
 ""
 

@@ -132,9 +132,12 @@
 /**
  * Boot command definitions.
  */
+
+/*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
+*/
 
 /*
 #if defined(CONFIG_SFC_NOR)
@@ -356,26 +359,11 @@
 
 #define CONFIG_MBR_P2_OFF		28mb
 #define CONFIG_MBR_P2_END		58mb
-#define CONFIG_MBR_P2_TYPE 		linux
+#define CONFIG_MBR_P2_TYPE		linux
 
 #define CONFIG_MBR_P3_OFF		1609mb
 #define CONFIG_MBR_P3_END		7800mb
-#define CONFIG_MBR_P3_TYPE 		fat
-#endif
-
-/* JFFS2 configuration */
-#if defined(CONFIG_CMD_JFFS2)
-#define CONFIG_CMD_FLASH
-#define CONFIG_SYS_MAX_FLASH_BANKS	1
-#define CONFIG_SYS_MAX_FLASH_SECT	256
-#undef CONFIG_CMD_MTDPARTS
-#undef CONFIG_JFFS2_CMDLINE
-#define COFIG_JFFS2_DEV			"nor0"
-#define CONFIG_JFFS2_PART_OFFSET	0x4C0000
-#define CONFIG_JFFS2_PART_SIZE		0xB40000
-#define CONFIG_START_VIRTUAL_ADDRESS	0x80600000
-#else
-#define CONFIG_SYS_MAX_FLASH_SECT	0
+#define CONFIG_MBR_P3_TYPE		fat
 #endif
 
 /*
@@ -385,7 +373,6 @@
 	wyze_mmc_enable = 48
 	wyze_cd_enable = 43
 */
-
 #define CONFIG_GPIO_SETTINGS \
 "gpio_default=47O\0" \
 "gpio_default_net=43O 48o 43o\0"
