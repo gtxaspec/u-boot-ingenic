@@ -45,7 +45,7 @@ int do_ls_wrapper(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 }
 
 U_BOOT_CMD(
-	ls,	4,	1,	do_ls_wrapper,
+	fsls,	4,	1,	do_ls_wrapper,
 	"list files in a directory (default /)",
 	"<interface> [<dev[:part]> [directory]]\n"
 	"    - List files in directory 'directory' of partition 'part' on\n"
