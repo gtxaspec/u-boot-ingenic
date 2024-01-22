@@ -60,20 +60,25 @@ jobs:
           bash u-boot-ingenic.sh $VERSION
 
       - name: Check if file exists
+        id: check-file
         run: |
-            FILE=u-boot-ingenic/output/u-boot-${{ matrix.u-boot-version }}-universal.bin
-            if [[ ! -f "$FILE" ]]; then
-                echo "::error::File $FILE does not exist."
-                exit 1
-            fi
-        shell: bash
+          FILE=$(find . -type f -name "u-boot-${{ matrix.u-boot-version }}-universal.bin")
+          if [ -z "$FILE" ]; then
+            echo "::error::File u-boot-${{ matrix.u-boot-version }}-universal.bin does not exist."
+            echo "FILE_FOUND=false" >> $GITHUB_ENV
+            exit 1
+          else
+            echo "Found file: $FILE"
+            echo "FILE_FOUND=true" >> $GITHUB_ENV
+          fi
+        shell: bash --noprofile --norc -e -o pipefail {0}
         env:
-            TAG_NAME: latest
+          TAG_NAME: ${{ env.TAG_NAME }}
 
       - name: Upload ${{ matrix.u-boot-version }}
-        if: steps.check-file.outcome == 'success'
+        if: env.FILE_FOUND == 'true'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{env.TAG_NAME}}
+          tag_name: ${{ env.TAG_NAME }}
           files: |
             u-boot-ingenic/output/u-boot-${{ matrix.u-boot-version }}-universal.bin
