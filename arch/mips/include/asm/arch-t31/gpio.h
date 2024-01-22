@@ -1,6 +1,5 @@
 /*
  * T31 GPIO definitions
- *
  * Copyright (c) 2019 Ingenic Semiconductor Co.,Ltd
  *
  * This program is free software; you can redistribute it and/or
@@ -24,10 +23,10 @@
 
 #include <asm/arch/base.h>
 
-#define GPIO_PA(n) 	(0*32 + n)
-#define GPIO_PB(n) 	(1*32 + n)
-#define GPIO_PC(n) 	(2*32 + n)
-#define GPIO_PD(n) 	(3*32 + n)
+#define GPIO_PA(n) 	(0 * 32 + n)
+#define GPIO_PB(n) 	(1 * 32 + n)
+#define GPIO_PC(n) 	(2 * 32 + n)
+#define GPIO_PD(n) 	(3 * 32 + n)
 
 enum gpio_function {
 	GPIO_FUNC_0     = 0x00,  //0000, GPIO as function 0 / device 0
@@ -49,12 +48,12 @@ enum gpio_port {
 #ifdef CONFIG_JZ_SLT
 static inline enum gpio_port gpio_port_gp(int gpio)
 {
-	return (GPIO_PORT_A + (gpio/32));
+	return (GPIO_PORT_A + (gpio / 32));
 }
 
 static inline int gpio_pin(int gpio)
 {
-	return (gpio%32);
+	return (gpio % 32);
 }
 #endif
 
@@ -112,28 +111,28 @@ struct jz_gpio_func_def {
 #define PXPDSHS		0x144   /* Port Driver-strength high Set Register */
 #define PXPDSHC		0x148   /* Port Driver-strength high Clear Register */
 
-#define GPIO_PXPIN(n)	(GPIO_BASE + (PXPIN + (n)*0x1000)) /* PIN Level Register */
-#define GPIO_PXINT(n)	(GPIO_BASE + (PXINT + (n)*0x1000)) /* Port Interrupt Register */
-#define GPIO_PXINTS(n)	(GPIO_BASE + (PXINTS + (n)*0x1000)) /* Port Interrupt Set Register */
-#define GPIO_PXINTC(n)	(GPIO_BASE + (PXINTC + (n)*0x1000)) /* Port Interrupt Clear Register */
-#define GPIO_PXMSK(n)	(GPIO_BASE + (PXMSK + (n)*0x1000)) /* Port Interrupt Mask Register */
-#define GPIO_PXMSKS(n)	(GPIO_BASE + (PXMSKS + (n)*0x1000)) /* Port Interrupt Mask Set Reg */
-#define GPIO_PXMSKC(n)	(GPIO_BASE + (PXMSKC + (n)*0x1000)) /* Port Interrupt Mask Clear Reg */
-#define GPIO_PXPAT1(n)	(GPIO_BASE + (PXPAT1 + (n)*0x1000)) /* Port Pattern 1 Register */
+#define GPIO_PXPIN(n)	(GPIO_BASE + (PXPIN + (n)*0x1000))   /* PIN Level Register */
+#define GPIO_PXINT(n)	(GPIO_BASE + (PXINT + (n)*0x1000))   /* Port Interrupt Register */
+#define GPIO_PXINTS(n)	(GPIO_BASE + (PXINTS + (n)*0x1000))  /* Port Interrupt Set Register */
+#define GPIO_PXINTC(n)	(GPIO_BASE + (PXINTC + (n)*0x1000))  /* Port Interrupt Clear Register */
+#define GPIO_PXMSK(n)	(GPIO_BASE + (PXMSK + (n)*0x1000))   /* Port Interrupt Mask Register */
+#define GPIO_PXMSKS(n)	(GPIO_BASE + (PXMSKS + (n)*0x1000))  /* Port Interrupt Mask Set Reg */
+#define GPIO_PXMSKC(n)	(GPIO_BASE + (PXMSKC + (n)*0x1000))  /* Port Interrupt Mask Clear Reg */
+#define GPIO_PXPAT1(n)	(GPIO_BASE + (PXPAT1 + (n)*0x1000))  /* Port Pattern 1 Register */
 #define GPIO_PXPAT1S(n)	(GPIO_BASE + (PXPAT1S + (n)*0x1000)) /* Port Pattern 1 Set Reg. */
 #define GPIO_PXPAT1C(n)	(GPIO_BASE + (PXPAT1C + (n)*0x1000)) /* Port Pattern 1 Clear Reg. */
-#define GPIO_PXPAT0(n)	(GPIO_BASE + (PXPAT0 + (n)*0x1000)) /* Port Pattern 0 Register */
+#define GPIO_PXPAT0(n)	(GPIO_BASE + (PXPAT0 + (n)*0x1000))  /* Port Pattern 0 Register */
 #define GPIO_PXPAT0S(n)	(GPIO_BASE + (PXPAT0S + (n)*0x1000)) /* Port Pattern 0 Set Register */
 #define GPIO_PXPAT0C(n)	(GPIO_BASE + (PXPAT0C + (n)*0x1000)) /* Port Pattern 0 Clear Register */
-#define GPIO_PXFLG(n)	(GPIO_BASE + (PXFLG + (n)*0x1000)) /* Port Flag Register */
-#define GPIO_PXFLGC(n)	(GPIO_BASE + (PXFLGC + (n)*0x1000)) /* Port Flag clear Register */
-#define GPIO_PXPE(n)	(GPIO_BASE + (PXPE + (n)*0x1000)) /* Port Pull Disable Register */          /*T31 delete*/
-#define GPIO_PXPES(n)	(GPIO_BASE + (PXPES + (n)*0x1000)) /* Port Pull Disable Set Register */     /*T31 delete*/
-#define GPIO_PXPEC(n)	(GPIO_BASE + (PXPEC + (n)*0x1000)) /* Port Pull Disable Clear Register */   /*T31 delete*/
-#define GPIO_PXPUEN(n)	(GPIO_BASE + (PXPUEN + (n)*0x1000)) /* Port Pull-up status Register */
+#define GPIO_PXFLG(n)	(GPIO_BASE + (PXFLG + (n)*0x1000))   /* Port Flag Register */
+#define GPIO_PXFLGC(n)	(GPIO_BASE + (PXFLGC + (n)*0x1000))  /* Port Flag clear Register */
+#define GPIO_PXPE(n)	(GPIO_BASE + (PXPE + (n)*0x1000))    /* Port Pull Disable Register */         /*T31 delete*/
+#define GPIO_PXPES(n)	(GPIO_BASE + (PXPES + (n)*0x1000))   /* Port Pull Disable Set Register */     /*T31 delete*/
+#define GPIO_PXPEC(n)	(GPIO_BASE + (PXPEC + (n)*0x1000))   /* Port Pull Disable Clear Register */   /*T31 delete*/
+#define GPIO_PXPUEN(n)	(GPIO_BASE + (PXPUEN + (n)*0x1000))  /* Port Pull-up status Register */
 #define GPIO_PXPUENS(n)	(GPIO_BASE + (PXPUENS + (n)*0x1000)) /* Port Pull-up status Set Register */
 #define GPIO_PXPUENC(n)	(GPIO_BASE + (PXPUENC + (n)*0x1000)) /* Port Pull-up status Clear Register */
-#define GPIO_PXPDEN(n) 	(GPIO_BASE + (PXPDEN + (n)*0x1000)) /* Port Pull-down status Register */
+#define GPIO_PXPDEN(n) 	(GPIO_BASE + (PXPDEN + (n)*0x1000))  /* Port Pull-down status Register */
 #define GPIO_PXPDENS(n)	(GPIO_BASE + (PXPDENS + (n)*0x1000)) /* Port Pull-down status Set Register */
 #define GPIO_PXPDENC(n)	(GPIO_BASE + (PXPDENC + (n)*0x1000)) /* Port Pull-down status Clear Register */
 

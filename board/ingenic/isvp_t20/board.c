@@ -56,7 +56,6 @@ void board_usb_init(void)
 }
 #endif /* CONFIG_USB_GADGET */
 
-
 int misc_init_r(void)
 {
 #if 0 /* TO DO */
@@ -67,7 +66,6 @@ int misc_init_r(void)
 #endif
 	/* used for usb_dete */
 	/*gpio_set_pull_dir(GPIO_PB(22), 1);*/
-
 
 	return 0;
 }

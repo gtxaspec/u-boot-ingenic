@@ -12,7 +12,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: ubuntu:23.10
     strategy:
+      fail-fast: false
       matrix:
         u-boot-version:
           - t10n
@@ -36,17 +38,18 @@ jobs:
           - t31x
           - t31a
           - t31al
-          - t31n
+          - t31n_msc0
           - t31a_msc0
-          - t31al_msc0 
+          - t31al_msc0
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Prepare
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install gcc-mipsel-linux-gnu lzop u-boot-tools
+          apt-get update
+          apt-get install -y --no-install-recommends --no-install-suggests build-essential gcc-mipsel-linux-gnu lzop u-boot-tools git make ca-certificates
+          update-ca-certificates
 
       - name: u-boot-ingenic Build
         run: |
@@ -56,9 +59,26 @@ jobs:
           VERSION=${{ matrix.u-boot-version }}
           bash u-boot-ingenic.sh $VERSION
 
+      - name: Check if file exists
+        id: check-file
+        run: |
+          FILE=$(find . -type f -name "u-boot-${{ matrix.u-boot-version }}-universal.bin")
+          if [ -z "$FILE" ]; then
+            echo "::error::File u-boot-${{ matrix.u-boot-version }}-universal.bin does not exist."
+            echo "FILE_FOUND=false" >> $GITHUB_ENV
+            exit 1
+          else
+            echo "Found file: $FILE"
+            echo "FILE_FOUND=true" >> $GITHUB_ENV
+          fi
+        shell: bash --noprofile --norc -e -o pipefail {0}
+        env:
+          TAG_NAME: ${{ env.TAG_NAME }}
+
       - name: Upload ${{ matrix.u-boot-version }}
+        if: env.FILE_FOUND == 'true'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{env.TAG_NAME}}
+          tag_name: ${{ env.TAG_NAME }}
           files: |
             u-boot-ingenic/output/u-boot-${{ matrix.u-boot-version }}-universal.bin

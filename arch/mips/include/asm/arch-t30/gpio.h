@@ -1,6 +1,5 @@
 /*
  * T30 GPIO definitions
- *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *
  * This program is free software; you can redistribute it and/or
@@ -24,10 +23,10 @@
 
 #include <asm/arch/base.h>
 
-#define GPIO_PA(n) 	(0*32 + n)
-#define GPIO_PB(n) 	(1*32 + n)
-#define GPIO_PC(n) 	(2*32 + n)
-#define GPIO_PD(n) 	(3*32 + n)
+#define GPIO_PA(n) 	(0 * 32 + n)
+#define GPIO_PB(n) 	(1 * 32 + n)
+#define GPIO_PC(n) 	(2 * 32 + n)
+#define GPIO_PD(n) 	(3 * 32 + n)
 
 enum gpio_function {
 	GPIO_FUNC_0     = 0x00,  //0000, GPIO as function 0 / device 0
@@ -49,7 +48,7 @@ enum gpio_port {
 #ifdef CONFIG_JZ_SLT
 static inline enum gpio_port gpio_port_gp(int gpio)
 {
-	return (GPIO_PORT_A + (gpio/32));
+	return (GPIO_PORT_A + (gpio / 32));
 }
 
 static inline int gpio_pin(int gpio)
@@ -105,10 +104,11 @@ struct jz_gpio_func_def {
 #define PXPDEN		0x120   /* Port Pull-down status Register */
 #define PXPDENS		0x124   /* Port Pull-down status Set Register */
 #define PXPDENC		0x128   /* Port Pull-down status Clear Register */
-#define PXPDSL		0x130   /* Port Driver-strength low  Register */
+
+#define PXPDSL		0x130   /* Port Driver-strength low Register */
 #define PXPDSLS		0x134   /* Port Driver-strength low Set Register */
 #define PXPDSLC		0x138   /* Port Driver-strength low Clear Register */
-#define PXPDSH		0x140   /* Port Driver-strength high  Register */
+#define PXPDSH		0x140   /* Port Driver-strength high Register */
 #define PXPDSHS		0x144   /* Port Driver-strength high Set Register */
 #define PXPDSHC		0x148   /* Port Driver-strength high Clear Register */
 

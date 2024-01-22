@@ -67,7 +67,6 @@ extern void reset_dll(void);
 
 static void dump_ddrc_register(void)
 {
-#ifdef CONFIG_DWC_DEBUG
 	debug("DDRC_STATUS         0x%x\n", ddr_readl(DDRC_STATUS));
 	debug("DDRC_CFG            0x%x\n", ddr_readl(DDRC_CFG));
 	debug("DDRC_CTRL           0x%x\n", ddr_readl(DDRC_CTRL));
@@ -88,8 +87,27 @@ static void dump_ddrc_register(void)
 	debug("DDRC_REMAP4         0x%x\n", ddr_readl(DDRC_REMAP(4)));
 	debug("DDRC_REMAP5         0x%x\n", ddr_readl(DDRC_REMAP(5)));
 	debug("DDRC_AUTOSR_EN      0x%x\n", ddr_readl(DDRC_AUTOSR_EN));
-#endif
 }
+
+void dump_inno_phy(void)
+{
+	debug("INNO_DQ_WIDTH   :%X\n",phy_readl(INNO_DQ_WIDTH));
+	debug("INNO_PLL_FBDIV  :%X\n",phy_readl(INNO_PLL_FBDIV));
+	debug("INNO_PLL_PDIV   :%X\n",phy_readl(INNO_PLL_PDIV));
+	debug("INNO_MEM_CFG    :%X\n",phy_readl(INNO_MEM_CFG));
+	debug("INNO_PLL_CTRL   :%X\n",phy_readl(INNO_PLL_CTRL));
+	debug("INNO_CHANNEL_EN :%X\n",phy_readl(INNO_CHANNEL_EN));
+	debug("INNO_CWL        :%X\n",phy_readl(INNO_CWL));
+	debug("INNO_CL         :%X\n",phy_readl(INNO_CL));
+}
+#else
+#define dump_ddrc_register()
+#define dump_inno_phy()
+
+#define FUNC_ENTER()
+#define FUNC_EXIT()
+#endif
+
 static void reset_controller(void)
 {
 #ifndef CONFIG_FPGA
@@ -266,18 +284,6 @@ void ddr_controller_init(void)
 	ddr_writel(DDRC_CTRL_VALUE & 0xffff8fff, DDRC_CTRL);
 }
 
-void dump_inno_phy(void)
-{
-	debug("INNO_DQ_WIDTH   :%X\n",phy_readl(INNO_DQ_WIDTH));
-	debug("INNO_PLL_FBDIV  :%X\n",phy_readl(INNO_PLL_FBDIV));
-	debug("INNO_PLL_PDIV   :%X\n",phy_readl(INNO_PLL_PDIV));
-	debug("INNO_MEM_CFG    :%X\n",phy_readl(INNO_MEM_CFG));
-	debug("INNO_PLL_CTRL   :%X\n",phy_readl(INNO_PLL_CTRL));
-	debug("INNO_CHANNEL_EN :%X\n",phy_readl(INNO_CHANNEL_EN));
-	debug("INNO_CWL        :%X\n",phy_readl(INNO_CWL));
-	debug("INNO_CL         :%X\n",phy_readl(INNO_CL));
-}
-
 void ddr_inno_phy_init()
 {
 	u32 reg = 0;
@@ -293,14 +299,14 @@ void ddr_inno_phy_init()
 	phy_writel(0x0, INNO_TRAINING_CTRL); // ADDR:9’h002
 	phy_writel(0x03, INNO_DQ_WIDTH);     // ADDR:9’h01f
 #ifdef CONFIG_DDR_TYPE_DDR3
-	phy_writel(0x30, INNO_MEM_CFG);                                                    // MEMSEL  =  DDR3  ,    BURSEL = burst8
-	phy_writel((readl(PHY_BASE + 0x154) & 0xffffff8f), 0x154);
-	phy_writel((readl(PHY_BASE + 0x114) & 0xffffff8f), 0x114);
-	phy_writel(0x0d, INNO_CHANNEL_EN);
-	phy_writel(0x6, INNO_CWL);
-	phy_writel(0x8, INNO_CL);
+	phy_writel(0x30, INNO_MEM_CFG);                                                    // ADDR:9’h011 MEMSEL = DDR3, BURSEL = burst8
+	phy_writel((readl(PHY_BASE + 0x154) & 0xffffff8f), 0x154); // ADDR:9’h055
+	phy_writel((readl(PHY_BASE + 0x114) & 0xffffff8f), 0x114); // ADDR:9’h045
+	phy_writel(0x0d, INNO_CHANNEL_EN);                                                 // ADDR:9’h000
+	phy_writel(0x6, INNO_CWL);                                                         // ADDR:9’h007
+	phy_writel(0x8, INNO_CL);                                                          // ADDR:9’h005
 #else
-	phy_writel(0x11, INNO_MEM_CFG);                           // ADDR:9’h001 MEMSEL  =  DDR2  ,    BURSEL = burst8
+	phy_writel(0x11, INNO_MEM_CFG);                           // ADDR:9’h001 MEMSEL = DDR2, BURSEL = burst8
 	phy_writel(0x0d, INNO_CHANNEL_EN);                        // ADDR:9’h000
 	phy_writel(((DDRP_MR0_VALUE & 0xf0) >> 4) - 1, INNO_CWL); // ADDR:9’h007
 	reg = ((DDRP_MR0_VALUE & 0xf0) >> 4);
@@ -355,15 +361,15 @@ void ddr_inno_phy_init()
 	writel(0x0a, REG_DDR_CTRL);
 
 #ifdef CONFIG_DDR_TYPE_DDR3
-	writel((0x08 << 12) | 0x211,REG_DDR_LMR);
-	debug("REG_DDR_LMR: %x\n",readl(REG_DDR_LMR));
+	writel((0x08 << 12) | 0x211, REG_DDR_LMR);
+	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
 	writel(0, REG_DDR_LMR);
 
 	writel(0x311, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	writel(0,REG_DDR_LMR);
+	writel(0, REG_DDR_LMR);
 
-	writel((0x6 << 12) | 0x111,REG_DDR_LMR); // 0x84
+	writel((0x6 << 12) | 0x111, REG_DDR_LMR); // 0x84
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
 	writel(0, REG_DDR_LMR);
 
@@ -418,9 +424,9 @@ void ddr_inno_phy_init()
 
 #endif
 #if 0
-	writel(0x19,REG_DDR_LMR);
+	writel(0x19, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	writel(0,REG_DDR_LMR);
+	writel(0, REG_DDR_LMR);
 #endif
 
 #ifdef CONFIG_DDR_TYPE_DDR3
@@ -465,8 +471,8 @@ void ddr_inno_phy_init()
 
 void phy_dqs_delay(int delay_l, int delay_h)
 {
-	writel(delay_l,T31_DQS_DELAY_L);
-	writel(delay_h,T31_DQS_DELAY_H);
+	writel(delay_l, T31_DQS_DELAY_L);
+	writel(delay_h, T31_DQS_DELAY_H);
 
 	debug("T31_DQS_DELAY_L: %x\n", readl(T31_DQS_DELAY_L));
 	debug("T31_DQS_DELAY_H: %x\n", readl(T31_DQS_DELAY_H));
@@ -475,7 +481,7 @@ void phy_dqs_delay(int delay_l, int delay_h)
  * Name     : phy_calibration()
  * Function : control the RX DQS window delay to the DQS
  *
- * a_low_8bit_delay		= al8_2x * clk_2x + al8_1x * clk_1x;
+ * a_low_8bit_delay	= al8_2x * clk_2x + al8_1x * clk_1x;
  * a_high_8bit_delay	= ah8_2x * clk_2x + ah8_1x * clk_1x;
  *
  * */
@@ -495,7 +501,7 @@ void phy_calibration(int al8_1x, int ah8_1x, int al8_2x, int ah8_2x)
 	while (0x3 != readl((PHY_BASE + 0xcc)))
 		;
 	debug("T31_cc: %x\n", readl((PHY_BASE + 0xcc)));
-	phy_writel(0xa0,INNO_TRAINING_CTRL);
+	phy_writel(0xa0, INNO_TRAINING_CTRL);
 	debug("INNO_TRAINING_CTRL 3: %x\n", phy_readl(INNO_TRAINING_CTRL));
 	debug("T31_118: %x\n", readl((PHY_BASE + 0x118)));
 	debug("T31_158: %x\n", readl((PHY_BASE + 0x158)));
@@ -586,7 +592,7 @@ void sdram_init(void)
 	/* DDR Controller init*/
 	ddr_controller_init();
 	/* DDRC address remap configure*/
-	mem_remap();											// open remap function
+	mem_remap();						// open remap function
 	ddr_writel(DDRC_CTRL_VALUE & 0xffff07ff, DDRC_CTRL);	// must modify after opening remap function
 
 	ddr_writel(ddr_readl(DDRC_STATUS) & ~DDRC_DSTATUS_MISS, DDRC_STATUS);

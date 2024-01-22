@@ -302,11 +302,11 @@ static void tftp_complete(void)
 #endif
 	time_start = get_timer(time_start);
 	if (time_start > 0) {
-		puts("\n\t ");	/* Line up with "Loading: " */
+		puts("\nTFTP:  ");	/* Line up with "Loading: " */
 		print_size(NetBootFileXferSize /
 			time_start * 1000, "/s");
 	}
-	puts("\ndone\n");
+	puts("... done\n");
 	net_set_state(NETLOOP_SUCCESS);
 }
 
@@ -737,8 +737,8 @@ void TftpStart(enum proto_t protocol)
 		}
 	}
 
-	printf("Using %s device\n", eth_get_name());
-	printf("TFTP %s server %pI4; our IP address is %pI4",
+	printf("TFTP:  Using %s device\n", eth_get_name());
+	printf("TFTP:  TFTP %s server %pI4; our IP address is %pI4",
 #ifdef CONFIG_CMD_TFTPPUT
 	       protocol == TFTPPUT ? "to" : "from",
 #else
@@ -757,7 +757,7 @@ void TftpStart(enum proto_t protocol)
 	}
 	putc('\n');
 
-	printf("Filename '%s'.", tftp_filename);
+	printf("TFTP:  Filename '%s'.", tftp_filename);
 
 	if (NetBootFileSize) {
 		printf(" Size is 0x%x Bytes = ", NetBootFileSize<<9);
@@ -777,8 +777,8 @@ void TftpStart(enum proto_t protocol)
 	} else
 #endif
 	{
-		printf("Load address: 0x%lx\n", load_addr);
-		puts("Loading: *\b");
+		printf("TFTP:  Load address: 0x%lx\n", load_addr);
+		puts("TFTP:  Loading: *\b");
 		TftpState = STATE_SEND_RRQ;
 	}
 

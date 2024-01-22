@@ -26,14 +26,15 @@ ifndef CONFIG_SPL_BUILD
 HOSTCPPFLAGS = -I$(TOPDIR)/include -DUSE_HOSTCC
 
 DDR-$(CONFIG_DDR_PARAMS_CREATOR)	+= ddr_params_creator ddr_reg_values.h
-MBR-$(CONFIG_MBR_CREATOR)		+= mbr_creator mbr.bin
-GPT-$(CONFIG_GPT_CREATOR)		+= mbr-gpt.bin
-SPI-$(CONFIG_SPI_SPL_CHECK)		+= spi_checksum
-SPI-$(CONFIG_SFC_NAND)         	+= sfc_timing_val.h
-SPI-$(CONFIG_SFC_NAND)         	+= sfc_nand_params.h
+MBR-$(CONFIG_MBR_CREATOR)			+= mbr_creator mbr.bin
+GPT-$(CONFIG_GPT_CREATOR)			+= mbr-gpt.bin
+SPI-$(CONFIG_SPI_SPL_CHECK)			+= spi_checksum
+SPI-$(CONFIG_SFC_NAND)				+= sfc_timing_val.h
+SPI-$(CONFIG_SFC_NAND)				+= sfc_nand_params.h
 SPL-$(CONFIG_SPL_PARAMS_FIXER)		+= spl_params_fixer
-#IMG2RLE-$(CONFIG_RLE_LCD_LOGO)          += img2rle
-#BIN2ARRAY-$(CONFIG_RLE_LCD_LOGO)        += bin2array
+SPL-$(CONFIG_SPL_PAD_TO_BLOCK)		+= spl_pad_to_block
+#IMG2RLE-$(CONFIG_RLE_LCD_LOGO)		+= img2rle
+#BIN2ARRAY-$(CONFIG_RLE_LCD_LOGO)	+= bin2array
 LOGO-$(CONFIG_RLE_LCD_LOGO) = $(RLE_BOOT_LOGO_H)
 ifndef CONFIG_BATTERYDET_LED
 CHARGE_LOGO-$(CONFIG_CMD_BATTERYDET) = $(RLE_CHARGE_LOGO_H)
@@ -117,6 +118,10 @@ $(obj)sfc_timing_params: sfc_timing_params.c
 	$(HOSTCC) $(HOSTCFLAGS_NOPED) $(HOSTLDFLAGS) -o $@ $^
 	$(HOSTSTRIP) $@
 
+$(obj)spl_pad_to_block:	spl_pad_to_block.c
+	$(HOSTCC) $(HOSTCFLAGS_NOPED) $(HOSTLDFLAGS) -o $@ $^
+	$(HOSTSTRIP) $@
+
 $(obj)sfc_nand_params: nand_device/
 	make -C $<
 
@@ -133,6 +138,16 @@ clean:
 
 distclean:	clean
 
+else
+LIB	= $(obj)lib_ddr_params_creator.o
+
+COBJS	:= ddr_params_creator.o
+
+SRCS	:= $(SOBJS:.o=.S) $(COBJS:.o=.c)
+OBJS	:= $(addprefix $(obj),$(SOBJS) $(COBJS))
+
+$(LIB):	$(obj).depend $(OBJS) $(SOBJS)
+	$(call cmd_link_o_target, $(OBJS))
 endif
 
 #########################################################################

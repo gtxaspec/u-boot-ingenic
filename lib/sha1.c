@@ -36,7 +36,7 @@
 #include <string.h>
 #endif /* USE_HOSTCC */
 #include <watchdog.h>
-#include "../include/sha1.h"
+#include "sha1.h"
 
 /*
  * 32-bit integer manipulation macros (big endian)

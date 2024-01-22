@@ -102,100 +102,100 @@ struct pwm {
 #define TCU_TCSR_RTC_EN			(1 << 1)
 #define TCU_TCSR_PCK_EN			(1 << 0)
 
-#define TCU_TER_TCEN5			(1 << 5) //T31 delete
-#define TCU_TER_TCEN4			(1 << 4) //T31 delete
+#define TCU_TER_TCEN5			(1 << 5)
+#define TCU_TER_TCEN4			(1 << 4)
 #define TCU_TER_TCEN3			(1 << 3)
 #define TCU_TER_TCEN2			(1 << 2)
 #define TCU_TER_TCEN1			(1 << 1)
 #define TCU_TER_TCEN0			(1 << 0)
 
-#define TCU_TESR_TCST5			(1 << 5) //T31 delete
-#define TCU_TESR_TCST4			(1 << 4) //T31 delete
+#define TCU_TESR_TCST5			(1 << 5)
+#define TCU_TESR_TCST4			(1 << 4)
 #define TCU_TESR_TCST3			(1 << 3)
 #define TCU_TESR_TCST2			(1 << 2)
 #define TCU_TESR_TCST1			(1 << 1)
 #define TCU_TESR_TCST0			(1 << 0)
 
-#define TCU_TECR_TCCL5			(1 << 5) //T31 delete
-#define TCU_TECR_TCCL4			(1 << 4) //T31 delete
+#define TCU_TECR_TCCL5			(1 << 5)
+#define TCU_TECR_TCCL4			(1 << 4)
 #define TCU_TECR_TCCL3			(1 << 3)
 #define TCU_TECR_TCCL2			(1 << 2)
 #define TCU_TECR_TCCL1			(1 << 1)
 #define TCU_TECR_TCCL0			(1 << 0)
 
-#define TCU_TFR_HFLAG5			(1 << 21) //T31 delete
-#define TCU_TFR_HFLAG4			(1 << 20) //T31 delete
+#define TCU_TFR_HFLAG5			(1 << 21)
+#define TCU_TFR_HFLAG4			(1 << 20)
 #define TCU_TFR_HFLAG3			(1 << 19)
 #define TCU_TFR_HFLAG2			(1 << 18)
 #define TCU_TFR_HFLAG1			(1 << 17)
 #define TCU_TFR_HFLAG0			(1 << 16)
-#define TCU_TFR_FFLAG5			(1 << 5) //T31 delete
-#define TCU_TFR_FFLAG4			(1 << 4) //T31 delete
+#define TCU_TFR_FFLAG5			(1 << 5)
+#define TCU_TFR_FFLAG4			(1 << 4)
 #define TCU_TFR_FFLAG3			(1 << 3)
 #define TCU_TFR_FFLAG2			(1 << 2)
 #define TCU_TFR_FFLAG1			(1 << 1)
 #define TCU_TFR_FFLAG0			(1 << 0)
 
-#define TCU_TFSR_HFLAG5			(1 << 21) //T31 delete
-#define TCU_TFSR_HFLAG4			(1 << 20) //T31 delete
+#define TCU_TFSR_HFLAG5			(1 << 21)
+#define TCU_TFSR_HFLAG4			(1 << 20)
 #define TCU_TFSR_HFLAG3			(1 << 19)
 #define TCU_TFSR_HFLAG2			(1 << 18)
 #define TCU_TFSR_HFLAG1			(1 << 17)
 #define TCU_TFSR_HFLAG0			(1 << 16)
-#define TCU_TFSR_FFLAG5			(1 << 5) //T31 delete
-#define TCU_TFSR_FFLAG4			(1 << 4) //T31 delete
+#define TCU_TFSR_FFLAG5			(1 << 5)
+#define TCU_TFSR_FFLAG4			(1 << 4)
 #define TCU_TFSR_FFLAG3			(1 << 3)
 #define TCU_TFSR_FFLAG2			(1 << 2)
 #define TCU_TFSR_FFLAG1			(1 << 1)
 #define TCU_TFSR_FFLAG0			(1 << 0)
 
-#define TCU_TFCR_HFLAG5			(1 << 21) //T31 delete
-#define TCU_TFCR_HFLAG4			(1 << 20) //T31 delete
+#define TCU_TFCR_HFLAG5			(1 << 21)
+#define TCU_TFCR_HFLAG4			(1 << 20)
 #define TCU_TFCR_HFLAG3			(1 << 19)
 #define TCU_TFCR_HFLAG2			(1 << 18)
 #define TCU_TFCR_HFLAG1			(1 << 17)
 #define TCU_TFCR_HFLAG0			(1 << 16)
-#define TCU_TFCR_FFLAG5			(1 << 5) //T31 delete
-#define TCU_TFCR_FFLAG4			(1 << 4) //T31 delete
+#define TCU_TFCR_FFLAG5			(1 << 5)
+#define TCU_TFCR_FFLAG4			(1 << 4)
 #define TCU_TFCR_FFLAG3			(1 << 3)
 #define TCU_TFCR_FFLAG2			(1 << 2)
 #define TCU_TFCR_FFLAG1			(1 << 1)
 #define TCU_TFCR_FFLAG0			(1 << 0)
 
-#define TCU_TMR_HMASK5			(1 << 21) //T31 delete
-#define TCU_TMR_HMASK4			(1 << 20) //T31 delete
+#define TCU_TMR_HMASK5			(1 << 21)
+#define TCU_TMR_HMASK4			(1 << 20)
 #define TCU_TMR_HMASK3			(1 << 19)
 #define TCU_TMR_HMASK2			(1 << 18)
 #define TCU_TMR_HMASK1			(1 << 17)
 #define TCU_TMR_HMASK0			(1 << 16)
-#define TCU_TMR_FMASK5			(1 << 5) //T31 delete
-#define TCU_TMR_FMASK4			(1 << 4) //T31 delete
+#define TCU_TMR_FMASK5			(1 << 5)
+#define TCU_TMR_FMASK4			(1 << 4)
 #define TCU_TMR_FMASK3			(1 << 3)
 #define TCU_TMR_FMASK2			(1 << 2)
 #define TCU_TMR_FMASK1			(1 << 1)
 #define TCU_TMR_FMASK0			(1 << 0)
 
-#define TCU_TMSR_HMST5			(1 << 21) //T31 delete
-#define TCU_TMSR_HMST4			(1 << 20) //T31 delete
+#define TCU_TMSR_HMST5			(1 << 21)
+#define TCU_TMSR_HMST4			(1 << 20)
 #define TCU_TMSR_HMST3			(1 << 19)
 #define TCU_TMSR_HMST2			(1 << 18)
 #define TCU_TMSR_HMST1			(1 << 17)
 #define TCU_TMSR_HMST0			(1 << 16)
-#define TCU_TMSR_FMST5			(1 << 5) //T31 delete
-#define TCU_TMSR_FMST4			(1 << 4) //T31 delete
+#define TCU_TMSR_FMST5			(1 << 5)
+#define TCU_TMSR_FMST4			(1 << 4)
 #define TCU_TMSR_FMST3			(1 << 3)
 #define TCU_TMSR_FMST2			(1 << 2)
 #define TCU_TMSR_FMST1			(1 << 1)
 #define TCU_TMSR_FMST0			(1 << 0)
 
-#define TCU_TMCR_HMCL5			(1 << 21) //T31 delete
-#define TCU_TMCR_HMCL4			(1 << 20) //T31 delete
+#define TCU_TMCR_HMCL5			(1 << 21)
+#define TCU_TMCR_HMCL4			(1 << 20)
 #define TCU_TMCR_HMCL3			(1 << 19)
 #define TCU_TMCR_HMCL2			(1 << 18)
 #define TCU_TMCR_HMCL1			(1 << 17)
 #define TCU_TMCR_HMCL0			(1 << 16)
-#define TCU_TMCR_FMCL5			(1 << 5) //T31 delete
-#define TCU_TMCR_FMCL4			(1 << 4) //T31 delete
+#define TCU_TMCR_FMCL5			(1 << 5)
+#define TCU_TMCR_FMCL4			(1 << 4)
 #define TCU_TMCR_FMCL3			(1 << 3)
 #define TCU_TMCR_FMCL2			(1 << 2)
 #define TCU_TMCR_FMCL1			(1 << 1)
@@ -203,8 +203,8 @@ struct pwm {
 
 #define TCU_TSR_WDTS			(1 << 16)
 #define TCU_TSR_OSTS			(1 << 15)
-#define TCU_TSR_STOP5			(1 << 5) //T31 delete
-#define TCU_TSR_STOP4			(1 << 4) //T31 delete
+#define TCU_TSR_STOP5			(1 << 5)
+#define TCU_TSR_STOP4			(1 << 4)
 #define TCU_TSR_STOP3			(1 << 3)
 #define TCU_TSR_STOP2			(1 << 2)
 #define TCU_TSR_STOP1			(1 << 1)
@@ -212,8 +212,8 @@ struct pwm {
 
 #define TCU_TSSR_WDTSS			(1 << 16)
 #define TCU_TSSR_OSTSS			(1 << 15)
-#define TCU_TSSR_STPS5			(1 << 5) //T31 delete
-#define TCU_TSSR_STPS4			(1 << 4) //T31 delete
+#define TCU_TSSR_STPS5			(1 << 5)
+#define TCU_TSSR_STPS4			(1 << 4)
 #define TCU_TSSR_STPS3			(1 << 3)
 #define TCU_TSSR_STPS2			(1 << 2)
 #define TCU_TSSR_STPS1			(1 << 1)
@@ -221,8 +221,8 @@ struct pwm {
 
 #define TCU_TSSR_WDTSC			(1 << 16)
 #define TCU_TSSR_OSTSC			(1 << 15)
-#define TCU_TSSR_STPC5			(1 << 5) //T31 delete
-#define TCU_TSSR_STPC4			(1 << 4) //T31 delete
+#define TCU_TSSR_STPC5			(1 << 5)
+#define TCU_TSSR_STPC4			(1 << 4)
 #define TCU_TSSR_STPC3			(1 << 3)
 #define TCU_TSSR_STPC2			(1 << 2)
 #define TCU_TSSR_STPC1			(1 << 1)

@@ -339,6 +339,26 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	/* relocate environment function pointers etc. */
 	env_relocate();
 
+	/* Once the environment has been setup, generate a random mac address, and save it */
+	uchar enetaddr[6];
+
+	#ifdef CONFIG_RANDOM_MACADDR
+	// Check if a valid ethaddr is already set
+	if (!eth_getenv_enetaddr("ethaddr", enetaddr)) {
+		// No valid ethaddr set, generate and set a new one
+		eth_random_enetaddr(enetaddr);
+		if (eth_setenv_enetaddr("ethaddr", enetaddr)) {
+			printf("Net:   Failed to set ethernet address\n");
+		} else {
+			printf("Net:   Random MAC address set successfully\n");
+			saveenv();
+		}
+	} else {
+		// A valid ethaddr is already set, so no need to set it again
+		printf("Net:   HW Ethernet address exists\n");
+	}
+	#endif
+
 #if defined(CONFIG_PCI)
 	/*
 	 * Do pci configuration
@@ -383,29 +403,52 @@ extern void board_usb_init(void);
 	bb_miiphy_init();
 #endif
 #if defined(CONFIG_CMD_NET)
-	/*puts("Net:   ");
-	eth_initialize(gd->bd); */
-
+	/*
+	puts("Net:   ");
+	eth_initialize(gd->bd);
+	*/
 	int ret = 0;
-	#ifdef CONFIG_USB_ETHER_ASIX
-		if (0 == strncmp(getenv("ethact"), "asx", 3)) {
-			run_command("usb start", 0);
+	char* eth_disable = getenv("eth_disable");
+
+#ifdef CONFIG_USB_ETHER_ASIX
+	char* ethact = getenv("ethact");
+	if (ethact && strncmp(ethact, "asx", 3) == 0) {
+		if (run_command("usb start", 0) != 0) {
+			printf("USB start failed\n");
 		}
-	#endif
-		ret += jz_net_initialize(gd->bd);
-		if (ret < 0){
-			// GPIOs to be set after net initialization fails
-			printf("GPIO:  gpio_default_net \n");
+	}
+#endif
+
+	// Check if eth_disable is set to "true"
+	if (eth_disable && strcmp(eth_disable, "true") == 0) {
+		// eth_disable is true, so skip network initialization
+		printf("Net:   Network disabled\n");
+		// Handle GPIO settings since network init is skipped
+		handle_gpio_settings("gpio_default_net");
+	} else {
+		// Attempt network initialization
+		ret = jz_net_initialize(gd->bd);
+		if (ret < 0) {
+			debug("Net:   Network initialization failed.\n");
+			// Network initialization failed, handle GPIO settings here
 			handle_gpio_settings("gpio_default_net");
 		}
+		// Note: jz_net_initialize succeeds here
+	}
 #endif
 
 /* User defined GPIO set */
-handle_gpio_settings("gpio_set");
+handle_gpio_settings("gpio_user");
 /* User defined MOTOR GPIO set */
 handle_gpio_settings("gpio_motor_v");
 handle_gpio_settings("gpio_motor_h");
 
+// Try to get the value of the 'sd_disable' environment variable
+char* sd_disable = getenv("sd_disable");
+
+// Check if 'sd_disable' was found and compare its value
+if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
+	// The environment variable 'sd_disable' exists and its value is "false"
 #ifdef CONFIG_AUTO_UPDATE
 	printf("Autoupdate... \n");
 	run_command("sdupdate",0);
@@ -413,6 +456,10 @@ handle_gpio_settings("gpio_motor_h");
 #ifdef CONFIG_CMD_SDSTART
 	run_command("sdstart",0);
 #endif
+} else {
+	// 'sd_disable' does not exist or is not "true"
+	printf("MMC:   SD card disabled\n");
+}
 
 	/* main_loop() can return to retry autoboot, if so just run it again. */
 	for (;;)

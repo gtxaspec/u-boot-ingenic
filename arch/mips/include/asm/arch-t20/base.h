@@ -58,6 +58,7 @@
 #define HARB2_BASE	0xb3400000
 #define NEMC_BASE	0xb3410000
 #define PDMA_BASE	0xb3420000
+#define SFC_BASE	0xb3440000
 #define MSC0_BASE	0xb3450000
 #define MSC1_BASE	0xb3460000
 #define MSC2_BASE	0xb3470000
@@ -111,7 +112,4 @@
 #define NEMC_CS5_BASE	0xb7000000
 #define NEMC_CS6_BASE	0xb6000000
 
-#define AUX_BASE	0xb32a0000
-
-#define SFC_BASE	0xb3440000
 #endif /* __BASE_H__ */

@@ -126,7 +126,9 @@ static void sfc_controler_init(void)
 {
 	unsigned int tmp;
 
+#ifndef CONFIG_FPGA
 	clk_set_rate(SSI, CONFIG_SFC_NAND_RATE);
+#endif
 
 	tmp = sfc_readl(SFC_GLB);
 	tmp &= ~(GLB_THRESHOLD_MSK);
@@ -241,7 +243,7 @@ static int spinand_probe_id(struct jz_sfc *sfc)
 	}
 	if(i == sizeof(addrlen)) {
 		debug("ERR: don`t support this kind of nand device, \
-			please add it\n");
+			please add it %x %x\n", id[0], id[1]);
 		return -ENODEV;
 	}
 	return 0;

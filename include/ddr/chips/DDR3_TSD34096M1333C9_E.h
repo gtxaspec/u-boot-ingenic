@@ -36,7 +36,7 @@
 #define DDR_tRRD MAX(4, 7500) /* ACTIVE bank A to ACTIVE bank B command period. DDR3 - tCK*/
 #define DDR_tRTP MAX(4, 7500) /* READ to PRECHARGE command period. DDR3 spec no. 7.5ns*/
 #define DDR_tWTR MAX(4, 7500) /* WRITE to READ command delay. DDR3 spec no. 7.5 ns*/
-	 
+
 /*
  * DDR3 controller timing2 register
  */
@@ -53,7 +53,7 @@
 #define DDR_tCKE   	MAX(3, 7500)	/* CKE minimum pulse width, DDR3 spec no, tCK */
 #define DDR_tRL 	(DDR_tAL + DDR_CL)	/* DDR3: Read Latency = tAL + tCL */
 #define DDR_tWL 	(DDR_tAL + DDR_tCWL)	/* DDR3: Write Latency = tAL + tCWL */
-#define DDR_tRDLAT	(DDR_tRL - 2)	
+#define DDR_tRDLAT	(DDR_tRL - 2)
 #define DDR_tWDLAT	(DDR_tWL - 1)
 #define DDR_tRTW 	(DDR_tRL + DDR_tCCD + 2 - DDR_tWL)	/* Read to Write delay */
 #define DDR_tCKSRE 	MAX(5, 10000) /* Valid Clock Requirement after Self Refresh Entry or Power-Down Entry */
@@ -68,7 +68,7 @@
 /*
  * DDR3 controller refcnt register
  */
-#define DDR_tREFI   7800	/* Refresh period: 64ms / 32768 = 1.95 us , 2 ^ 15 = 32768 */  
+#define DDR_tREFI   7800	/* Refresh period: 64ms / 32768 = 1.95 us , 2 ^ 15 = 32768 */
 #define DDR_CLK_DIV 1    	/* Clock Divider. auto refresh
 			  *	cnt_clk = memclk/(16*(2^DDR_CLK_DIV))
 			  */

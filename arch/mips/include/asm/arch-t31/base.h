@@ -30,16 +30,16 @@
 #define HARB0_BASE	0xb3000000
 #define DDRC_BASE	0xb34f0000
 #define DDR_PHY_OFFSET	(-0x4e0000 + 0x1000)
-#define X2D_BASE	0xb3030000 // T31 delete
-#define GPU_BASE	0xb3040000 // T31 delete
+#define X2D_BASE	0xb3030000
+#define GPU_BASE	0xb3040000
 #define LCDC0_BASE	0xb3050000
-#define CIM_BASE	0xb3060000 // T31 delete
-#define COMPRESS_BASE	0xb3070000 // T31 delete
+#define CIM_BASE	0xb3060000
+#define COMPRESS_BASE	0xb3070000
 #define IPU0_BASE	0xb3080000
-#define GPVLC_BASE	0xb3090000 // T31 delete
+#define GPVLC_BASE	0xb3090000
 /*#define LCDC1_BASE	0xb30a0000*/
-#define IPU1_BASE	0xb30b0000 // T31 delete
-#define MONITOR_BASE	0xb30f0000 // T31 delete
+#define IPU1_BASE	0xb30b0000
+#define MONITOR_BASE	0xb30f0000
 
 /* AHB1 BUS Devices Base */
 #define SCH_BASE	0xb3200000
@@ -62,20 +62,20 @@
 #define SFC_BASE	0xb3440000
 #define MSC0_BASE	0xb3450000
 #define MSC1_BASE	0xb3460000
-#define MSC2_BASE	0xb3470000 // T31 delete
+#define MSC2_BASE	0xb3470000
 //#define GPS_BASE	0xb3480000
-#define HASH_BASE	0xb3480000 // hash
-#define EHCI_BASE	0xb3490000 // T31 delete
-#define OHCI_BASE	0xb34a0000 // T31 delete
-#define ETHC_BASE	0xb34b0000 // gmac
-#define BCH_BASE	0xb34d0000 // T31 delete
-#define TSSI0_BASE	0xb34e0000 // T31 delete
-#define TSSI1_BASE	0xb34f0000 // T31 delete
+#define HASH_BASE	0xb3480000
+#define EHCI_BASE	0xb3490000
+#define OHCI_BASE	0xb34a0000
+#define ETHC_BASE	0xb34b0000
+#define BCH_BASE	0xb34d0000
+#define TSSI0_BASE	0xb34e0000
+#define TSSI1_BASE	0xb34f0000
 #define OTG_BASE	0xb3500000
 #define EFUSE_BASE	0xb3540000
 
 #define OST_BASE	0xb2000000
-#define HDMI_BASE	0xb0180000 // T31 delete
+#define HDMI_BASE	0xb0180000
 
 /* APB BUS Devices Base */
 #define CPM_BASE	0xb0000000
@@ -84,31 +84,31 @@
 #define RTC_BASE	0xb0003000
 #define GPIO_BASE	0xb0010000
 #define AIC0_BASE	0xb0020000
-//#define AIC1_BASE	0xb0021000 //codec
-#define CODEC_BASE	0xb0021000 //codec
+//#define AIC1_BASE	0xb0021000
+#define CODEC_BASE	0xb0021000
 #define UART0_BASE	0xb0030000
 #define UART1_BASE	0xb0031000
 #define UART2_BASE	0xb0032000
-#define UART3_BASE	0xb0033000 // T31 delete
-//#define UART4_BASE	0xb0034000 // T31 delete
-#define DMIC_BASE	0xb0034000 // T31 add
-#define SSC_BASE	0xb0040000 // ssi_slv
+#define UART3_BASE	0xb0033000
+//#define UART4_BASE	0xb0034000
+#define DMIC_BASE	0xb0034000
+#define SSC_BASE	0xb0040000
 #define SSI0_BASE	0xb0043000
 #define SSI1_BASE	0xb0044000
-#define I2C0_BASE	0xb0050000 // smb0
-#define I2C1_BASE	0xb0051000 // smb1
-#define I2C2_BASE	0xb0052000 // T31 delete
-#define I2C3_BASE	0xb0053000 // T31 delete
-#define I2C4_BASE	0xb0054000 // T31 delete
-//#define KMC_BASE	0xb0060000 // usb-phy
-#define USBPHY_BASE	0xb0060000 // usb-phy
+#define I2C0_BASE	0xb0050000
+#define I2C1_BASE	0xb0051000
+#define I2C2_BASE	0xb0052000
+#define I2C3_BASE	0xb0053000
+#define I2C4_BASE	0xb0054000
+//#define KMC_BASE	0xb0060000
+#define USBPHY_BASE	0xb0060000
 #define DES_BASE	0xb0061000
 #define SADC_BASE	0xb0070000
-#define PCM0_BASE	0xb0071000 // T31 delete
-//#define OWI_BASE	0xb0072000 //DTRNG
-#define DTRNG_BASE	0xb0072000 // DTRNG
-#define PCM1_BASE	0xb0074000 // T31 delete
-#define WDT_BASE	0xb0002000 // TCU == WDT
+#define PCM0_BASE	0xb0071000
+//#define OWI_BASE	0xb0072000
+#define DTRNG_BASE	0xb0072000
+#define PCM1_BASE	0xb0074000
+#define WDT_BASE	0xb0002000
 
 /* NAND CHIP Base Address*/
 #define NEMC_CS1_BASE	0xbb000000

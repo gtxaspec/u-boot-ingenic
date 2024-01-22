@@ -402,7 +402,7 @@ static int jz_init(struct eth_device* dev, bd_t * bd)
 
 	memset(tx_buff, 0, 2048 * NUM_TX_DESCS);
 
-	printf("jz_init......\n");
+	printf("ETH:   jz4775-9161 driver init\n");
 
 
 	/* init global pointers */
@@ -427,10 +427,10 @@ static int jz_init(struct eth_device* dev, bd_t * bd)
 #if 1
 	phy_id = synopGMAC_search_phy(gmacdev);
 	if (phy_id >= 0) {
-		printf("====>found PHY %d\n", phy_id);
+		printf("ETH:   PHY found %d\n", phy_id);
 		gmacdev->PhyBase = phy_id;
 	} else {
-		printf("====>PHY not found!\n");
+		printf("ETH:   PHY not found!\n");
 	}
 #endif
 	synopGMAC_check_phy_init(gmacdev);
@@ -482,7 +482,7 @@ static int jz_init(struct eth_device* dev, bd_t * bd)
 	synopGMAC_rx_enable(gmacdev);
 
 #endif
-	printf("GMAC init finish\n");
+	printf("ETH:   GMAC init finish\n");
 	return 1;
 }
 
@@ -500,18 +500,18 @@ static void jz_halt(struct eth_device *dev)
 }
 
 int check_phy_config(synopGMACdevice *gmacdev) {
-  printf("Net:   Searching for valid PHY\n");
-  int phy_id = synopGMAC_search_phy(gmacdev);
-  if (phy_id < 0) {
-      return -1; // PHY not found
-  }
+	printf("ETH:   Searching for valid PHY\n");
+	int phy_id = synopGMAC_search_phy(gmacdev);
+	if (phy_id < 0) {
+		return -1; // PHY not found
+	}
 
-  // Lets assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
-  if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
-      printf("Net:  Invalid PHY configuration (speed or duplex) detected!\n");
-      return -1; // Invalid configuration
-  }
-   return phy_id;
+	// Lets assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
+	if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
+	printf("ETH:  Invalid PHY configuration (speed or duplex) detected!\n");
+		return -1; // Invalid configuration
+	}
+	return phy_id;
 }
 
 extern s32 synopGMAC_read_phy_reg(u32 *RegBase,u32 PhyBase, u32 RegOffset, u16 * data);
@@ -524,10 +524,12 @@ int jz_net_initialize(bd_t *bis)
 	u16 data;
 	s32 status = -ESYNOPGMACNOERR;
 
-	clk_set_rate(MACPHY,50000000);
+#ifndef CONFIG_FPGA
+	clk_set_rate(MACPHY, CONFIG_GMAC_PHY_RATE);
 	udelay(50000);
+#endif
 
-#if defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21) || defined (CONFIG_T31)
+#if defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21) || defined (CONFIG_T23) || defined (CONFIG_T31)
 	/* initialize gmac gpio */
 	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x1EFC0);
 #endif
@@ -581,8 +583,8 @@ int jz_net_initialize(bd_t *bis)
 
 	phy_id = check_phy_config(gmacdev);
 	if (phy_id < 0) {
-		printf("Net:   Error: Invalid PHY configuration.\n");
-		printf("Net:   ====>PHY not found!\n");
+		printf("ETH:   Error: Invalid PHY configuration.\n");
+		printf("ETH:   PHY not found!\n");
 		return -1; // Return error
 	}
 
@@ -624,12 +626,12 @@ int jz_net_initialize(bd_t *bis)
 		}
 	}
 #else
-    phy_id = check_phy_config(gmacdev);
-    if (phy_id < 0) {
-      printf("Net:   Error: Invalid PHY configuration.\n");
-      printf("Net:   ====>PHY not found!\n");
-      return -1;  // Return error
-    }
+	phy_id = check_phy_config(gmacdev);
+	if (phy_id < 0) {
+		printf("ETH:   Error: Invalid PHY configuration.\n");
+		printf("ETH:   PHY not found!\n");
+		return -1;  // Return error
+	}
 #endif //CONFIG_NET_PHY_TYPE
 	udelay(100000);
 
@@ -677,32 +679,31 @@ static int do_ethphy(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	if (argc < 2)
 		goto usage;
 
-    cmd = argv[1];
-    --argc;
-    ++argv;
+	cmd = argv[1];
+	--argc;
+	++argv;
 
-    if (strcmp(cmd, "read") == 0) {
-        unsigned long addr;
-        char *endp;
-        if (argc != 2) {
-            ret = -1;
-            goto done;
-        }
-        addr = simple_strtoul(argv[1], &endp, 16);
-        if (*argv[1] == 0 || *endp != 0) {
-            ret = -1;
-            goto done;
-        }
-        u16 data;
-        s32 status = -ESYNOPGMACNOERR;
-        status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, &data);
-        if(status) {
-            printf("%s,%d:read mac register error\n", __func__, __LINE__);
-        }
-        printf("phy read 0x%x = 0x%x\n",
-                addr, data);
+	if (strcmp(cmd, "read") == 0) {
+		unsigned long addr;
+		char *endp;
+		if (argc != 2) {
+			ret = -1;
+			goto done;
+		}
+		addr = simple_strtoul(argv[1], &endp, 16);
+		if (*argv[1] == 0 || *endp != 0) {
+			ret = -1;
+			goto done;
+		}
+		u16 data;
+		s32 status = -ESYNOPGMACNOERR;
+		status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, &data);
+		if (status) {
+			printf("%s,%d:read mac register error\n", __func__, __LINE__);
+		}
+		printf("phy read 0x%x = 0x%x\n", addr, data);
 
-    } else if (strcmp(cmd, "reset") == 0) {
+	} else if (strcmp(cmd, "reset") == 0) {
 #ifdef CONFIG_GPIO_IP101G_RESET
 		printf("eth phy reset %d, %d\n", CONFIG_GPIO_IP101G_RESET, CONFIG_GPIO_IP101G_RESET_ENLEVEL);
 		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
@@ -712,38 +713,37 @@ static int do_ethphy(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
 		mdelay(10);
 #endif/*CONFIG_GPIO_IP101G_RESET*/
-    } else if (strcmp(cmd, "write") == 0) {
-        unsigned long addr;
-        u16 data;
-        char *endp;
-        if (argc != 3) {
-            ret = -1;
-            goto done;
-        }
-        addr = simple_strtoul(argv[1], &endp, 16);
-        if (*argv[1] == 0 || *endp != 0) {
-            ret = -1;
-            goto done;
-        }
-        data = simple_strtoul(argv[2], &endp, 16);
-        if (*argv[2] == 0 || *endp != 0) {
-            ret = -1;
-            goto done;
-        }
+	} else if (strcmp(cmd, "write") == 0) {
+		unsigned long addr;
+		u16 data;
+		char *endp;
+		if (argc != 3) {
+			ret = -1;
+			goto done;
+		}
+		addr = simple_strtoul(argv[1], &endp, 16);
+		if (*argv[1] == 0 || *endp != 0) {
+			ret = -1;
+			goto done;
+		}
+		data = simple_strtoul(argv[2], &endp, 16);
+		if (*argv[2] == 0 || *endp != 0) {
+			ret = -1;
+			goto done;
+		}
 
-        s32 status = -ESYNOPGMACNOERR;
-        printf("phy write 0x%x = 0x%x\n",
-                addr, data);
-        status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, data);
-        if(status) {
-            printf("%s,%d:write phy register error\n", __func__, __LINE__);
-        }
+		s32 status = -ESYNOPGMACNOERR;
+		printf("phy write 0x%x = 0x%x\n", addr, data);
+		status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, data);
+		if (status) {
+			printf("%s,%d:write phy register error\n", __func__, __LINE__);
+		}
 
-    } else {
-        ret = -1;
-        goto done;
-    }
-    return ret;
+	} else {
+		ret = -1;
+		goto done;
+	}
+	return ret;
 
 done:
 
@@ -755,7 +755,7 @@ usage:
 
 U_BOOT_CMD(
 	ethphy,	4,	1,	do_ethphy,
-    "ethphy contrl",
+	"ethphy contrl",
 	"\nethphy read addr\n"
 	"ethphy write addr data\n"
 );

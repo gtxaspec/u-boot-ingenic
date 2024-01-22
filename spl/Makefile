@@ -188,6 +188,9 @@ endif
 else
 $(obj)u-boot-spl.bin:	$(obj)u-boot-spl
 	$(OBJCOPY) $(OBJCFLAGS) -O binary $< $@
+ifdef CONFIG_SPL_PAD_TO_BLOCK
+	$(OBJTREE)/tools/ingenic-tools/spl_pad_to_block $@
+endif
 	$(OBJTREE)/tools/ingenic-tools/spi_checksum $@
 endif
 

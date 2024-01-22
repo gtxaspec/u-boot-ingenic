@@ -134,8 +134,8 @@
 
 /* MSC Interrupts Mask Register (MSC_IMASK) */
 
-#define MSC_IMASK_TIME_OUT_RES (1 << 9)
-#define MSC_IMASK_TIME_OUT_READ (1 << 8)
+#define MSC_IMASK_TIME_OUT_RES		(1 << 9)
+#define MSC_IMASK_TIME_OUT_READ		(1 << 8)
 #define	MSC_IMASK_SDIO			(1 << 7)
 #define	MSC_IMASK_TXFIFO_WR_REQ		(1 << 6)
 #define	MSC_IMASK_RXFIFO_RD_REQ		(1 << 5)
@@ -146,8 +146,8 @@
 
 /* MSC Interrupts Status Register (MSC_IREG) */
 
-#define MSC_IREG_TIME_OUT_RES (1 << 9)
-#define MSC_IREG_TIME_OUT_READ (1 << 8)
+#define MSC_IREG_TIME_OUT_RES		(1 << 9)
+#define MSC_IREG_TIME_OUT_READ		(1 << 8)
 #define	MSC_IREG_SDIO			(1 << 7)
 #define	MSC_IREG_TXFIFO_WR_REQ		(1 << 6)
 #define	MSC_IREG_RXFIFO_RD_REQ		(1 << 5)

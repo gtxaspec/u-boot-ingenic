@@ -49,6 +49,8 @@
 #include "jz_gpio/t21_gpio.c"
 #elif defined (CONFIG_T31)
 #include "jz_gpio/t31_gpio.c"
+#elif defined (CONFIG_T23)
+#include "jz_gpio/t23_gpio.c"
 #endif
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -92,27 +94,28 @@ void gpio_set_driver_strength(enum gpio_port n, unsigned int pins, int ds)
 	u32 step = 0x100;
 #endif
 	unsigned int base = GPIO_BASE + step * n;
-    int i = 0;
-    for (i = 0; i < sizeof(pins)*8; i++) {
-       if (pins&(0x1<<i)) {
-           if (2 == ds) {
-               writel(0x3<<((i%16)*2), base + (i<16?PXPDSLC:PXPDSHC));
-           } else if (4 == ds) {
-               writel(0x1<<((i%16)*2), base + (i<16?PXPDSLS:PXPDSHS));
-               writel(0x1<<((i%16)*2+1), base + (i<16?PXPDSLC:PXPDSHC));
-           } else if (8 == ds) {
-               writel(0x1<<((i%16)*2), base + (i<16?PXPDSLC:PXPDSHC));
-               writel(0x1<<((i%16)*2+1), base + (i<16?PXPDSLS:PXPDSHS));
-           } else if (12 == ds) {
-               writel(0x3<<((i%16)*2), base + (i<16?PXPDSLS:PXPDSHS));
-           }
-       }
-    }
+	int i = 0;
+	for (i = 0; i < sizeof(pins) * 8; i++) {
+		if (pins & (0x1 << i)) {
+			if (2 == ds) {
+				writel(0x3 << ((i % 16) * 2), base + (i < 16 ? PXPDSLC : PXPDSHC));
+			} else if (4 == ds) {
+				writel(0x1 << ((i % 16) * 2), base + (i < 16 ? PXPDSLS : PXPDSHS));
+				writel(0x1 << ((i % 16) * 2 + 1), base + (i < 16 ? PXPDSLC : PXPDSHC));
+			} else if (8 == ds) {
+				writel(0x1 << ((i % 16) * 2), base + (i < 16 ? PXPDSLC : PXPDSHC));
+				writel(0x1 << ((i % 16) * 2 + 1), base + (i < 16 ? PXPDSLS : PXPDSHS));
+			} else if (12 == ds) {
+				writel(0x3 << ((i % 16) * 2), base + (i < 16 ? PXPDSLS : PXPDSHS));
+			}
+		}
+	}
 }
 
 int gpio_request(unsigned gpio, const char *label)
 {
-	printf("GPIO:  Requesting GPIO %d = [%s]\n",gpio,label);
+	// Redundant print statement, lets silence it for now
+	// printf("GPIO:  Requesting GPIO %d = [%s]\n",gpio,label);
 	return gpio;
 }
 
@@ -323,8 +326,8 @@ void gpio_init(void)
 	for (i = 0; i < n; i++) {
 		g = &gpio_func[i];
 		gpio_set_func(g->port, g->func, g->pins);
-        if (g->driver_strength)
-            gpio_set_driver_strength(g->port, g->pins, g->driver_strength);
+		if (g->driver_strength)
+			gpio_set_driver_strength(g->port, g->pins, g->driver_strength);
 	}
 	g = &uart_gpio_func[CONFIG_SYS_UART_INDEX];
 #else
@@ -354,7 +357,7 @@ void dump_gpio_func( unsigned int gpio)
 	d = d | ((readl(base + PXMSK) >> pin) & 1) << 2;
 	d = d | ((readl(base + PXPAT1) >> pin) & 1) << 1;
 	d = d | ((readl(base + PXPAT0) >> pin) & 1) << 0;
-    printf("gpio[%d] fun %x\n",gpio,d);
+	printf("gpio[%d] fun %x\n",gpio,d);
 }
 
 #define MAX_GPIO_SET_LEN 256  // Define a maximum length for the GPIO settings string
@@ -390,13 +393,13 @@ void process_gpio_token(char* token) {
 
 void handle_gpio_settings(const char *env_var_name) {
 	if (!env_var_name) {
-		printf("GPIO:  Error: gpio_settings called without variable name. \n");
+		printf("GPIO:  Error: gpio_settings called without variable name\n");
 		return;
 	}
 
 	const char *env_gpio_str = getenv(env_var_name);
 	if (!env_gpio_str || *env_gpio_str == '\0') {
-		printf("GPIO:  %s: No GPIO env settings provided.\n", env_var_name);
+		printf("GPIO:  %s: No GPIO env settings provided\n", env_var_name);
 		return;
 	}
 
@@ -405,6 +408,9 @@ void handle_gpio_settings(const char *env_var_name) {
 	gpio_str_copy[MAX_GPIO_SET_LEN - 1] = '\0';
 
 	char *token = strtok(gpio_str_copy, " ");
+
+	printf("GPIO:  Loading %s\n", env_var_name);
+
 	while (token) {
 		if (strncmp(token, "gpio", 4) == 0) {
 			token = strtok(NULL, " ");

@@ -123,7 +123,7 @@ int usb_host_eth_scan(int mode)
 
 
 	if (mode == 1)
-		printf("       scanning usb for ethernet devices... ");
+		printf("USB:   scanning usb for ethernet devices... ");
 
 	old_async = usb_disable_asynch(1); /* asynch transfer not allowed */
 
@@ -157,7 +157,7 @@ int usb_host_eth_scan(int mode)
 	} /* for */
 
 	usb_disable_asynch(old_async); /* restore asynch value */
-	printf("%d Ethernet Device(s) found\n", usb_max_eth_dev);
+	printf("\nUSB:   %d Ethernet Device(s) found\n", usb_max_eth_dev);
 	if (usb_max_eth_dev > 0)
 		return 0;
 	return -1;

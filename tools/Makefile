@@ -173,9 +173,9 @@ HOSTSRCS += $(addprefix $(SRCTREE)/,$(EXT_OBJ_FILES-y:.o=.c))
 HOSTSRCS += $(addprefix $(SRCTREE)/tools/,$(OBJ_FILES-y:.o=.c))
 HOSTSRCS += $(addprefix $(SRCTREE)/lib/libfdt/,$(LIBFDT_OBJ_FILES-y:.o=.c))
 HOSTSRCS += $(addprefix $(SRCTREE)/lib/rsa/,$(RSA_OBJ_FILES-y:.o=.c))
-BINS	:= $(addprefix $(obj),$(sort $(BIN_FILES-y)))
-LIBFDT_OBJS	:= $(addprefix $(obj),$(LIBFDT_OBJ_FILES-y))
-RSA_OBJS	:= $(addprefix $(obj),$(RSA_OBJ_FILES-y))
+BINS := $(addprefix $(obj),$(sort $(BIN_FILES-y)))
+LIBFDT_OBJS := $(addprefix $(obj),$(LIBFDT_OBJ_FILES-y))
+RSA_OBJS := $(addprefix $(obj),$(RSA_OBJ_FILES-y))
 
 # We cannot check CONFIG_FIT_SIGNATURE here since it is not set on the host
 FIT_SIG_OBJ_FILES	:= image-sig.o
@@ -188,10 +188,11 @@ NOPEDOBJS := $(addprefix $(obj),$(NOPED_OBJ_FILES-y))
 # Use native tools and options
 # Define __KERNEL_STRICT_NAMES to prevent typedef overlaps
 #
-HOSTCPPFLAGS =	-idirafter $(SRCTREE)/include \
+HOSTCPPFLAGS =	-include $(SRCTREE)/include/libfdt_env.h \
+		-idirafter $(SRCTREE)/include \
 		-idirafter $(OBJTREE)/include2 \
 		-idirafter $(OBJTREE)/include \
-	        -I $(SRCTREE)/lib/libfdt \
+		-I $(SRCTREE)/lib/libfdt \
 		-I $(SRCTREE)/tools \
 		-DCONFIG_SYS_TEXT_BASE=$(CONFIG_SYS_TEXT_BASE) \
 		-DUSE_HOSTCC \

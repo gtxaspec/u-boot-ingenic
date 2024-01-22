@@ -50,14 +50,14 @@ struct medium_interface {
 };
 
 /* layout of the FLASH. ST = start address, ND = end address. */
-#define AU_FL_UBOOT_ST	0x0
-#define AU_FL_UBOOT_ND	0x40000
+#define AU_FL_UBOOT_ST		0x0
+#define AU_FL_UBOOT_ND		0x40000
 #define AU_FL_KERNEL_ST		0x50000
 #define AU_FL_KERNEL_ND		0x350000
 #define AU_FL_ROOTFS_ST		0x350000
 #define AU_FL_ROOTFS_ND		0xd50000
-#define AU_FL_FW_ST			0x000000
-#define AU_FL_FW_ND			0x1000000
+#define AU_FL_FW_ST		0x000000
+#define AU_FL_FW_ND		0x1000000
 
 static int au_stor_curr_dev; /* current device */
 
@@ -65,10 +65,10 @@ static int au_stor_curr_dev; /* current device */
 #define IDX_UBOOT	0
 #define IDX_KERNEL	1
 #define IDX_ROOTFS	2
-#define IDX_FW	3
+#define IDX_FW		3
 
 /* max. number of files which could interest us */
-#define AU_MAXFILES 4
+#define AU_MAXFILES	4
 
 /* pointers to file names */
 char *aufile[AU_MAXFILES] = {
@@ -204,7 +204,8 @@ static int au_check_header_valid(int idx, long nbytes)
 	return 0;
 }
 
-static int au_do_update(int idx, long sz) {
+static int au_do_update(int idx, long sz)
+{
 	image_header_t *hdr;
 	unsigned long start, len;
 	unsigned long write_len;
@@ -223,6 +224,7 @@ static int au_do_update(int idx, long sz) {
 		len = ntohl(hdr->ih_ep) - ntohl(hdr->ih_load);
 	}
 
+	/* erase the address range. */
 	printf("flash erase...\n");
 	rc = flash->erase(flash, start, len);
 	if (rc) {
@@ -245,6 +247,7 @@ static int au_do_update(int idx, long sz) {
 		write_len = ntohl(hdr->ih_size);
 	}
 
+	/* copy the data from RAM to FLASH */
 	printf("flash write...\n");
 	rc = flash->write(flash, start, write_len, pbuf);
 	if (rc) {
@@ -253,10 +256,18 @@ static int au_do_update(int idx, long sz) {
 	}
 
 	unmap_physmem(buf, len);
+
 	return 0;
 }
 
-static int update_to_flash(void) {
+/*
+ * If none of the update file(u-boot, kernel or rootfs) was found
+ * in the medium, return -1;
+ * If u-boot has been updated, return 1;
+ * Others, return 0;
+ */
+static int update_to_flash(void)
+{
 	int i = 0;
 	long sz;
 	int res;
@@ -330,7 +341,13 @@ static int update_to_flash(void) {
 	return image_found ? (uboot_updated ? 1 : 0) : -1;
 }
 
-int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
+/*
+ * This is called by board_init() after the hardware has been set up
+ * and is usable. Only if SPI flash initialization failed will this function
+ * return -1, otherwise it will return 0;
+ */
+int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
 	block_dev_desc_t *stor_dev;
 	int old_ctrlc;
 	int state = -1;
@@ -341,13 +358,13 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
 	} else if (argc == 2) {
 		LOAD_ID = simple_strtoul(argv[1], NULL, 16);
 		if (LOAD_ID < IDX_UBOOT || LOAD_ID > AU_MAXFILES) {
-			printf("Unsupported id!\n");
+			printf("Unsupported ID!\n");
 			return CMD_RET_USAGE;
 		}
 	} else if (argc == 4) {
 		LOAD_ID = simple_strtoul(argv[1], NULL, 16);
 		if (LOAD_ID < IDX_UBOOT || LOAD_ID > AU_MAXFILES) {
-			printf("Unsupported id!\n");
+			printf("Unsupported ID!\n");
 			return CMD_RET_USAGE;
 		}
 
@@ -358,7 +375,7 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
 			aufl_layout[LOAD_ID].start = start;
 			aufl_layout[LOAD_ID].end = end;
 		} else {
-			printf("Error address, use default\n");
+			printf("Wrong address, use default\n");
 		}
 	} else {
 		return CMD_RET_USAGE;
@@ -381,6 +398,10 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
 		return -1;
 	}
 
+	/*
+	 * make sure that we see CTRL-C
+	 * and save the old state
+	 */
 	old_ctrlc = disable_ctrlc(0);
 
 	flash = spi_flash_probe(0, 0, 1000000, 0x3);
@@ -391,7 +412,9 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
 
 	state = update_to_flash();
 
+	/* restore the old state */
 	disable_ctrlc(old_ctrlc);
+
 	LOAD_ID = -1;
 
 	if (state == 1) {

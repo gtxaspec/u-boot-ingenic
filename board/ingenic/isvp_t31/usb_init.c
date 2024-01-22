@@ -1,7 +1,6 @@
 #include <common.h>
 #include <usb.h>
 
-
 #define OPCR_SPENDN0		7
 #define SRBC_USB_SR		12
 #define USBPCR1_USB_SEL		28
@@ -31,8 +30,8 @@
 #define CPM_OPCR		0x10000024
 #define CPM_CPAPCR		0x10000010
 
-#define reg_set_bit(bit,reg)	*(volatile unsigned int *)(reg) |= 1UL<<(bit)
-#define reg_clr_bit(bit,reg)	*(volatile unsigned int *)(reg) &= ~(1UL<<(bit))
+#define reg_set_bit(bit,reg)	*(volatile unsigned int *)(reg) |= 1UL << (bit)
+#define reg_clr_bit(bit,reg)	*(volatile unsigned int *)(reg) &= ~(1UL << (bit))
 #define reg_wr(val,reg)		*(volatile unsigned int *)(reg) = (val)
 #define reg_rd(reg)		*(volatile unsigned int *)(reg)
 
@@ -41,13 +40,13 @@ int board_usb_init(void)
 	unsigned int usbpcr1,tmp;
 #if 0
 	/*set pins*/
-	reg_set_bit(17,0x10010260);
-	reg_set_bit(17,0x10010264);
+	reg_set_bit(17, 0x10010260);
+	reg_set_bit(17, 0x10010264);
 #endif
 	/*feed clock to otg*/
-	reg_clr_bit(3,CPM_CLKGR0);
-	/* reg_wr(0x0bcf5780,CPM_CLKGR0); */
-	/* reg_wr(0x0470890d,CPM_CPAPCR); */
+	reg_clr_bit(3, CPM_CLKGR0);
+	/* reg_wr(0x0bcf5780, CPM_CLKGR0); */
+	/* reg_wr(0x0470890d, CPM_CPAPCR); */
 	mdelay(100);
 	/* softreset otg */
 	reg_set_bit(SRBC_USB_SR, CPM_SRBC);

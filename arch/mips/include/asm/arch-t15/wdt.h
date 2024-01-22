@@ -26,10 +26,10 @@
 
 #define TCU_TSCR			0x3c
 
-#define WDT_TCSR			0xc
-#define WDT_TCER			0x4
 #define WDT_TDR				0x0
+#define WDT_TCER			0x4
 #define WDT_TCNT			0x8
+#define WDT_TCSR			0xc
 
 #define TSCR_WDTSC			(1 << 16)
 
