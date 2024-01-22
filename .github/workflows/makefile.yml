@@ -59,7 +59,19 @@ jobs:
           VERSION=${{ matrix.u-boot-version }}
           bash u-boot-ingenic.sh $VERSION
 
+      - name: Check if file exists
+        run: |
+            FILE=u-boot-ingenic/output/u-boot-${{ matrix.u-boot-version }}-universal.bin
+            if [[ ! -f "$FILE" ]]; then
+                echo "::error::File $FILE does not exist."
+                exit 1
+            fi
+        shell: bash
+        env:
+            TAG_NAME: latest
+
       - name: Upload ${{ matrix.u-boot-version }}
+        if: steps.check-file.outcome == 'success'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{env.TAG_NAME}}
