@@ -283,7 +283,7 @@ static int do_spi_flash_read_write(int argc, char * const argv[])
 		else
 			ret = spi_flash_write(flash, offset, len, buf);
 
-		printf("SF: %zu bytes @ %#x %s: %s\n", (size_t)len, (u32)offset,
+		printf("SF:    %zu bytes @ %#x %s: %s\n", (size_t)len, (u32)offset,
 			read ? "Read" : "Written", ret ? "ERROR" : "OK");
 	}
 
@@ -318,7 +318,7 @@ static int do_spi_flash_erase(int argc, char * const argv[])
 	}
 
 	ret = spi_flash_erase(flash, offset, len);
-	printf("SF: %zu bytes @ %#x Erased: %s\n", (size_t)len, (u32)offset,
+	printf("SF:    %zu bytes @ %#x Erased: %s\n", (size_t)len, (u32)offset,
 			ret ? "ERROR" : "OK");
 
 	return ret == 0 ? 0 : 1;
@@ -523,7 +523,7 @@ static int do_spi_flash(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[
 done:
 #ifdef PRINT_TIME
 	end = get_timer(0);
-	printf("--->%s spend %d ms\n",cmd,end - start);
+	printf("SF:    %s command completed in %d ms\n",cmd,end - start);
 #endif
 
 	if (ret != -1)

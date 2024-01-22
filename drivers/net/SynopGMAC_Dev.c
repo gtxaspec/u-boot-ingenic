@@ -204,11 +204,11 @@ s32 synopGMAC_reset (synopGMACdevice * gmacdev )
 		TR("DATA after Reset = %08x\n",data);
 		if (data & DmaResetOn) {
 			if(cnt > 10)
-				printf("Bus Mode Reg after reset: 0x%08x\n", data);
+				printf("ETH:   Bus Mode Reg after reset: 0x%08x\n", data);
 			udelay(1);
 			cnt ++;
 		} else{
-			printf("Bus Mode Reg after write: 0x%08x\n", data);
+			printf("ETH:   Bus Mode Reg after write: 0x%08x\n", data);
 			break;
 		}
 	}
@@ -1109,7 +1109,7 @@ s32 synopGMAC_search_phy (synopGMACdevice * gmacdev) {
         status += synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,phy_id, PHY_ID_HI_REG, &id1);
         status += synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,phy_id, PHY_ID_LOW_REG, &id2);
         if ((!status)&&(id2 != 0xffff)) {
-            printf("Net:   ====>phy %d:0x%x-0x%x found\n", phy_id, id1, id2);
+            printf("ETH:   Found PHY %d:0x%x-0x%x\n", phy_id, id1, id2);
             if ((0x0 == id1) && ((0x128 == id2) || (0x118 == id2))) {
                 status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, 0, 0x1e, 0x50);
                 status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, 0, 0x1f, &data);
@@ -1160,7 +1160,7 @@ s32 synopGMAC_search_phy (synopGMACdevice * gmacdev) {
                     gmacdev->DuplexMode = HALFDUPLEX;
                 }
             }
-			printf("Net:   SPEED:%d, DUPLEX:%d\n", gmacdev->Speed, gmacdev->DuplexMode);
+			printf("ETH:   SPEED:%d, DUPLEX:%d\n", gmacdev->Speed, gmacdev->DuplexMode);
             break;
         }
 	}
@@ -1169,7 +1169,7 @@ s32 synopGMAC_search_phy (synopGMACdevice * gmacdev) {
     status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, phy_id, PHY_STATUS_REG, &data);
     if ( (!status) && (data != 0xffff)) {
         if((data & Mii_AutoNegCmplt) != 0){
-            printf("====>phy %d Autonegotiation Complete\n", phy_id);
+            printf("ETH:   PHY %d Autonegotiation Complete\n", phy_id);
         }
     }
 
@@ -1284,7 +1284,7 @@ s32 synopGMAC_check_phy_init(synopGMACdevice * gmacdev) {
             }
         }
 
-        printf("====>PHY Autonegotiation Complete!\n");
+        printf("ETH:   PHY Autonegotiation Complete!\n");
         status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase,PHY_STATUS_REG, &data);
 
         status += synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase, 2, &id1);

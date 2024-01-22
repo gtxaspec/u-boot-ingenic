@@ -290,11 +290,11 @@ static int do_ping(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		return CMD_RET_USAGE;
 
 	if (NetLoop(PING) < 0) {
-		printf("ping failed; host %s is not alive\n", argv[1]);
+		printf("Ping failed; host %s is not alive\n", argv[1]);
 		return 1;
 	}
 
-	printf("host %s is alive\n", argv[1]);
+	printf("Host %s is alive\n", argv[1]);
 
 	return 0;
 }

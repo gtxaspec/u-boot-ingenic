@@ -468,7 +468,7 @@ static int do_usb(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		 (strncmp(argv[1], "start", 5) == 0)) {
 		bootstage_mark_name(BOOTSTAGE_ID_USB_START, "usb_start");
 		usb_stop();
-		printf("(Re)start USB...\n");
+		printf("USB:   (Re)start USB...\n");
 		if (usb_init() >= 0) {
 #ifdef CONFIG_USB_STORAGE
 			/* try to recognize storage devices immediately */

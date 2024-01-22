@@ -201,11 +201,11 @@ int eth_write_hwaddr(struct eth_device *dev, const char *base_name,
 	if (memcmp(env_enetaddr, "\0\0\0\0\0\0", 6)) {
 		if (memcmp(dev->enetaddr, "\0\0\0\0\0\0", 6) &&
 				memcmp(dev->enetaddr, env_enetaddr, 6)) {
-			printf("\nWarning: %s MAC addresses don't match:\n",
+			printf("\nETH:   Warning: %s MAC addresses don't match:\n",
 				dev->name);
-			printf("Address in SROM is         %pM\n",
+			printf("\nETH:   Address in SROM is         %pM\n",
 				dev->enetaddr);
-			printf("Address in environment is  %pM\n",
+			printf("\nETH:   Address in environment is  %pM\n",
 				env_enetaddr);
 		}
 
@@ -213,7 +213,7 @@ int eth_write_hwaddr(struct eth_device *dev, const char *base_name,
 	} else if (is_valid_ether_addr(dev->enetaddr)) {
 		eth_setenv_enetaddr_by_index(base_name, eth_number,
 					     dev->enetaddr);
-		printf("\nWarning: %s using MAC address from net device\n",
+		printf("\nETH:   Warning: %s using MAC address from net device\n",
 			dev->name);
 	}
 

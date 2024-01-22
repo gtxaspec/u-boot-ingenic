@@ -449,7 +449,7 @@ static int asix_init(struct eth_device *eth, bd_t *bd)
 			BMSR_LSTATUS;
 		if (!link_detected) {
 			if (timeout == 0)
-				printf("Waiting for Ethernet connection... ");
+				printf("USB:   Waiting for Ethernet connection... ");
 			udelay(TIMEOUT_RESOLUTION * 1000);
 			timeout += TIMEOUT_RESOLUTION;
 		}

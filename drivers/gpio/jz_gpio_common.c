@@ -391,13 +391,13 @@ void process_gpio_token(char* token) {
 
 void handle_gpio_settings(const char *env_var_name) {
 	if (!env_var_name) {
-		printf("GPIO:  Error: gpio_settings called without variable name. \n");
+		printf("GPIO:  Error: gpio_settings called without variable name\n");
 		return;
 	}
 
 	const char *env_gpio_str = getenv(env_var_name);
 	if (!env_gpio_str || *env_gpio_str == '\0') {
-		printf("GPIO:  %s: No GPIO env settings provided.\n", env_var_name);
+		printf("GPIO:  %s: No GPIO env settings provided\n", env_var_name);
 		return;
 	}
 

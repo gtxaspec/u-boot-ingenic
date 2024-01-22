@@ -402,7 +402,7 @@ static int jz_init(struct eth_device* dev, bd_t * bd)
 
 	memset(tx_buff, 0, 2048 * NUM_TX_DESCS);
 
-	printf("jz_init......\n");
+	printf("ETH:   jz4775-9161 driver init\n");
 
 
 	/* init global pointers */
@@ -427,10 +427,10 @@ static int jz_init(struct eth_device* dev, bd_t * bd)
 #if 1
 	phy_id = synopGMAC_search_phy(gmacdev);
 	if (phy_id >= 0) {
-		printf("====>found PHY %d\n", phy_id);
+		printf("ETH:   PHY found %d\n", phy_id);
 		gmacdev->PhyBase = phy_id;
 	} else {
-		printf("====>PHY not found!\n");
+		printf("ETH:   PHY not found!\n");
 	}
 #endif
 	synopGMAC_check_phy_init(gmacdev);
@@ -482,7 +482,7 @@ static int jz_init(struct eth_device* dev, bd_t * bd)
 	synopGMAC_rx_enable(gmacdev);
 
 #endif
-	printf("GMAC init finish\n");
+	printf("ETH:   GMAC init finish\n");
 	return 1;
 }
 
@@ -500,7 +500,7 @@ static void jz_halt(struct eth_device *dev)
 }
 
 int check_phy_config(synopGMACdevice *gmacdev) {
-  printf("Net:   Searching for valid PHY\n");
+  printf("ETH:   Searching for valid PHY\n");
   int phy_id = synopGMAC_search_phy(gmacdev);
   if (phy_id < 0) {
       return -1; // PHY not found
@@ -508,7 +508,7 @@ int check_phy_config(synopGMACdevice *gmacdev) {
 
   // Lets assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
   if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
-      printf("Net:  Invalid PHY configuration (speed or duplex) detected!\n");
+      printf("ETH:  Invalid PHY configuration (speed or duplex) detected!\n");
       return -1; // Invalid configuration
   }
    return phy_id;
@@ -581,8 +581,8 @@ int jz_net_initialize(bd_t *bis)
 
 	phy_id = check_phy_config(gmacdev);
 	if (phy_id < 0) {
-		printf("Net:   Error: Invalid PHY configuration.\n");
-		printf("Net:   ====>PHY not found!\n");
+		printf("ETH:   Error: Invalid PHY configuration.\n");
+		printf("ETH:   PHY not found!\n");
 		return -1; // Return error
 	}
 
@@ -626,8 +626,8 @@ int jz_net_initialize(bd_t *bis)
 #else
     phy_id = check_phy_config(gmacdev);
     if (phy_id < 0) {
-      printf("Net:   Error: Invalid PHY configuration.\n");
-      printf("Net:   ====>PHY not found!\n");
+      printf("ETH:   Error: Invalid PHY configuration.\n");
+      printf("ETH:   PHY not found!\n");
       return -1;  // Return error
     }
 #endif //CONFIG_NET_PHY_TYPE

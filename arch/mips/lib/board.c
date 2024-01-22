@@ -447,7 +447,7 @@ if (sd_present != NULL && strcmp(sd_present, "true") == 0) {
 #endif
 } else {
 	// 'sd_present' does not exist or is not "true"
-	printf("SD card disabled\n");
+	printf("MMC:   SD card disabled\n");
 }
 
 	/* main_loop() can return to retry autoboot, if so just run it again. */
