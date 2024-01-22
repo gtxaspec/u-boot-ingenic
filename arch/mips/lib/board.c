@@ -413,7 +413,6 @@ extern void board_usb_init(void);
 	if (ethact && strncmp(ethact, "asx", 3) == 0) {
 		if (run_command("usb start", 0) != 0) {
 			printf("USB start failed\n");
-			return;
 		}
 	}
 	#endif
