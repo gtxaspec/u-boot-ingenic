@@ -152,9 +152,9 @@ endif
 
 #########################################################################
 
-ifndef CONFIG_SPL_BUILD
-include $(obj)logo.mk
-endif
+#ifndef CONFIG_SPL_BUILD
+#include $(obj)logo.mk
+#endif
 # defines $(obj).depend target
 include $(SRCTREE)/rules.mk
 
