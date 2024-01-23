@@ -590,8 +590,10 @@
 #endif
 #endif
 */
+/*
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
-/* #define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024) */
+#define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
+ */
 
 #define CONFIG_SYS_SDRAM_BASE		0x80000000 /* cached (KSEG0) address */
 #define CONFIG_SYS_SDRAM_MAX_TOP	0x84000000 /* don't run into IO space */
