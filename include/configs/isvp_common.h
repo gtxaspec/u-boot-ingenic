@@ -8,6 +8,10 @@
 #define CONFIG_SPL_DDR_SOFT_TRAINING
 /*#define CONFIG_SPL_DDR_SOFT_TRAINING*/
 
+/* #define CONFIG_DDR_AUTO_SELF_REFRESH */
+/*#define CONFIG_SPL_DDR_SOFT_TRAINING*/
+
+
 #if defined(__CONFIG_ISVP_T10_H__)
 #define CONFIG_T10
 #define CONFIG_SOC "t10"
@@ -236,6 +240,7 @@
 #else
 #define CONFIG_SYS_MAX_FLASH_SECT	0
 #endif
+
 
 /*
 #define CONFIG_CMD_FLOCK
