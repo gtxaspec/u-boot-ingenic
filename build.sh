@@ -18,8 +18,8 @@ cfg[t20n_msc0]="isvp_t20_msc0"
 cfg[t21n]="isvp_t21_sfcnor"
 cfg[t21n_msc0]="isvp_t21_msc0"
 
-cfg[t23n]="isvp_t23_sfcnor"
-cfg[t23n_msc0]="isvp_t23_msc0"
+cfg[t23n]="isvp_t23n_sfcnor"
+cfg[t23n_msc0]="isvp_t23n_msc0"
 
 cfg[t30n]="isvp_t30_sfcnor"
 cfg[t30l]="isvp_t30_sfcnor_lite"

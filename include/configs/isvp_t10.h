@@ -123,11 +123,13 @@
 /**
  * Boot command definitions.
  */
+
 /*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
 */
+
 /*
 #if defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"

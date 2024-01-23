@@ -344,7 +344,7 @@ void ddr_inno_phy_init()
 	while (!(readl(DDR_APB_PHY_INIT) & (1 << 1)))
 		; // init_complete
 	debug("ddr_inno_phy_init ..! 22:  %X\n", readl(DDR_APB_PHY_INIT));
-	while (!readl(T31_INIT_COMP))
+	while (!readl(XBURST1_INIT_COMP))
 		;
 	debug("ddr_inno_phy_init ..! 33:  %X\n", readl(DDR_APB_PHY_INIT));
 	writel(0, REG_DDR_CTRL);
@@ -437,7 +437,7 @@ void ddr_inno_phy_init()
 
 	while (0x3 != readl((PHY_BASE + 0xc0)))
 		;
-	debug("T31_c0: %x\n", readl((PHY_BASE + 0xc0)));
+	debug("XBURST1_c0: %x\n", readl((PHY_BASE + 0xc0)));
 
 	writel(0xa1, 0xb3011008);
 #endif
@@ -471,11 +471,11 @@ void ddr_inno_phy_init()
 
 void phy_dqs_delay(int delay_l, int delay_h)
 {
-	writel(delay_l, T31_DQS_DELAY_L);
-	writel(delay_h, T31_DQS_DELAY_H);
+	writel(delay_l, XBURST1_DQS_DELAY_L);
+	writel(delay_h, XBURST1_DQS_DELAY_H);
 
-	debug("T31_DQS_DELAY_L: %x\n", readl(T31_DQS_DELAY_L));
-	debug("T31_DQS_DELAY_H: %x\n", readl(T31_DQS_DELAY_H));
+	debug("XBURST1_DQS_DELAY_L: %x\n", readl(XBURST1_DQS_DELAY_L));
+	debug("XBURST1_DQS_DELAY_H: %x\n", readl(XBURST1_DQS_DELAY_H));
 }
 /*
  * Name     : phy_calibration()
@@ -488,10 +488,10 @@ void phy_dqs_delay(int delay_l, int delay_h)
 void phy_calibration(int al8_1x, int ah8_1x, int al8_2x, int ah8_2x)
 {
 #if 1
-	debug("T31_0x5: %x\n", readl(PHY_BASE + 0x14));
-	debug("T31_0x15: %x\n", readl(PHY_BASE + 0x54));
-	debug("T31_0x4: %x\n", readl(PHY_BASE + 0x10));
-	debug("T31_0x14: %x\n", readl(PHY_BASE + 0x50));
+	debug("XBURST1_0x5: %x\n", readl(PHY_BASE + 0x14));
+	debug("XBURST1_0x15: %x\n", readl(PHY_BASE + 0x54));
+	debug("XBURST1_0x4: %x\n", readl(PHY_BASE + 0x10));
+	debug("XBURST1_0x14: %x\n", readl(PHY_BASE + 0x50));
 
 	int m = phy_readl(INNO_TRAINING_CTRL);
 	debug("INNO_TRAINING_CTRL 1: %x\n", phy_readl(INNO_TRAINING_CTRL));
@@ -500,27 +500,27 @@ void phy_calibration(int al8_1x, int ah8_1x, int al8_2x, int ah8_2x)
 	debug("INNO_TRAINING_CTRL 2: %x\n", phy_readl(INNO_TRAINING_CTRL));
 	while (0x3 != readl((PHY_BASE + 0xcc)))
 		;
-	debug("T31_cc: %x\n", readl((PHY_BASE + 0xcc)));
+	debug("XBURST1_cc: %x\n", readl((PHY_BASE + 0xcc)));
 	phy_writel(0xa0, INNO_TRAINING_CTRL);
 	debug("INNO_TRAINING_CTRL 3: %x\n", phy_readl(INNO_TRAINING_CTRL));
-	debug("T31_118: %x\n", readl((PHY_BASE + 0x118)));
-	debug("T31_158: %x\n", readl((PHY_BASE + 0x158)));
-	debug("T31_190: %x\n", readl((PHY_BASE + 0x190)));
-	debug("T31_194: %x\n", readl((PHY_BASE + 0x194)));
+	debug("XBURST1_118: %x\n", readl((PHY_BASE + 0x118)));
+	debug("XBURST1_158: %x\n", readl((PHY_BASE + 0x158)));
+	debug("XBURST1_190: %x\n", readl((PHY_BASE + 0x190)));
+	debug("XBURST1_194: %x\n", readl((PHY_BASE + 0x194)));
 #else
 	int m = phy_readl(INNO_TRAINING_CTRL);
 	m = (0x1 << 1);
 	phy_writel(m, INNO_TRAINING_CTRL);
-	// debug("T31_REG02: %x\n", phy_readl(INNO_TRAINING_CTRL));
-	int x = readl(T31_REG46);
-	int y = readl(T31_REG56);
+	// debug("XBURST1_REG02: %x\n", phy_readl(INNO_TRAINING_CTRL));
+	int x = readl(XBURST1_REG46);
+	int y = readl(XBURST1_REG56);
 	x = (x & (0x83) + (al8_1x << 3) + (al8_2x << 4));
 	y = (y & (0x83) + (ah8_1x << 3) + (ah8_2x << 4));
 	// debug for t30
-	writel(30, T31_REG46);
-	writel(27, T31_REG56);
-	debug("T31_REG46: %x\n", readl(T31_REG46));
-	debug("T31_REG56: %x\n", readl(T31_REG56));
+	writel(30, XBURST1_REG46);
+	writel(27, XBURST1_REG56);
+	debug("XBURST1_REG46: %x\n", readl(XBURST1_REG46));
+	debug("XBURST1_REG56: %x\n", readl(XBURST1_REG56));
 #endif
 }
 /* DDR sdram init */

@@ -98,12 +98,12 @@ struct jz_gpio_func_def {
 #define PXPDIRS		0x94   /* Port Pull Direction Set Register */
 #define PXPDIRC		0x98   /* Port Pull Direction Clear Register */
 
-//#define PXPEL		0x110   /* Port Pull Disable Register */
-//#define PXPELS	0x114   /* Port Pull Disable Set Register */
-//#define PXPELC	0x118   /* Port Pull Disable Clear Register */
-//#define PXPEH		0x120   /* Port Pull Disable Register */
-//#define PXPEHS	0x124   /* Port Pull Disable Set Register */
-//#define PXPEHC	0x128   /* Port Pull Disable Clear Register */
+#define PXPEL		0x110   /* Port Pull Disable Register */
+#define PXPELS		0x114   /* Port Pull Disable Set Register */
+#define PXPELC		0x118   /* Port Pull Disable Clear Register */
+#define PXPEH		0x120   /* Port Pull Disable Register */
+#define PXPEHS		0x124   /* Port Pull Disable Set Register */
+#define PXPEHC		0x128   /* Port Pull Disable Clear Register */
 
 #define PXPUEN		0x110   /* Port Pull-up status Register */
 #define PXPUENS		0x114   /* Port Pull-up status Set Register */
