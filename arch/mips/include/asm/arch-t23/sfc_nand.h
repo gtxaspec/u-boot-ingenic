@@ -285,18 +285,18 @@ struct jz_sfc {
 
 #define  SFC_SEND_COMMAND(sfc, a, b, c, d, e, f, g)   do{                       \
         ((struct jz_sfc *)sfc)->tranconf.d32 = 0;				\
-        ((struct jz_sfc *)sfc)->tranconf.reg.cmd_en = 1;				\
-		((struct jz_sfc *)sfc)->tranconf.reg.cmd = a;					\
+        ((struct jz_sfc *)sfc)->tranconf.reg.cmd_en = 1;			\
+	((struct jz_sfc *)sfc)->tranconf.reg.cmd = a;				\
         ((struct jz_sfc *)sfc)->len = b;                                        \
         ((struct jz_sfc *)sfc)->addr = c;                                       \
         ((struct jz_sfc *)sfc)->tranconf.reg.addr_width = d;			\
         ((struct jz_sfc *)sfc)->addr_plus = 0;                                  \
-        ((struct jz_sfc *)sfc)->tranconf.reg.dmy_bits = e;				\
-        ((struct jz_sfc *)sfc)->tranconf.reg.data_en = f;				\
-	if(a == CMD_FR_CACHE_QUAD) {						\
-			((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_QUAD; \
+        ((struct jz_sfc *)sfc)->tranconf.reg.dmy_bits = e;			\
+        ((struct jz_sfc *)sfc)->tranconf.reg.data_en = f;			\
+	if (a == CMD_FR_CACHE_QUAD) {						\
+		((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_QUAD; \
 	} else {								\
-			((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_STANDARD; \
+		((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_STANDARD; \
 	}									\
         sfc_send_cmd(sfc, g);                                                   \
 } while(0)

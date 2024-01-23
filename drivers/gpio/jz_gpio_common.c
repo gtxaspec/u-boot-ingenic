@@ -33,29 +33,29 @@
 #include "jz_gpio/jz4775_gpio.c"
 #elif defined (CONFIG_JZ4780)
 #include "jz_gpio/jz4780_gpio.c"
-#elif defined (CONFIG_M200)
-#include "jz_gpio/m200_gpio.c"
 #elif defined (CONFIG_M150)
 #include "jz_gpio/m150_gpio.c"
-#elif defined (CONFIG_T15)
-#include "jz_gpio/t15_gpio.c"
+#elif defined (CONFIG_M200)
+#include "jz_gpio/m200_gpio.c"
 #elif defined (CONFIG_T10)
 #include "jz_gpio/t10_gpio.c"
+#elif defined (CONFIG_T15)
+#include "jz_gpio/t15_gpio.c"
 #elif defined (CONFIG_T20)
 #include "jz_gpio/t20_gpio.c"
-#elif defined (CONFIG_T30)
-#include "jz_gpio/t30_gpio.c"
 #elif defined (CONFIG_T21)
 #include "jz_gpio/t21_gpio.c"
-#elif defined (CONFIG_T31)
-#include "jz_gpio/t31_gpio.c"
 #elif defined (CONFIG_T23)
 #include "jz_gpio/t23_gpio.c"
+#elif defined (CONFIG_T30)
+#include "jz_gpio/t30_gpio.c"
+#elif defined (CONFIG_T31)
+#include "jz_gpio/t31_gpio.c"
 #endif
 
 DECLARE_GLOBAL_DATA_PTR;
 
-static inline is_gpio_from_chip(int gpio_num)
+int static inline is_gpio_from_chip(unsigned int gpio_num)
 {
 	return gpio_num < (GPIO_NR_PORTS * 32) ? 1 : 0;
 }
@@ -152,11 +152,11 @@ int gpio_set_value(unsigned gpio, int value)
 {
 	int port = gpio / 32;
 	int pin = gpio % 32;
-	if(is_gpio_from_chip(gpio)) {
+	if (is_gpio_from_chip(gpio)) {
 		gpio_port_set_value(port, pin, value);
 	} else {
 #ifdef CONFIG_JZ_PCA953X
-	pca953x_set_value(gpio, value);
+		pca953x_set_value(gpio, value);
 #endif
 	}
 	return 0;
@@ -166,11 +166,11 @@ int gpio_get_value(unsigned gpio)
 {
 	unsigned port = gpio / 32;
 	unsigned pin = gpio % 32;
-	if(is_gpio_from_chip(gpio)) {
-	return !!(readl(GPIO_PXPIN(port)) & (1 << pin));
+	if (is_gpio_from_chip(gpio)) {
+		return !!(readl(GPIO_PXPIN(port)) & (1 << pin));
 	} else {
 #ifdef CONFIG_JZ_PCA953X
-	return pca953x_get_value(gpio);
+		return pca953x_get_value(gpio);
 #endif
 	}
 }
@@ -196,11 +196,11 @@ int gpio_direction_input(unsigned gpio)
 {
 	unsigned port = gpio / 32;
 	unsigned pin = gpio % 32;
-	if(is_gpio_from_chip(gpio)) {
+	if (is_gpio_from_chip(gpio)) {
 		gpio_port_direction_input(port, pin);
 	} else {
 #ifdef CONFIG_JZ_PCA953X
-	pca953x_direction_input(TO_PCA953X_GPIO(gpio));
+		pca953x_direction_input(TO_PCA953X_GPIO(gpio));
 #endif
 	}
 
@@ -211,11 +211,11 @@ int gpio_direction_output(unsigned gpio, int value)
 {
 	unsigned port = gpio / 32;
 	unsigned pin = gpio % 32;
-	if(is_gpio_from_chip(gpio)) {
+	if (is_gpio_from_chip(gpio)) {
 		gpio_port_direction_output(port, pin, value);
 	} else {
 #ifdef CONFIG_JZ_PCA953X
-	pca953x_direction_output(TO_PCA953X_GPIO(gpio), value);
+		pca953x_direction_output(TO_PCA953X_GPIO(gpio), value);
 #endif
 	}
 	return 0;
@@ -315,7 +315,8 @@ void gpio_ack_irq(unsigned gpio)
 	writel(1 << pin, GPIO_PXFLGC(port));
 }
 
-void dump_gpio_func( unsigned int gpio);
+void dump_gpio_func(unsigned int gpio);
+
 void gpio_init(void)
 {
 	int i, n;
@@ -347,20 +348,21 @@ void gpio_init(void)
 #endif
 #endif
 }
-void dump_gpio_func( unsigned int gpio)
+
+void dump_gpio_func(unsigned int gpio)
 {
 	unsigned group = gpio / 32;
 	unsigned pin = gpio % 32;
 	int d = 0;
 	unsigned int base = GPIO_BASE + 0x100 * group;
-	d = d | ((readl(base + PXINT) >> pin) & 1) << 3;
-	d = d | ((readl(base + PXMSK) >> pin) & 1) << 2;
+	d = d | ((readl(base + PXINT)  >> pin) & 1) << 3;
+	d = d | ((readl(base + PXMSK)  >> pin) & 1) << 2;
 	d = d | ((readl(base + PXPAT1) >> pin) & 1) << 1;
 	d = d | ((readl(base + PXPAT0) >> pin) & 1) << 0;
 	printf("gpio[%d] fun %x\n",gpio,d);
 }
 
-#define MAX_GPIO_SET_LEN 256  // Define a maximum length for the GPIO settings string
+#define MAX_GPIO_SET_LEN	256  // Define a maximum length for the GPIO settings string
 
 void process_gpio_token(char* token) {
 	char *endptr;

@@ -1,6 +1,5 @@
 /*
  * T20 GPIO definitions
- *
  * Copyright (c) 2013 Ingenic Semiconductor Co.,Ltd
  *
  * This program is free software; you can redistribute it and/or
@@ -24,9 +23,9 @@
 
 #include <asm/arch/base.h>
 
-#define GPIO_PA(n) 	(0*32 + n)
-#define GPIO_PB(n) 	(1*32 + n)
-#define GPIO_PC(n) 	(2*32 + n)
+#define GPIO_PA(n) 	(0 * 32 + n)
+#define GPIO_PB(n) 	(1 * 32 + n)
+#define GPIO_PC(n) 	(2 * 32 + n)
 
 enum gpio_function {
 	GPIO_FUNC_0     = 0x00,  //0000, GPIO as function 0 / device 0
@@ -47,12 +46,12 @@ enum gpio_port {
 #ifdef CONFIG_JZ_SLT
 static inline enum gpio_port gpio_port_gp(int gpio)
 {
-	return (GPIO_PORT_A + (gpio/32));
+	return (GPIO_PORT_A + (gpio / 32));
 }
 
 static inline int gpio_pin(int gpio)
 {
-	return (gpio%32);
+	return (gpio % 32);
 }
 #endif
 
@@ -103,6 +102,7 @@ struct jz_gpio_func_def {
 #define PXPDEN		0x120   /* Port Pull-down status Register */
 #define PXPDENS		0x124   /* Port Pull-down status Set Register */
 #define PXPDENC		0x128   /* Port Pull-down status Clear Register */
+
 #define PXPDSL		0x130   /* Port Driver-strength low Register */
 #define PXPDSLS		0x134   /* Port Driver-strength low Set Register */
 #define PXPDSLC		0x138   /* Port Driver-strength low Clear Register */
@@ -110,27 +110,28 @@ struct jz_gpio_func_def {
 #define PXPDSHS		0x144   /* Port Driver-strength high Set Register */
 #define PXPDSHC		0x148   /* Port Driver-strength high Clear Register */
 
-#define GPIO_PXPIN(n)	(GPIO_BASE + (PXPIN + (n)*0x100)) /* PIN Level Register */
-#define GPIO_PXINT(n)	(GPIO_BASE + (PXINT + (n)*0x100)) /* Port Interrupt Register */
-#define GPIO_PXINTS(n)	(GPIO_BASE + (PXINTS + (n)*0x100)) /* Port Interrupt Set Register */
-#define GPIO_PXINTC(n)	(GPIO_BASE + (PXINTC + (n)*0x100)) /* Port Interrupt Clear Register */
-#define GPIO_PXMSK(n)	(GPIO_BASE + (PXMSK + (n)*0x100)) /* Port Interrupt Mask Register */
-#define GPIO_PXMSKS(n)	(GPIO_BASE + (PXMSKS + (n)*0x100)) /* Port Interrupt Mask Set Reg */
-#define GPIO_PXMSKC(n)	(GPIO_BASE + (PXMSKC + (n)*0x100)) /* Port Interrupt Mask Clear Reg */
-#define GPIO_PXPAT1(n)	(GPIO_BASE + (PXPAT1 + (n)*0x100)) /* Port Pattern 1 Register */
-#define GPIO_PXPAT1S(n)	(GPIO_BASE + (PXPAT1S + (n)*0x100)) /* Port Pattern 1 Set Reg. */
-#define GPIO_PXPAT1C(n)	(GPIO_BASE + (PXPAT1C + (n)*0x100)) /* Port Pattern 1 Clear Reg. */
-#define GPIO_PXPAT0(n)	(GPIO_BASE + (PXPAT0 + (n)*0x100)) /* Port Pattern 0 Register */
-#define GPIO_PXPAT0S(n)	(GPIO_BASE + (PXPAT0S + (n)*0x100)) /* Port Pattern 0 Set Register */
-#define GPIO_PXPAT0C(n)	(GPIO_BASE + (PXPAT0C + (n)*0x100)) /* Port Pattern 0 Clear Register */
-#define GPIO_PXFLG(n)	(GPIO_BASE + (PXFLG + (n)*0x100)) /* Port Flag Register */
-#define GPIO_PXFLGC(n)	(GPIO_BASE + (PXFLGC + (n)*0x100)) /* Port Flag clear Register */
-#define GPIO_PXPE(n)	(GPIO_BASE + (PXPE + (n)*0x100)) /* Port Pull Disable Register */
-#define GPIO_PXPES(n)	(GPIO_BASE + (PXPES + (n)*0x100)) /* Port Pull Disable Set Register */
-#define GPIO_PXPEC(n)	(GPIO_BASE + (PXPEC + (n)*0x100)) /* Port Pull Disable Clear Register */
-#define GPIO_PXPDIR(n)	(GPIO_BASE + (PXPDIR + (n)*0x100)) /* Port Pull Direction Register */
-#define GPIO_PXPDIRS(n)	(GPIO_BASE + (PXPDIRS + (n)*0x100)) /* Port Pull Direction Set Register */
-#define GPIO_PXPDIRC(n)	(GPIO_BASE + (PXPDIRC + (n)*0x100)) /* Port Pull Direction Clear Register */
+#define GPIO_PXPIN(n)	(GPIO_BASE + (PXPIN   + (n) * 0x100)) /* PIN Level Register */
+#define GPIO_PXINT(n)	(GPIO_BASE + (PXINT   + (n) * 0x100)) /* Port Interrupt Register */
+#define GPIO_PXINTS(n)	(GPIO_BASE + (PXINTS  + (n) * 0x100)) /* Port Interrupt Set Register */
+#define GPIO_PXINTC(n)	(GPIO_BASE + (PXINTC  + (n) * 0x100)) /* Port Interrupt Clear Register */
+#define GPIO_PXMSK(n)	(GPIO_BASE + (PXMSK   + (n) * 0x100)) /* Port Interrupt Mask Register */
+#define GPIO_PXMSKS(n)	(GPIO_BASE + (PXMSKS  + (n) * 0x100)) /* Port Interrupt Mask Set Reg */
+#define GPIO_PXMSKC(n)	(GPIO_BASE + (PXMSKC  + (n) * 0x100)) /* Port Interrupt Mask Clear Reg */
+#define GPIO_PXPAT1(n)	(GPIO_BASE + (PXPAT1  + (n) * 0x100)) /* Port Pattern 1 Register */
+#define GPIO_PXPAT1S(n)	(GPIO_BASE + (PXPAT1S + (n) * 0x100)) /* Port Pattern 1 Set Reg. */
+#define GPIO_PXPAT1C(n)	(GPIO_BASE + (PXPAT1C + (n) * 0x100)) /* Port Pattern 1 Clear Reg. */
+#define GPIO_PXPAT0(n)	(GPIO_BASE + (PXPAT0  + (n) * 0x100)) /* Port Pattern 0 Register */
+#define GPIO_PXPAT0S(n)	(GPIO_BASE + (PXPAT0S + (n) * 0x100)) /* Port Pattern 0 Set Register */
+#define GPIO_PXPAT0C(n)	(GPIO_BASE + (PXPAT0C + (n) * 0x100)) /* Port Pattern 0 Clear Register */
+#define GPIO_PXFLG(n)	(GPIO_BASE + (PXFLG   + (n) * 0x100)) /* Port Flag Register */
+#define GPIO_PXFLGC(n)	(GPIO_BASE + (PXFLGC  + (n) * 0x100)) /* Port Flag clear Register */
+#define GPIO_PXPE(n)	(GPIO_BASE + (PXPE    + (n) * 0x100)) /* Port Pull Disable Register */
+#define GPIO_PXPES(n)	(GPIO_BASE + (PXPES   + (n) * 0x100)) /* Port Pull Disable Set Register */
+#define GPIO_PXPEC(n)	(GPIO_BASE + (PXPEC   + (n) * 0x100)) /* Port Pull Disable Clear Register */
+
+#define GPIO_PXPDIR(n)	(GPIO_BASE + (PXPDIR  + (n) * 0x100)) /* Port Pull Direction Register */
+#define GPIO_PXPDIRS(n)	(GPIO_BASE + (PXPDIRS + (n) * 0x100)) /* Port Pull Direction Set Register */
+#define GPIO_PXPDIRC(n)	(GPIO_BASE + (PXPDIRC + (n) * 0x100)) /* Port Pull Direction Clear Register */
 
 void gpio_set_func(enum gpio_port n, enum gpio_function func, unsigned int pins);
 void gpio_port_set_value(int port, int pin, int value);
