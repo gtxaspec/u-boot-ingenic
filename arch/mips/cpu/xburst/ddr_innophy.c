@@ -1,7 +1,7 @@
 
 /*
  * DDR driver for inno DDR PHY.
- * Used by t31
+ * Used by XBurst1 SoC
  *
  * Copyright (C) 2017 Ingenic Semiconductor Co.,Ltd
  * Author: Zoro <ykli@ingenic.cn>
