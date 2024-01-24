@@ -56,14 +56,14 @@ int do_watchdog(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 
 U_BOOT_CMD(
 	watchdog, 2, 1, do_watchdog,
-	"open or colse the watchdog",
+	"open or close the watchdog",
 	"<interface> <timeout>\n"
-	"the unit of timeout is ms,reset after timeout\n"
+	"the unit of timeout is ms, reset after timeout\n"
 	"the max value of timeout is 128000 ms\n"
 	"when timeout is greater than 128000ms, timeout is equal to 128000ms\n"
 	"timeout = 0 --> close\n"
 	"timeout > 0 --> open\n"
-	"timeout < 0 or not numbers --> unsupport"
+	"timeout < 0 or not numbers --> unsupported"
 );
 
 #endif
