@@ -147,10 +147,10 @@
 #define CONFIG_SFC_MIN_ALIGN		0x10000 /*0x1000->4K Erase, 0x8000->32K, 0x10000->64K*/
 
 #undef CONFIG_SYS_PROMPT
-#define CONFIG_SYS_PROMPT		"OpenIPC # "
+#define CONFIG_SYS_PROMPT		"OpenIPC# "
 
 #define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_AUTOBOOT_PROMPT		"Press Ctrl-c to abort autoboot... %d %d\n", bootdelay
+#define CONFIG_AUTOBOOT_PROMPT		"KEY:   ###### Press Ctrl-C now to interrupt boot... loading in %ds ######\n", bootdelay
 #define CONFIG_AUTOBOOT_STOP_STR	"\x3"
 
 #define CONFIG_SYS_LONGHELP
