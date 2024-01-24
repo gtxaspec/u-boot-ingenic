@@ -48,9 +48,9 @@ struct sfc_transfer {
 
 #ifndef CONFIG_SPL_BUILD
 struct sfc_message {
-	struct list_head    transfers;
-	unsigned  int   actual_length;
-	int         status;
+	struct list_head transfers;
+	unsigned int actual_length;
+	int status;
 
 };
 #endif
@@ -60,7 +60,7 @@ struct sfc{
 #ifndef CONFIG_SPL_BUILD
 	unsigned long long src_clk;
 #endif
-	int			threshold;
+	int threshold;
 
 	struct sfc_transfer *transfer;
 };
@@ -84,9 +84,9 @@ struct sfc_flash {
 #else
 	struct mini_spi_nor_info g_nor_info;
 #endif
-	struct spi_nor_flash_ops	*nor_flash_ops;
-	struct spi_nor_cmd_info	 *cur_r_cmd;
-	struct spi_nor_cmd_info	 *cur_w_cmd;
+	struct spi_nor_flash_ops *nor_flash_ops;
+	struct spi_nor_cmd_info	*cur_r_cmd;
+	struct spi_nor_cmd_info	*cur_w_cmd;
 #ifndef CONFIG_SPL_BUILD
 	struct norflash_partitions *norflash_partitions;
 #endif
@@ -101,8 +101,8 @@ struct sfc_flash {
 #define	SFC_DEV_ADDR_PLUS0		(0x0048)
 
 /* For SFC_GLB */
-#define GLB_TRAN_DIR_OFFSET         (13)
-#define GLB_TRAN_DIR            (1 << GLB_TRAN_DIR_OFFSET)
+#define GLB_TRAN_DIR_OFFSET   		(13)
+#define GLB_TRAN_DIR			(1 << GLB_TRAN_DIR_OFFSET)
 #define GLB_TRAN_DIR_WRITE		(1)
 #define GLB_TRAN_DIR_READ		(0)
 #define	GLB_THRESHOLD_OFFSET		(7)
@@ -161,15 +161,15 @@ struct sfc_flash {
 #define TRIG_START			(1 << 0)
 
 //For SFC_SR
-#define FIFONUM_OFFSET  (16)
-#define FIFONUM_MSK     (0x7f << FIFONUM_OFFSET)
-#define BUSY_OFFSET     (5)
-#define BUSY_MSK        (0x3 << BUSY_OFFSET)
-#define END             (1 << 4)
-#define TRAN_REQ        (1 << 3)
-#define RECE_REQ        (1 << 2)
-#define OVER            (1 << 1)
-#define UNDER           (1 << 0)
+#define FIFONUM_OFFSET		(16)
+#define FIFONUM_MSK		(0x7f << FIFONUM_OFFSET)
+#define BUSY_OFFSET		(5)
+#define BUSY_MSK		(0x3 << BUSY_OFFSET)
+#define END			(1 << 4)
+#define TRAN_REQ		(1 << 3)
+#define RECE_REQ		(1 << 2)
+#define OVER			(1 << 1)
+#define UNDER			(1 << 0)
 
 /* For SFC_SCR */
 #define	CLR_END			(1 << 4)
@@ -179,31 +179,31 @@ struct sfc_flash {
 #define CLR_UNDER		(1 << 0)
 
 /* For SFC_INTC */
-#define MASK_END                (1 << 4)
-#define MASK_TREQ               (1 << 3)
-#define MASK_RREQ               (1 << 2)
-#define MASK_OVER               (1 << 1)
-#define MASK_UNDR               (1 << 0)
+#define MASK_END		(1 << 4)
+#define MASK_TREQ		(1 << 3)
+#define MASK_RREQ		(1 << 2)
+#define MASK_OVER		(1 << 1)
+#define MASK_UNDR		(1 << 0)
 
 /* For SFC_TRAN_CONFx */
 #define	TRAN_MODE_OFFSET	(29)
 #define	TRAN_MODE_MSK		(0x7 << TRAN_MODE_OFFSET)
-#define TRAN_SPI_STANDARD   (0x0)
+#define TRAN_SPI_STANDARD	(0x0)
 
 //For SFC_FSM
-#define FSM_AHB_OFFSET      (16)
-#define FSM_AHB_MSK         (0xf << FSM_AHB_OFFSET)
-#define FSM_SPI_OFFSET      (11)
-#define FSM_SPI_MSK         (0x1f << FSM_SPI_OFFSET)
-#define FSM_CLK_OFFSET      (6)
-#define FSM_CLK_MSK         (0xf << FSM_CLK_OFFSET)
-#define FSM_DMAC_OFFSET     (3)
-#define FSM_DMAC_MSK        (0x7 << FSM_DMAC_OFFSET)
-#define FSM_RMC_OFFSET      (0)
-#define FSM_RMC_MSK         (0x7 << FSM_RMC_OFFSET)
+#define FSM_AHB_OFFSET		(16)
+#define FSM_AHB_MSK		(0xf << FSM_AHB_OFFSET)
+#define FSM_SPI_OFFSET		(11)
+#define FSM_SPI_MSK		(0x1f << FSM_SPI_OFFSET)
+#define FSM_CLK_OFFSET		(6)
+#define FSM_CLK_MSK		(0xf << FSM_CLK_OFFSET)
+#define FSM_DMAC_OFFSET		(3)
+#define FSM_DMAC_MSK		(0x7 << FSM_DMAC_OFFSET)
+#define FSM_RMC_OFFSET		(0)
+#define FSM_RMC_MSK		(0x7 << FSM_RMC_OFFSET)
 
 //For SFC_CGE
-#define CG_EN           (1 << 0)
+#define CG_EN			(1 << 0)
 
 #define	ADDR_WIDTH_OFFSET	(26)
 #define	ADDR_WIDTH_MSK		(0x7 << ADDR_WIDTH_OFFSET)
@@ -216,7 +216,7 @@ struct sfc_flash {
 #define	CMD_OFFSET		(0)
 #define	CMD_MSK			(0xffff << CMD_OFFSET)
 
-#define N_MAX				6
+#define N_MAX			6
 
 
 #define ENABLE			1
@@ -229,21 +229,21 @@ struct sfc_flash {
 #define CPU_OPS			0
 
 #define TM_STD_SPI		0
-#define TM_DI_DO_SPI	1
+#define TM_DI_DO_SPI		1
 #define TM_DIO_SPI		2
-#define TM_FULL_DIO_SPI	3
-#define TM_QI_QO_SPI	5
+#define TM_FULL_DIO_SPI		3
+#define TM_QI_QO_SPI		5
 #define TM_QIO_SPI		6
-#define	TM_FULL_QIO_SPI	7
+#define	TM_FULL_QIO_SPI		7
 
 #define DEFAULT_ADDRSIZE	3
 
 
-#define DEF_ADDR_LEN    3
-#define DEF_TCHSH       5
-#define DEF_TSLCH       5
-#define DEF_TSHSL_R     20
-#define DEF_TSHSL_W     50
+#define DEF_ADDR_LEN		3
+#define DEF_TCHSH		5
+#define DEF_TSLCH		5
+#define DEF_TSHSL_R		20
+#define DEF_TSHSL_W		50
 
 
 #ifdef CONFIG_SPL_SFC_NAND
@@ -266,40 +266,40 @@ typedef union sfc_tranconf_r {
 } sfc_tranconf_r;
 struct jz_sfc {
 	sfc_tranconf_r tranconf;
-    unsigned int  addr;
-    unsigned int  len;
-    unsigned int  addr_plus;
+	unsigned int  addr;
+	unsigned int  len;
+	unsigned int  addr_plus;
 };
 #endif
 
 #ifdef CONFIG_SFC_DEBUG
-#define sfc_debug(fmt, args...)         \
-    do {                    \
-        printf(fmt, ##args);        \
-    } while (0)
+#define sfc_debug(fmt, args...)			\
+	do {					\
+		printf(fmt, ##args);		\
+	} while (0)
 #else
-#define sfc_debug(fmt, args...)         \
-    do {                    \
+#define sfc_debug(fmt, args...)			\
+    do {					\
     } while (0)
 #endif
 
-#define  SFC_SEND_COMMAND(sfc, a, b, c, d, e, f, g)   do{                       \
+#define  SFC_SEND_COMMAND(sfc, a, b, c, d, e, f, g)   do {                      \
         ((struct jz_sfc *)sfc)->tranconf.d32 = 0;				\
-        ((struct jz_sfc *)sfc)->tranconf.reg.cmd_en = 1;				\
-		((struct jz_sfc *)sfc)->tranconf.reg.cmd = a;					\
-        ((struct jz_sfc *)sfc)->len = b;                                        \
-        ((struct jz_sfc *)sfc)->addr = c;                                       \
+        ((struct jz_sfc *)sfc)->tranconf.reg.cmd_en = 1;			\
+	((struct jz_sfc *)sfc)->tranconf.reg.cmd = a;				\
+        ((struct jz_sfc *)sfc)->len = b;					\
+        ((struct jz_sfc *)sfc)->addr = c;					\
         ((struct jz_sfc *)sfc)->tranconf.reg.addr_width = d;			\
-        ((struct jz_sfc *)sfc)->addr_plus = 0;                                  \
-        ((struct jz_sfc *)sfc)->tranconf.reg.dmy_bits = e;				\
-        ((struct jz_sfc *)sfc)->tranconf.reg.data_en = f;				\
-	if(a == CMD_FR_CACHE_QUAD) {						\
-			((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_QUAD; \
+        ((struct jz_sfc *)sfc)->addr_plus = 0;					\
+        ((struct jz_sfc *)sfc)->tranconf.reg.dmy_bits = e;			\
+        ((struct jz_sfc *)sfc)->tranconf.reg.data_en = f;			\
+	if (a == CMD_FR_CACHE_QUAD) {						\
+		((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_QUAD; \
 	} else {								\
-			((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_STANDARD; \
+		((struct jz_sfc *)sfc)->tranconf.reg.tran_mode = TRAN_SPI_STANDARD; \
 	}									\
-        sfc_send_cmd(sfc, g);                                                   \
-} while(0)
+        sfc_send_cmd(sfc, g);							\
+} while (0)
 
 #endif
 

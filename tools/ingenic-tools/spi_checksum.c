@@ -35,10 +35,16 @@
 #ifdef CONFIG_M200
 #define SKIP_SIZE 2048
 #endif
+#ifdef CONFIG_T5
+#define SKIP_SIZE 2048
+#endif
 #ifdef CONFIG_T10
 #define SKIP_SIZE 2048
 #endif
 #ifdef CONFIG_T15
+#define SKIP_SIZE 2048
+#endif
+#ifdef CONFIG_T15G
 #define SKIP_SIZE 2048
 #endif
 #ifdef CONFIG_T20
@@ -47,14 +53,25 @@
 #ifdef CONFIG_T21
 #define SKIP_SIZE 2048
 #endif
+#ifdef CONFIG_T23
+#define SKIP_SIZE 2048
+#endif
 #ifdef CONFIG_T30
 #define SKIP_SIZE 2048
 #endif
 #ifdef CONFIG_T31
 #define SKIP_SIZE 2048
 #endif
+#ifdef CONFIG_T40
+#define SKIP_SIZE 2048
+#endif
+#ifdef CONFIG_T41
+#define SKIP_SIZE 2048
+#endif
 
 #define BUFFER_SIZE 4
+
+#define le(a) (((a & 0xff)<<24) | ((a>>8 & 0xff)<< 16) | ((a>>16 & 0xff)<< 8) | ((a>>24 & 0xff)))
 
 #ifndef CONFIG_SPL_SFC_SUPPORT
 int main(int argc, char *argv[])
@@ -122,7 +139,8 @@ int main(int argc, char *argv[])
 	return 0;
 }
 #else
-#define CRC_POSITION		9	/*  9th bytes */
+#define BUFFER_SIZE		4
+#define CRC_POSITION		9	/* 9th bytes */
 #define SPL_LENGTH_POSITION	12	/* 12th bytes */
 
 typedef unsigned char u8;
@@ -176,8 +194,11 @@ static u8 crc7(u8 crc, u8 *buffer, int len)
 
 int main(int argc, char *argv[])
 {
-	u8 crc, buffer[BUFFER_SIZE];
-	int t, fd, count, bytes_read;
+	int fd, count;
+	int bytes_read;
+	char buffer[BUFFER_SIZE];
+	volatile int t = 0;
+	u8 crc = 0;
 
 	if (argc != 2) {
 		printf("Usage: %s fromfile tofile\n\a",argv[0]);
@@ -190,8 +211,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	t = 0;
-	crc = 0;
 	count = 0;
 
 	while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0) {
@@ -203,20 +222,20 @@ int main(int argc, char *argv[])
 		count += bytes_read;
 	}
 
-	printf("spi spl crc7 = %x \n", crc);
 	printf("spi spl count = %08x \n", count);
+	printf("spi spl crc7 = %x \n", crc);
 
 	/*set crc*/
 	lseek(fd, CRC_POSITION, SEEK_SET);
 
-	if (write(fd, &crc, 1) != 1) {
+	if ((t = write(fd, &crc, 1)) != 1) {
 		printf("Write %s Error\n",argv[1]);
 		return 1;
 	}
 
 	/*set spl len*/
 	lseek(fd, SPL_LENGTH_POSITION, SEEK_SET);
-	if (write(fd, &count, 4) != 4) {
+	if ((t = write(fd, &count, 4)) != 4) {
 		printf("Check: Write %s Error\n",argv[1]);
 		return 1;
 	}

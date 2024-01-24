@@ -121,26 +121,28 @@ struct params {
 
 struct desc descriptors[14] = {
 	/*
-	 * saddr,	paddr,		value,		poll_h_mask,	poll_l_mask
+	 * saddr,		paddr,		value,	poll_h_mask,	poll_l_mask
 	 */
 #ifndef FPGA
-	{0x20,		0xffff,		0x1fffffb4,	0,		0},		/* gate clk */
-	{0x10,		0x10,		0x03004a01,	0x8,		0},		/* conf APLL */
-	{0,		0xd4,		0x95773310,	0,		0x7},		/* conf DIV */
-	{0,		0xffff,		0x55073310,	0,		0},		/* conf select */
-#ifdef CONFIG_SPL_MMC_SUPPORT
+	{0x20,			0xffff,		0x1fffffb4,	0,	0},	/* gate clk */
+	{0x10,			0x10,		0x03004a01,	0x8,	0},	/* conf APLL */
+	{0,			0xd4,		0x95773310,	0,	0x7},	/* conf DIV */
+	{0,			0xffff,		0x55073310,	0,	0},	/* conf select */
+
+#if defined(CONFIG_SPL_MMC_SUPPORT)
 #if (CONFIG_JZ_MMC_SPLMSC == 0)
-	{0x68,		0x68,		0x20000017,	0,		0x10000000},	/* conf MSC0CDR */
+	{0x68,			0x68,		0x20000017,	0,		0x10000000},	/* conf MSC0CDR */
 #elif (CONFIG_JZ_MMC_SPLMSC == 1)
-	{0xa4,		0xa4,		0x20000017,	0,		0x10000000},	/* conf MSC1CDR */
+	{0xa4,			0xa4,		0x20000017,	0,		0x10000000},	/* conf MSC1CDR */
 #endif /* CONFIG_JZ_MMC_SPLMSC == 1 */
 #endif /* CONFIG_SPL_MMC_SUPPORT */
-#ifdef CONFIG_SPL_NAND_SUPPORT
-	{0xac,		0xac,		0x20000003,	0,		0x10000000},	/* conf BCHCDR */
+
+#if defined(CONFIG_SPL_NAND_SUPPORT)
+	{0xac,			0xac,		0x20000003,	0,		0x10000000},	/* conf BCHCDR */
 #endif /* CONFIG_SPL_NAND_SUPPORT */
-	{0x20,		0xffff,		0x1fffff80,	0,		0},		/* ungate clk */
+	{0x20,			0xffff,		0x1fffff80,	0,		0},		/* ungate clk */
 #endif /* FPGA */
-	{0xffff,	0xffff, 	0,		0,		0},
+	{0xffff,		0xffff, 	0,		0,		0},
 };
 
 void dump_params(struct params *p)

@@ -470,10 +470,12 @@ static void sdram_size_print(struct ddr_params *p)
 	printf("#define	DDR_CHIP_0_SIZE			%u\n", p->size.chip0);
 	printf("#define	DDR_CHIP_1_SIZE			%u\n", p->size.chip1);
 }
+#if 0
 static unsigned int frandom(int max)
 {
 	return max;
 }
+#endif
 #define swap_bytes(buf,b1,b2) do{                \
          unsigned char swap;                        \
          swap = buf[b1];                            \
@@ -490,7 +492,8 @@ static void mem_remap_print(struct ddr_params *p)
      int bit_width;
      unsigned int remap_array[5];
      unsigned char *s;
-     int i,width;
+     int i;
+     /* int width; */
      s = (unsigned char *)remap_array;
      for(i = 0;i < sizeof(remap_array);i++)
          s[i] = i;

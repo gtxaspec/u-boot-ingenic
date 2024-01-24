@@ -312,7 +312,7 @@ static int sfc_write_data(unsigned int *data, unsigned int length)
 
 	return 0;
 }
-/*this code is same as the spl  in common/spl*/
+/*this code is the same as the spl in common/spl*/
 #if 0
 static void sfc_set_read_reg(unsigned int cmd, unsigned int addr,
 		unsigned int addr_plus, unsigned int addr_len, unsigned int data_en)
@@ -470,6 +470,7 @@ int sfc_init(void )
 {
 	unsigned int i;
 	volatile unsigned int tmp;
+#ifndef CONFIG_FPGA
 #ifndef CONFIG_BURNER
 	sfc_rate = 50000000;
 	clk_set_rate(SSI, sfc_rate);
@@ -481,6 +482,7 @@ int sfc_init(void )
 		sfc_rate = 70000000;
 		clk_set_rate(SSI, sfc_rate);
 	}
+#endif
 #endif
 
 #ifdef CONFIG_SPI_QUAD

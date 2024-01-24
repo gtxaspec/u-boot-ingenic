@@ -56,7 +56,6 @@ void board_usb_init(void)
 }
 #endif /* CONFIG_USB_GADGET */
 
-
 int misc_init_r(void)
 {
 #if 0 /* TO DO */

@@ -12,9 +12,9 @@ typedef enum{
 	RECEIVE,
 }tran_dir;
 
-#define DISABLE			0
-#define ENABLE			1
-#define RDID_NUM		2
+#define DISABLE				0
+#define ENABLE				1
+#define RDID_NUM			2
 
 struct sfc_xfer{
 	int cmd;
@@ -27,11 +27,11 @@ struct sfc_xfer{
 	int column;
 };
 
-#define NOR_MAGIC		0x726f6e	//ascii "nor"
-#define NOR_PART_NUM		10
-#define NORFLASH_PART_RW	0
-#define NORFLASH_PART_WO	1
-#define NORFLASH_PART_RO	2
+#define NOR_MAGIC			0x726f6e	//ascii "nor"
+#define NOR_PART_NUM			10
+#define NORFLASH_PART_RW		0
+#define NORFLASH_PART_WO		1
+#define NORFLASH_PART_RO		2
 struct nor_partition {
 	char name[32];
 	uint32_t size;
@@ -47,28 +47,28 @@ struct norflash_partitions {
 
 
 #define SFC_GLB				(0x0000)
-#define SFC_DEV_CONF          		(0x0004)
-#define SFC_STA_EXP           		(0x0008)
-#define SFC_STA_RT        		(0x000c)
-#define SFC_STA_MSK       		(0x0010)
-#define SFC_TRAN_CONF(n)      		(0x0014 + (n * 4))
-#define SFC_DEV_ADDR(n)       		(0x0030 + (n * 4))
-#define SFC_DEV_ADDR_PLUS(n)  		(0x0048 + (n * 4))
-#define SFC_TRAN_LEN	      		(0x002c)
-#define SFC_MEM_ADDR	      		(0x0060)
+#define SFC_DEV_CONF			(0x0004)
+#define SFC_STA_EXP			(0x0008)
+#define SFC_STA_RT			(0x000c)
+#define SFC_STA_MSK			(0x0010)
+#define SFC_TRAN_CONF(n)		(0x0014 + (n * 4))
+#define SFC_DEV_ADDR(n)			(0x0030 + (n * 4))
+#define SFC_DEV_ADDR_PLUS(n)		(0x0048 + (n * 4))
+#define SFC_TRAN_LEN			(0x002c)
+#define SFC_MEM_ADDR			(0x0060)
 #define SFC_TRIG			(0x0064)
 #define SFC_SR				(0x0068)
 #define SFC_SCR				(0x006c)
-#define SFC_INTC	        	(0x0070)
-#define SFC_FSM		        	(0x0074)
-#define SFC_CGE		        	(0x0078)
-#define SFC_DR		        	(0x1000)
+#define SFC_INTC			(0x0070)
+#define SFC_FSM				(0x0074)
+#define SFC_CGE				(0x0078)
+#define SFC_DR				(0x1000)
 
 
 //For SFC_GLB
 #define	TRAN_DIR			(1 << 13)
-#define GLB_TRAN_DIR_WRITE      	(1)
-#define GLB_TRAN_DIR_READ       	(0)
+#define GLB_TRAN_DIR_WRITE		(1)
+#define GLB_TRAN_DIR_READ		(0)
 #define	THRESHOLD_OFFSET		(7)
 #define THRESHOLD_MSK			(0x3f << THRESHOLD_OFFSET)
 #define OP_MODE				(1 << 6)
@@ -104,13 +104,13 @@ struct norflash_partitions {
 #define TRAN_CONF_DMYBITS_OFFSET	(17)
 #define TRAN_CONF_DMYBITS_MSK		(0x3f << DMYBITS_OFFSET)
 #define TRAN_SPI_STANDARD		(0x0)
-#define TRAN_SPI_DUAL   		(0x1)
-#define TRAN_SPI_QUAD   		(0x5)
-#define TRAN_SPI_IO_QUAD   		(0x6)
+#define TRAN_SPI_DUAL			(0x1)
+#define TRAN_SPI_QUAD			(0x5)
+#define TRAN_SPI_IO_QUAD		(0x6)
 #define POLLEN				(1 << 25)
 #define CMDEN				(1 << 24)
-#define	PHASE_FORMAT         		(1 << 23)
-#define	CMD_EN         		        (1 << 24)
+#define	PHASE_FORMAT			(1 << 23)
+#define	CMD_EN				(1 << 24)
 #define FMAT				(1 << 23)
 #define DMYBITS_OFFSET			(17)
 #define DMYBITS_MSK			(0x3f << DMYBITS_OFFSET)

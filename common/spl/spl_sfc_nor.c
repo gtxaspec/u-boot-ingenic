@@ -127,7 +127,9 @@ void sfc_init()
 {
 	unsigned int tmp;
 
+#ifndef CONFIG_FPGA
 	clk_set_rate(SSI, 70000000);
+#endif
 
 	tmp = THRESHOLD << THRESHOLD_OFFSET;
 	jz_sfc_writel(tmp, SFC_GLB);
@@ -194,4 +196,3 @@ void spl_sfc_nor_load_image(void)
 	return ;
 }
 #endif
-

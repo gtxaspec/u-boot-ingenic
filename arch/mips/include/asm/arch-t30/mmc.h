@@ -58,12 +58,12 @@
 #define MSC_CTRL_EXIT_TRANSFER			(1 << 6)
 #define MSC_CTRL_START_READWAIT			(1 << 5)
 #define MSC_CTRL_STOP_READWAIT			(1 << 4)
-#define MSC_CTRL_RESET		    		(1 << 3)
+#define MSC_CTRL_RESET				(1 << 3)
 #define MSC_CTRL_START_OP			(1 << 2)
 #define MSC_CTRL_CLOCK_CONTROL_BIT		0
 #define MSC_CTRL_CLOCK_CONTROL_MASK		(0x3 << MSC_CTRL_CLOCK_CONTROL_BIT)
-#define MSC_CTRL_CLOCK_CONTROL_STOP		(0x1 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Stop MMC/SD clock */
-#define MSC_CTRL_CLOCK_CONTROL_START  		(0x2 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Start MMC/SD clock */
+  #define MSC_CTRL_CLOCK_CONTROL_STOP		(0x1 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Stop MMC/SD clock */
+  #define MSC_CTRL_CLOCK_CONTROL_START		(0x2 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Start MMC/SD clock */
 
 #define MSC_STRPCL_EXIT_MULTIPLE		(1 << 7)
 #define MSC_STRPCL_EXIT_TRANSFER		(1 << 6)
@@ -74,8 +74,8 @@
 #define MSC_STRPCL_START_OP			(1 << 2)
 #define MSC_STRPCL_CLOCK_CONTROL_BIT		0
 #define MSC_STRPCL_CLOCK_CONTROL_MASK		(0x3 << MSC_STRPCL_CLOCK_CONTROL_BIT)
-#define MSC_STRPCL_CLOCK_CONTROL_STOP		(0x1 << MSC_STRPCL_CLOCK_CONTROL_BIT) /* Stop MMC/SD clock */
-#define MSC_STRPCL_CLOCK_CONTROL_START  	(0x2 << MSC_STRPCL_CLOCK_CONTROL_BIT) /* Start MMC/SD clock */
+  #define MSC_STRPCL_CLOCK_CONTROL_STOP		(0x1 << MSC_STRPCL_CLOCK_CONTROL_BIT) /* Stop MMC/SD clock */
+  #define MSC_STRPCL_CLOCK_CONTROL_START	(0x2 << MSC_STRPCL_CLOCK_CONTROL_BIT) /* Start MMC/SD clock */
 
 /* MSC Status Register (MSC_STAT) */
 
@@ -94,9 +94,9 @@
 #define MSC_STAT_CRC_READ_ERROR			(1 << 4)
 #define MSC_STAT_CRC_WRITE_ERROR_BIT		2
 #define MSC_STAT_CRC_WRITE_ERROR_MASK		(0x3 << MSC_STAT_CRC_WRITE_ERROR_BIT)
-#define MSC_STAT_CRC_WRITE_ERROR_NO		(0 << MSC_STAT_CRC_WRITE_ERROR_BIT) /* No error on transmission of data */
-#define MSC_STAT_CRC_WRITE_ERROR		(1 << MSC_STAT_CRC_WRITE_ERROR_BIT) /* Card observed erroneous transmission of data */
-#define MSC_STAT_CRC_WRITE_ERROR_NOSTS		(2 << MSC_STAT_CRC_WRITE_ERROR_BIT) /* No CRC status is sent back */
+  #define MSC_STAT_CRC_WRITE_ERROR_NO		(0 << MSC_STAT_CRC_WRITE_ERROR_BIT) /* No error on transmission of data */
+  #define MSC_STAT_CRC_WRITE_ERROR		(1 << MSC_STAT_CRC_WRITE_ERROR_BIT) /* Card observed erroneous transmission of data */
+  #define MSC_STAT_CRC_WRITE_ERROR_NOSTS	(2 << MSC_STAT_CRC_WRITE_ERROR_BIT) /* No CRC status is sent back */
 #define MSC_STAT_TIME_OUT_RES			(1 << 1)
 #define MSC_STAT_TIME_OUT_READ			(1 << 0)
 

@@ -29,16 +29,16 @@
  * Basic configuration(SOC, Cache, UART, DDR).
  */
 #if defined(CONFIG_LITE_VERSION)
-#define CONFIG_SYS_APLL_FREQ		712704000	/*If APLLis not used, it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		712704000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((59 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0x645a1c
 #else
-#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLLis not used, it must be set to 0*/
+#define CONFIG_SYS_APLL_FREQ		860160000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((71 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
 #define CONFIG_SYS_APLL_FRAC		0xae147a
 #endif
 
-#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLLis not used, it must be set to 0*/
+#define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
 
 #define SEL_SCLKA			2
 #define SEL_CPU				1
@@ -123,9 +123,12 @@
 /**
  * Boot command definitions.
  */
+
+/*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
+*/
 
 /*
 #if defined(CONFIG_SFC_NOR)
@@ -357,13 +360,9 @@
 /*
 	Platform Default GPIOs:
 */
-
 #define CONFIG_GPIO_SETTINGS \
 ""
 
 #include "isvp_common.h"
-
-#define CONFIG_GPIO_SETTINGS \
-""
 
 #endif /*__CONFIG_ISVP_T10_H__*/

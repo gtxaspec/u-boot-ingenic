@@ -79,22 +79,22 @@
 #define LCR_LPM_MASK		(0x3)
 #define LCR_LPM_SLEEP		(0x1)
 
-#define CPM_LCR_PD_P0		(0x1<<31)
-#define CPM_LCR_PD_P1		(0x1<<30)
-#define CPM_LCR_PD_VPU		(0x1<<29)
-#define CPM_LCR_PD_GPU		(0x1<<28)
-#define CPM_LCR_PD_ISP		(0x1<<27)
-#define CPM_LCR_PD_H2D		(0x1<<26)
-#define CPM_LCR_P0S		(0x1<<25)
-#define CPM_LCR_P1S		(0x1<<24)
-#define CPM_LCR_VPUS 		(0x1<<23)
-#define CPM_LCR_GPUS		(0x1<<22)
-#define CPM_LCR_ISPS		(0x1<<21)
-#define CPM_LCR_H2DS		(0x1<<20)
-#define CPM_LCR_PD_DMIC		(0x1<<7)
-#define CPM_LCR_DMIC_S		(0x1<<6)
-#define CPM_LCR_IDLE_DS		(0x1<<3)
-#define CPM_LCR_SLEEP_DS	(0x1<<2)
+#define CPM_LCR_PD_P0		(0x1 << 31)
+#define CPM_LCR_PD_P1		(0x1 << 30)
+#define CPM_LCR_PD_VPU		(0x1 << 29)
+#define CPM_LCR_PD_GPU		(0x1 << 28)
+#define CPM_LCR_PD_ISP		(0x1 << 27)
+#define CPM_LCR_PD_H2D		(0x1 << 26)
+#define CPM_LCR_P0S		(0x1 << 25)
+#define CPM_LCR_P1S		(0x1 << 24)
+#define CPM_LCR_VPUS 		(0x1 << 23)
+#define CPM_LCR_GPUS		(0x1 << 22)
+#define CPM_LCR_ISPS		(0x1 << 21)
+#define CPM_LCR_H2DS		(0x1 << 20)
+#define CPM_LCR_PD_DMIC		(0x1 << 7)
+#define CPM_LCR_DMIC_S		(0x1 << 6)
+#define CPM_LCR_IDLE_DS		(0x1 << 3)
+#define CPM_LCR_SLEEP_DS	(0x1 << 2)
 
 #define CPM_CLKGR_DDR		(1 << 31)
 #define CPM_CLKGR_TCU		(1 << 30)
@@ -129,16 +129,16 @@
 #define CPM_RSR_WR		(1 << 1)
 #define CPM_RSR_PR		(1 << 0)
 
-#define OPCR_ERCS		(0x1<<2)
-#define OPCR_PD			(0x1<<3)
-#define OPCR_IDLE		(0x1<<31)
+#define OPCR_ERCS		(0x1 << 2)
+#define OPCR_PD			(0x1 << 3)
+#define OPCR_IDLE		(0x1 << 31)
 
 #define cpm_readl(off)		readl(CPM_BASE + (off))
 #define cpm_writel(val,off)	writel(val, CPM_BASE + (off))
 #define cpm_inl(off)		readl(CPM_BASE + (off))
 #define cpm_outl(val,off)	writel(val, CPM_BASE + (off))
-#define cpm_test_bit(bit,off)	(cpm_inl(off) & 0x1<<(bit))
-#define cpm_set_bit(bit,off)	(cpm_outl((cpm_inl(off) | 0x1<<(bit)),off))
+#define cpm_test_bit(bit,off)	(cpm_inl(off) & 0x1 << (bit))
+#define cpm_set_bit(bit,off)	(cpm_outl((cpm_inl(off) | 0x1 << (bit)), off))
 #define cpm_clear_bit(bit,off)	(cpm_outl(cpm_inl(off) & ~(0x1 << bit), off))
 
 /*USBCDR*/
@@ -184,11 +184,11 @@
 #define cpm_get_scrpad()        readl(CPM_BASE + CPM_CPSPR)
 #define cpm_set_scrpad(data)                    \
 do {                                            \
-	volatile int i = 0x3fff;                \
+	volatile int i = 0x3fff;		\
 	writel(0x5a5a,CPM_BASE + CPM_CPSPPR);	\
 	while(i--);				\
 	writel(data,CPM_BASE + CPM_CPSPR);	\
-	writel(0xa5a5,CPM_BASE + CPM_CPSPPR);   \
+	writel(0xa5a5,CPM_BASE + CPM_CPSPPR);	\
 } while (0)
 
 #endif /* __CPM_H__ */

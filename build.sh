@@ -18,6 +18,9 @@ cfg[t20n_msc0]="isvp_t20_msc0"
 cfg[t21n]="isvp_t21_sfcnor"
 cfg[t21n_msc0]="isvp_t21_msc0"
 
+cfg[t23n]="isvp_t23n_sfcnor"
+cfg[t23n_msc0]="isvp_t23n_msc0"
+
 cfg[t30n]="isvp_t30_sfcnor"
 cfg[t30l]="isvp_t30_sfcnor_lite"
 cfg[t30x]="isvp_t30_sfcnor_ddr128M"
@@ -53,10 +56,10 @@ build_version() {
 	else
 		# Normal mode, log to file
 		log="building-${soc}.log"; :>"$log"
-		make distclean    >>"$log" 2>&1
-		mkdir -p "${OUTPUT_DIR}" >/dev/null 2>&1
-		make "${cfg[$soc]}" >>"$log" 2>&1
-		make -j"$(nproc)"   >>"$log" 2>&1
+		make distclean	 		>>"$log"	2>&1
+		mkdir -p "${OUTPUT_DIR}"	>/dev/null	2>&1
+		make "${cfg[$soc]}"		>>"$log"	2>&1
+		make -j"$(nproc)"		>>"$log"	2>&1
 		cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
 	fi
 }

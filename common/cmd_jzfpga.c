@@ -10,6 +10,9 @@
 #elif defined(CONFIG_M200)
 #define BOOT_RAM_LOADADDR (0xb3418000)
 #define BOOT_ROM_SIZE (32 * 1024)
+#elif defined(CONFIG_T23)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (16 * 1024)
 #endif
 
 static int do_jbootrom_part(unsigned long bootrom_addr)

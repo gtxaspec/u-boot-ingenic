@@ -40,7 +40,7 @@
 #define	MSC_RES			0x034
 #define	MSC_RXFIFO		0x038
 #define	MSC_TXFIFO		0x03C
-#define	MSC_LPM 		0x040
+#define	MSC_LPM			0x040
 #define MSC_DMAC		0x044
 #define MSC_DMANDA		0x048
 #define MSC_DMADA		0x04c
@@ -48,7 +48,7 @@
 #define MSC_DMACMD		0x054
 #define MSC_CTRL2		0x058
 #define MSC_RTCNT		0x05c
-#define MSC_DBG			0x0fc   //T31 delete
+#define MSC_DBG			0x0fc   // T31 delete
 
 /* MSC Clock and Control Register (MSC_CTRL) */
 
@@ -56,21 +56,21 @@
 #define MSC_CTRL_EXIT_TRANSFER			(1 << 6)
 #define MSC_CTRL_START_READWAIT			(1 << 5)
 #define MSC_CTRL_STOP_READWAIT			(1 << 4)
-#define MSC_CTRL_RESET		    		(1 << 3)
+#define MSC_CTRL_RESET				(1 << 3)
 #define MSC_CTRL_START_OP			(1 << 2)
 #define MSC_CTRL_CLOCK_CONTROL_BIT		0
 #define MSC_CTRL_CLOCK_CONTROL_MASK		(0x3 << MSC_CTRL_CLOCK_CONTROL_BIT)
 #define MSC_CTRL_CLOCK_CONTROL_STOP		(0x1 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Stop MMC/SD clock */
-#define MSC_CTRL_CLOCK_CONTROL_START  		(0x2 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Start MMC/SD clock */
+#define MSC_CTRL_CLOCK_CONTROL_START		(0x2 << MSC_CTRL_CLOCK_CONTROL_BIT) /* Start MMC/SD clock */
 
 /* MSC Status Register (MSC_STAT) */
 
 #define MSC_STAT_AUTO_CMD_DONE			(1 << 31)
-#define MSC_STAT_BCE                		(1 << 20)
-#define MSC_STAT_BDE	            		(1 << 19)
-#define MSC_STAT_BAE       			(1 << 18)
-#define MSC_STAT_BAR		        	(1 << 17)
-#define MSC_STAT_DMAEND		        	(1 << 16)
+#define MSC_STAT_BCE				(1 << 20)
+#define MSC_STAT_BDE				(1 << 19)
+#define MSC_STAT_BAE				(1 << 18)
+#define MSC_STAT_BAR				(1 << 17)
+#define MSC_STAT_DMAEND				(1 << 16)
 #define MSC_STAT_IS_RESETTING			(1 << 15)
 #define MSC_STAT_SDIO_INT_ACTIVE		(1 << 14)
 #define MSC_STAT_PRG_DONE			(1 << 13)
@@ -115,7 +115,7 @@
 #define CMDAT_BUS_WIDTH1			(0x0 << MSC_CMDAT_BUS_WIDTH_BIT)
 #define CMDAT_BUS_WIDTH4			(0x2 << MSC_CMDAT_BUS_WIDTH_BIT)
 #define CMDAT_BUS_WIDTH8			(0x3 << MSC_CMDAT_BUS_WIDTH_BIT)
-#define	MSC_CMDAT_DMA_EN			(1 << 8) //T31 delete
+#define	MSC_CMDAT_DMA_EN			(1 << 8) // T31 delete
 #define	MSC_CMDAT_INIT				(1 << 7)
 #define	MSC_CMDAT_BUSY				(1 << 6)
 #define	MSC_CMDAT_STREAM_BLOCK			(1 << 5)
@@ -133,7 +133,7 @@
 #define MSC_CMDAT_RESPONSE_R6			(0x6 << MSC_CMDAT_RESPONSE_BIT) /* Format R6 */
 #define MSC_CMDAT_RESPONSE_R7			(0x7 << MSC_CMDAT_RESPONSE_BIT) /* Format R7 */
 
-#define	CMDAT_DMA_EN				(1 << 8) //T31 delete
+#define	CMDAT_DMA_EN				(1 << 8) // T31 delete
 #define	CMDAT_INIT				(1 << 7)
 #define	CMDAT_BUSY				(1 << 6)
 #define	CMDAT_STREAM				(1 << 5)
@@ -143,7 +143,7 @@
 /* MSC Interrupts Mask Register (MSC_IMASK) */
 
 #define MSC_IMASK_TIME_OUT_RES			(1 << 9)
-#define MSC_IMASK_TIME_OUT_READ 		(1 << 8)
+#define MSC_IMASK_TIME_OUT_READ			(1 << 8)
 #define	MSC_IMASK_SDIO				(1 << 7)
 #define	MSC_IMASK_TXFIFO_WR_REQ			(1 << 6)
 #define	MSC_IMASK_RXFIFO_RD_REQ			(1 << 5)

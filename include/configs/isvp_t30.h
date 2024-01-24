@@ -276,13 +276,18 @@
 /**
  * Boot command definitions.
  */
+
+/*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
+*/
 
+/*
 #if defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
 #endif
+*/
 
 /**
  * Drivers configuration.
@@ -410,12 +415,14 @@
 #define CONFIG_SYS_MAXARGS		64
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT		CONFIG_SYS_BOARD "# "
-#define CONFIG_SYS_CBSIZE		1024
+/* #define CONFIG_SYS_CBSIZE		1024 */
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
+/*
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
 #define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
+*/
 
 #define CONFIG_SYS_SDRAM_BASE		0x80000000 /* cached (KSEG0) address */
 #define CONFIG_SYS_SDRAM_MAX_TOP	0x84000000 /* don't run into IO space */
@@ -500,11 +507,11 @@
 
 #define CONFIG_MBR_P2_OFF		28mb
 #define CONFIG_MBR_P2_END		58mb
-#define CONFIG_MBR_P2_TYPE 		linux
+#define CONFIG_MBR_P2_TYPE		linux
 
 #define CONFIG_MBR_P3_OFF		1609mb
 #define CONFIG_MBR_P3_END		7800mb
-#define CONFIG_MBR_P3_TYPE 		fat
+#define CONFIG_MBR_P3_TYPE		fat
 #endif
 
 /*

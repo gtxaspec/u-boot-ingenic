@@ -32,14 +32,14 @@
 #define RTC_RTCSAR		0x08
 #define RTC_RTCGR		0x0C
 
-#define RTC_HCR			0x20 //T31 delete
-#define RTC_HWFCR		0x24 //T31 delete
-#define RTC_HRCR		0x28 //T31 delete
-#define RTC_HWCR		0x2C //T31 delete
-#define RTC_HWRSR		0x30 //T31 delete
-#define RTC_HSPR		0x34 //T31 delete
+#define RTC_HCR			0x20 // T31 delete
+#define RTC_HWFCR		0x24 // T31 delete
+#define RTC_HRCR		0x28 // T31 delete
+#define RTC_HWCR		0x2C // T31 delete
+#define RTC_HWRSR		0x30 // T31 delete
+#define RTC_HSPR		0x34 // T31 delete
 #define RTC_WENR		0x3C
-#define RTC_CKPCR		0x40 //T31 delete
+#define RTC_CKPCR		0x40 // T31 delete
 #define RTC_PWRONCR		0x48
 
 /* RTC Control Register */
@@ -49,7 +49,7 @@
 #define RTC_RTCCR_AF		(1 << 4)
 #define RTC_RTCCR_AIE		(1 << 3)
 #define RTC_RTCCR_AE		(1 << 2)
-#define RTC_RTCCR_SELEXC	(1 << 1) //T31 delete
+#define RTC_RTCCR_SELEXC	(1 << 1) // T31 delete
 #define RTC_RTCCR_RTCE		(1 << 0)
 
 /* Write Enable Pattern Register */

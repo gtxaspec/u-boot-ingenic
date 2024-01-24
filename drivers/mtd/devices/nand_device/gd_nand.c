@@ -3,7 +3,7 @@
 #include <linux/mtd/partitions.h>
 #include "../jz_sfc_nand.h"
 #include "nand_common.h"
-#define GD_DEVICES_NUM          8
+#define GD_DEVICES_NUM	10
 #define TSETUP		20
 #define THOLD		5
 #define	TSHSL_R		20
@@ -165,6 +165,44 @@ static struct jz_nand_base_param gd_param[GD_DEVICES_NUM] = {
 		.need_quad = 1,
 #endif
 	},
+	[8] = {
+		/*IS37SML01G1*/
+		.pagesize = 2 * 1024,
+		.blocksize = 2 * 1024 * 64,
+		.oobsize = 64,
+		.flashsize = 2 * 1024 * 64 * 1024,
+
+		.tSETUP  = 5,
+		.tHOLD   = 5,
+		.tSHSL_R = TSHSL_R,
+		.tSHSL_W = TSHSL_W,
+
+		.ecc_max = 0x2,
+#ifdef CONFIG_SPI_STANDARD
+		.need_quad = 0,
+#else
+		.need_quad = 1,
+#endif
+	},
+	[9] = {
+		/*GD5F1GM7UE*/
+		.pagesize = 2 * 1024,
+		.blocksize = 2 * 1024 * 64,
+		.oobsize = 64,
+		.flashsize = 2 * 1024 * 64 * 1024,
+
+		.tSETUP  = 5,
+		.tHOLD   = 5,
+		.tSHSL_R = TSHSL_R,
+		.tSHSL_W = TSHSL_W,
+
+		.ecc_max = 0x2,
+#ifdef CONFIG_SPI_STANDARD
+		.need_quad = 0,
+#else
+		.need_quad = 1,
+#endif
+	},
 
 };
 
@@ -177,6 +215,8 @@ static struct device_id_struct device_id[GD_DEVICES_NUM] = {
 	DEVICE_ID_STRUCT(0xB4, "GD5F4GQ4UC",&gd_param[5]),
 	DEVICE_ID_STRUCT(0x51, "GD5F1GQ5UE",&gd_param[6]),
 	DEVICE_ID_STRUCT(0x52, "GD5F2GQ5UE",&gd_param[7]),
+	DEVICE_ID_STRUCT(0x21, "IS37SML01G1",&gd_param[8]),
+	DEVICE_ID_STRUCT(0x91, "GD5F1GM7UE",&gd_param[9]),
 };
 
 static void gd_single_read(struct sfc_transfer *transfer, struct cmd_info *cmd, struct flash_operation_message *op_info) {
@@ -186,19 +226,23 @@ static void gd_single_read(struct sfc_transfer *transfer, struct cmd_info *cmd, 
 	uint8_t device_id = nand_desc->id_device;
 	uint8_t addr_len = 0;
 	switch(device_id) {
-	    case 0xB1 ... 0xB4:
-		    addr_len = 3;
-		    break;
-	    case 0xD1 ... 0xD4:
-		    addr_len = 2;
-		    break;
+		case 0xB1 ... 0xB4:
+			addr_len = 3;
+			break;
+		case 0xD1 ... 0xD4:
+			addr_len = 2;
+			break;
 		case 0x51 ... 0x52:
-		    addr_len = 2;
-		    break;
-	    default:
-		    printf("device_id err, please check your  device id: device_id = 0x%02x\n", device_id);
-		    addr_len = 2;
-		    break;
+			addr_len = 2;
+			break;
+		case 0x21:
+		case 0x91:
+			addr_len = 2;
+			break;
+		default:
+			printf("device_id err, please check your  device id: device_id = 0x%02x\n", device_id);
+			addr_len = 2;
+			break;
 	}
 
 	nand_single_read(transfer, cmd, op_info, addr_len);
@@ -212,19 +256,23 @@ static void gd_quad_read(struct sfc_transfer *transfer, struct cmd_info *cmd, st
 	uint8_t device_id = nand_desc->id_device;
 	uint8_t addr_len = 0;
 	switch(device_id) {
-	    case 0xB1 ... 0xB4:
-		    addr_len = 3;
-		    break;
-	    case 0xD1 ... 0xD4:
-		    addr_len = 2;
-		    break;
+		case 0xB1 ... 0xB4:
+			addr_len = 3;
+			break;
+		case 0xD1 ... 0xD4:
+			addr_len = 2;
+			break;
 		case 0x51 ... 0x52:
-		    addr_len = 2;
-		    break;
-	    default:
-		    printf("device_id err, please check your device id: device_id = 0x%02x\n", device_id);
-		    addr_len = 2;
-		    break;
+			addr_len = 2;
+			break;
+		case 0x21:
+		case 0x91:
+			addr_len = 2;
+			break;
+		default:
+			printf("device_id err, please check your device id: device_id = 0x%02x\n", device_id);
+			addr_len = 2;
+			break;
 	}
 	nand_quad_read(transfer, cmd, op_info, addr_len);
 	return;
@@ -306,13 +354,6 @@ static int32_t gd_get_read_feature(struct flash_operation_message *op_info) {
 			switch((ecc_status >> 4) & 0x7) {
 				case 0x7:
 					ret = -EBADMSG;
-					break;
-				case 0x6:
-					ret = 0x8;
-					break;
-				case 0x5:
-					ret = 0x7;
-					break;
 				default:
 					ret = 0;
 					break;
@@ -320,17 +361,9 @@ static int32_t gd_get_read_feature(struct flash_operation_message *op_info) {
 			break;
 		case 0xD1 ... 0xD4:
 			switch((ecc_status >> 4) & 0x3) {
-				case 0x3:
-					ret = 0x8;
-					break;
 				case 0x2:
 					ret = -EBADMSG;
 					break;
-				case 0x1:
-					if((ret = gd_get_f0_register_value(flash)) < 0)
-						return ret;
-					if(((ret >> 4) & 0x3) == 0x3)
-						ret = 0x7;
 				default:
 					ret = 0;
 					break;
@@ -342,11 +375,17 @@ static int32_t gd_get_read_feature(struct flash_operation_message *op_info) {
 				case 0x3:
 					ret = 0x0;
 					break;
-				case 0x1:
-					ret = 0x4;
-					break;
 				default:
 					ret = -EBADMSG;
+			}
+			break;
+		case 0x21:
+		case 0x91:
+			switch((ecc_status >> 4) & 0x3) {
+				case 0x2:
+					ret = -EBADMSG;
+				default:
+					ret = 0;
 			}
 			break;
 		default:

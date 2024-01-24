@@ -521,7 +521,13 @@ $(obj)u-boot.dis:	$(obj)u-boot
 		$(OBJDUMP) -d $< > $@
 
 
-
+ifeq ($(CONFIG_SPL_PARAMS_FIXER),y)
+$(obj)u-boot-with-spl.bin: $(obj)spl/u-boot-spl-with-params.bin $(obj)u-boot.bin
+		$(OBJCOPY) ${OBJCFLAGS} --pad-to=$(CONFIG_SPL_PAD_TO) \
+			-I binary -O binary $< $(obj)spl/u-boot-spl-pad.bin
+		cat $(obj)spl/u-boot-spl-pad.bin $(obj)u-boot.bin > $@
+		rm $(obj)spl/u-boot-spl-pad.bin
+else
 $(obj)u-boot-with-spl.bin: $(obj)spl/u-boot-spl.bin $(obj)u-boot.bin
 		$(OBJCOPY) ${OBJCFLAGS} --pad-to=$(CONFIG_SPL_PAD_TO) \
 			-I binary -O binary $< $(obj)spl/u-boot-spl-pad.bin
@@ -534,6 +540,7 @@ endif
 endif
 		cat $(obj)spl/u-boot-spl-pad.bin $(obj)u-boot.bin > $@
 		rm $(obj)spl/u-boot-spl-pad.bin
+endif
 
 $(obj)u-boot-lzo-with-spl.bin: $(obj)spl/u-boot-spl.bin $(obj)u-boot-lzo.img
 		$(OBJCOPY) ${OBJCFLAGS} --pad-to=$(CONFIG_SPL_PAD_TO) \
@@ -616,7 +623,7 @@ $(obj)u-boot-with-spl-mbr.bin: $(obj)u-boot-with-spl.bin
 		cat $(obj)tools/ingenic-tools/mbr.bin $(obj)u-boot-with-spl.bin > $@
 
 ifeq ($(CONFIG_SPL_PARAMS_FIXER),y)
-$(obj)u-boot-with-spl-mbr-gpt.bin: $(obj)u-boot-with-spl.bin
+$(obj)u-boot-with-spl-mbr-gpt.bin: $(obj)u-boot-with-spl.bin $(obj)spl/u-boot-spl.bin
 		cat $(obj)tools/ingenic-tools/mbr-gpt.bin $(obj)u-boot-with-spl.bin > $@
 		$(obj)tools/ingenic-tools/spl_params_fixer $@ $(obj)spl/u-boot-spl.bin 0 256 > /dev/null
 $(obj)u-boot-lzo-with-spl-mbr-gpt.bin: $(obj)u-boot-lzo-with-spl.bin
@@ -691,6 +698,11 @@ nand_spl:	$(TIMESTAMP_FILE) $(VERSION_FILE) depend
 $(obj)u-boot-nand.bin:	nand_spl $(obj)u-boot.bin
 		cat $(obj)nand_spl/u-boot-spl-16k.bin $(obj)u-boot.bin > $(obj)u-boot-nand.bin
 
+ifeq ($(CONFIG_SPL_PARAMS_FIXER),y)
+$(obj)spl/u-boot-spl-with-params.bin:	$(obj)spl/u-boot-spl.bin
+		$(obj)tools/ingenic-tools/spl_params_fixer $< $< 256 512 > /dev/null
+		mv $< $@
+endif
 $(obj)spl/u-boot-spl.bin:	$(SUBDIR_TOOLS) depend
 		$(MAKE) -C spl all
 

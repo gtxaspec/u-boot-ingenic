@@ -132,9 +132,12 @@
 /**
  * Boot command definitions.
  */
+
+/*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
+*/
 
 /*
 #if defined(CONFIG_SFC_NOR)
@@ -356,11 +359,11 @@
 
 #define CONFIG_MBR_P2_OFF		28mb
 #define CONFIG_MBR_P2_END		58mb
-#define CONFIG_MBR_P2_TYPE 		linux
+#define CONFIG_MBR_P2_TYPE		linux
 
 #define CONFIG_MBR_P3_OFF		1609mb
 #define CONFIG_MBR_P3_END		7800mb
-#define CONFIG_MBR_P3_TYPE 		fat
+#define CONFIG_MBR_P3_TYPE		fat
 #endif
 
 /*
@@ -370,7 +373,6 @@
 	wyze_mmc_enable = 48
 	wyze_cd_enable = 43
 */
-
 #define CONFIG_GPIO_SETTINGS \
 "gpio_default=47O\0" \
 "gpio_default_net=43O 48o 43o\0"

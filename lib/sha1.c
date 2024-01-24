@@ -36,7 +36,7 @@
 #include <string.h>
 #endif /* USE_HOSTCC */
 #include <watchdog.h>
-#include "../include/sha1.h"
+#include "sha1.h"
 
 /*
  * 32-bit integer manipulation macros (big endian)
@@ -389,7 +389,7 @@ void sha1_hmac(const unsigned char *key, int keylen,
 	memset (&ctx, 0, sizeof (sha1_context));
 }
 
-static const char _sha1_src[] = "_sha1_src";
+/*static const char _sha1_src[] = "_sha1_src";*/
 
 #ifdef SELF_TEST
 /*

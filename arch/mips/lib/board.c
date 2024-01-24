@@ -403,19 +403,21 @@ extern void board_usb_init(void);
 	bb_miiphy_init();
 #endif
 #if defined(CONFIG_CMD_NET)
-	/*puts("Net:   ");
-	eth_initialize(gd->bd); */
+	/*
+	puts("Net:   ");
+	eth_initialize(gd->bd);
+	*/
 	int ret = 0;
 	char* eth_disable = getenv("eth_disable");
 
-	#ifdef CONFIG_USB_ETHER_ASIX
+#ifdef CONFIG_USB_ETHER_ASIX
 	char* ethact = getenv("ethact");
 	if (ethact && strncmp(ethact, "asx", 3) == 0) {
 		if (run_command("usb start", 0) != 0) {
 			printf("USB start failed\n");
 		}
 	}
-	#endif
+#endif
 
 	// Check if eth_disable is set to "true"
 	if (eth_disable && strcmp(eth_disable, "true") == 0) {

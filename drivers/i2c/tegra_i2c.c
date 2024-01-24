@@ -435,7 +435,7 @@ void i2c_init_board(void)
 	if (process_nodes(blob, node_list, count, 0, 1))
 		return;
 
-	/* Now get the older (T20/T30/T21/T31) normal I2C ports */
+	/* Now get the older (T20/T30/T21/T31/T23) normal I2C ports */
 	count = fdtdec_find_aliases_for_id(blob, "i2c",
 			COMPAT_NVIDIA_TEGRA20_I2C, node_list,
 			TEGRA_I2C_NUM_CONTROLLERS);

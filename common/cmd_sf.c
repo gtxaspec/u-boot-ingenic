@@ -13,7 +13,7 @@
 #include <asm/io.h>
 
 #ifndef CONFIG_SF_DEFAULT_SPEED
-#define CONFIG_SF_DEFAULT_SPEED	1000000
+#define CONFIG_SF_DEFAULT_SPEED		1000000
 #endif
 
 #ifndef CONFIG_SF_DEFAULT_MODE

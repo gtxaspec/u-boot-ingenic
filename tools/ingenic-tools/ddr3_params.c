@@ -207,6 +207,7 @@ static void ddrp_params_creator_ddr3(struct ddrp_reg *ddrp, struct ddr_params *p
 #endif
 	
 	ddrp->dtpr0.b.tMRD = tmp - 4;
+
 #if (defined(CONFIG_T10) || defined(CONFIG_T20))
 	DDRP_TIMING_SET(0,ddr3_params,tRTP,3,2,6);
 #else
@@ -218,6 +219,7 @@ static void ddrp_params_creator_ddr3(struct ddrp_reg *ddrp, struct ddr_params *p
 	ASSERT_MASK(tmp - 4, 1);
 	BETWEEN(tmp,4,5);
 	ddrp->dtpr0.b.tCCD = tmp - 4;
+
 #if (defined(CONFIG_T10) || defined(CONFIG_T20))
 	DDRP_TIMING_SET(1,ddr3_params,tFAW,6,2,31);
 #else

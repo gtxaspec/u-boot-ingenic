@@ -1,27 +1,36 @@
 #ifndef __CONFIG_ISVP_COMMON_H__
 #define __CONFIG_ISVP_COMMON_H__
 
-#define CONFIG_MIPS32		/* MIPS32 CPU core */
+#define CONFIG_MIPS32
 #define CONFIG_CPU_XBURST
 #define CONFIG_SYS_LITTLE_ENDIAN
 /*#define CONFIG_DDR_AUTO_SELF_REFRESH*/
 #define CONFIG_SPL_DDR_SOFT_TRAINING
+/*#define CONFIG_SPL_DDR_SOFT_TRAINING*/
 
 #if defined(__CONFIG_ISVP_T10_H__)
-#define CONFIG_T10		/* T10 SoC */
+#define CONFIG_T10
 #define CONFIG_SOC "t10"
+#elif defined(__CONFIG_ISVP_T15_H__)
+#define CONFIG_T15
+#define CONFIG_SOC "t15"
 #elif defined(__CONFIG_ISVP_T20_H__)
-#define CONFIG_T20		/* T20 SoC */
+#define CONFIG_T20
 #define CONFIG_SOC "t20"
 #elif defined(__CONFIG_ISVP_T21_H__)
-#define CONFIG_T21		/* T21 SoC */
+#define CONFIG_T21
 #define CONFIG_SOC "t21"
+#elif defined(__CONFIG_ISVP_T23_H__)
+#define CONFIG_T23
+#define CONFIG_SOC "t23"
 #elif defined(__CONFIG_ISVP_T30_H__)
-#define CONFIG_T30		/* T30 SoC */
+#define CONFIG_T30
 #define CONFIG_SOC "t30"
-#else
-#define CONFIG_T31		/* T31 SoC */
+#elif defined(__CONFIG_ISVP_T31_H__)
+#define CONFIG_T31
 #define CONFIG_SOC "t31"
+#else
+// Unknown SoC
 #endif
 
 #define T10N "T10N"
@@ -32,6 +41,8 @@
 #define T20X "T20X"
 
 #define T21N "T21N"
+
+#define T23N "T23N"
 
 #define T30N "T30N"
 #define T30L "T30L"
@@ -47,115 +58,73 @@
 #define T31AL "T31AL"
 
 
-#ifdef CONFIG_T10
-    #ifdef CONFIG_LITE_VERSION
-        #define SOC_VAR T10L
-    #else
-        #define SOC_VAR T10N
-    #endif
+#if defined(CONFIG_T10)
+#if defined(CONFIG_LITE_VERSION)
+#define SOC_VAR T10L
+#else
+#define SOC_VAR T10N
+#endif
 #endif
 
-#ifdef CONFIG_T20
-    #ifdef CONFIG_DDR2_128M
-        #define SOC_VAR T20X
-    #elif defined(CONFIG_LITE_VERSION)
-        #define SOC_VAR T20L
-    #else
-        #define SOC_VAR T20N
-    #endif
+#if defined(CONFIG_T20)
+#if defined(CONFIG_DDR2_128M)
+#define SOC_VAR T20X
+#elif defined(CONFIG_LITE_VERSION)
+#define SOC_VAR T20L
+#else
+#define SOC_VAR T20N
+#endif
 #endif
 
-#ifdef CONFIG_T21
-    #define SOC_VAR T21N
+#if defined(CONFIG_T21)
+#define SOC_VAR T21N
 #endif
 
-#ifdef CONFIG_T30
-    #ifdef CONFIG_DDR2_128M
-        #ifdef CONFIG_T30A
-            #define SOC_VAR T30A
-        #elif defined(CONFIG_T30A1)
-            #define SOC_VAR T30A1
-        #else
-            #define SOC_VAR T30X
-        #endif
-    #elif defined(CONFIG_LITE_VERSION)
-        #define SOC_VAR T30L
-    #else
-        #define SOC_VAR T30N
-    #endif
+#if defined(CONFIG_T23)
+#define SOC_VAR T23N
 #endif
 
-#ifdef CONFIG_T31
-    #ifdef CONFIG_DDR2_128M
-        #ifdef CONFIG_T31A
-            #define SOC_VAR T31A
-        #elif defined(CONFIG_T31AL)
-            #define SOC_VAR T31AL
-        #else
-            #define SOC_VAR T31X
-        #endif
-    #elif defined(CONFIG_LITE_VERSION)
-        #ifdef CONFIG_T31LC
-            #define SOC_VAR T31LC
-        #else
-            #define SOC_VAR T31L
-        #endif
-    #else
-        #define SOC_VAR T31N
-    #endif
+#if defined(CONFIG_T30)
+#if defined(CONFIG_DDR2_128M)
+#if defined(CONFIG_T30A)
+#define SOC_VAR T30A
+#elif defined(CONFIG_T30A1)
+#define SOC_VAR T30A1
+#else
+#define SOC_VAR T30X
+#endif
+#elif defined(CONFIG_LITE_VERSION)
+#define SOC_VAR T30L
+#else
+#define SOC_VAR T30N
+#endif
 #endif
 
-#define CONFIG_U_BOOT_BUILD_NAME	"openipc_flex"
-#define CONFIG_SFC_MIN_ALIGN		0x10000 /*0x1000->4K Erase, 0x8000->32K, 0x10000->64K*/
-
-#undef CONFIG_SYS_PROMPT
-#define CONFIG_SYS_PROMPT		"OpenIPC # "
-
-#define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_AUTOBOOT_PROMPT		"Press Ctrl-c to abort autoboot... %d %d\n", bootdelay
-#define CONFIG_AUTOBOOT_STOP_STR	"\x3"
-
-#define CONFIG_SYS_LONGHELP
-#define CONFIG_CMDLINE_EDITING
-#define CONFIG_SYS_MAXARGS		64
-#define CONFIG_SYS_NO_FLASH
-
-#define CONFIG_SYS_CBSIZE		2048
-#define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-#define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
-#define CONFIG_SYS_BOOTPARAMS_LEN	(256 * 1024)
-#define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
-
-#define CONFIG_SKIP_LOWLEVEL_INIT
-#define CONFIG_CMDLINE_TAG
-
-#define CONFIG_SYS_UART_INDEX		1
-#define CONFIG_BAUDRATE			115200
-#if defined(CONFIG_T21) || defined(CONFIG_T30) || defined(CONFIG_T31)
-    #define CONFIG_SYS_UART_CONTROLLER_STEP    0x1000
+#if defined(CONFIG_T31)
+#if defined(CONFIG_DDR2_128M)
+#if defined(CONFIG_T31A)
+#define SOC_VAR T31A
+#elif defined(CONFIG_T31AL)
+#define SOC_VAR T31AL
+#else
+#define SOC_VAR T31X
+#endif
+#elif defined(CONFIG_LITE_VERSION)
+#if defined(CONFIG_T31LC)
+#define SOC_VAR T31LC
+#else
+#define SOC_VAR T31L
+#endif
+#else
+#define SOC_VAR T31N
+#endif
 #endif
 
-#define CONFIG_BOOTDELAY		1
-#define CONFIG_CMD_TFTPPUT		1
-#define CONFIG_CMD_FAT			1
-#define CONFIG_FAT_WRITE		1
-#define CONFIG_CMD_FS_GENERIC		1
-#define CONFIG_CMD_GPIO			1
-#define	CONFIG_SYS_HUSH_PARSER		1
-
-#define CONFIG_NETMASK			255.255.255.0
-#define CONFIG_GATEWAYIP		192.168.1.1
-#define CONFIG_SERVERIP			192.168.1.254
-#define CONFIG_IPADDR			192.168.1.10
-/*#define CONFIG_ETHADDR			00:00:23:34:45:66*/
-#define CONFIG_RANDOM_MACADDR
-
-#define CONFIG_AUTO_UPDATE		1
-#ifdef CONFIG_AUTO_UPDATE
-#define CONFIG_CMD_SDUPDATE		1
+#if defined(CONFIG_T23)
+#define CONFIG_GMAC_PHY_RATE     25000000
+#else
+#define CONFIG_GMAC_PHY_RATE     50000000
 #endif
-
-#define CONFIG_CMD_SDSTART		1
 
 /**
  * Environment
@@ -174,12 +143,54 @@
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
 #endif
 
+#define CONFIG_U_BOOT_BUILD_NAME	"openipc_flex"
+#define CONFIG_SFC_MIN_ALIGN		0x10000 /*0x1000->4K Erase, 0x8000->32K, 0x10000->64K*/
+
+#undef CONFIG_SYS_PROMPT
+#define CONFIG_SYS_PROMPT		"OpenIPC # "
+
+#define CONFIG_AUTOBOOT_KEYED
+#define CONFIG_AUTOBOOT_PROMPT		"Press Ctrl-c to abort autoboot... %d %d\n", bootdelay
+#define CONFIG_AUTOBOOT_STOP_STR	"\x3"
+
+#define CONFIG_SYS_LONGHELP
+#define CONFIG_SYS_MAXARGS		64
+#define CONFIG_SYS_NO_FLASH
+
+#define CONFIG_SYS_CBSIZE		2048
+#define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
+#define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
+#define CONFIG_SYS_BOOTPARAMS_LEN	(256 * 1024)
+#define CONFIG_SYS_MONITOR_LEN		(230 * 1024)
+
+#define CONFIG_SKIP_LOWLEVEL_INIT
+
+#define CONFIG_SYS_UART_INDEX		1
+#define CONFIG_BAUDRATE			115200
+#if defined(CONFIG_T21) || defined(CONFIG_T30) || defined(CONFIG_T31)
+#define CONFIG_SYS_UART_CONTROLLER_STEP	0x1000
+#endif
+
+#define CONFIG_BOOTDELAY		3
+#define CONFIG_FAT_WRITE
+#define CONFIG_SYS_HUSH_PARSER
+
+#define CONFIG_NETMASK			255.255.255.0
+#define CONFIG_GATEWAYIP		192.168.1.1
+#define CONFIG_SERVERIP			192.168.1.254
+#define CONFIG_IPADDR			192.168.1.10
+/*#define CONFIG_ETHADDR			00:00:23:34:45:66*/
+#define CONFIG_RANDOM_MACADDR
+
+#define CONFIG_AUTO_UPDATE
+
 /**
  * Command configuration.
  */
 
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_CMDLINE_EDITING
+#define CONFIG_CMDLINE_TAG
 
 #define CONFIG_CMD_BOOTD
 #define CONFIG_CMD_CONSOLE
@@ -187,7 +198,11 @@
 #define CONFIG_CMD_ECHO
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
+#define CONFIG_CMD_FAT
+#define CONFIG_CMD_FS_GENERIC
 #define CONFIG_CMD_GETTIME
+#define CONFIG_CMD_GPIO
+#define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_LOADB
 #define CONFIG_CMD_LOADS
 #define CONFIG_CMD_MEMORY
@@ -197,11 +212,13 @@
 #define CONFIG_CMD_PING
 #define CONFIG_CMD_RUN
 #define CONFIG_CMD_SAVEENV
+#define CONFIG_CMD_SDSTART
+#define CONFIG_CMD_SDUPDATE
 #define CONFIG_CMD_SOURCE
 #define CONFIG_CMD_SQUASH_PROBE
 #define CONFIG_CMD_TFTPDOWNLOAD
-/*#define CONFIG_CMD_WATCHDOG*/
-#define CONFIG_CMD_JFFS2
+#define CONFIG_CMD_TFTPPUT
+#define CONFIG_CMD_WATCHDOG
 
 /* JFFS2 configuration */
 #if defined(CONFIG_CMD_JFFS2)
@@ -219,22 +236,15 @@
 #endif
 
 /*
-#define CONFIG_CMD_FAT
-#define CONFIG_CMD_FLASH
 #define CONFIG_CMD_FLOCK
 #define CONFIG_CMD_I2C
-#define CONFIG_CMD_MTDPARTS
-#define CONFIG_CMD_SF
-#define CONFIG_CMD_USB
-
-#if defined(CONFIG_SPL_SFC_NAND) || defined(CONFIG_SFC_NAND_COMMAND)
-#define CONFIG_CMD_MTDPARTS
 #define CONFIG_CMD_NAND
+#define CONFIG_CMD_SF
 #define CONFIG_CMD_SFCNAND
 #define CONFIG_CMD_SFC_NAND
 #define CONFIG_CMD_UBI
 #define CONFIG_CMD_UBIFS
-#endif
+#define CONFIG_CMD_USB
 */
 
 #if defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M)

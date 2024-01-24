@@ -639,8 +639,9 @@ struct sfc *sfc_res_init(unsigned int sfc_rate)
 	memset(sfc, 0, sizeof(struct sfc));
 
 	sfc->src_clk = sfc_rate;
+#ifndef CONFIG_FPGA
 	clk_set_rate(SSI, sfc->src_clk);
-
+#endif
 	sfc->threshold = THRESHOLD;
 
 	sfc_ctl_init(sfc);

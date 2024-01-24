@@ -64,14 +64,14 @@ __attribute__((__unused__)) static void jzmac_dump_pkt_data(unsigned char *data,
 		if ((i % 8) == 7)
 			printf(" ");
 
-		if ( (i != 0) && ((i % 16) == 15) )
+		if ((i != 0) && ((i % 16) == 15))
 			printf("\n\t0x%04x: ", i+1);
 	}
 	printf("\n");
 }
 __attribute__((__unused__)) static void jzmac_dump_arp_reply(unsigned char *data, int len)
 {
-	int i = 0;
+	int i;
 
 	for (i = 0; i < 6; i++) {
 		if (data[i] != 0xff)
@@ -81,14 +81,14 @@ __attribute__((__unused__)) static void jzmac_dump_arp_reply(unsigned char *data
 	if (i == 6)  // broadcast pkt
 		return;
 
-	if ( (data[12] == 0x08) && (data[13] == 0x06) && (data[20] == 0x00)) {
+	if ((data[12] == 0x08) && (data[13] == 0x06) && (data[20] == 0x00)) {
 		jzmac_dump_pkt_data(data, len);
 	}
 }
 __attribute__((__unused__)) static void jzmac_dump_icmp_reply(unsigned char *data, int len)
 {
-	if ( (data[12] == 0x08) && (data[13] == 0x00) &&
-	     (data[23] == 0x01) && (data[34] == 0x00) ) {
+	if ((data[12] == 0x08) && (data[13] == 0x00) &&
+	     (data[23] == 0x01) && (data[34] == 0x00)) {
 		jzmac_dump_pkt_data(data, len);
 	}
 }
@@ -130,6 +130,7 @@ static struct jzmac_reg mac[] =
 	{ 0x0738, "          AVMAC Ctrl Reg" },
 	{ 0, 0 }
 };
+
 static struct jzmac_reg dma0[] =
 {
 	{ 0x0000, "[CH0] CSR0   Bus Mode" },
@@ -206,7 +207,7 @@ static void jzmac_init(void) {
 	synopGMAC_jumbo_frame_enable(gmacdev);
 	synopGMAC_rx_own_disable(gmacdev);
 	synopGMAC_loopback_off(gmacdev);
-	if(gmacdev->DuplexMode == FULLDUPLEX) {
+	if (gmacdev->DuplexMode == FULLDUPLEX) {
 		synopGMAC_set_full_duplex(gmacdev);
 	} else {
 		synopGMAC_set_half_duplex(gmacdev);
@@ -220,13 +221,13 @@ static void jzmac_init(void) {
 	synopGMAC_rx_enable(gmacdev);
 #endif
 
-	if(gmacdev->Speed == SPEED10) {
+	if (gmacdev->Speed == SPEED10) {
 		synopGMAC_select_mii(gmacdev);
 		synopGMACSetBits((u32 *)gmacdev->MacBase, GmacConfig, GmacFESpeed10);
-	} else if(gmacdev->Speed == SPEED100) {
+	} else if (gmacdev->Speed == SPEED100) {
 		synopGMAC_select_mii(gmacdev);
 		synopGMACSetBits((u32 *)gmacdev->MacBase, GmacConfig, GmacFESpeed100);
-	} else if(gmacdev->Speed == SPEED1000) {
+	} else if (gmacdev->Speed == SPEED1000) {
 		synopGMAC_select_gmii(gmacdev);
 	}
 
@@ -250,6 +251,7 @@ static void jzmac_init(void) {
 	//synopGMAC_tx_flow_control_disable(gmacdev);
 	synopGMAC_tx_flow_control_enable(gmacdev);
 }
+
 static void jz47xx_mac_configure(void)
 {
 	/* pbl32 incr with rxthreshold 128 and Desc is 8 Words */
@@ -312,8 +314,8 @@ static int jz_send(struct eth_device* dev, void *packet, int length)
 	flush_dcache_all();
 
 	/* prepare DMA data */
-	desc->length = (((length <<DescSize1Shift) & DescSize1Mask)
-			 | ((0 <<DescSize2Shift) & DescSize2Mask));
+	desc->length = (((length << DescSize1Shift) & DescSize1Mask)
+			 | ((0 << DescSize2Shift) & DescSize2Mask));
 
 	desc->buffer1 = virt_to_phys(&tx_buff[next_tx * 2048]);
 //	desc->buffer1 = virt_to_phys(packet);
@@ -328,12 +330,11 @@ static int jz_send(struct eth_device* dev, void *packet, int length)
 
 	/* wait until current desc transfer done */
 #if 1
-	while(--wait_delay && synopGMAC_is_desc_owned_by_dma(desc)) {
+	while (--wait_delay && synopGMAC_is_desc_owned_by_dma(desc)) {
 		udelay(100);
 	}
 	/* check if there is error during transmit */
-	if(wait_delay == 0)
-	{
+	if (wait_delay == 0) {
 		printf("error may happen, need reload\n");
 		return -1;
 	}
@@ -358,7 +359,7 @@ static int jz_recv(struct eth_device* dev)
 
 	desc = rx_desc + next_rx;
 
-	if(!synopGMAC_is_desc_owned_by_dma(desc)) {
+	if (!synopGMAC_is_desc_owned_by_dma(desc)) {
 
 		/* since current desc contains the valid data, now we're going to get the data */
 		length = synopGMAC_get_rx_desc_frame_length(desc->status);
@@ -370,9 +371,9 @@ static int jz_recv(struct eth_device* dev)
 #endif
 
 		// printf("recv length:%d\n", length);
-		//jzmac_dump_dma_regs(__func__, __LINE__);
+		// jzmac_dump_dma_regs(__func__, __LINE__);
 #if 1
-		if(length  < 28) {
+		if (length  < 28) {
 			udelay(100);
 			return -1;
 		}
@@ -451,7 +452,7 @@ static int jz_init(struct eth_device* dev, bd_t * bd)
 		DmaDesc *curr_desc = rx_desc + i;
 		synopGMAC_rx_desc_init_ring(curr_desc, i == (NUM_RX_DESCS - 1));
 
-		curr_desc->length |= ((PKTSIZE_ALIGN <<DescSize1Shift) & DescSize1Mask) |
+		curr_desc->length |= ((PKTSIZE_ALIGN << DescSize1Shift) & DescSize1Mask) |
 			((0 << DescSize2Shift) & DescSize2Mask);
 		curr_desc->buffer1 = virt_to_phys(NetRxPackets[i]);
 
@@ -500,22 +501,23 @@ static void jz_halt(struct eth_device *dev)
 }
 
 int check_phy_config(synopGMACdevice *gmacdev) {
-  printf("ETH:   Searching for valid PHY\n");
-  int phy_id = synopGMAC_search_phy(gmacdev);
-  if (phy_id < 0) {
-      return -1; // PHY not found
-  }
+	printf("ETH:   Searching for valid PHY\n");
+	int phy_id = synopGMAC_search_phy(gmacdev);
+	if (phy_id < 0) {
+		return -1; // PHY not found
+	}
 
-  // Lets assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
-  if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
-      printf("ETH:  Invalid PHY configuration (speed or duplex) detected!\n");
-      return -1; // Invalid configuration
-  }
-   return phy_id;
+	// Let's assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
+	if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
+		printf("ETH:  Invalid PHY configuration (speed or duplex) detected!\n");
+		return -1; // Invalid configuration
+	}
+	return phy_id;
 }
 
 extern s32 synopGMAC_read_phy_reg(u32 *RegBase,u32 PhyBase, u32 RegOffset, u16 * data);
 extern s32 synopGMAC_write_phy_reg(u32 *RegBase, u32 PhyBase, u32 RegOffset, u16 data);
+
 int jz_net_initialize(bd_t *bis)
 {
 	struct eth_device *dev;
@@ -524,10 +526,12 @@ int jz_net_initialize(bd_t *bis)
 	u16 data;
 	s32 status = -ESYNOPGMACNOERR;
 
-	clk_set_rate(MACPHY,50000000);
+#ifndef CONFIG_FPGA
+	clk_set_rate(MACPHY, CONFIG_GMAC_PHY_RATE);
 	udelay(50000);
+#endif
 
-#if defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21) || defined (CONFIG_T31)
+#if defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21) || defined (CONFIG_T23) || defined (CONFIG_T31)
 	/* initialize gmac gpio */
 	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x1EFC0);
 #endif
@@ -589,13 +593,13 @@ int jz_net_initialize(bd_t *bis)
 	/* configure 88e1111 in rgmii to copper mode
 	 */
 	status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, 27, &data);
-	if(status) {
+	if (status) {
 		TR("read mac register error\n");
 	}
 	data &= ~0xF;
 	data |= 0xB;
 	status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, 27, data);
-	if(status) {
+	if (status) {
 		TR("write mac register error\n");
 	}
 
@@ -604,37 +608,37 @@ int jz_net_initialize(bd_t *bis)
 	/* software reset 88e1111
 	 */
 	status = synopGMAC_read_phy_reg((u32*)gmacdev->MacBase, phy_id, 0, &data);
-	if(status) {
+	if (status) {
 		TR("read mac register error\n");
 	}
-	data |= 0x1<<15;
+	data |= 0x1 << 15;
 	status = synopGMAC_write_phy_reg((u32*)gmacdev->MacBase, phy_id, 0, data);
-	if(status) {
+	if (status) {
 		TR("write mac register error\n");
 	}
 	while(1) {
 		status = synopGMAC_read_phy_reg((u32*)gmacdev->MacBase, phy_id, 0, &data);
-		if(status) {
+		if (status) {
 			TR("read mac register error\n");
 		}
-		if((data & (0x1<<15)) != 0) {
+		if ((data & (0x1 << 15)) != 0) {
 			continue;
 		} else {
 			break;
 		}
 	}
 #else
-    phy_id = check_phy_config(gmacdev);
-    if (phy_id < 0) {
-      printf("ETH:   Error: Invalid PHY configuration.\n");
-      printf("ETH:   PHY not found!\n");
-      return -1;  // Return error
-    }
+	phy_id = check_phy_config(gmacdev);
+	if (phy_id < 0) {
+		printf("ETH:   Error: Invalid PHY configuration.\n");
+		printf("ETH:   PHY not found!\n");
+		return -1;  // Return error
+	}
 #endif //CONFIG_NET_PHY_TYPE
 	udelay(100000);
 
 	dev = (struct eth_device *)malloc(sizeof(struct eth_device));
-	if(dev == NULL) {
+	if (dev == NULL) {
 		printf("struct eth_device malloc fail\n");
 		return -1;
 	}
@@ -658,12 +662,11 @@ int jz_net_initialize(bd_t *bis)
 	write_cpm_mphyc(cpm_mphyc);
 #elif (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_RGMII)
 	cpm_mphyc = read_cpm_mphyc();
-	cpm_mphyc |= 0x1<<31;
+	cpm_mphyc |= 0x1 << 31;
 	cpm_mphyc &= ~0x7;
 	cpm_mphyc |= 0x1;
 	write_cpm_mphyc(cpm_mphyc);
 #endif //CONFIG_NET_GMAC_PHY_MODE
-
 
 	return phy_id;
 }
@@ -677,32 +680,31 @@ static int do_ethphy(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	if (argc < 2)
 		goto usage;
 
-    cmd = argv[1];
-    --argc;
-    ++argv;
+	cmd = argv[1];
+	--argc;
+	++argv;
 
-    if (strcmp(cmd, "read") == 0) {
-        unsigned long addr;
-        char *endp;
-        if (argc != 2) {
-            ret = -1;
-            goto done;
-        }
-        addr = simple_strtoul(argv[1], &endp, 16);
-        if (*argv[1] == 0 || *endp != 0) {
-            ret = -1;
-            goto done;
-        }
-        u16 data;
-        s32 status = -ESYNOPGMACNOERR;
-        status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, &data);
-        if(status) {
-            printf("%s,%d:read mac register error\n", __func__, __LINE__);
-        }
-        printf("phy read 0x%x = 0x%x\n",
-                addr, data);
+	if (strcmp(cmd, "read") == 0) {
+		unsigned long addr;
+		char *endp;
+		if (argc != 2) {
+			ret = -1;
+			goto done;
+		}
+		addr = simple_strtoul(argv[1], &endp, 16);
+		if (*argv[1] == 0 || *endp != 0) {
+			ret = -1;
+			goto done;
+		}
+		u16 data;
+		s32 status = -ESYNOPGMACNOERR;
+		status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, &data);
+		if (status) {
+			printf("%s,%d:read mac register error\n", __func__, __LINE__);
+		}
+		printf("phy read 0x%lx = 0x%x\n", addr, data);
 
-    } else if (strcmp(cmd, "reset") == 0) {
+	} else if (strcmp(cmd, "reset") == 0) {
 #ifdef CONFIG_GPIO_IP101G_RESET
 		printf("eth phy reset %d, %d\n", CONFIG_GPIO_IP101G_RESET, CONFIG_GPIO_IP101G_RESET_ENLEVEL);
 		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
@@ -712,38 +714,37 @@ static int do_ethphy(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
 		mdelay(10);
 #endif/*CONFIG_GPIO_IP101G_RESET*/
-    } else if (strcmp(cmd, "write") == 0) {
-        unsigned long addr;
-        u16 data;
-        char *endp;
-        if (argc != 3) {
-            ret = -1;
-            goto done;
-        }
-        addr = simple_strtoul(argv[1], &endp, 16);
-        if (*argv[1] == 0 || *endp != 0) {
-            ret = -1;
-            goto done;
-        }
-        data = simple_strtoul(argv[2], &endp, 16);
-        if (*argv[2] == 0 || *endp != 0) {
-            ret = -1;
-            goto done;
-        }
+	} else if (strcmp(cmd, "write") == 0) {
+		unsigned long addr;
+		u16 data;
+		char *endp;
+		if (argc != 3) {
+			ret = -1;
+			goto done;
+		}
+		addr = simple_strtoul(argv[1], &endp, 16);
+		if (*argv[1] == 0 || *endp != 0) {
+			ret = -1;
+			goto done;
+		}
+		data = simple_strtoul(argv[2], &endp, 16);
+		if (*argv[2] == 0 || *endp != 0) {
+			ret = -1;
+			goto done;
+		}
 
-        s32 status = -ESYNOPGMACNOERR;
-        printf("phy write 0x%x = 0x%x\n",
-                addr, data);
-        status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, data);
-        if(status) {
-            printf("%s,%d:write phy register error\n", __func__, __LINE__);
-        }
+		s32 status = -ESYNOPGMACNOERR;
+		printf("phy write 0x%lx = 0x%x\n", addr, data);
+		status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, addr, data);
+		if (status) {
+			printf("%s,%d:write phy register error\n", __func__, __LINE__);
+		}
 
-    } else {
-        ret = -1;
-        goto done;
-    }
-    return ret;
+	} else {
+		ret = -1;
+		goto done;
+	}
+	return ret;
 
 done:
 
@@ -755,7 +756,7 @@ usage:
 
 U_BOOT_CMD(
 	ethphy,	4,	1,	do_ethphy,
-    "ethphy contrl",
+	"ethphy contrl",
 	"\nethphy read addr\n"
 	"ethphy write addr data\n"
 );
