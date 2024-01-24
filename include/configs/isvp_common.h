@@ -187,6 +187,8 @@
 /*#define CONFIG_ETHADDR			00:00:23:34:45:66*/
 #define CONFIG_RANDOM_MACADDR
 
+#define CONFIG_AUTO_UPDATE
+
 /**
  * Command configuration.
  */
