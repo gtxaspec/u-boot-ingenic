@@ -450,7 +450,7 @@ char* sd_disable = getenv("sd_disable");
 if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
 	// The environment variable 'sd_disable' exists and its value is "false"
 #ifdef CONFIG_AUTO_UPDATE
-	printf("Autoupdate... \n");
+	printf("MMC:   Autoupdate... \n");
 	run_command("sdupdate",0);
 #endif
 #ifdef CONFIG_CMD_SDSTART
