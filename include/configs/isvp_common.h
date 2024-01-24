@@ -202,6 +202,7 @@
 #define CONFIG_CMD_TFTPDOWNLOAD
 /*#define CONFIG_CMD_WATCHDOG*/
 #define CONFIG_CMD_JFFS2
+#define CONFIG_CMD_SOC_INFO
 
 /* JFFS2 configuration */
 #if defined(CONFIG_CMD_JFFS2)
