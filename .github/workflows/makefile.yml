@@ -26,6 +26,8 @@ jobs:
           - t20n_msc0
           - t21n
           - t21n_msc0
+          - t23n
+          - t23n_msc0
           - t30n
           - t30l
           - t30x
