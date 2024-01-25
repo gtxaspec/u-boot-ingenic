@@ -523,7 +523,7 @@ static int do_spi_flash(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[
 done:
 #ifdef PRINT_TIME
 	end = get_timer(0);
-	printf("SF:    %s command completed in %d ms\n",cmd,end - start);
+	printf("SF:    %s command completed in %dms\n",cmd,end - start);
 #endif
 
 	if (ret != -1)
