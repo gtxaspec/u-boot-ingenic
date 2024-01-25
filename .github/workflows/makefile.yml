@@ -12,7 +12,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ubuntu:23.10
+    container: debian:sid
     strategy:
       fail-fast: false
       matrix:
@@ -45,13 +45,13 @@ jobs:
           - t31al_msc0
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends --no-install-suggests build-essential gcc-mipsel-linux-gnu lzop u-boot-tools git make ca-certificates
-          update-ca-certificates
+          apt-get install -y --no-install-recommends --no-install-suggests build-essential gcc-13 gcc-13-mipsel-linux-gnu lzop u-boot-tools git make ca-certificates
+          CROSS_COMPILE=mipsel-linux-gnu-; VER=${1:-13}; for app in cpp gcc gcc-ar gcc-nm gcc-ranlib gcov gcov-dump gcov-tool lto-dump; do if update-alternatives --query ${CROSS_COMPILE}${app} >/dev/null; then update-alternatives --set ${CROSS_COMPILE}${app} /usr/bin/${CROSS_COMPILE}${app}-${VER}; else update-alternatives --install /usr/bin/${CROSS_COMPILE}${app} ${CROSS_COMPILE}${app} /usr/bin/${CROSS_COMPILE}${app}-${VER} 1; fi; done; echo "Done"
 
       - name: u-boot-ingenic Build
         run: |
