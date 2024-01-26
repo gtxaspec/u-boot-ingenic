@@ -1,4 +1,4 @@
-build/
+uboot_build/
 .vscode
 *boards.depend
 System.map

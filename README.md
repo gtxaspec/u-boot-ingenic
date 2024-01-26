@@ -15,6 +15,7 @@ This repository hosts the unofficial, enhanced OpenIPC U-Boot tailored for the I
 - **Hush Command Shell**: An advanced, interactive command-line interface.
 - **JFFS2 Support**: Integrated support for JFFS2 filesystems.
 - **SDStart**: Specialized command for automated loading of the linux kernel from an SD card.
+- **TFTP Server**: Built-in TFTP server to facilitate loading and recovery.
 - **USB Networking Support**: Integrated support for ASIX USB adapters, facilitating network connectivity.
 - **USB Storage**: Enables the use of USB storage devices.
 
