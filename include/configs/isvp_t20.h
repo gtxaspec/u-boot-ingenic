@@ -367,15 +367,11 @@
 #endif
 
 /*
-	Platform Default GPIOs:
-
-	wyze_usb_enable = 47
-	wyze_mmc_enable = 48
-	wyze_cd_enable = 43
+	Platform Default GPIOs
+	These shall be specific to the SoC model
 */
 #define CONFIG_GPIO_SETTINGS \
-"gpio_default=47O\0" \
-"gpio_default_net=43O 48o 43o\0"
+""
 
 #include "isvp_common.h"
 

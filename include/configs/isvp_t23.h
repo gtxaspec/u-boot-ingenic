@@ -573,11 +573,8 @@
 #endif
 
 /*
-	Platform Default GPIOs:
-
-	hichip_mmc_enable = 62
-	pps_mmc_enable = 61
-	wyze_mmc_enable = 48
+	Platform Default GPIOs
+	These shall be specific to the SoC model
 */
 #define CONFIG_GPIO_SETTINGS \
 ""

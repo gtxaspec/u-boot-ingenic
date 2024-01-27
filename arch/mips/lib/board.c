@@ -42,6 +42,8 @@ DECLARE_GLOBAL_DATA_PTR;
 
 ulong monitor_flash_len;
 
+uchar enetaddr[6];
+
 extern int jz_net_initialize(bd_t *bis);
 
 void handle_gpio_settings(const char *env_var_name);
@@ -268,6 +270,7 @@ void board_init_f(ulong bootflag)
  */
 void board_init_r(gd_t *id, ulong dest_addr)
 {
+
 #ifndef CONFIG_SYS_NO_FLASH
 	ulong size;
 #endif
@@ -339,8 +342,12 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	/* relocate environment function pointers etc. */
 	env_relocate();
 
-	/* Once the environment has been setup, generate a random mac address, and save it */
-	uchar enetaddr[6];
+	/* At this point, Environment has been setup, now we can use it */
+
+	/* Try to get the value of the 'sd_disable' environment variable */
+	char* sd_disable = getenv("sd_disable");
+
+	/* Generate a random mac address, and save it */
 
 	#ifdef CONFIG_RANDOM_MACADDR
 	// Check if a valid ethaddr is already set
@@ -403,10 +410,6 @@ extern void board_usb_init(void);
 	bb_miiphy_init();
 #endif
 #if defined(CONFIG_CMD_NET)
-	/*
-	puts("Net:   ");
-	eth_initialize(gd->bd);
-	*/
 	int ret = 0;
 	char* eth_disable = getenv("eth_disable");
 
@@ -432,6 +435,10 @@ extern void board_usb_init(void);
 			debug("Net:   Network initialization failed.\n");
 			// Network initialization failed, handle GPIO settings here
 			handle_gpio_settings("gpio_default_net");
+			if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
+			/* MMC specific user GPIO set */
+			handle_gpio_settings("gpio_mmc_power");
+			}
 		}
 		// Note: jz_net_initialize succeeds here
 	}
@@ -442,9 +449,6 @@ handle_gpio_settings("gpio_user");
 /* User defined MOTOR GPIO set */
 handle_gpio_settings("gpio_motor_v");
 handle_gpio_settings("gpio_motor_h");
-
-// Try to get the value of the 'sd_disable' environment variable
-char* sd_disable = getenv("sd_disable");
 
 // Check if 'sd_disable' was found and compare its value
 if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {

@@ -524,7 +524,8 @@
 #endif
 
 /*
-	Platform Default GPIOs:
+	Platform Default GPIOs
+	These shall be specific to the SoC model
 */
 #define CONFIG_GPIO_SETTINGS \
 ""
