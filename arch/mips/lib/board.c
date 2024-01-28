@@ -35,6 +35,7 @@
 #include <mmc.h>
 
 extern int debug_socinfo;
+extern int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]);
 
 #define BOOT_SCRIPT "fatload mmc 0 ${baseaddr} boot.scr"
 #define ENV_FILE "fatload mmc 0 ${baseaddr} uEnv.txt"

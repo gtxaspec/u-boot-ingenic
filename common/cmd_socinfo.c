@@ -26,7 +26,7 @@ SocInfo socInfoTable[] = {
 	{"T40XP", 0x0040, 0x00f9, 0x0000, 0x0000, 0x7777},
 };
 
-static const char* get_soc_name() {
+static const char* get_soc_name(void) {
 	unsigned int soc_id = *((volatile unsigned int *)(0x1300002C));
 	unsigned int cppsr = *((volatile unsigned int *)(0x10000034));
 	unsigned int subremark = *((volatile unsigned int *)(0x13540231));
