@@ -381,6 +381,8 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		return CMD_RET_USAGE;
 	}
 
+/* As with cmd_sdstart.c, lets disable this for now, if we are running, assume it's valid already
+
 	debug("Device name: mmc\n");
 	stor_dev = get_dev("mmc", 0);
 	if (!stor_dev) {
@@ -397,7 +399,7 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		debug("file_fat_detectfs failed\n");
 		return -1;
 	}
-
+*/
 	/*
 	 * make sure that we see CTRL-C
 	 * and save the old state

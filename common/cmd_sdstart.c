@@ -231,10 +231,12 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	// Convert string to pointer (address)
 	LOAD_ADDR = (unsigned char *)simple_strtoul(baseaddr_str, NULL, 16);
 
+	/* Lets disable this for now, if we are running, assume it's valid already
 	// Validate the SD card
 	if (!validate_sd_card() != 0) {
 		return 0; // Return early if SD card is not valid, silently
 	}
+	*/
 
 	// Detect the kernel's presence without fully loading it
         printf("Checking for kernel image from MMC... \n");
