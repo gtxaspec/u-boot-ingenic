@@ -150,7 +150,7 @@
 #define CONFIG_SYS_PROMPT		"OpenIPC# "
 
 #define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_AUTOBOOT_PROMPT		"KEY:   ###### Press Ctrl-C now to interrupt boot... loading in %ds ######\n", bootdelay
+#define CONFIG_AUTOBOOT_PROMPT		"KEY:   ###### Press Ctrl-C now to interrupt boot... loading in %ds ######\n"
 #define CONFIG_AUTOBOOT_STOP_STR	"\x3"
 
 #define CONFIG_SYS_LONGHELP
