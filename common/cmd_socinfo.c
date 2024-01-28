@@ -1,6 +1,8 @@
 #include <common.h>
 #include <command.h>
 
+int debug_socinfo = 0;
+
 typedef struct {
 	const char* name;
 	unsigned int socId;
@@ -37,11 +39,13 @@ static const char* get_soc_name() {
 	unsigned int subsoctype1_shifted = (subsoctype1 >> 16) & 0xFFFF;
 	unsigned int subsoctype2_shifted = (subsoctype2 >> 16) & 0xFFFF;
 
-	printf("soc_id:      0x%08X [0x%04X]\n", soc_id, cpu_id);
-	printf("cppsr:       0x%08X [0x%02X]\n", cppsr, cppsr_extracted);
-	printf("subremark:   0x%08X [0x%02X]\n", subremark, subremark_shifted);
-	printf("subsoctype1: 0x%08X [0x%04X]\n", subsoctype1, subsoctype1_shifted);
-	printf("subsoctype2: 0x%08X [0x%04X]\n", subsoctype2, subsoctype2_shifted);
+	if (debug_socinfo) {
+		printf("soc_id:      0x%08X [0x%04X]\n", soc_id, cpu_id);
+		printf("cppsr:       0x%08X [0x%02X]\n", cppsr, cppsr_extracted);
+		printf("subremark:   0x%08X [0x%02X]\n", subremark, subremark_shifted);
+		printf("subsoctype1: 0x%08X [0x%04X]\n", subsoctype1, subsoctype1_shifted);
+		printf("subsoctype2: 0x%08X [0x%04X]\n", subsoctype2, subsoctype2_shifted);
+	}
 
 	int i;
 	for (i = 0; i < sizeof(socInfoTable) / sizeof(SocInfo); i++) {
@@ -58,14 +62,21 @@ static const char* get_soc_name() {
 	return "Unknown";
 }
 
-static int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
-	const char *soc_name = get_soc_name();
+int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
+	const char *soc_name = get_soc_name(); // No debug parameter passed
 	printf("SOC Name: %s\n", soc_name);
 	return CMD_RET_SUCCESS;
 }
 
+int do_socinfo_cmd_wrapper(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
+	debug_socinfo = 1; // Enable debug prints for command line calls
+	int result = do_socinfo(cmdtp, flag, argc, argv); // Call the original function
+	debug_socinfo = 0; // Reset debug info flag
+	return result;
+}
+
 U_BOOT_CMD(
-	socinfo, CONFIG_SYS_MAXARGS, 1, do_socinfo,
+	socinfo, CONFIG_SYS_MAXARGS, 1, do_socinfo_cmd_wrapper,
 	"Display SOC information",
 	"Usage: socinfo - Displays the SOC type based on the ingenic hardware registers"
 );

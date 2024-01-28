@@ -268,17 +268,17 @@
 "bootm ${baseaddr};"
 #elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND \
-"if test ${sd_disable} != true;then run importenv;fi;sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
 "sf read ${baseaddr} 0x50000 \\${kern_len};" \
 "bootm ${baseaddr};"
 #elif defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND \
-"if test ${sd_disable} != true;then run importenv;fi;sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
 "sfcnand read 0x50000 0x200000 ${baseaddr};" \
 "bootm ${baseaddr};"
 #else
 #define CONFIG_BOOTCOMMAND \
-"if test ${sd_disable} != true;then run importenv;fi;sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
+"sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
 "sf read ${baseaddr} 0x50000 0x250000;" \
 "bootm ${baseaddr};"
 #endif
@@ -298,13 +298,7 @@
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \
-CONFIG_GPIO_IRCUT_SETTINGS \
-CONFIG_UENV_LOAD
-
-#define CONFIG_UENV_LOAD \
-"bootenv=uEnv.txt\0" \
-"scriptaddr=0x82000000\0" \
-"importenv=if fatload mmc 0 ${scriptaddr} ${bootenv}; then echo MMC: \"\\\\ \\ \\ \" Imported environment from ${bootenv}; env import -t ${scriptaddr} ${filesize}; saveenv; fi;\0"
+CONFIG_GPIO_IRCUT_SETTINGS
 
 /* IRCUT Default GPIOs */
 

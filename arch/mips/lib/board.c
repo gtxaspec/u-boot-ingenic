@@ -34,6 +34,11 @@
 #include <spi.h>
 #include <mmc.h>
 
+extern int debug_socinfo;
+
+#define BOOT_SCRIPT "fatload mmc 0 ${baseaddr} boot.scr"
+#define ENV_FILE "fatload mmc 0 ${baseaddr} uEnv.txt"
+
 #ifdef CONFIG_BITBANGMII
 #include <miiphy.h>
 #endif
@@ -344,11 +349,7 @@ void board_init_r(gd_t *id, ulong dest_addr)
 
 	/* At this point, Environment has been setup, now we can use it */
 
-	/* Try to get the value of the 'sd_disable' environment variable */
-	char* sd_disable = getenv("sd_disable");
-
-	/* Generate a random mac address, and save it */
-
+	/* Generate a random mac address, and save it as soon as the environment is up*/
 	#ifdef CONFIG_RANDOM_MACADDR
 	// Check if a valid ethaddr is already set
 	if (!eth_getenv_enetaddr("ethaddr", enetaddr)) {
@@ -422,14 +423,17 @@ extern void board_usb_init(void);
 	}
 #endif
 
-	// Check if eth_disable is set to "true"
+	/* Try to get the value of the 'sd_disable' environment variable */
+	char* sd_disable = getenv("sd_disable");
+
+	/* Check if eth_disable is set to "true" */
 	if (eth_disable && strcmp(eth_disable, "true") == 0) {
-		// eth_disable is true, so skip network initialization
+		/* eth_disable is true, so skip network initialization */
 		printf("Net:   Network disabled\n");
-		// Handle GPIO settings since network init is skipped
+		/* Handle GPIO settings since network init is skipped */
 		handle_gpio_settings("gpio_default_net");
 	} else {
-		// Attempt network initialization
+		/* Attempt network initialization */
 		ret = jz_net_initialize(gd->bd);
 		if (ret < 0) {
 			debug("Net:   Network initialization failed.\n");
@@ -440,7 +444,7 @@ extern void board_usb_init(void);
 			handle_gpio_settings("gpio_mmc_power");
 			}
 		}
-		// Note: jz_net_initialize succeeds here
+		/* Note: jz_net_initialize succeeds here */
 	}
 #endif
 
@@ -450,9 +454,9 @@ handle_gpio_settings("gpio_user");
 handle_gpio_settings("gpio_motor_v");
 handle_gpio_settings("gpio_motor_h");
 
-// Check if 'sd_disable' was found and compare its value
+/* Check if 'sd_disable' was found and compare its value */
 if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
-	// The environment variable 'sd_disable' exists and its value is "false"
+/* The environment variable 'sd_disable' exists and its value is "false" */
 #ifdef CONFIG_AUTO_UPDATE
 	printf("MMC:   Autoupdate... \n");
 	run_command("sdupdate",0);
@@ -460,8 +464,25 @@ if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
 #ifdef CONFIG_CMD_SDSTART
 	run_command("sdstart",0);
 #endif
+
+if (mmc_get_dev(0)) {
+	if (!run_command("fatload mmc 0 ${baseaddr} boot.scr", 0)) {
+		printf("MMC:   Loading boot.scr\n");
+		run_command(BOOT_SCRIPT, 0);
+		run_command("source", 0);
+	}
+}
+
+if (mmc_get_dev(0)) {
+	if (!run_command("fatload mmc 0 ${baseaddr} uEnv.txt", 0)) {
+		printf("MMC:   Loading uEnv.txt\n");
+		run_command(ENV_FILE, 0);
+		run_command("env import -t ${baseaddr} ${filesize};setenv filesize;saveenv;", 0);
+	}
+}
+
 } else {
-	// 'sd_disable' does not exist or is not "true"
+	/* 'sd_disable' does not exist or is not "true" */
 	printf("MMC:   SD card disabled\n");
 }
 
@@ -471,11 +492,20 @@ if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
 	/* NOTREACHED - no way out of command loop except booting */
 }
 
+
 int checkboard(void)
 {
 	char output[100];
 	puts("Platform: ISVP (Ingenic XBurst)\n");
 	sprintf(output, "Built profile: %s\n", SOC_VAR);
 	puts(output);
+
+	debug_socinfo = 0;
+	cmd_tbl_t *cmdtp = NULL;
+	int flag = 0;
+	int argc = 0;
+	char *argv[] = {NULL};
+	do_socinfo(cmdtp, flag, argc, argv);
+
 	return 0;
 }
