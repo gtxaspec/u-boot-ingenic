@@ -359,6 +359,8 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	int state = -1;
 	long start = -1, end = 0;
 
+	printf("MMC:   Checking for autoupdate files... \n");
+
 	if (argc == 1) {
 		// Default behavior
 	} else if (argc == 2) {

@@ -260,7 +260,7 @@ static ulong mmc_bread(int dev_num, lbaint_t start, lbaint_t blkcnt, void *dst)
 
 	if ((start + blkcnt) > mmc->block_dev.lba) {
 #if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_LIBCOMMON_SUPPORT)
-		printf("MMC: block number 0x" LBAF " exceeds max(0x" LBAF ")\n",
+		printf("MMC:   block number 0x" LBAF " exceeds max(0x" LBAF ")\n",
 			start + blkcnt, mmc->block_dev.lba);
 #endif
 		return 0;
@@ -1268,7 +1268,7 @@ int mmc_start_init(struct mmc *mmc)
 
 		if (err && err != IN_PROGRESS) {
 #if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_LIBCOMMON_SUPPORT)
-			printf("Card did not respond to voltage select!\n");
+			printf("MMC:   Card did not respond to voltage select!\n");
 #endif
 			return UNUSABLE_ERR;
 		}

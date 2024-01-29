@@ -116,13 +116,13 @@ int saveenv(void)
 			sector++;
 	}
 
-	puts("Erasing SPI flash...");
+	puts("Erasing SPI flash...\n");
 	ret = spi_flash_erase(env_flash, env_new_offset,
 				sector * CONFIG_ENV_SECT_SIZE);
 	if (ret)
 		goto done;
 
-	puts("Writing to SPI flash...");
+	puts("Writing to SPI flash... ");
 
 	ret = spi_flash_write(env_flash, env_new_offset,
 		CONFIG_ENV_SIZE, &env_new);
@@ -284,13 +284,13 @@ int saveenv(void)
 	}
 	env_new.crc = crc32(0, env_new.data, ENV_SIZE);
 
-	puts("Erasing SPI flash...");
+	puts("ENV:   Erasing SPI flash...\n");
 	ret = spi_flash_erase(env_flash, CONFIG_ENV_OFFSET,
 		sector * CONFIG_ENV_SECT_SIZE);
 	if (ret)
 		goto done;
 
-	puts("Writing to SPI flash...");
+	puts("ENV:   Writing to SPI flash... ");
 	ret = spi_flash_write(env_flash, CONFIG_ENV_OFFSET,
 		CONFIG_ENV_SIZE, &env_new);
 	if (ret)

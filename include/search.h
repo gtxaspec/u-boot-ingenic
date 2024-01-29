@@ -113,9 +113,9 @@ extern ssize_t hexport_r(struct hsearch_data *__htab,
  * do_apply: whether to call callback function to check the new argument,
  * and possibly apply changes (false means accept everything)
  */
-extern int himport_r(struct hsearch_data *__htab,
-		     const char *__env, size_t __size, const char __sep,
-		     int __flag, int nvars, char * const vars[]);
+extern int himport_r(struct hsearch_data *htab,
+		const char *env, size_t size, const char sep, int flag,
+		int crlf_is_lf, int nvars, char * const vars[]);
 
 /* Walk the whole table calling the callback on each element */
 extern int hwalk_r(struct hsearch_data *__htab, int (*callback)(ENTRY *));

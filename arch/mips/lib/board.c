@@ -34,26 +34,23 @@
 #include <spi.h>
 #include <mmc.h>
 
-extern int debug_socinfo;
-extern int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]);
-
-#define BOOT_SCRIPT "fatload mmc 0 ${baseaddr} boot.scr"
-#define ENV_FILE "fatload mmc 0 ${baseaddr} uEnv.txt"
-
 #ifdef CONFIG_BITBANGMII
 #include <miiphy.h>
 #endif
 
+#define BOOT_SCRIPT "fatload mmc 0 ${baseaddr} boot.scr"
+#define ENV_FILE "fatload mmc 0 ${baseaddr} uEnv.txt"
+
+extern int debug_socinfo;
+extern int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]);
+
 DECLARE_GLOBAL_DATA_PTR;
-
 ulong monitor_flash_len;
-
 uchar enetaddr[6];
 
 extern int jz_net_initialize(bd_t *bis);
 
 void handle_gpio_settings(const char *env_var_name);
-
 static char *failed = "*** failed ***\n";
 
 /*
@@ -459,28 +456,24 @@ handle_gpio_settings("gpio_motor_h");
 if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
 /* The environment variable 'sd_disable' exists and its value is "false" */
 #ifdef CONFIG_AUTO_UPDATE
-	printf("MMC:   Autoupdate... \n");
 	run_command("sdupdate",0);
 #endif
 #ifdef CONFIG_CMD_SDSTART
 	run_command("sdstart",0);
 #endif
 
-if (mmc_get_dev(0)) {
+	printf("MMC:   Checking for for boot / env files...\n");
 	if (!run_command("fatload mmc 0 ${baseaddr} boot.scr", 0)) {
 		printf("MMC:   Loading boot.scr\n");
 		run_command(BOOT_SCRIPT, 0);
 		run_command("source", 0);
 	}
-}
 
-if (mmc_get_dev(0)) {
 	if (!run_command("fatload mmc 0 ${baseaddr} uEnv.txt", 0)) {
 		printf("MMC:   Loading uEnv.txt\n");
 		run_command(ENV_FILE, 0);
-		run_command("env import -t ${baseaddr} ${filesize};setenv filesize;saveenv;", 0);
+		run_command("env import -t -r ${baseaddr} ${filesize};setenv filesize;saveenv;", 0);
 	}
-}
 
 } else {
 	/* 'sd_disable' does not exist or is not "true" */
@@ -502,11 +495,7 @@ int checkboard(void)
 	puts(output);
 
 	debug_socinfo = 0;
-	cmd_tbl_t *cmdtp = NULL;
-	int flag = 0;
-	int argc = 0;
-	char *argv[] = {NULL};
-	do_socinfo(cmdtp, flag, argc, argv);
+	do_socinfo(NULL, 0, 0, NULL);
 
 	return 0;
 }
