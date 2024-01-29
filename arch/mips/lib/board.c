@@ -49,6 +49,7 @@ ulong monitor_flash_len;
 uchar enetaddr[6];
 
 extern int jz_net_initialize(bd_t *bis);
+extern int autoupdate_status;
 
 void handle_gpio_settings(const char *env_var_name);
 static char *failed = "*** failed ***\n";
@@ -473,6 +474,11 @@ if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
 		printf("MMC:   Loading uEnv.txt\n");
 		run_command(ENV_FILE, 0);
 		run_command("env import -t -r ${baseaddr} ${filesize};setenv filesize;saveenv;", 0);
+	}
+
+	if (autoupdate_status == 3) {
+		printf("Auto-update is set to 'full'. Resetting the device...\n");
+		do_reset(NULL, 0, 0, NULL);
 	}
 
 } else {

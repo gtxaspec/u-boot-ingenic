@@ -102,6 +102,8 @@ struct flash_layout aufl_layout[AU_MAXFILES] = {
 
 int LOAD_ID = -1; //default update all
 
+int autoupdate_status = -1;
+
 static int au_check_cksum_valid(int idx, long nbytes)
 {
 	image_header_t *hdr;
@@ -278,6 +280,7 @@ static int update_to_flash(void)
 	long sz;
 	int res;
 	int uboot_updated = 0;
+	int full_updated = 0;
 	int image_found = 0;
 
 	for (i = 0; i < AU_MAXFILES; i++) {
@@ -321,6 +324,10 @@ static int update_to_flash(void)
 			uboot_updated = 1;
 		}
 
+		if (i == IDX_FW) {
+			full_updated = 1;
+		}
+
 		res = au_do_update(i, sz);
 		if (res != 0) {
 			return res;
@@ -333,9 +340,7 @@ static int update_to_flash(void)
 				printf("Error creating flag file autoupdate-full.done\n");
 			} else {
 				printf("Flag file autoupdate-full.done created\n");
-				printf("Auto-update completed successfully. Saving environment...\n");
-				run_command("saveenv", 0);
-				printf("Environment saved.\n");
+				autoupdate_status = 3;
 			}
 		}
 
@@ -344,7 +349,7 @@ static int update_to_flash(void)
 		}
 	}
 
-	return image_found ? (uboot_updated ? 1 : 0) : -1;
+	return image_found ? ((uboot_updated || full_updated) ? 1 : 0) : -1;
 }
 
 /*
@@ -421,7 +426,9 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	LOAD_ID = -1;
 
 	if (state == 1) {
+		printf("Auto-update completed successfully. Saving environment...\n");
 		saveenv();
+		printf("Environment saved.\n");
 	}
 
 	return (state == -1) ? CMD_RET_FAILURE : CMD_RET_SUCCESS;
