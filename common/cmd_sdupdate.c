@@ -395,8 +395,6 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		return CMD_RET_USAGE;
 	}
 
-/* As with cmd_sdstart.c, lets disable this for now, if we are running, assume it's valid already
-
 	debug("Device name: mmc\n");
 	stor_dev = get_dev("mmc", 0);
 	if (!stor_dev) {
