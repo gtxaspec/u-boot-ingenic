@@ -224,6 +224,12 @@ static int au_do_update(int idx, long sz)
 		len = ntohl(hdr->ih_ep) - ntohl(hdr->ih_load);
 	}
 
+	flash = spi_flash_probe(0, 0, 1000000, 0x3);
+	if (!flash) {
+		printf("Failed to initialize SPI flash\n");
+		return -1;
+	}
+	
 	/* erase the address range. */
 	printf("flash erase...\n");
 	rc = flash->erase(flash, start, len);
@@ -381,8 +387,6 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		return CMD_RET_USAGE;
 	}
 
-/* As with cmd_sdstart.c, lets disable this for now, if we are running, assume it's valid already
-
 	debug("Device name: mmc\n");
 	stor_dev = get_dev("mmc", 0);
 	if (!stor_dev) {
@@ -395,6 +399,7 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		return -1;
 	}
 
+/* As with cmd_sdstart.c, lets disable this for now, if we are running, assume the FS is valid
 	if (file_fat_detectfs() != 0) {
 		debug("file_fat_detectfs failed\n");
 		return -1;
@@ -405,12 +410,6 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	 * and save the old state
 	 */
 	old_ctrlc = disable_ctrlc(0);
-
-	flash = spi_flash_probe(0, 0, 1000000, 0x3);
-	if (!flash) {
-		printf("Failed to initialize SPI flash\n");
-		return -1;
-	}
 
 	state = update_to_flash();
 
