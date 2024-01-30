@@ -90,6 +90,34 @@ int process_spi_flash_data(struct spi_flash *flash) {
 				debug("root_size env updated");
 			}
 
+			// Calculate and set 'updatesize', which is from KERNEL_START_ADDR to the end of the chip
+			uint64_t updatesize = flash->size - KERNEL_START_ADDR;
+			char updatesize_str[32];
+			sprintf(updatesize_str, "%lluk", updatesize / 1024); // Convert to kilobytes
+			setenv("updatesize", updatesize_str);
+			debug("updatesize env updated: %s\n", updatesize_str);
+
+			// Set 'flashsize' based on the size of the flash chip
+			uint64_t flashsize = flash->size;
+			char flashsize_str[32];
+			sprintf(flashsize_str, "%lluk", flashsize / 1024); // Convert to kilobytes
+			setenv("flashsize", flashsize_str);
+			debug("flashsize env updated: %s\n", flashsize_str);
+
+			// Conditionally enable the offset arguments in the mtdparts string to allow compatability with unpatched kernels
+			const char *enable_update_str = getenv("update_enable");
+
+			// Buffer for the update string
+			char update_str[256];
+
+			if (enable_update_str != NULL && strcmp(enable_update_str, "1") == 0) {
+				sprintf(update_str, ",%s@0x50000(upgrade),%s@0(all)", updatesize_str, flashsize_str);
+			} else {
+				strcpy(update_str, "");
+			}
+
+			setenv("update", update_str);
+
 			return 0; // Success
 		}
 	}

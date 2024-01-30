@@ -286,7 +286,7 @@
 #define CONFIG_BOOTARGS \
 "mem=\\${osmem} rmem=\\${rmem} console=\\${serialport},\\${baudrate}n8" \
 " panic=\\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs init=/init" \
-" mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)"
+" mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 "baseaddr=0x80600000\0" \
