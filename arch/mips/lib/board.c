@@ -411,7 +411,7 @@ extern void board_usb_init(void);
 #endif
 #if defined(CONFIG_CMD_NET)
 	int ret = 0;
-	char* eth_disable = getenv("eth_disable");
+	char* disable_eth = getenv("disable_eth");
 
 #ifdef CONFIG_USB_ETHER_ASIX
 	char* ethact = getenv("ethact");
@@ -422,12 +422,12 @@ extern void board_usb_init(void);
 	}
 #endif
 
-	/* Try to get the value of the 'sd_disable' environment variable */
-	char* sd_disable = getenv("sd_disable");
+	/* Try to get the value of the 'disable_sd' environment variable */
+	char* disable_sd = getenv("disable_sd");
 
-	/* Check if eth_disable is set to "true" */
-	if (eth_disable && strcmp(eth_disable, "true") == 0) {
-		/* eth_disable is true, so skip network initialization */
+	/* Check if disable_eth is set to "true" */
+	if (disable_eth && strcmp(disable_eth, "true") == 0) {
+		/* disable_eth is true, so skip network initialization */
 		printf("Net:   Network disabled\n");
 		/* Handle GPIO settings since network init is skipped */
 		handle_gpio_settings("gpio_default_net");
@@ -438,7 +438,7 @@ extern void board_usb_init(void);
 			debug("Net:   Network initialization failed.\n");
 			// Network initialization failed, handle GPIO settings here
 			handle_gpio_settings("gpio_default_net");
-			if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
+			if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
 			/* MMC specific user GPIO set */
 			handle_gpio_settings("gpio_mmc_power");
 			}
@@ -453,9 +453,9 @@ handle_gpio_settings("gpio_user");
 handle_gpio_settings("gpio_motor_v");
 handle_gpio_settings("gpio_motor_h");
 
-/* Check if 'sd_disable' was found and compare its value */
-if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
-/* The environment variable 'sd_disable' exists and its value is "false" */
+/* Check if 'disable_sd' was found and compare its value */
+if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
+/* The environment variable 'disable_sd' exists and its value is "false" */
 #ifdef CONFIG_AUTO_UPDATE
 	run_command("sdupdate",0);
 #endif
@@ -482,7 +482,7 @@ if (sd_disable != NULL && strcmp(sd_disable, "false") == 0) {
 	}
 
 } else {
-	/* 'sd_disable' does not exist or is not "true" */
+	/* 'disable_sd' does not exist or is not "true" */
 	printf("MMC:   SD card disabled\n");
 }
 

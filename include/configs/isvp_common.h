@@ -293,8 +293,9 @@
 "panic_timeout=10\0" \
 "serialport=ttyS1\0" \
 "restore=n\0" \
-"sd_disable=false\0" \
-"eth_disable=false\0" \
+"disable_eth=false\0" \
+"disable_sd=false\0" \
+"enable_updates=false\0" \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \

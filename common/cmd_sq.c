@@ -105,12 +105,12 @@ int process_spi_flash_data(struct spi_flash *flash) {
 			debug("flashsize env updated: %s\n", flashsize_str);
 
 			// Conditionally enable the offset arguments in the mtdparts string to allow compatability with unpatched kernels
-			const char *enable_update_str = getenv("update_enable");
+			const char *enable_update_str = getenv("enable_updates");
 
 			// Buffer for the update string
 			char update_str[256];
 
-			if (enable_update_str != NULL && strcmp(enable_update_str, "1") == 0) {
+			if (enable_update_str != NULL && strcmp(enable_update_str, "true") == 0) {
 				sprintf(update_str, ",%s@0x50000(upgrade),%s@0(all)", updatesize_str, flashsize_str);
 			} else {
 				strcpy(update_str, "");
