@@ -40,7 +40,9 @@ jobs:
           - t31x
           - t31a
           - t31al
+          - t31l_msc0
           - t31n_msc0
+          - t31x_msc0
           - t31a_msc0
           - t31al_msc0
     steps:
@@ -57,16 +59,16 @@ jobs:
         run: |
           git clone https://github.com/gtxaspec/u-boot-ingenic.git --depth 1
           cd u-boot-ingenic
-          cp -f .github/scripts/u-boot-ingenic.sh u-boot-ingenic.sh
+          cp -f .github/scripts/build.sh build-ci.sh
           VERSION=${{ matrix.u-boot-version }}
-          bash u-boot-ingenic.sh $VERSION
+          bash build-ci.sh $VERSION debug
 
       - name: Check if file exists
         id: check-file
         run: |
-          FILE=$(find . -type f -name "u-boot-${{ matrix.u-boot-version }}-universal.bin")
+          FILE=$(find . -type f -name "u-boot-${{ matrix.u-boot-version }}.bin")
           if [ -z "$FILE" ]; then
-            echo "::error::File u-boot-${{ matrix.u-boot-version }}-universal.bin does not exist."
+            echo "::error::File u-boot-${{ matrix.u-boot-version }}.bin does not exist."
             echo "FILE_FOUND=false" >> $GITHUB_ENV
             exit 1
           else
@@ -83,4 +85,4 @@ jobs:
         with:
           tag_name: ${{ env.TAG_NAME }}
           files: |
-            u-boot-ingenic/output/u-boot-${{ matrix.u-boot-version }}-universal.bin
+            ./u-boot-ingenic/uboot_build/u-boot-${{ matrix.u-boot-version }}.bin

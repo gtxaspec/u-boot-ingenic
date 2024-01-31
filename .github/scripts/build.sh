@@ -1,8 +1,11 @@
 #!/bin/bash
 
+export ARCH=mips
 export CROSS_COMPILE=mipsel-linux-gnu-
+#export CCACHE=/usr/bin/ccache
 
 declare -A cfg
+
 cfg[t10n]="isvp_t10_sfcnor"
 cfg[t10l]="isvp_t10_sfcnor_lite"
 cfg[t10n_msc0]="isvp_t10_msc0"
@@ -31,37 +34,66 @@ cfg[t31lc]="isvp_t31lc_sfcnor"
 cfg[t31x]="isvp_t31_sfcnor_ddr128M"
 cfg[t31a]="isvp_t31a_sfcnor_ddr128M"
 cfg[t31al]="isvp_t31al_sfcnor_ddr128M"
+cfg[t31l_msc0]="isvp_t31_msc0_lite"
+cfg[t31x_msc0]="isvp_t31_msc0_ddr128M"
 cfg[t31n_msc0]="isvp_t31_msc0"
 cfg[t31a_msc0]="isvp_t31a_msc0_ddr128M"
 cfg[t31al_msc0]="isvp_t31al_msc0_ddr128M"
 
-ln -s compiler-gcc7.h include/linux/compiler-gcc10.h
-mkdir -p ../ingenic-output
+OUTPUT_DIR="./uboot_build"
+DEBUG_MODE=0  # Flag to indicate whether debug mode is active
 
+# Start timer
+SECONDS=0
+
+# Function to build a specific version with possible debug mode
 build_version() {
 	local soc=$1
-	echo "Building U-Boot for ${soc} with configuration ${cfg[$soc]}"
+	echo "Building U-Boot for ${soc}"
 
-	make distclean
-	make ${cfg[$soc]}
-	make -j8
-	cp u-boot-lzo-with-spl.bin ../ingenic-output/u-boot-${soc}-universal.bin
+	if [ "$DEBUG_MODE" -eq 1 ]; then
+		# Debug mode outputs directly to the console
+		make distclean
+		mkdir -p "${OUTPUT_DIR}" >/dev/null
+		make "${cfg[$soc]}"
+		make -j"$(nproc)"
+		cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
+	else
+		# Normal mode, log to file
+		log="building-${soc}.log"; :>"$log"
+		make distclean	 		>>"$log"	2>&1
+		mkdir -p "${OUTPUT_DIR}"	>/dev/null	2>&1
+		make "${cfg[$soc]}"		>>"$log"	2>&1
+		make -j"$(nproc)"		>>"$log"	2>&1
+		cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
+	fi
 }
+
+
+# Check if the last argument is "debug"
+if [ "${@: -1}" == "debug" ]; then
+	DEBUG_MODE=1
+	set -- "${@:1:$(($#-1))}"  # Remove the last argument
+fi
 
 # Check if an argument was provided
 if [ $# -eq 0 ]; then
 	# No argument, build all versions
 	for soc in "${!cfg[@]}"; do
-		build_version $soc
+		build_version "$soc"
 	done
 else
 	# Argument provided, build specific version
 	if [[ -n ${cfg[$1]} ]]; then
-		build_version $1
+		build_version "$1"
 	else
 		echo "Invalid argument: $1"
 		exit 1
 	fi
 fi
 
-mv ../ingenic-output -T output
+# End timer and report
+duration=$SECONDS
+echo "Done"
+echo "Total build time: $(($duration / 60)) minutes and $(($duration % 60)) seconds."
+exit 0

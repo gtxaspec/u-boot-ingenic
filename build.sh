@@ -4,90 +4,69 @@ export ARCH=mips
 export CROSS_COMPILE=mipsel-linux-gnu-
 #export CCACHE=/usr/bin/ccache
 
-declare -A cfg
-
-cfg[t10n]="isvp_t10_sfcnor"
-cfg[t10l]="isvp_t10_sfcnor_lite"
-cfg[t10n_msc0]="isvp_t10_msc0"
-
-cfg[t20n]="isvp_t20_sfcnor"
-cfg[t20l]="isvp_t20_sfcnor_lite"
-cfg[t20x]="isvp_t20_sfcnor_ddr128M"
-cfg[t20n_msc0]="isvp_t20_msc0"
-
-cfg[t21n]="isvp_t21_sfcnor"
-cfg[t21n_msc0]="isvp_t21_msc0"
-
-cfg[t23n]="isvp_t23n_sfcnor"
-cfg[t23n_msc0]="isvp_t23n_msc0"
-
-cfg[t30n]="isvp_t30_sfcnor"
-cfg[t30l]="isvp_t30_sfcnor_lite"
-cfg[t30x]="isvp_t30_sfcnor_ddr128M"
-cfg[t30a]="isvp_t30a_sfcnor_ddr128M"
-cfg[t30a1]="isvp_t30a1_sfcnor_ddr128M"
-cfg[t30n_msc0]="isvp_t30_msc0"
-
-cfg[t31n]="isvp_t31_sfcnor"
-cfg[t31l]="isvp_t31_sfcnor_lite"
-cfg[t31lc]="isvp_t31lc_sfcnor"
-cfg[t31x]="isvp_t31_sfcnor_ddr128M"
-cfg[t31a]="isvp_t31a_sfcnor_ddr128M"
-cfg[t31al]="isvp_t31al_sfcnor_ddr128M"
-cfg[t31n_msc0]="isvp_t31_msc0"
-cfg[t31a_msc0]="isvp_t31a_msc0_ddr128M"
-cfg[t31al_msc0]="isvp_t31al_msc0_ddr128M"
-
 OUTPUT_DIR="./uboot_build"
-DEBUG_MODE=0  # Flag to indicate whether debug mode is active
 
-# Function to build a specific version with possible debug mode
+if command -v resize; then
+	eval $(resize)
+	size="$(( LINES - 4 )) $(( COLUMNS -4 )) $(( LINES - 12 ))"
+else
+	size="20 76 12"
+fi
+
+pick_a_soc() {
+	eval `resize`
+	soc=$(whiptail --title "U-Boot SoC selection" \
+		--menu "Choose a SoC model" $size \
+		"isvp_t10_sfcnor_lite"		"Ingenic T10L"		\
+		"isvp_t10_sfcnor"		"Ingenic T10N"		\
+		"isvp_t10_msc0"			"Ingenic T10N  MSC0"	\
+		"isvp_t20_sfcnor_lite"		"Ingenic T20L"		\
+		"isvp_t20_sfcnor"		"Ingenic T20N"		\
+		"isvp_t20_sfcnor_ddr128M"	"Ingenic T20X"		\
+		"isvp_t20_msc0"			"Ingenic T20N  MSC0"	\
+		"isvp_t21_sfcnor"		"Ingenic T21N"		\
+		"isvp_t21_msc0"			"Ingenic T21N  MSC0"	\
+		"isvp_t23n_sfcnor"		"Ingenic T23N"		\
+		"isvp_t23n_msc0"		"Ingenic T23N  MSC0"	\
+		"isvp_t30_sfcnor_lite"		"Ingenic T30L"		\
+		"isvp_t30_sfcnor"		"Ingenic T30N"		\
+		"isvp_t30_sfcnor_ddr128M"	"Ingenic T30X"		\
+		"isvp_t30a_sfcnor_ddr128M"	"Ingenic T30A"		\
+		"isvp_t30a1_sfcnor_ddr128M"	"Ingenic T30A1"		\
+		"isvp_t30_msc0"			"Ingenic T30N  MSC0"	\
+		"isvp_t31_sfcnor_lite"		"Ingenic T31L"		\
+		"isvp_t31lc_sfcnor"		"Ingenic T31LC"		\
+		"isvp_t31_sfcnor"		"Ingenic T31N"		\
+		"isvp_t31_sfcnor_ddr128M"	"Ingenic T31X"		\
+		"isvp_t31a_sfcnor_ddr128M"	"Ingenic T31A"		\
+		"isvp_t31al_sfcnor_ddr128M"	"Ingenic T31AL"		\
+		"isvp_t31_msc0"			"Ingenic T31N  MSC0"	\
+		"isvp_t31a_msc0_ddr128M"	"Ingenic T31A  MSC0"	\
+		"isvp_t31al_msc0_ddr128M"	"Ingenic T31AL MSC0"	\
+		"isvp_t31_msc0_lite"		"Ingenic T31L  MSC0"	\
+		"isvp_t31_msc0_ddr128M"		"Ingenic T31X  MSC0"	\
+		--notags 3>&1 1>&2 2>&3)
+}
+
+# Function to build a specific version
 build_version() {
+	# Start timer
+	SECONDS=0
+
 	local soc=$1
 	echo "Building U-Boot for ${soc}"
 
-	if [ "$DEBUG_MODE" -eq 1 ]; then
-		# Debug mode outputs directly to the console
-		make distclean
-		mkdir -p "${OUTPUT_DIR}" >/dev/null
-		make "${cfg[$soc]}"
-		make -j"$(nproc)"
-		cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
-	else
-		# Normal mode, log to file
-		log="building-${soc}.log"; :>"$log"
-		make distclean	 		>>"$log"	2>&1
-		mkdir -p "${OUTPUT_DIR}"	>/dev/null	2>&1
-		make "${cfg[$soc]}"		>>"$log"	2>&1
-		make -j"$(nproc)"		>>"$log"	2>&1
-		cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
-	fi
+	make distclean
+	mkdir -p "${OUTPUT_DIR}" >/dev/null
+	make $soc
+	make -j$(nproc)
+	cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
 }
 
-# Start timer
-SECONDS=0
-
-# Check if the last argument is "debug"
-if [ "${@: -1}" == "debug" ]; then
-	DEBUG_MODE=1
-	set -- "${@:1:$(($#-1))}"  # Remove the last argument
-fi
-
-# Check if an argument was provided
-if [ $# -eq 0 ]; then
-	# No argument, build all versions
-	for soc in "${!cfg[@]}"; do
-		build_version "$soc"
-	done
-else
-	# Argument provided, build specific version
-	if [[ -n ${cfg[$1]} ]]; then
-		build_version "$1"
-	else
-		echo "Invalid argument: $1"
-		exit 1
-	fi
-fi
+soc="$1"
+[ -z "$soc" ] && pick_a_soc
+[ -z "$soc" ] && echo No SoC && exit 1
+build_version "$soc"
 
 # End timer and report
 duration=$SECONDS
