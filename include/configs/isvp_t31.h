@@ -707,7 +707,7 @@
  */
 
 #define CONFIG_GPIO_SETTINGS \
-"gpio_default=25I 26I\0"
+"gpio_default_net=25I 26I\0"
 
 #include "isvp_common.h"
 
