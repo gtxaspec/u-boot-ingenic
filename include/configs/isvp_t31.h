@@ -698,8 +698,16 @@
 	Platform Default GPIOs
 	These shall be specific to the SoC model
 */
+
+/*
+ * Reference:
+ * T31ZX Smart Video Application Processor DATA SHEET
+ * Page 20
+ * Note: "Pin 60 and 61 share IO with PB15 and PB16..."
+ */
+
 #define CONFIG_GPIO_SETTINGS \
-""
+"gpio_default=25I 26I\0"
 
 #include "isvp_common.h"
 

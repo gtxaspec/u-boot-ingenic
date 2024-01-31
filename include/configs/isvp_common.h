@@ -304,6 +304,6 @@ CONFIG_GPIO_IRCUT_SETTINGS
 /* IRCUT Default GPIOs */
 
 #define CONFIG_GPIO_IRCUT_SETTINGS \
-"gpio_default_ircut=25I 26I 52I 53I 49I 50I\0"
+"gpio_ircut=52I 53I 49I 50I 57I 58I\0"
 
 #endif /*__CONFIG_ISVP_COMMON__*/

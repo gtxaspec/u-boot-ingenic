@@ -402,8 +402,6 @@ extern void board_usb_init(void);
 	misc_init_r();
 	/* Platform Default GPIO Set */
 	handle_gpio_settings("gpio_default");
-	/* IRCUT default GPIO set */
-	handle_gpio_settings("gpio_default_ircut");
 #endif
 
 #ifdef CONFIG_BITBANGMII
@@ -447,6 +445,8 @@ extern void board_usb_init(void);
 	}
 #endif
 
+/* IRCUT GPIO set */
+handle_gpio_settings("gpio_ircut");
 /* User defined GPIO set */
 handle_gpio_settings("gpio_user");
 /* User defined MOTOR GPIO set */
