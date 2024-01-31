@@ -8,6 +8,9 @@
  *	Copyright 2000-2004 Wolfgang Denk, wd@denx.de
  */
 
+// Enable DEBUG temporarily to fix DHCP freezes during lease acquisition
+#define DEBUG
+
 #include <common.h>
 #include <command.h>
 #include <net.h>
@@ -631,7 +634,6 @@ BootpRequest(void)
 	printf("BOOTP broadcast %d\n", ++BootpTry);
 	pkt = NetTxPacket;
 	memset((void *)pkt, 0, PKTSIZE);
-
 	eth_hdr_size = NetSetEther(pkt, NetBcastAddr, PROT_IP);
 	pkt += eth_hdr_size;
 
@@ -651,6 +653,7 @@ BootpRequest(void)
 	bp->bp_op = OP_BOOTREQUEST;
 	bp->bp_htype = HWT_ETHER;
 	bp->bp_hlen = HWL_ETHER;
+	printf("Waiting for DHCP packet\n");
 	bp->bp_hops = 0;
 	bp->bp_secs = htons(get_timer(0) / 1000);
 	NetWriteIP(&bp->bp_ciaddr, 0);
@@ -839,6 +842,7 @@ static void DhcpSendRequestPkt(struct Bootp_t *bp_offer)
 	bp->bp_op = OP_BOOTREQUEST;
 	bp->bp_htype = HWT_ETHER;
 	bp->bp_hlen = HWL_ETHER;
+	debug("DHCPREQUEST packet sent\n");
 	bp->bp_hops = 0;
 	bp->bp_secs = htons(get_timer(0) / 1000);
 	/* Do not set the client IP, your IP, or server IP yet, since it
