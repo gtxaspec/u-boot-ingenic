@@ -704,10 +704,12 @@
  * T31ZX Smart Video Application Processor DATA SHEET
  * Page 20
  * Note: "Pin 60 and 61 share IO with PB15 and PB16..."
+ * 25 and 26 shall be set to only be set to input if
+ * GMAC doesn't exist or is disabled.
  */
 
 #define CONFIG_GPIO_SETTINGS \
-"gpio_default_net=25I 26I\0"
+"gpio_default=25ID 26IDU\0"
 
 #include "isvp_common.h"
 
