@@ -59,7 +59,8 @@ struct medium_interface {
 #define AU_FL_FW_ST		0x000000
 #define AU_FL_FW_ND		0x1000000
 
-static int au_stor_curr_dev; /* current device */
+// Not used
+//static int au_stor_curr_dev; /* current device */
 
 /* index of each file in the following arrays */
 #define IDX_UBOOT	0

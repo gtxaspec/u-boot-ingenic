@@ -183,6 +183,7 @@ static int load_kernel_and_validate(void) {
 	return handle_error(ERR_FILE_NOT_FOUND, kernel_filenames[0]);
 }
 
+/*
 // Function to check if the SD card is present and contains a valid FAT filesystem
 static int validate_sd_card(void) {
 	block_dev_desc_t *stor_dev = get_dev("mmc", 0);
@@ -203,6 +204,7 @@ static int validate_sd_card(void) {
 	printf("FAT filesystem detected successfully.\n");
 	return true;
 }
+*/
 
 // Function to set the environment variables for booting the kernel
 static void configure_boot_environment(void) {
