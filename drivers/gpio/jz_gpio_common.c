@@ -367,9 +367,28 @@ void dump_gpio_func(unsigned int gpio)
 void process_gpio_token(char* token) {
 	char *endptr;
 	unsigned gpio = simple_strtoul(token, &endptr, 10);
-	
+
 	// Check if the mode character is present and valid
 	char mode = (*endptr) ? *endptr : 'i'; // Default to 'i' (input) if no mode specified
+
+	bool disablePullUp = false;
+	bool disablePullDown = false;
+
+	// Check for additional characters for pull-up/pull-down configuration
+	char* ptr = endptr + 1;
+	while (*ptr) {
+		switch (*ptr) {
+			case 'u':
+			case 'U':
+				disablePullUp = true;
+				break;
+			case 'd':
+		    case 'D':
+				disablePullDown = true;
+				break;
+		}
+		ptr++;
+	}
 
 	gpio_request(gpio, "gpio_set");
 
@@ -378,6 +397,16 @@ void process_gpio_token(char* token) {
 		case 'I': // Also treat uppercase 'I' as Input for consistency
 			gpio_direction_input(gpio);
 			printf("GPIO:  %u set to input\n", gpio);
+			#ifdef CONFIG_T31
+			if (disablePullUp) {
+				gpio_disable_pull_up(gpio);
+				printf("GPIO:  %u input pull-up disabled\n", gpio);
+			}
+			if (disablePullDown) {
+				gpio_disable_pull_down(gpio);
+				printf("GPIO:  %u input pull-down disabled\n", gpio);
+			}
+			#endif
 			break;
 		case 'o': // Output low
 			gpio_direction_output(gpio, 0);
