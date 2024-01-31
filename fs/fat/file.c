@@ -1,7 +1,7 @@
 /*
  * file.c
  *
- * Mini VFS by Marcus Sundberg
+ * Mini "VFS" by Marcus Sundberg
  *
  * 2002-07-28 - rjones@nexus-tech.net - ported to ppcboot v1.1.6
  * 2003-03-10 - kharris@nexus-tech.net - ported to uboot
