@@ -507,11 +507,6 @@ int check_phy_config(synopGMACdevice *gmacdev) {
 		return -1; // PHY not found
 	}
 
-	// Let's assume gmacdev->Speed and gmacdev->DuplexMode are set correctly after synopGMAC_search_phy
-	if (gmacdev->Speed == 0 || gmacdev->DuplexMode == 0) {
-		printf("ETH:  Invalid PHY configuration (speed or duplex) detected!\n");
-		return -1; // Invalid configuration
-	}
 	return phy_id;
 }
 
