@@ -33,9 +33,9 @@ static const char* get_soc_name(void) {
 	unsigned int subsoctype1 = *((volatile unsigned int *)(0x13540238));
 	unsigned int subsoctype2 = *((volatile unsigned int *)(0x13540250));
 
-	unsigned int cpu_id = (soc_id >> 12) & 0xFFFF; // Correct extraction for cpu_id to match 0x0031
-	unsigned int cppsr_extracted = cppsr & 0xFF; // Extracting cppsr as 8-bit, matching as 16-bit 0x0001
-	unsigned int subremark_shifted = (subremark >> 8) & 0xFF; // Assuming we want the lowest 8-bit for comparison
+	unsigned int cpu_id = (soc_id >> 12) & 0xFFFF;
+	unsigned int cppsr_extracted = cppsr & 0xFF;
+	unsigned int subremark_shifted = (subremark >> 8) & 0xFF;
 	unsigned int subsoctype1_shifted = (subsoctype1 >> 16) & 0xFFFF;
 	unsigned int subsoctype2_shifted = (subsoctype2 >> 16) & 0xFFFF;
 
@@ -51,7 +51,7 @@ static const char* get_soc_name(void) {
 	for (i = 0; i < sizeof(socInfoTable) / sizeof(SocInfo); i++) {
 		SocInfo s = socInfoTable[i];
 		if (cpu_id == s.socId &&
-			cppsr_extracted == s.cppsr &&
+			// cppsr_extracted == s.cppsr && // Disable for now
 			subremark_shifted == s.subremark &&
 			subsoctype1_shifted == s.subsoctype1 &&
 			subsoctype2_shifted == s.subsoctype2) {
@@ -63,15 +63,15 @@ static const char* get_soc_name(void) {
 }
 
 int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
-	const char *soc_name = get_soc_name(); // No debug parameter passed
+	const char *soc_name = get_soc_name();
 	printf("SOC Name: %s\n", soc_name);
 	return CMD_RET_SUCCESS;
 }
 
 int do_socinfo_cmd_wrapper(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
 	debug_socinfo = 1; // Enable debug prints for command line calls
-	int result = do_socinfo(cmdtp, flag, argc, argv); // Call the original function
-	debug_socinfo = 0; // Reset debug info flag
+	int result = do_socinfo(cmdtp, flag, argc, argv);
+	debug_socinfo = 0;
 	return result;
 }
 
