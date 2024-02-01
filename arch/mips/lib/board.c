@@ -422,6 +422,7 @@ extern void board_usb_init(void);
 
 	/* Try to get the value of the 'disable_sd' environment variable */
 	char* disable_sd = getenv("disable_sd");
+	int networkInitializationAttempted = 0;
 
 	/* Check if disable_eth is set to "true" */
 	if (disable_eth && strcmp(disable_eth, "true") == 0) {
@@ -431,18 +432,23 @@ extern void board_usb_init(void);
 		handle_gpio_settings("gpio_default_net");
 	} else {
 		/* Attempt network initialization */
+		networkInitializationAttempted = 1;
 		ret = jz_net_initialize(gd->bd);
 		if (ret < 0) {
 			debug("Net:   Network initialization failed.\n");
 			// Network initialization failed, handle GPIO settings here
 			handle_gpio_settings("gpio_default_net");
-			if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
-			/* MMC specific user GPIO set */
-			handle_gpio_settings("gpio_mmc_power");
-			}
 		}
-		/* Note: jz_net_initialize succeeds here */
 	}
+
+	/* Check if disable_sd is "false" AND either network initialization was not attempted
+	due to disable_eth being "true" OR it failed. */
+	if (disable_sd != NULL && strcmp(disable_sd, "false") == 0 &&
+		(!networkInitializationAttempted || ret < 0)) {
+		/* MMC specific user GPIO set */
+		handle_gpio_settings("gpio_mmc_power");
+	}
+
 #endif
 
 /* IRCUT GPIO set */
