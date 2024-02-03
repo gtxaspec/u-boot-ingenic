@@ -367,11 +367,12 @@
 #endif
 
 /*
-	Platform Default GPIOs
-	These shall be specific to the SoC model
+*	Platform Default GPIOs
+*	These shall be specific to the SoC model
+*	48 low = Wyze V2 MMC0 enable
 */
 #define CONFIG_GPIO_SETTINGS \
-""
+"gpio_default_net=48o\0"
 
 #include "isvp_common.h"
 
