@@ -228,10 +228,15 @@
 /**
  * Boot arguments definitions.
  */
+#define BOOTARGS_COMMON "mem=\\${osmem} rmem=\\${rmem}"
 #if defined(CONFIG_T23N)
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=41M@0x0 rmem=23M@0x2900000"
+#define CONFIG_EXTRA_SETTINGS \
+"osmem=41M@0x0\0" \
+"rmem=23M@0x2900000\0"
 #else
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=32M@0x0 rmem=32M@0x2000000"
+#define CONFIG_EXTRA_SETTINGS \
+"osmem=32M@0x0\0" \
+"rmem=32M@0x2000000\0"
 #endif
 
 #if defined(CONFIG_SPL_SFC_NOR) || defined(CONFIG_SPL_SFC_NAND)

@@ -249,18 +249,6 @@
 #define CONFIG_CMD_USB
 */
 
-#if defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M)
-#define CONFIG_EXTRA_SETTINGS \
-"totalmem=128M\0" \
-"osmem=64M\0" \
-"rmem=64M@0x4000000\0"
-#else
-#define CONFIG_EXTRA_SETTINGS \
-"totalmem=64M\0" \
-"osmem=40M\0" \
-"rmem=24M@0x2800000\0"
-#endif
-
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND \
 "setenv setargs setenv bootargs ${bootargs};run setargs;" \
@@ -284,7 +272,8 @@
 #endif
 
 #define CONFIG_BOOTARGS \
-"mem=\\${osmem} rmem=\\${rmem} console=\\${serialport},\\${baudrate}n8" \
+BOOTARGS_COMMON \
+" console=\\${serialport},\\${baudrate}n8" \
 " panic=\\${panic_timeout} root=/dev/mtdblock3 rootfstype=squashfs init=/init" \
 " mtdparts=jz_sfc:256k(boot),64k(env),\\${kern_size}(kernel),\\${rootfs_size}(rootfs),-(rootfs_data)\\${update}"
 
