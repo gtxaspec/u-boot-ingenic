@@ -99,6 +99,9 @@ int process_spi_flash_data(struct spi_flash *flash) {
 
 			// Set 'flashsize' based on the size of the flash chip
 			uint64_t flashsize = flash->size;
+			char flashlen_str[32];
+			sprintf(flashlen_str, "%llx", flashsize);
+			setenv("flash_len", flashlen_str);
 			char flashsize_str[32];
 			sprintf(flashsize_str, "%lluk", flashsize / 1024); // Convert to kilobytes
 			setenv("flashsize", flashsize_str);
@@ -116,6 +119,13 @@ int process_spi_flash_data(struct spi_flash *flash) {
 				strcpy(update_str, "");
 			}
 
+			// Set overlay environment variable in hexadecimal format
+			uint64_t overlay_addr = addr + aligned_bytes_used; // Calculate overlay address
+
+			char overlay_str[32];
+			sprintf(overlay_str, "%llX", overlay_addr);
+			setenv("overlay", overlay_str);
+			debug("Overlay env updated: %s\n", overlay_str);
 			setenv("update", update_str);
 
 			return 0; // Success
