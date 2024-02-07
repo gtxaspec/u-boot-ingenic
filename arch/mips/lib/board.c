@@ -83,7 +83,7 @@ static int init_func_ram(void)
 
 	gd->ram_size = initdram(board_type);
 	if (gd->ram_size > 0) {
-		print_size(gd->ram_size, "\n");
+		print_size(gd->ram_size, "\n\n");
 		return 0;
 	}
 	puts(failed);
@@ -283,7 +283,7 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	gd = id;
 	gd->flags |= GD_FLG_RELOC;	/* tell others: relocation done */
 
-	printf("Now running in RAM - U-Boot at: %08lx\n", dest_addr);
+	printf("Now running in RAM - U-Boot at: %08lx\n\n", dest_addr);
 
 #ifdef CONFIG_XBURST_TRAPS
 	traps_init();
@@ -362,7 +362,8 @@ void board_init_r(gd_t *id, ulong dest_addr)
 		}
 	} else {
 		// A valid ethaddr is already set, so no need to set it again
-		printf("Net:   HW Ethernet address exists\n");
+		printf("Net:   HW Ethernet address: %02X:%02X:%02X:%02X:%02X:%02X\n",
+				enetaddr[0], enetaddr[1], enetaddr[2], enetaddr[3], enetaddr[4], enetaddr[5]);
 	}
 	#endif
 
@@ -400,6 +401,67 @@ extern void board_usb_init(void);
 #if defined(CONFIG_MISC_INIT_R)
 	/* miscellaneous platform dependent initialisations */
 	misc_init_r();
+
+	/* Reset */
+	#define ERASE_BLOCK_SIZE 0x8000 // 64KB
+
+	char *overlay_str, *flashsize_str;
+	unsigned long overlay, flashsize, length_to_erase, erase_block_size = 0x8000;
+	char cmd[64]; // Buffer for command
+
+	char* gpio_button_str = getenv("gpio_button");
+	if (gpio_button_str) {
+		unsigned gpio_number = (unsigned)simple_strtoul(gpio_button_str, NULL, 10);
+		handle_gpio_settings("gpio_button");
+		int value = gpio_get_value(gpio_number); // Get the GPIO value
+		debug("GPIO %u value: %d\n", gpio_number, value); // Print the value
+
+		if (value == 0) {
+			printf("KEY:   Reset button pressed during boot, erasing ENV and Overlay...\n");
+			run_command("env default -f -a", 0);
+			/* Carry over the gpio between resets if desired */
+			/* setenv("gpio_button", gpio_number); */
+			saveenv();
+			run_command("sf probe; sq probe", 0); // Initialize SPI flash and probe to set ENV variables
+
+			overlay_str = getenv("overlay");
+			flashsize_str = getenv("flash_len");
+			if (overlay_str && flashsize_str) {
+				overlay = simple_strtoul(overlay_str, NULL, 16);
+				flashsize = simple_strtoul(flashsize_str, NULL, 16);
+
+				// Calculate the initial length to erase before alignment
+				length_to_erase = flashsize - overlay;
+
+				// Align length to the next block size without exceeding flash size
+				unsigned long aligned_length = (length_to_erase + erase_block_size - 1) & ~(erase_block_size - 1);
+				if (overlay + aligned_length > flashsize) {
+					// If alignment exceeds flash size, adjust length to not exceed flash
+					aligned_length = flashsize - overlay;
+					// Ensure adjusted length is also aligned to block size
+					aligned_length = aligned_length & ~(erase_block_size - 1);
+				}
+
+				if (overlay + aligned_length <= flashsize) {
+					debug("RST:   Overlay: 0x%lX, Flash size: 0x%lX, Length to erase: 0x%lX\n", overlay, flashsize, flashsize - overlay);
+					debug(cmd, "sf erase 0x%lX 0x%lX", overlay, aligned_length);
+					debug("Executing command: %s\n", cmd);
+					if (run_command(cmd, 0) != 0) {
+						printf("RST:   Error: Failed to execute erase command.\n");
+					} else {
+						debug("RST:   Successfully executed: %s\n", cmd);
+					}
+				} else {
+					printf("RST:   Error: Erase range still exceeds flash size after adjustment.\n");
+				}
+			} else {
+				printf("RST:   Error: overlay or flash_len environment variable is not set.\n");
+			}
+		}
+	} else {
+		printf("KEY:   Reset button undefined\n");
+	}
+
 	/* Platform Default GPIO Set */
 	handle_gpio_settings("gpio_default");
 #endif
@@ -415,7 +477,7 @@ extern void board_usb_init(void);
 	char* ethact = getenv("ethact");
 	if (ethact && strncmp(ethact, "asx", 3) == 0) {
 		if (run_command("usb start", 0) != 0) {
-			printf("USB start failed\n");
+			printf("USB:   USB start failed\n");
 		}
 	}
 #endif
@@ -483,7 +545,7 @@ if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
 	}
 
 	if (autoupdate_status == 3) {
-		printf("Auto-update is set to 'full'. Resetting the device...\n");
+		printf("MMC:   Auto-update is set to 'full'. Resetting the device...\n");
 		do_reset(NULL, 0, 0, NULL);
 	}
 
@@ -498,11 +560,10 @@ if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
 	/* NOTREACHED - no way out of command loop except booting */
 }
 
-
 int checkboard(void)
 {
 	char output[100];
-	puts("Platform: ISVP (Ingenic XBurst)\n");
+	puts("Platform: ISVP (Ingenic XBurst1)\n");
 	sprintf(output, "Built profile: %s\n", SOC_VAR);
 	puts(output);
 

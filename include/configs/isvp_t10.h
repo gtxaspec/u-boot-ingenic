@@ -110,7 +110,11 @@
 /**
  * Boot arguments definitions.
  */
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=39M@0x0 ispmem=5M@0x2700000 rmem=20M@0x2c00000"
+#define BOOTARGS_COMMON "mem=\\${osmem} rmem=\\${rmem}"
+#define CONFIG_EXTRA_SETTINGS \
+"osmem=39M@0x0\0" \
+"ispmem=5M@0x2700000\0" \
+"rmem=20M@0x2c00000\0"
 
 /*
 #if defined(CONFIG_SPL_MMC_SUPPORT)

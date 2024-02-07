@@ -115,12 +115,18 @@
 /**
  * Boot arguments definitions.
  */
+#define BOOTARGS_COMMON "mem=\\${osmem} ispmem=\\${ispmem} rmem=\\${rmem}"
 #if defined(CONFIG_DDR2_128M)
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=96M@0x0 ispmem=8M@0x6000000 rmem=24M@0x6800000"
+#define CONFIG_EXTRA_SETTINGS \
+"osmem=99M@0x0\0" \
+"ispmem=8M@0x6000000\0" \
+"rmem=24M@0x6800000\0"
 #else
-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=32M@0x0 ispmem=8M@0x2000000 rmem=24M@0x2800000"
+#define CONFIG_EXTRA_SETTINGS \
+"osmem=43M@0x0\0" \
+"ispmem=8M@0x2000000\0" \
+"rmem=24M@0x2800000\0"
 #endif
-
 /*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
@@ -367,11 +373,12 @@
 #endif
 
 /*
-	Platform Default GPIOs
-	These shall be specific to the SoC model
+*	Platform Default GPIOs
+*	These shall be specific to the SoC model
+*	48 low = Wyze V2 MMC0 enable
 */
 #define CONFIG_GPIO_SETTINGS \
-""
+"gpio_default_net=48o\0"
 
 #include "isvp_common.h"
 
