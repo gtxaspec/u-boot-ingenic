@@ -285,7 +285,7 @@ static int update_to_flash(void)
 	int image_found = 0;
 
 	if (file_fat_read("autoupdate-full.done", LOAD_ADDR, 1) >= 0) {
-		printf("Flag file autoupdate-full.done exists, skipping %s\n", AU_FW);
+		printf("MMC:   Flag file autoupdate-full.done exists, skipping %s\n", AU_FW);
 		return 0; // Skip this file
 	}
 
@@ -319,9 +319,9 @@ static int update_to_flash(void)
 			// Write the autoupdate-full.done file after successful flash
 			char empty_flag[1] = {0};
 			if (file_fat_write("autoupdate-full.done", empty_flag, sizeof(empty_flag)) < 0) {
-				printf("Error creating flag file autoupdate-full.done\n");
+				printf("MMC:   Error creating flag file autoupdate-full.done\n");
 			} else {
-				printf("Flag file autoupdate-full.done created\n");
+				printf("MMC:   Flag file autoupdate-full.done created\n");
 				autoupdate_status = 3;
 			}
 		}
@@ -408,9 +408,9 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	LOAD_ID = -1;
 
 	if (state == 1) {
-		printf("Auto-update completed successfully. Saving environment...\n");
+		printf("MMC:   Auto-update completed successfully. Saving environment...\n");
 		saveenv();
-		printf("Environment saved.\n");
+		printf("MMC:   Environment saved.\n");
 	}
 
 	return (state == -1) ? CMD_RET_FAILURE : CMD_RET_SUCCESS;

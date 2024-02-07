@@ -67,7 +67,7 @@ static const char* kernel_filenames[] = { NULL };  // Default case, do not load 
 // This function prompts the user to press Ctrl-C to cancel the kernel loading,
 // lasting for the specified delay (in seconds).
 static bool prompt_and_wait_for_interrupt(int delay) {
-	printf("To cancel loading the kernel, press Ctrl-C within the next %d second(s)...\n", delay);
+	printf("MMC:   To cancel loading the kernel, press Ctrl-C within the next %d second(s)...\n", delay);
 	unsigned long start = get_timer(0);
 
 	while (get_timer(0) - start < delay * 1000) {
@@ -102,7 +102,7 @@ static int handle_error(ErrorCode err, const char* context) {
 			printf("Error: Invalid kernel type for %s.\n", context);
 			break;
 		case ERR_FILE_NOT_FOUND:
-			printf("Error: Kernel file not found.\n");
+			printf("MMC:   Kernel file not found.\n");
 			break;
 		case ERR_MMC_NOT_PRESENT:
 			printf("Error: MMC card is not present.\n");
@@ -226,7 +226,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	// Fetch 'baseaddr' from the U-Boot environment
 	const char *baseaddr_str = getenv("baseaddr");
 	if (!baseaddr_str) {
-		printf("Error: 'baseaddr' not found in the environment.\n");
+		printf("MMC:   Error: 'baseaddr' not found in the environment.\n");
 		return -1;
 	}
 
@@ -241,7 +241,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	*/
 
 	// Detect the kernel's presence without fully loading it
-        printf("Checking for kernel image from MMC... \n");
+        printf("MMC:   Checking for kernel image from MMC... \n");
 	int i;
 	int found_kernel = 0;
 	for (i = 0; kernel_filenames[i] != NULL; i++) {
@@ -260,11 +260,11 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	// If kernel is detected, then show the Ctrl-C prompt
 	int delay = (argc > 1) ? simple_strtol(argv[1], NULL, 10) : SDSTART_DEFAULT_DELAY;
 	if (prompt_and_wait_for_interrupt(delay)) {
-		printf("Operation was canceled during the prompt.\n");
+		printf("MMC:   SDStart loading was canceled during the prompt.\n");
 		return 0; // Return early if user interrupted
 	}
 
-        printf("Loading external kernel image from MMC... \n");
+        printf("MMC:   Loading external kernel image... \n");
 
 	// Load and validate the kernel
 	int old_ctrlc = disable_ctrlc(0);

@@ -83,7 +83,7 @@ static int init_func_ram(void)
 
 	gd->ram_size = initdram(board_type);
 	if (gd->ram_size > 0) {
-		print_size(gd->ram_size, "\n");
+		print_size(gd->ram_size, "\n\n");
 		return 0;
 	}
 	puts(failed);
@@ -283,7 +283,7 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	gd = id;
 	gd->flags |= GD_FLG_RELOC;	/* tell others: relocation done */
 
-	printf("Now running in RAM - U-Boot at: %08lx\n", dest_addr);
+	printf("Now running in RAM - U-Boot at: %08lx\n\n", dest_addr);
 
 #ifdef CONFIG_XBURST_TRAPS
 	traps_init();
@@ -362,7 +362,8 @@ void board_init_r(gd_t *id, ulong dest_addr)
 		}
 	} else {
 		// A valid ethaddr is already set, so no need to set it again
-		printf("Net:   HW Ethernet address exists\n");
+		printf("Net:   HW Ethernet address: %02X:%02X:%02X:%02X:%02X:%02X\n",
+				enetaddr[0], enetaddr[1], enetaddr[2], enetaddr[3], enetaddr[4], enetaddr[5]);
 	}
 	#endif
 
@@ -476,7 +477,7 @@ extern void board_usb_init(void);
 	char* ethact = getenv("ethact");
 	if (ethact && strncmp(ethact, "asx", 3) == 0) {
 		if (run_command("usb start", 0) != 0) {
-			printf("USB start failed\n");
+			printf("USB:   USB start failed\n");
 		}
 	}
 #endif
@@ -544,7 +545,7 @@ if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
 	}
 
 	if (autoupdate_status == 3) {
-		printf("Auto-update is set to 'full'. Resetting the device...\n");
+		printf("MMC:   Auto-update is set to 'full'. Resetting the device...\n");
 		do_reset(NULL, 0, 0, NULL);
 	}
 
