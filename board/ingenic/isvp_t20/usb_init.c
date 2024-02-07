@@ -30,9 +30,9 @@
 #define CPM_OPCR		0x10000024
 #define CPM_CPAPCR		0x10000010
 
-#define reg_set_bit(bit,reg)	*(volatile unsigned int *)(reg) |= 1UL << (bit)
-#define reg_clr_bit(bit,reg)	*(volatile unsigned int *)(reg) &= ~(1UL << (bit))
-#define reg_wr(val,reg)		*(volatile unsigned int *)(reg) = (val)
+#define reg_set_bit(bit, reg)	*(volatile unsigned int *)(reg) |= 1UL << (bit)
+#define reg_clr_bit(bit, reg)	*(volatile unsigned int *)(reg) &= ~(1UL << (bit))
+#define reg_wr(val, reg)	*(volatile unsigned int *)(reg) = (val)
 #define reg_rd(reg)		*(volatile unsigned int *)(reg)
 
 int board_usb_init(void)
@@ -45,7 +45,7 @@ int board_usb_init(void)
 #endif
 	/*feed clock to otg*/
 	reg_clr_bit(3, CPM_CLKGR0);
-	/*  reg_wr(0x0bcf5780, CPM_CLKGR0); */
+	/* reg_wr(0x0bcf5780, CPM_CLKGR0); */
 	/* reg_wr(0x0470890d, CPM_CPAPCR); */
 	mdelay(100);
 	/* softreset otg */

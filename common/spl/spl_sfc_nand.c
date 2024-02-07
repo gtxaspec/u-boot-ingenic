@@ -70,7 +70,7 @@ static void sfc_set_transfer(struct jz_sfc *sfc, unsigned int dir)
 static void clear_end(void)
 {
 	while(!(sfc_readl(SFC_SR) & END));
-        sfc_writel(CLR_END, SFC_SCR);
+	sfc_writel(CLR_END, SFC_SCR);
 
 }
 static void sfc_send_cmd(struct jz_sfc *sfc, unsigned char dir)
@@ -86,8 +86,8 @@ static void sfc_send_cmd(struct jz_sfc *sfc, unsigned char dir)
 static void sfc_write_data(unsigned int *data, unsigned int length)
 {
 	while (!(sfc_readl(SFC_SR) & TRAN_REQ));
-			sfc_writel(CLR_TREQ,SFC_SCR);
-				sfc_writel(*data, SFC_DR);
+	sfc_writel(CLR_TREQ,SFC_SCR);
+	sfc_writel(*data, SFC_DR);
 	clear_end();
 }
 
@@ -257,7 +257,7 @@ static int spinand_init(void)
 	/*
 	 * Probe nand vid/pid
 	 */
-	if(spinand_probe_id(&sfc))
+	if (spinand_probe_id(&sfc))
 		return -ENODEV;
 
 	/* disable write protect */

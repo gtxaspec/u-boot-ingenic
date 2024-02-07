@@ -56,6 +56,7 @@ static int mmc_load_image_raw(struct mmc *mmc, unsigned long sector)
 	/* convert size to sectors - round up */
 	image_size_sectors = (spl_image.size + mmc->read_bl_len - 1) /
 				mmc->read_bl_len;
+
 #ifdef CONFIG_SPL_LZOP
 	err = mmc->block_dev.block_read(0, sector, image_size_sectors,
 					(void *)CONFIG_DECMP_BUFFER_ADRS);
@@ -66,6 +67,7 @@ static int mmc_load_image_raw(struct mmc *mmc, unsigned long sector)
 	err = mmc->block_dev.block_read(0, sector, image_size_sectors,
 					(void *)spl_image.load_addr);
 #endif
+
 end:
 #ifdef CONFIG_SPL_LIBCOMMON_SUPPORT
 	if (err == 0)

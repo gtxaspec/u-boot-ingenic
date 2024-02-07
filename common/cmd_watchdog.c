@@ -16,7 +16,8 @@
 
 #ifdef CONFIG_CMD_WATCHDOG
 
-int do_watchdog(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
+int do_watchdog(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[])
+{
 	int timeout;
 	int time, i;
 	unsigned long val;
