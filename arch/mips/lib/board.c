@@ -444,7 +444,7 @@ extern void board_usb_init(void);
 
 				if (overlay + aligned_length <= flashsize) {
 					debug("RST:   Overlay: 0x%lX, Flash size: 0x%lX, Length to erase: 0x%lX\n", overlay, flashsize, flashsize - overlay);
-					debug(cmd, "sf erase 0x%lX 0x%lX", overlay, aligned_length);
+					sprintf(cmd, "sf erase 0x%lX 0x%lX", overlay, aligned_length);
 					debug("Executing command: %s\n", cmd);
 					if (run_command(cmd, 0) != 0) {
 						printf("RST:   Error: Failed to execute erase command.\n");
