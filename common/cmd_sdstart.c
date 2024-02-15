@@ -36,7 +36,6 @@ static unsigned char *LOAD_ADDR = NULL;
 
 // Macro to generate kernel filenames based on SoC
 #define SDSTART_KERNEL_FILENAMES(soc) \
-    "factory_" #soc "_0P3N1PC_kernel", \
     "factory_" #soc "_ZMC6tiIDQN", \
     NULL  // sentinel value
 
@@ -48,7 +47,6 @@ static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t15) };
 #elif defined(CONFIG_T20)
 // Special case for T20 to match factory
 static const char* kernel_filenames[] = {
-	"factory_t20_0P3N1PC_kernel",
 	"factory_ZMC6tiIDQN",
 	NULL
 };
