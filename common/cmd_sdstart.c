@@ -36,9 +36,10 @@ static unsigned char *LOAD_ADDR = NULL;
 
 // Macro to generate kernel filenames based on SoC
 #define SDSTART_KERNEL_FILENAMES(soc) \
-    "factory_" #soc "_0P3N1PC_kernel", \
-    "factory_" #soc "_ZMC6tiIDQN", \
-    NULL  // sentinel value
+	"factory_" #soc "_kernel", \
+	"factory_" #soc "_ZMC6tiIDQN", \
+	"factory_ZMC6tiIDQN", \
+	NULL  // sentinel value
 
 // Kernel filenames based on SoC
 #ifdef CONFIG_T10
@@ -48,7 +49,6 @@ static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t15) };
 #elif defined(CONFIG_T20)
 // Special case for T20 to match factory
 static const char* kernel_filenames[] = {
-	"factory_t20_0P3N1PC_kernel",
 	"factory_ZMC6tiIDQN",
 	NULL
 };
@@ -241,7 +241,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 	*/
 
 	// Detect the kernel's presence without fully loading it
-        printf("MMC:   Checking for kernel image from MMC... \n");
+	printf("MMC:   Checking for kernel image from MMC... \n");
 	int i;
 	int found_kernel = 0;
 	for (i = 0; kernel_filenames[i] != NULL; i++) {
@@ -264,7 +264,7 @@ int sdstart(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[]) {
 		return 0; // Return early if user interrupted
 	}
 
-        printf("MMC:   Loading external kernel image... \n");
+	printf("MMC:   Loading external kernel image... \n");
 
 	// Load and validate the kernel
 	int old_ctrlc = disable_ctrlc(0);
