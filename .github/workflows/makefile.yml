@@ -38,6 +38,34 @@ jobs:
       matrix:
         u-boot-version:
           - t10n
+          - t10n
+          - t10l
+          - t10n_msc0
+          - t20n
+          - t20l
+          - t20x
+          - t20n_msc0
+          - t21n
+          - t21n_msc0
+          - t23n
+          - t23n_msc0
+          - t30n
+          - t30l
+          - t30x
+          - t30a
+          - t30a1
+          - t30n_msc0
+          - t31n
+          - t31l
+          - t31lc
+          - t31x
+          - t31a
+          - t31al
+          - t31l_msc0
+          - t31n_msc0
+          - t31x_msc0
+          - t31a_msc0
+          - t31al_msc0
 
     steps:
       - name: Setup ccache
