@@ -714,7 +714,7 @@
  */
 
 #define CONFIG_GPIO_SETTINGS \
-"gpio_default=25ID 26IDU 48o\0"
+"gpio_default=25ID 26IDU\0"
 
 #include "isvp_common.h"
 
