@@ -36,8 +36,10 @@ static unsigned char *LOAD_ADDR = NULL;
 
 // Macro to generate kernel filenames based on SoC
 #define SDSTART_KERNEL_FILENAMES(soc) \
-    "factory_" #soc "_ZMC6tiIDQN", \
-    NULL  // sentinel value
+	"factory_" #soc "_kernel", \
+	"factory_" #soc "_ZMC6tiIDQN", \
+	"factory_ZMC6tiIDQN", \
+	NULL  // sentinel value
 
 // Kernel filenames based on SoC
 #ifdef CONFIG_T10

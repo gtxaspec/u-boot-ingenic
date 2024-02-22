@@ -44,7 +44,7 @@ OUTPUT_DIR="./uboot_build"
 DEBUG_MODE=0  # Flag to indicate whether debug mode is active
 
 # Start timer
-SECONDS=0
+SECONDS_ELAPSED=0
 
 # Function to build a specific version with possible debug mode
 build_version() {
@@ -93,7 +93,7 @@ else
 fi
 
 # End timer and report
-duration=$SECONDS
+duration=$SECONDS_ELAPSED
 echo "Done"
 echo "Total build time: $(($duration / 60)) minutes and $(($duration % 60)) seconds."
 exit 0
