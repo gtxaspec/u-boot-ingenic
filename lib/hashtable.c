@@ -853,14 +853,15 @@ int himport_r(struct hsearch_data *htab,
 			return 0;
 		}
 	}
-if(!size)
+
+	if (!size)
 		return 1;		/* everything OK */
-	if(crlf_is_lf) {
+
+	if (crlf_is_lf) {
 		/* Remove Carriage Returns in front of Line Feeds */
 		unsigned ignored_crs = 0;
-		for(;dp < data + size && *dp; ++dp) {
-			if(*dp == '\r' &&
-			   dp < data + size - 1 && *(dp+1) == '\n')
+		for (;dp < data + size && *dp; ++dp) {
+			if (*dp == '\r' && dp < data + size - 1 && *(dp+1) == '\n')
 				++ignored_crs;
 			else
 				*(dp-ignored_crs) = *dp;

@@ -28,6 +28,7 @@
 #include <jffs2/jffs2.h>
 #include <nand.h>
 
+#define NAND_PRINT_TIME
 #if defined(CONFIG_CMD_MTDPARTS)
 
 /* partition handling routines */
@@ -475,6 +476,11 @@ static int do_nand(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	cmd = argv[1];
 
+#ifdef NAND_PRINT_TIME
+	unsigned int start, end;
+	start = get_timer(0);
+#endif
+
 	/* Only "dump" is repeatable. */
 	if (repeat && strcmp(cmd, "dump"))
 		return 0;
@@ -724,7 +730,10 @@ static int do_nand(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 		printf(" %zu bytes %s: %s\n", rwsize,
 		       read ? "read" : "written", ret ? "ERROR" : "OK");
-
+#ifdef NAND_PRINT_TIME
+	end = get_timer(0);
+	printf("--->%s spend %d ms\n",cmd,end - start);
+#endif
 		return ret == 0 ? 0 : 1;
 	}
 

@@ -1101,7 +1101,7 @@ s32 synopGMAC_mac_init(synopGMACdevice * gmacdev)
 s32 synopGMAC_search_phy (synopGMACdevice * gmacdev) {
 	int phy_id = 0;
 	u16 data;
-	s32 status = 0;
+	s32 status = -ESYNOPGMACNOERR;
 	u16 id1 = 0;
 	u16 id2 = 0;
 

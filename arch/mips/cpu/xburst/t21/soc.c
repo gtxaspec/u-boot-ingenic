@@ -22,6 +22,7 @@
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -64,8 +65,8 @@ void board_init_f(ulong dummy)
 
 #ifdef CONFIG_BURNER
 	gd->arch.gi->ddr_div = ((gd->arch.gi->cpufreq % gd->arch.gi->ddrfreq) == 0)
-		               ? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
-		               : (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
+			       ? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
+			       : (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
 #endif
 
 	gpio_init();
@@ -124,7 +125,7 @@ void board_init_f(ulong dummy)
 	{
 		volatile u32 tmp = 0;
 		u32 data = 0;
-		for (tmp = 0xa0000000; tmp < 0xa0000000 + 0x8000000/4; tmp+=4) {
+		for (tmp = 0xa0000000; tmp < 0xa0000000 + 0x8000000 / 4; tmp+=4) {
 			u32 i = 0;
 			u32 td = 0x12345678;
 			for (i = 0; i < 16; i++) {
@@ -136,7 +137,7 @@ void board_init_f(ulong dummy)
 				}
 				td = td << 1;
 			}
-			//printf("#");
+			printf("#");
 		}
 	}
 #endif
@@ -163,7 +164,7 @@ void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
 
 	flush_cache_all();
 
-	debug("image entry point: 0x%X\n", spl_image->entry_point);
+	printf("image entry point: 0x%X\n", spl_image->entry_point);
 	image_entry();
 }
 
@@ -173,20 +174,17 @@ void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
  * U-Boot common functions
  */
 
-void enable_interrupts(void)
-{
+void enable_interrupts(void) {
 }
 
-int disable_interrupts(void)
-{
+int disable_interrupts(void) {
 	return 0;
 }
 
-unsigned long do_go_exec(ulong (*entry)(int, char * const []), int argc,
-				 char * const argv[])
-{
+unsigned long do_go_exec(ulong (*entry)(int, char *const[]), int argc,
+			 char *const argv[]) {
 	printf("Flush cache all before jump. \n");
 	flush_cache_all();
 
-	return entry (argc, argv);
+	return entry(argc, argv);
 }

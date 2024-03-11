@@ -37,10 +37,10 @@
 DECLARE_GLOBAL_DATA_PTR;
 
 #ifndef CONFIG_SYS_UBOOT_START
-#define CONFIG_SYS_UBOOT_START	CONFIG_SYS_TEXT_BASE
+#define CONFIG_SYS_UBOOT_START        CONFIG_SYS_TEXT_BASE
 #endif
 #ifndef CONFIG_SYS_MONITOR_LEN
-#define CONFIG_SYS_MONITOR_LEN	(200 * 1024)
+#define CONFIG_SYS_MONITOR_LEN        (200 * 1024)
 #endif
 
 u32 *boot_params_ptr = NULL;
@@ -73,13 +73,11 @@ __weak int spl_start_uboot(void)
  * Linux boot. Some boards/platforms might not need it, so just provide
  * an empty stub here.
  */
-__weak void spl_board_prepare_for_linux(void)
-{
+__weak void spl_board_prepare_for_linux(void) {
 	/* Nothing to do! */
 }
 
-void spl_parse_image_header(const struct image_header *header)
-{
+void spl_parse_image_header(const struct image_header *header) {
 	u32 header_size = sizeof(struct image_header);
 
 	if (image_get_magic(header) == IH_MAGIC) {
@@ -96,18 +94,18 @@ void spl_parse_image_header(const struct image_header *header)
 			spl_image.entry_point = image_get_load(header);
 			/* Load including the header */
 			spl_image.load_addr = spl_image.entry_point -
-				header_size;
+					      header_size;
 			spl_image.size = image_get_data_size(header) +
-				header_size;
+					 header_size;
 		}
 		spl_image.os = image_get_os(header);
 		spl_image.name = image_get_name(header);
 		debug("spl: payload image: %s load addr: 0x%x size: %d\n",
-			spl_image.name, spl_image.load_addr, spl_image.size);
+		      spl_image.name, spl_image.load_addr, spl_image.size);
 	} else {
 		/* Signature not found - assume u-boot.bin */
 		debug("mkimage signature not found - ih_magic = %x\n",
-			header->ih_magic);
+		      header->ih_magic);
 		/* Let's assume U-Boot will not be more than 200 KB */
 		spl_image.size = CONFIG_SYS_MONITOR_LEN;
 		spl_image.entry_point = CONFIG_SYS_UBOOT_START;
@@ -117,12 +115,11 @@ void spl_parse_image_header(const struct image_header *header)
 	}
 }
 
-__weak void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
-{
-	typedef void __noreturn (*image_entry_noargs_t)(void);
+__weak void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image) {
+	typedef void __noreturn(*image_entry_noargs_t)(void);
 
 	image_entry_noargs_t image_entry =
-			(image_entry_noargs_t) spl_image->entry_point;
+		(image_entry_noargs_t) spl_image->entry_point;
 
 	printf("image entry point: 0x%X\n", spl_image->entry_point);
 	image_entry();
@@ -145,8 +142,7 @@ static void spl_ram_load_image(void)
 }
 #endif
 
-void board_init_r(gd_t *dummy1, ulong dummy2)
-{
+void board_init_r(gd_t *dummy1, ulong dummy2) {
 	u32 boot_device;
 	debug(">>spl:board_init_r()\n");
 
@@ -171,98 +167,101 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 #ifdef CONFIG_PALLADIUM
 	spl_board_prepare_for_linux();
 #endif
+
 	switch (boot_device) {
 #ifdef CONFIG_SPL_RAM_DEVICE
-	case BOOT_DEVICE_RAM:
-		spl_ram_load_image();
-		break;
+		case BOOT_DEVICE_RAM:
+			spl_ram_load_image();
+			break;
 #endif
 #ifdef CONFIG_SPL_MMC_SUPPORT
-	case BOOT_DEVICE_MMC1:
-	case BOOT_DEVICE_MMC2:
-	case BOOT_DEVICE_MMC2_2:
-		spl_mmc_load_image();
-		break;
+		case BOOT_DEVICE_MMC1:
+		case BOOT_DEVICE_MMC2:
+		case BOOT_DEVICE_MMC2_2:
+			spl_mmc_load_image();
+			break;
 #endif
 #ifdef CONFIG_SPL_SFC_SUPPORT
 #ifdef CONFIG_SFC_NOR
-	case BOOT_DEVICE_SFC_NOR:
-		spl_sfc_nor_load_image();
-		break;
+		case BOOT_DEVICE_SFC_NOR:
+			spl_sfc_nor_load_image();
+			break;
 #endif
 #ifdef CONFIG_SFC_NAND
-	case BOOT_DEVICE_SFC_NAND:
-		spl_sfc_nand_load_image();
-		break;
+		case BOOT_DEVICE_SFC_NAND:
+			spl_sfc_nand_load_image();
+			break;
 #endif
 #endif
 #if defined(CONFIG_SPL_NAND_SUPPORT) || defined(CONFIG_JZ_NAND_MGR)
-	case BOOT_DEVICE_NAND:
-		spl_nand_load_image();
-		break;
+		case BOOT_DEVICE_NAND:
+			spl_nand_load_image();
+			break;
 #endif
 #ifdef CONFIG_SPL_ONENAND_SUPPORT
-	case BOOT_DEVICE_ONENAND:
-		spl_onenand_load_image();
-		break;
+		case BOOT_DEVICE_ONENAND:
+			spl_onenand_load_image();
+			break;
 #endif
 #ifdef CONFIG_SPL_NOR_SUPPORT
-	case BOOT_DEVICE_NOR:
-		spl_nor_load_image();
-		break;
+		case BOOT_DEVICE_NOR:
+			spl_nor_load_image();
+			break;
 #endif
 #ifdef CONFIG_SPL_YMODEM_SUPPORT
-	case BOOT_DEVICE_UART:
-		spl_ymodem_load_image();
-		break;
+		case BOOT_DEVICE_UART:
+			spl_ymodem_load_image();
+			break;
 #endif
 #ifdef CONFIG_SPL_SPI_SUPPORT
-	case BOOT_DEVICE_SPI:
-		spl_spi_load_image();
-		break;
+		case BOOT_DEVICE_SPI:
+			spl_spi_load_image();
+			break;
 #endif
 #ifdef CONFIG_SPL_ETH_SUPPORT
-	case BOOT_DEVICE_CPGMAC:
+		case BOOT_DEVICE_CPGMAC:
 #ifdef CONFIG_SPL_ETH_DEVICE
-		spl_net_load_image(CONFIG_SPL_ETH_DEVICE);
+			spl_net_load_image(CONFIG_SPL_ETH_DEVICE);
 #else
-		spl_net_load_image(NULL);
+			spl_net_load_image(NULL);
 #endif
-		break;
+			break;
 #endif
 #ifdef CONFIG_SPL_USBETH_SUPPORT
-	case BOOT_DEVICE_USBETH:
-		spl_net_load_image("usb_ether");
-		break;
+		case BOOT_DEVICE_USBETH:
+			spl_net_load_image("usb_ether");
+			break;
 #endif
-	default:
-		debug("SPL: Un-supported Boot Device\n");
-		hang();
+		default:
+			debug("SPL: Un-supported Boot Device\n");
+			hang();
 	}
 
 	switch (spl_image.os) {
-	case IH_OS_U_BOOT:
-		debug("Jumping to U-Boot\n");
-		break;
+		case IH_OS_U_BOOT:
+			debug("Jumping to U-Boot\n");
+			break;
 #ifdef CONFIG_SPL_OS_BOOT
-	case IH_OS_LINUX:
-		debug("Jumping to Linux\n");
-		spl_board_prepare_for_linux();
-		jump_to_image_linux((void *)CONFIG_SYS_SPL_ARGS_ADDR);
+			case IH_OS_LINUX:
+				debug("Jumping to Linux\n");
+				spl_board_prepare_for_linux();
+				jump_to_image_linux((void *)CONFIG_SYS_SPL_ARGS_ADDR);
 #endif
-	default:
-		debug("Unsupported OS image.. Jumping nevertheless..\n");
+		default:
+			debug("Unsupported OS image.. Jumping nevertheless..\n");
 	}
 
 	jump_to_image_no_args(&spl_image);
 }
 
 /*
- * This requires UART clocks to be enabled.  In order for this to work the
+ * This requires UART clocks to be enabled. In order for this to work, the
  * caller must ensure that the gd pointer is valid.
  */
-void preloader_console_init(void)
-{
+void preloader_console_init(void) {
+#ifndef CONFIG_UART_LOAD
+	unsigned int chip = 0;
+#endif
 	gd->bd = &bdata;
 #ifndef CONFIG_BURNER
 	gd->baudrate = CONFIG_BAUDRATE;
@@ -272,19 +271,19 @@ void preloader_console_init(void)
 #ifdef CONFIG_PALLADIUM
 	gd->baudrate = 3750000;
 #endif
-	serial_init();		/* serial communications setup */
+	serial_init();                /* serial communications setup */
 
 	gd->have_console = 1;
 
-	puts("\n\nIngenic U-Boot SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " \
-			U_BOOT_TIME ")\n");
+#if !defined(CONFIG_FAST_BOOT) && !defined (CONFIG_SIMULATION) && !defined(CONFIG_YMODEM_NO_PRINTF)
+	puts("\n\nThingino U-Boot SPL " PLAIN_VERSION " (" U_BOOT_DATE " - " U_BOOT_TIME ")\n");
+#endif
 #ifdef CONFIG_SPL_DISPLAY_PRINT
 	spl_display_print();
 #endif
 }
 
-void spl_regulator_set(void)
-{
+void spl_regulator_set(void) {
 #ifdef CONFIG_SPL_CORE_VOLTAGE
 	spl_regulator_init();
 	debug("Set core voltage:%dmv\n", CONFIG_SPL_CORE_VOLTAGE);

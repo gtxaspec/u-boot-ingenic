@@ -22,7 +22,7 @@
 
 PLATFORM_CPPFLAGS += -march=mips32
 PLATFORM_CPPFLAGS += -mabi=32 -DCONFIG_32BIT
-PLATFORM_CPPFLAGS += -mhard-float
+/*PLATFORM_CPPFLAGS += -mhard-float*/
 ifdef CONFIG_SYS_BIG_ENDIAN
 PLATFORM_LDFLAGS  += -m elf32btsmip
 else

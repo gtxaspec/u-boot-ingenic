@@ -21,7 +21,8 @@
  * MA 02111-1307 USA
  */
 
-/* #define DEBUG */
+#define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -30,7 +31,6 @@
 #include <spl.h>
 
 #ifdef CONFIG_SPL_BUILD
-
 /* Pointer to as well as the global data structure for SPL */
 DECLARE_GLOBAL_DATA_PTR;
 gd_t gdata __attribute__ ((section(".data")));
@@ -129,11 +129,9 @@ void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
  * U-Boot common functions
  */
 
-void enable_interrupts(void)
-{
+void enable_interrupts(void) {
 }
 
-int disable_interrupts(void)
-{
+int disable_interrupts(void) {
 	return 0;
 }

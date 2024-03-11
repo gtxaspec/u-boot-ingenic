@@ -29,21 +29,21 @@
  * Basic configuration(SOC, Cache, UART, DDR).
  */
 #if defined(CONFIG_LITE_VERSION)
-	#define APLL_1008M
-	#define DDR_500M
+#define APLL_1008M
+#define DDR_500M
 #elif defined(CONFIG_DDR2_128M)
-	#define APLL_1392M
-	#define DDR_600M
+#define APLL_1392M
+#define DDR_600M
 #elif defined(CONFIG_T31A)
-	#define APLL_1392M
-	#define DDR_750M
+#define APLL_1392M
+#define DDR_750M
 #elif defined(CONFIG_T31LC)
-	#define APLL_1104M
-	#define DDR_500M
+#define APLL_1104M
+#define DDR_500M
 #else
-	/* T31N */
-	#define APLL_1400M
-	#define DDR_500M
+/* T31N */
+#define APLL_1400M
+#define DDR_500M
 #endif
 
 #if defined(APLL_804M)
@@ -330,7 +330,6 @@
 #endif
 
 #define DDR2_CHIP_DRIVER_OUT_STRENGTH	0
-
 #define DDR2_CHIP_MR0_DLL_RST
 
 #define CONFIG_DDR_PHY_IMPEDANCE	40000
@@ -409,20 +408,16 @@
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
-*/
 
-/*
 #if defined(CONFIG_SFC_NOR)
 #if defined(CONFIG_OF_LIBFDT)
-#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x50000 0x270000;sf read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
+#define CONFIG_BOOTCOMMAND "sf probe; sf read 0x80600000 0x50000 0x270000; sf read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
 #else
-#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
+#define CONFIG_BOOTCOMMAND "sf probe; sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
 #endif
 #endif
-*/
 
-/*
-#if defined(CONFIG_SFC_NAND)
+ #if defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND "nand read 0x80600000 0x100000 0x800000;bootm 0x80600000"
 #endif
 */
@@ -488,7 +483,6 @@
 #define MTDIDS_DEFAULT			"nand0=nand"
 #define MTDPARTS_DEFAULT		"mtdparts=nand:1M(boot),8M(kernel),40M(rootfs),-(data)"
 #define CONFIG_SPI_STANDARD /* if the nand is QUAD mode, please annotate it. the default is one lan. */
-
 #if defined(CONFIG_SPL_SFC_SUPPORT)
 /*SFCNAND env*/
 /* spi nand environment */
@@ -500,7 +494,6 @@
 #define CONFIG_ENV_OFFSET_REDUND	(CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)
 #define CONFIG_ENV_IS_IN_SFC_NAND
 #endif
-
 /* MTD support */
 /* #define CONFIG_SYS_NAND_SELF_INIT */
 #define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
@@ -594,11 +587,10 @@
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
 #endif
 #endif
-*/
-/*
+
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
 #define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
- */
+*/
 
 #define CONFIG_SYS_SDRAM_BASE		0x80000000 /* cached (KSEG0) address */
 #define CONFIG_SYS_SDRAM_MAX_TOP	0x84000000 /* don't run into IO space */
@@ -621,9 +613,9 @@
 
 #if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-nor-spl.lds"
-#else /* CONFIG_SPL_NOR_SUPPORT */
+#else
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-spl.lds"
-#endif /* CONFIG_SPL_NOR_SUPPORT */
+#endif
 
 /*
 #if defined(CONFIG_SPL_SFC_NAND)

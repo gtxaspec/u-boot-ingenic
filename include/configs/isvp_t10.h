@@ -29,13 +29,15 @@
  * Basic configuration(SOC, Cache, UART, DDR).
  */
 #if defined(CONFIG_LITE_VERSION)
+/* T10L */
 #define CONFIG_SYS_APLL_FREQ		712704000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((59 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
-#define CONFIG_SYS_APLL_FRAC		0x645a1c
+#define CONFIG_SYS_APLL_FRAC		0x645a1c	/* 6576668 */
 #else
+/* T10N */
 #define CONFIG_SYS_APLL_FREQ		860160000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((71 << 20) | (2 << 14) | (1 << 11) | (1 << 8))
-#define CONFIG_SYS_APLL_FRAC		0xae147a
+#define CONFIG_SYS_APLL_FRAC		0xae147a	/* 11408506 */
 #endif
 
 #define CONFIG_SYS_MPLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
@@ -366,7 +368,7 @@
 	These shall be specific to the SoC model
 */
 #define CONFIG_GPIO_SETTINGS \
-""
+"gpio_default=25o 26o"
 
 #include "isvp_common.h"
 

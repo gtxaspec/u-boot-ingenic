@@ -22,6 +22,7 @@
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -50,8 +51,7 @@ extern void pll_init(void);
 extern void sdram_init(void);
 extern void validate_cache(void);
 #ifdef CONFIG_SIMULATION
-volatile noinline void hello_word(void)
-{
+volatile noinline void hello_word(void) {
 	while(1);
 }
 #endif
@@ -70,8 +70,8 @@ void board_init_f(ulong dummy)
 
 #ifdef CONFIG_BURNER
 	gd->arch.gi->ddr_div = ((gd->arch.gi->cpufreq % gd->arch.gi->ddrfreq) == 0)
-		               ? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
-		               : (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
+			? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
+			: (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
 #endif
 
 	gpio_init();
@@ -86,30 +86,29 @@ void board_init_f(ulong dummy)
 #endif
 
 #ifndef CONFIG_FPGA
-	//debug("Timer init\n");
+	debug("Timer init\n");
 	timer_init();
 
 #ifdef CONFIG_SPL_REGULATOR_SUPPORT
-	//debug("regulator set\n");
+	debug("regulator set\n");
 	spl_regulator_set();
 #endif
-	//debug("CLK stop\n");
+	debug("CLK stop\n");
 	clk_prepare();
 
-	//debug("PLL init\n");
+	debug("PLL init\n");
 	pll_init();
 
-	//debug("CLK init\n");
+	debug("CLK init\n");
 	clk_init();
 #endif
-#ifdef CONFIG_SIMULATION
-	{
-		hello_word();
-	}
+#ifdef CONFIG_SIMULATION {
+	hello_word();
+}
 #endif
-
+	debug("SDRAM init\n");
 	sdram_init();
-
+	debug("SDRAM init ok\n");
 
 #if 0 /* a simple ddr training */
 	/*MUST access 0xa3fffffc address */
@@ -154,7 +153,7 @@ void board_init_f(ulong dummy)
 #ifndef CONFIG_BURNER
 	/* Clear the BSS */
 	memset(__bss_start, 0, (char *)&__bss_end - __bss_start);
-	// debug("board_init_r\n");
+	debug("board_init_r\n");
 	board_init_r(NULL, 0);
 #endif
 }
@@ -164,12 +163,8 @@ extern void flush_cache_all(void);
 void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
 {
 	typedef void __noreturn (*image_entry_noargs_t)(void);
-
-	image_entry_noargs_t image_entry =
-			(image_entry_noargs_t) spl_image->entry_point;
-
+	image_entry_noargs_t image_entry = (image_entry_noargs_t) spl_image->entry_point;
 	flush_cache_all();
-
 	printf("image entry point: 0x%X\n", spl_image->entry_point);
 	image_entry();
 }
@@ -180,20 +175,16 @@ void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
  * U-Boot common functions
  */
 
-void enable_interrupts(void)
-{
+void enable_interrupts(void) {
 }
 
-int disable_interrupts(void)
-{
+int disable_interrupts(void) {
 	return 0;
 }
 
-unsigned long do_go_exec(ulong (*entry)(int, char * const []), int argc,
-				 char * const argv[])
-{
+unsigned long do_go_exec(ulong (*entry)(int, char *const[]), int argc, char *const argv[]) {
 	printf("Flush cache all before jump. \n");
 	flush_cache_all();
 
-	return entry (argc, argv);
+	return entry(argc, argv);
 }

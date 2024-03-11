@@ -161,7 +161,7 @@
 #define CONFIG_SPI_SPL_CHECK
 #define CONFIG_JZ_SFC_PA
 #ifdef CONFIG_SPI_NAND
-#define CONFIG_UBOOT_OFFSET	(26  * 1024)
+#define CONFIG_UBOOT_OFFSET	(26 * 1024)
 #define CONFIG_SPI_NAND_BPP	(2048 +64)  /*Bytes Per Page*/
 #define CONFIG_SPI_NAND_PPB	(64)        /*Page Per Block*/
 #define CONFIG_SPL_SFC_NAND

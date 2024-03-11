@@ -125,11 +125,9 @@ static int sfc_read_data(unsigned int *data, unsigned int length)
 static void sfc_controler_init(void)
 {
 	unsigned int tmp;
-
 #ifndef CONFIG_FPGA
 	clk_set_rate(SSI, CONFIG_SFC_NAND_RATE);
 #endif
-
 	tmp = sfc_readl(SFC_GLB);
 	tmp &= ~(GLB_THRESHOLD_MSK);
 	tmp |= (THRESHOLD << GLB_THRESHOLD_OFFSET);

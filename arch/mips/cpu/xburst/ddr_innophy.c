@@ -298,10 +298,15 @@ void ddr_inno_phy_init()
 
 	phy_writel(0x0, INNO_TRAINING_CTRL); // ADDR:9’h002
 	phy_writel(0x03, INNO_DQ_WIDTH);     // ADDR:9’h01f
-#ifdef CONFIG_DDR_TYPE_DDR3
+#if defined(CONFIG_DDR_TYPE_DDR3)
 	phy_writel(0x30, INNO_MEM_CFG);                            // ADDR:9’h011 MEMSEL = DDR3, BURSEL = burst8
+#if defined(CONFIG_T23)
+	phy_writel((readl(PHY_BASE + INNO_A_DQS1_TXPLL) & 0xffffff8f), INNO_A_DQS1_TXPLL); // ADDR:9’h055
+	phy_writel((readl(PHY_BASE + INNO_A_DQS0_TXPLL) & 0xffffff8f), INNO_A_DQS0_TXPLL); // ADDR:9’h045
+#else
 	phy_writel((readl(PHY_BASE + 0x154) & 0xffffff8f), 0x154); // ADDR:9’h055
 	phy_writel((readl(PHY_BASE + 0x114) & 0xffffff8f), 0x114); // ADDR:9’h045
+#endif
 	phy_writel(0x0d, INNO_CHANNEL_EN);                         // ADDR:9’h000
 	phy_writel(0x6, INNO_CWL);                                 // ADDR:9’h007
 	phy_writel(0x8, INNO_CL);                                  // ADDR:9’h005
@@ -336,16 +341,13 @@ void ddr_inno_phy_init()
 	debug("phy 0x134 0x%x\n", phy_readl(0x134*4));
 #endif
 	writel(0, DDR_APB_PHY_INIT); // start high
-	while (!(readl(DDR_APB_PHY_INIT) & (1 << 2)))
-		; // pll locked
+	while (!(readl(DDR_APB_PHY_INIT) & (1 << 2))) {} // pll locked
 	debug("ddr_inno_phy_init ..! 11:  %X\n", readl(DDR_APB_PHY_INIT));
 	writel(0, REG_DDR_CTRL);
 
-	while (!(readl(DDR_APB_PHY_INIT) & (1 << 1)))
-		; // init_complete
+	while (!(readl(DDR_APB_PHY_INIT) & (1 << 1))) {} // init_complete
 	debug("ddr_inno_phy_init ..! 22:  %X\n", readl(DDR_APB_PHY_INIT));
-	while (!readl(XBURST1_INIT_COMP))
-		;
+	while (!readl(XBURST1_INIT_COMP)) {}
 	debug("ddr_inno_phy_init ..! 33:  %X\n", readl(DDR_APB_PHY_INIT));
 	writel(0, REG_DDR_CTRL);
 
@@ -384,42 +386,34 @@ void ddr_inno_phy_init()
 	writel(0, REG_DDR_LMR);
 #else
 	writel(0x400001, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 
 	writel(0x211, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 
 	writel(0x311, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 
 	writel(0x111, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 
 	reg = ((DDRP_MR0_VALUE) << 12) | 0x011;
 	writel(reg, REG_DDR_LMR);
 	debug("REG_DDR_LMR, MR0: %x\n", reg);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 	udelay(5 * 1000);
 
 	writel(0x400001, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 
 	writel(0x400009, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 
 	writel(0x400009, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {}
 	udelay(5 * 1000);
 
 #endif
@@ -435,8 +429,7 @@ void ddr_inno_phy_init()
 	writel(0x40, 0xb3011010);
 	writel(0xa4, 0xb3011008);
 
-	while (0x3 != readl((PHY_BASE + 0xc0)))
-		;
+	while (0x3 != readl((PHY_BASE + 0xc0))) {}
 	debug("XBURST1_c0: %x\n", readl((PHY_BASE + 0xc0)));
 
 	writel(0xa1, 0xb3011008);
@@ -526,7 +519,6 @@ void phy_calibration(int al8_1x, int ah8_1x, int al8_2x, int ah8_2x)
 /* DDR sdram init */
 void sdram_init(void)
 {
-
 	int type = VARIABLE;
 	unsigned int mode;
 	unsigned int bypass = 0;
@@ -570,7 +562,7 @@ void sdram_init(void)
 	rate = gd->arch.gi->ddrfreq;
 #endif
 #ifdef CONFIG_M200
-	if(rate <= 150000000)
+	if (rate <= 150000000)
 		bypass = 1;
 #endif
 	reset_controller();
@@ -597,7 +589,7 @@ void sdram_init(void)
 
 	ddr_writel(ddr_readl(DDRC_STATUS) & ~DDRC_DSTATUS_MISS, DDRC_STATUS);
 #ifdef CONFIG_DDR_AUTO_SELF_REFRESH
-	if(!bypass)
+	if (!bypass)
 		ddr_writel(0 , DDRC_DLP);
 #ifdef CONFIG_FPGA
 	//ddr_writel(ddr_readl(DDRP_DSGCR)&~(1<<4),DDRP_DSGCR);

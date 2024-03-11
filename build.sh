@@ -6,36 +6,32 @@ export CROSS_COMPILE=mipsel-linux-gnu-
 
 OUTPUT_DIR="./uboot_build"
 
-if command -v resize >/dev/null; then
-	eval $(resize)
-	size="$(( LINES - 4 )) $(( COLUMNS -4 )) $(( LINES - 12 ))"
-else
-	size="20 50 12"
-fi
-
 profiles() {
-	awk '/^isvp_/ {sub(/isvp_/, "", $1); print $1}' boards.cfg
+	awk '/^isvp_/ {sub(/isvp_/, "", $1); print $1}' boards.cfg | sort
 }
 
 list_of_profiles() {
-	awk '/^isvp_/ {sub(/isvp_/, "", $1); print $1 " " $1 " "}' boards.cfg
+	awk '/^isvp_/ {sub(/isvp_/, "", $1); print $1 " " $1 " "}' boards.cfg | sort
 }
 
 pick_a_soc() {
 	profiles=$(echo $(list_of_profiles))
 	whiptail --title "U-Boot SoC selection" --menu "Choose a SoC model" \
-		--notags $size $profiles 3>&1 1>&2 2>&3
+		--notags 20 50 12 $profiles 3>&1 1>&2 2>&3
 }
 
 build_version() {
-	[ -z "$profile" ] && help_and_exit
+	if [ -z "$profile" ]; then
+        echo "Profile is empty"
+        help_and_exit
+    fi
 
-	echo "Building U-Boot for ${profile}"
+	echo "Building U-Boot for $profile"
 	# Start timer
-	local SECONDS=0
+	SECONDS=0
 	make distclean
-	mkdir -p "${OUTPUT_DIR}" >/dev/null
-	make isvp_${profile}
+	mkdir -p "$OUTPUT_DIR" >/dev/null
+	make isvp_$profile
 	make -j$(nproc)
 	cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${profile}.bin"
 	make distclean
@@ -63,15 +59,17 @@ case "$soc" in
 		done
 		;;
 	t10* | t20* | t21* | t23* | t30* | t31*)
-		awk '/^isvp_'${soc}'/ && /'${boot}'/ {print $1}' boards.cfg
-
-		#build_version $profile
+		if [ $(awk '/^isvp_'$soc'/ && /'$boot'/ {print $1}' boards.cfg | wc -l) -eq 1 ]; then
+			profile=$soc
+			build_version $profile
+		fi
 		;;
 	"")
 		profile=$(pick_a_soc)
 		build_version $profile
 		;;
 	*)
+        echo "Unknown SoC: $soc"
 		help_and_exit
 esac
 

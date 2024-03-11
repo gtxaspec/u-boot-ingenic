@@ -1,7 +1,7 @@
 /*
- *  Startup Code for MIPS32 XBURST CPU-core
+ * Startup Code for MIPS32 XBURST CPU-core
  *
- *  Copyright (c) 2010 Xiangfu Liu <xiangfu@sharism.cc>
+ * Copyright (c) 2010 Xiangfu Liu <xiangfu@sharism.cc>
  *
  * See file CREDITS for list of people who contributed to this
  * project.
@@ -32,13 +32,13 @@
 #include "traps.h"
 
 	.set noreorder
-
 	.globl _start
 	.text
+
 _start:
 	/* Initialize $gp */
 	bal	1f
-	 nop
+	nop
 	.word	_gp
 1:
 	lw	gp, 0(ra)
@@ -243,7 +243,7 @@ in_ram:
 		.globl	symbol;                         \
 		.align	2;                              \
 		.type	symbol, @function;              \
-		.ent	symbol, 0;                       \
+		.ent	symbol, 0;                      \
 symbol:		.frame	sp, framesize, rpc
 
 /*

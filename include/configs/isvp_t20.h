@@ -65,7 +65,6 @@
 #define CONFIG_CPU_SEL_PLL		APLL
 #define CONFIG_DDR_SEL_PLL		MPLL
 #define CONFIG_SYS_CPU_FREQ		CONFIG_SYS_APLL_FREQ
-
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 
 #define CONFIG_SYS_EXTAL		24000000	/* EXTAL freq: 24 MHz */
@@ -75,10 +74,6 @@
 #define CONFIG_SYS_ICACHE_SIZE		32768
 #define CONFIG_SYS_CACHELINE_SIZE	32
 
-/*
-#define CONFIG_DDR_TEST_CPU
-#define CONFIG_DDR_TEST
-*/
 #define CONFIG_DDR_PARAMS_CREATOR
 #define CONFIG_DDR_HOST_CC
 #define CONFIG_DDR_FORCE_SELECT_CS1
@@ -96,21 +91,6 @@
 
 #define CONFIG_DDR_PHY_IMPEDANCE	40000
 #define CONFIG_DDR_PHY_ODT_IMPEDANCE	50000 /* 75000 */
-/*
-#define CONFIG_DDR_PHY_IMPED_PULLUP	0xf
-#define CONFIG_DDR_PHY_IMPED_PULLDOWN	0xf
-*/
-
-/*
-#define CONFIG_DDR_DLL_OFF
-*/
-
-/*
-#define CONFIG_DDR_CHIP_ODT
-#define CONFIG_DDR_PHY_ODT
-#define CONFIG_DDR_PHY_DQ_ODT
-#define CONFIG_DDR_PHY_DQS_ODT
-*/
 
 /**
  * Boot arguments definitions.
@@ -127,29 +107,6 @@
 "ispmem=8M@0x2000000\0" \
 "rmem=24M@0x2800000\0"
 #endif
-/*
-#if defined(CONFIG_SPL_MMC_SUPPORT)
-#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
-#elif defined(CONFIG_SFC_NOR)
-#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256k(boot),2560k(kernel),2048k(root),-(appfs)"
-#endif
-*/
-
-/**
- * Boot command definitions.
- */
-
-/*
-#if defined(CONFIG_SPL_MMC_SUPPORT)
-#define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
-#endif
-*/
-
-/*
-#if defined(CONFIG_SFC_NOR)
-#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
-#endif
-*/
 
 /**
  * Drivers configuration.
@@ -273,14 +230,7 @@
 #define CONFIG_SYS_MAXARGS		64
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT		CONFIG_SYS_BOARD "# "
-/* #define CONFIG_SYS_CBSIZE		1024 */
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-
-/*
-#define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
-#define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
-#define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
-*/
 
 #define CONFIG_SYS_SDRAM_BASE		0x80000000 /* cached (KSEG0) address */
 #define CONFIG_SYS_SDRAM_MAX_TOP	0x84000000 /* don't run into IO space */

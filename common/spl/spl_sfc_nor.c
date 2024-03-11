@@ -130,7 +130,6 @@ void sfc_init()
 #ifndef CONFIG_FPGA
 	clk_set_rate(SSI, 70000000);
 #endif
-
 	tmp = THRESHOLD << THRESHOLD_OFFSET;
 	jz_sfc_writel(tmp, SFC_GLB);
 

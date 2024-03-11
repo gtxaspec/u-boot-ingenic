@@ -28,6 +28,13 @@
 /**
  * Basic configuration(SOC, Cache, UART, DDR).
  */
+#define CONFIG_MIPS32		/* MIPS32 CPU core */
+#define CONFIG_CPU_XBURST
+#define CONFIG_SYS_LITTLE_ENDIAN
+#define CONFIG_T23		/* T23 SoC */
+/*#define CONFIG_DDR_AUTO_SELF_REFRESH */
+/*#define CONFIG_SPL_DDR_SOFT_TRAINING*/
+
 #if defined(CONFIG_T23N)
 #if defined(CONFIG_HP)
 #define APLL_1400M
@@ -41,7 +48,7 @@
 #endif /* T23N */
 #else
 #define APLL_1000M
-	#define DDR_500M
+#define DDR_500M
 #endif
 
 #if defined(APLL_891M)
@@ -109,7 +116,15 @@
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
+#elif defined(DDR_450M)
+#define DIV_PCLK			8
+#define DIV_H2				4
+#define DIV_H0				4
 #elif defined(DDR_500M)
+#define DIV_PCLK			8
+#define DIV_H2				4
+#define DIV_H0				4
+#elif defined(DDR_540M)
 #define DIV_PCLK			8
 #define DIV_H2				4
 #define DIV_H0				4
@@ -126,6 +141,46 @@
 #define DIV_H2				6
 #define DIV_H0				6
 #elif defined(DDR_650M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_700M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_750M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_762M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_774M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_786M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_798M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_800M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_810M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_816M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_900M)
 #define DIV_PCLK			12
 #define DIV_H2				6
 #define DIV_H0				6
@@ -151,7 +206,11 @@
 
 #if defined(DDR_400M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 3)
+#elif defined(DDR_450M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #elif defined(DDR_500M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_540M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #elif defined(DDR_550M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
@@ -160,6 +219,26 @@
 #elif defined(DDR_600M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #elif defined(DDR_650M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_700M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_750M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_762M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_774M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_786M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_798M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_800M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_810M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_816M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_900M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #else
 #error please define DDR_FREQ
@@ -171,6 +250,10 @@
 #define CONFIG_SYS_DCACHE_SIZE		32768
 #define CONFIG_SYS_ICACHE_SIZE		32768
 #define CONFIG_SYS_CACHELINE_SIZE	32
+
+#define CONFIG_SYS_UART_INDEX		1
+#define CONFIG_BAUDRATE			115200
+#define CONFIG_SYS_UART_CONTROLLER_STEP	0x1000
 
 /*
 #define CONFIG_DDR_TEST_CPU
@@ -195,7 +278,6 @@
 #endif
 
 #define DDR2_CHIP_DRIVER_OUT_STRENGTH	0
-
 #define DDR2_CHIP_MR0_DLL_RST
 
 #define CONFIG_DDR_PHY_IMPEDANCE	40000
@@ -275,19 +357,15 @@
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
-*/
 
-/*
 #if defined(CONFIG_SFC_NOR)
 #if defined(CONFIG_OF_LIBFDT)
-#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x50000 0x270000;sf read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
+#define CONFIG_BOOTCOMMAND "sf probe; sf read 0x80600000 0x50000 0x270000; sf read 0x83000000 0x540000 0x10000;bootm 0x80600000 - 0x83000000"
 #else
-#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
+#define CONFIG_BOOTCOMMAND "sf probe; sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
 #endif
 #endif
-*/
 
-/*
 #if defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND "nand read 0x80600000 0x100000 0x300000;bootm 0x80600000"
 #endif
@@ -367,15 +445,13 @@
 #define CONFIG_ENV_SECT_SIZE		0x20000
 #define SPI_NAND_BLK			0x20000
 #define CONFIG_ENV_SIZE			SPI_NAND_BLK
-#define CONFIG_ENV_OFFSET		0xC0000
+#define CONFIG_ENV_OFFSET		0xc0000
 #define CONFIG_ENV_OFFSET_REDUND	(CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)
 #define CONFIG_ENV_IS_IN_SFC_NAND
 #endif
-
 /* MTD support */
 #define CONFIG_SYS_NAND_SELF_INIT
 #define CONFIG_UBOOT_OFFSET		CONFIG_SPL_MAX_SIZE
-
 #elif defined(CONFIG_SPL_SFC_NOR)
 #define CONFIG_CMD_SF
 #define CONFIG_SPI_FLASH_INGENIC
@@ -424,7 +500,7 @@
 #define CONFIG_JZ_GPIO
 
 /************************ USB CONFIG ***************************/
-#define CONFIG_CMD_USB
+#undef CONFIG_CMD_USB
 #if defined(CONFIG_CMD_USB)
 #define CONFIG_USB_DWC2
 #define CONFIG_USB_DWC2_REG_ADDR	0x13500000
@@ -472,11 +548,10 @@
 #define CONFIG_SYS_MONITOR_LEN		(214 * 1024)
 #endif
 #endif
-*/
-/*
+
 #define CONFIG_SYS_MALLOC_LEN		(32 * 1024 * 1024)
 #define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
- */
+*/
 
 #define CONFIG_SYS_SDRAM_BASE		0x80000000 /* cached (KSEG0) address */
 #define CONFIG_SYS_SDRAM_MAX_TOP	0x84000000 /* don't run into IO space */
@@ -499,9 +574,9 @@
 
 #if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-nor-spl.lds"
-#else /* CONFIG_SPL_NOR_SUPPORT */
+#else
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-spl.lds"
-#endif /* CONFIG_SPL_NOR_SUPPORT */
+#endif
 
 /*
 #if defined(CONFIG_SPL_SFC_NAND)

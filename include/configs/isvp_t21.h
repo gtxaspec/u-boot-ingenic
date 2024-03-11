@@ -29,13 +29,21 @@
  * Basic configuration(SOC, Cache, UART, DDR).
  */
 #if defined(CONFIG_HIGH_PERF)
-#define CONFIG_SYS_APLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
-#define CONFIG_SYS_APLL_MNOD		((49 << 20) | (0 << 14) | (1 << 11) | (3 << 5))
+#define APLL_1200M
 #define DDR_500M
 #else
+#define APLL_864M
+#define DDR_450M
+#endif
+
+#if defined(APLL_1200M)
+#define CONFIG_SYS_APLL_FREQ		1200000000	/*If MPLL is not used, it must be set to 0*/
+#define CONFIG_SYS_APLL_MNOD		((49 << 20) | (0 << 14) | (1 << 11) | (3 << 5))
+#elif defined(APLL_864M)
 #define CONFIG_SYS_APLL_FREQ		864000000	/*If APLL is not used, it must be set to 0*/
 #define CONFIG_SYS_APLL_MNOD		((71 << 20) | (1 << 14) | (1 << 11) | (2 << 5))
-#define DDR_450M
+#else
+#error please define APLL_FREQ
 #endif
 
 #if defined(DDR_400M)
@@ -77,6 +85,14 @@
 #define DIV_PCLK			8
 #define DIV_H2				4
 #define DIV_H0				4
+#elif defined(DDR_550M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
+#elif defined(DDR_594M)
+#define DIV_PCLK			12
+#define DIV_H2				6
+#define DIV_H0				6
 #elif defined(DDR_600M)
 #define DIV_PCLK			12
 #define DIV_H2				6
@@ -152,6 +168,10 @@
 #elif defined(DDR_500M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #elif defined(DDR_540M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_550M)
+#define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
+#elif defined(DDR_594M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
 #elif defined(DDR_600M)
 #define CONFIG_SYS_MEM_FREQ		(CONFIG_SYS_MPLL_FREQ / 2)
@@ -274,11 +294,9 @@
 #if defined(CONFIG_SPL_MMC_SUPPORT)
 #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"
 #endif
-*/
 
-/*
 #if defined(CONFIG_SFC_NOR)
-#define CONFIG_BOOTCOMMAND "sf probe;sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
+#define CONFIG_BOOTCOMMAND "sf probe; sf read 0x80600000 0x40000 0x280000; bootm 0x80600000"
 #endif
 */
 
@@ -363,13 +381,12 @@
 #define CONFIG_MTD_DEVICE
 
 /* GMAC */
-#define GMAC_PHY_INNER
-
 #define GMAC_PHY_MII			1
 #define GMAC_PHY_RMII			2
 #define GMAC_PHY_GMII			3
 #define GMAC_PHY_RGMII			4
 
+#define GMAC_PHY_INNER
 #if defined(GMAC_PHY_INNER)
 #define CONFIG_NET_GMAC_PHY_MODE	GMAC_PHY_MII
 #else
@@ -459,9 +476,9 @@
 
 #if defined(CONFIG_SPL_NOR_SUPPORT)
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-nor-spl.lds"
-#else /* CONFIG_SPL_NOR_SUPPORT */
+#else
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/$(SOC)/u-boot-spl.lds"
-#endif /* CONFIG_SPL_NOR_SUPPORT */
+#endif
 
 #define CONFIG_SPL_PAD_TO		26624
 #define CONFIG_SPL_MAX_SIZE		(26 * 1024)
@@ -529,9 +546,9 @@
 #endif
 
 /*
-	Platform Default GPIOs
-	These shall be specific to the SoC model
-*/
+ * Platform Default GPIOs
+ * These shall be specific to the SoC model
+ */
 #define CONFIG_GPIO_SETTINGS \
 ""
 

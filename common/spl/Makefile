@@ -26,6 +26,7 @@ COBJS-$(CONFIG_SPL_SFC_NAND) += spl_sfc_nand.o
 
 ifndef CONFIG_SPL_LIBCOMMON_SUPPORT
 COBJS-y += spl_printf.o
+COBJS-y += spl_scanf.o
 endif
 endif
 
