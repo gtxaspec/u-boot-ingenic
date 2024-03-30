@@ -111,6 +111,26 @@ static int init_baudrate(void)
 	return 0;
 }
 
+// Lets move this into another file, along with most of the other env setup gear...
+static void set_random_mac_address(const char *iface_name, const char *iface_type, uint8_t *addr) {
+    // Check if a valid address is already set for the given interface
+    if (!eth_getenv_enetaddr(iface_name, addr)) {
+        // No valid address set, generate and set a new one
+        eth_random_enetaddr(addr);
+        if (eth_setenv_enetaddr(iface_name, addr)) {
+            printf("Net:   Failed to set %s address for %s\n", iface_type, iface_name);
+        } else {
+            printf("Net:   Random MAC address for %s (%s) set successfully\n", iface_type, iface_name);
+            saveenv();
+        }
+    } else {
+        // A valid address is already set, so no need to set it again
+        printf("Net:   HW %s Ethernet address for %s: %02X:%02X:%02X:%02X:%02X:%02X\n",
+               iface_type, iface_name,
+               addr[0], addr[1], addr[2],
+               addr[3], addr[4], addr[5]);
+    }
+}
 
 /*
  * Breath some life into the board...
@@ -349,23 +369,13 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	/* At this point, Environment has been setup, now we can use it */
 
 	/* Generate a random mac address, and save it as soon as the environment is up*/
-	#ifdef CONFIG_RANDOM_MACADDR
-	// Check if a valid ethaddr is already set
-	if (!eth_getenv_enetaddr("ethaddr", enetaddr)) {
-		// No valid ethaddr set, generate and set a new one
-		eth_random_enetaddr(enetaddr);
-		if (eth_setenv_enetaddr("ethaddr", enetaddr)) {
-			printf("Net:   Failed to set ethernet address\n");
-		} else {
-			printf("Net:   Random MAC address set successfully\n");
-			saveenv();
-		}
-	} else {
-		// A valid ethaddr is already set, so no need to set it again
-		printf("Net:   HW Ethernet address: %02X:%02X:%02X:%02X:%02X:%02X\n",
-				enetaddr[0], enetaddr[1], enetaddr[2], enetaddr[3], enetaddr[4], enetaddr[5]);
-	}
-	#endif
+#ifdef CONFIG_RANDOM_MACADDR
+	uint8_t enetaddr[6];
+	uint8_t wlanaddr[6];
+
+	set_random_mac_address("ethaddr", "ETH", enetaddr);
+	set_random_mac_address("wlanmac", "WLAN", wlanaddr);
+#endif
 
 #if defined(CONFIG_PCI)
 	/*
