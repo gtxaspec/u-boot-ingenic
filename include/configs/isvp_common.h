@@ -285,6 +285,7 @@ BOOTARGS_COMMON \
 "disable_eth=false\0" \
 "disable_sd=false\0" \
 "enable_updates=false\0" \
+"boot_complete=false\0" \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \
