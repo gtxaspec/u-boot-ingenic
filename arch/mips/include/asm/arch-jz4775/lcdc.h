@@ -352,7 +352,7 @@
 #define LCDC_OFFS_BIT		0
 #define LCDC_OFFS_OFFSIZE_MASK	(0xffffff << LCDC_OFFS_BIT)
 /* DMA Page Width Register 0,1 */
-#define LCDC_PW_BIT		0 
+#define LCDC_PW_BIT		0
 #define LCDC_PW_PAGEWIDTH_MASK	(0xffffff << LCDC_PW_BIT)
 /* DMA Command Counter Register 0,1 */
 #define LCDC_CNUM_BIT		 0

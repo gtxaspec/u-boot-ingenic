@@ -16,9 +16,9 @@
 #include "traps.h"
 
 	.set noreorder
+
 	.globl _start
 	.text
-
 _start:
 	/* Initialize $gp */
 	bal	1f
