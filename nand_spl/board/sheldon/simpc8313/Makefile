@@ -4,10 +4,8 @@
 # (C) Copyright 2008 Freescale Semiconductor
 # (C) Copyright Sheldon Instruments, Inc. 2008
 #
-# See file CREDITS for list of people who contributed to this
-# project.
-#
 # SPDX-License-Identifier:	GPL-2.0+
+#
 
 NAND_SPL := y
 

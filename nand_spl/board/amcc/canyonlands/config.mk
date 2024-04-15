@@ -2,10 +2,8 @@
 # (C) Copyright 2008
 # Stefan Roese, DENX Software Engineering, sr@denx.de.
 #
-# See file CREDITS for list of people who contributed to this
-# project.
-#
 # SPDX-License-Identifier:	GPL-2.0+
+#
 #
 # AMCC 460EX Reference Platform (Canyonlands) board
 #

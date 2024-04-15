@@ -4,10 +4,8 @@
 #
 # Copyright 2009-2011 Freescale Semiconductor, Inc.
 #
-# See file CREDITS for list of people who contributed to this
-# project.
-#
 # SPDX-License-Identifier:	GPL-2.0+
+#
 
 NAND_SPL := y
 CONFIG_SYS_TEXT_BASE_SPL := 0xfff00000

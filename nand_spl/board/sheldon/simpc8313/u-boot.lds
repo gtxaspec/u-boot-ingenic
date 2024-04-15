@@ -4,9 +4,6 @@
  *
  * Copyright 2008 Freescale Semiconductor, Inc.
  *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
  * SPDX-License-Identifier:	GPL-2.0+
  */
 

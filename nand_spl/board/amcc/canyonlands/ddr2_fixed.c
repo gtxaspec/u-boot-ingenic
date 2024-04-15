@@ -2,9 +2,6 @@
  * (C) Copyright 2008-2009
  * Stefan Roese, DENX Software Engineering, sr@denx.de.
  *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
  * SPDX-License-Identifier:	GPL-2.0+
  */
 

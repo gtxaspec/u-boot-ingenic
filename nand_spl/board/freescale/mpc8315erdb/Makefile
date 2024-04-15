@@ -3,10 +3,8 @@
 # Stefan Roese, DENX Software Engineering, sr@denx.de.
 # (C) Copyright 2008 Freescale Semiconductor
 #
-# See file CREDITS for list of people who contributed to this
-# project.
-#
 # SPDX-License-Identifier:	GPL-2.0+
+#
 
 NAND_SPL := y
 PAD_TO := 0xfff04000
