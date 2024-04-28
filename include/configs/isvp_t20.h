@@ -123,9 +123,9 @@
 "rmem=24M@0x6800000\0"
 #else
 #define CONFIG_EXTRA_SETTINGS \
-"osmem=43M@0x0\0" \
-"ispmem=8M@0x2000000\0" \
-"rmem=24M@0x2800000\0"
+"osmem=39@0x0\0" \
+"ispmem=5M@0x2000000\0" \
+"rmem=20M@0x2800000\0"
 #endif
 /*
 #if defined(CONFIG_SPL_MMC_SUPPORT)
