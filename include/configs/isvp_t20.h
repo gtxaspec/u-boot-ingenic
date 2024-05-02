@@ -123,7 +123,7 @@
 "rmem=24M@0x6800000\0"
 #else
 #define CONFIG_EXTRA_SETTINGS \
-"osmem=39@0x0\0" \
+"osmem=39M@0x0\0" \
 "ispmem=5M@0x2000000\0" \
 "rmem=20M@0x2800000\0"
 #endif
