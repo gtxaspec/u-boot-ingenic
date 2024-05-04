@@ -283,15 +283,34 @@ static int update_to_flash(void)
 	int uboot_updated = 0;
 	int full_updated = 0;
 	int image_found = 0;
+	int j;
 
 	if (file_fat_read("autoupdate-full.done", LOAD_ADDR, 1) >= 0) {
 		printf("MMC:   Flag file autoupdate-full.done exists, skipping %s\n", AU_FW);
 		return 0; // Skip this file
 	}
 
+	// Define which files to automatically update
+	int auto_update_files[] = {IDX_UBOOT, IDX_FW};  // Only auto-update u-boot and full
+	int num_auto_updates = sizeof(auto_update_files) / sizeof(auto_update_files[0]);
+
 	for (i = 0; i < AU_MAXFILES; i++) {
-		if (LOAD_ID != -1) {
-			i = LOAD_ID;
+		if (LOAD_ID != -1 && LOAD_ID != i) {
+			continue;  // Skip if a specific LOAD_ID is set and it's not the current file
+		}
+
+		// Check if this file should be auto-updated
+		int auto_update = 0;
+		for (j = 0; j < num_auto_updates; j++) {
+			if (auto_update_files[j] == i) {
+				auto_update = 1;
+				break;
+			}
+		}
+
+		// Skip files not marked for auto-update if in automatic mode (LOAD_ID == -1)
+		if (LOAD_ID == -1 && !auto_update) {
+			continue;
 		}
 
 		image_found = 1;
