@@ -1,3 +1,4 @@
+#define DEBUG
 #include <common.h>
 #include <div64.h>
 #include <malloc.h>
@@ -10,7 +11,8 @@ extern struct spi_flash *get_flash(void);
 #define SQUASHFS_MAGIC_OFFSET       0
 #define SQUASHFS_BYTES_USED_OFFSET  40
 #define ERASE_BLOCK_SIZE            0x8000
-#define KERNEL_START_ADDR           0x50000
+#define KERNEL_MAGIC_NUMBER 0x56190527
+#define KERNEL_MAGIC_OFFSET 0
 
 static uint64_t align_to_erase_block(uint64_t size) {
 	if (size % ERASE_BLOCK_SIZE == 0) {
@@ -19,20 +21,54 @@ static uint64_t align_to_erase_block(uint64_t size) {
 	return ((size / ERASE_BLOCK_SIZE) + 1) * ERASE_BLOCK_SIZE;
 }
 
+static uint64_t find_kernel_start(struct spi_flash *flash, unsigned int start_addr, unsigned int end_addr) {
+	unsigned int addr;
+	uint32_t magic_number;
+	char buf[256];  // Adjust buffer size as needed based on the expected header size
+
+	for (addr = start_addr; addr < end_addr; addr += ERASE_BLOCK_SIZE) {
+		if (spi_flash_read(flash, addr, sizeof(buf), buf)) {
+			debug("SQ:    Failed to read from SPI flash at address 0x%X\n", addr);
+			continue; // Skip to the next block
+		}
+
+		memcpy(&magic_number, buf + KERNEL_MAGIC_OFFSET, sizeof(magic_number));
+
+		debug("SQ:    Read magic number 0x%X at address 0x%X\n", magic_number, addr);
+
+		if (magic_number == KERNEL_MAGIC_NUMBER) {
+			debug("SQ:    Kernel found at address 0x%X\n", addr);
+			return addr;  // Return the address where the kernel is found
+		}
+	}
+
+	debug("SQ:    Kernel not found between address 0x%X and 0x%X\n", start_addr, end_addr);
+	return 0;  // Return 0 if not found
+}
+
 int process_spi_flash_data(struct spi_flash *flash) {
-	debug("Starting process_spi_flash_data\n");
+	debug("SQ:    Starting process_spi_flash_data\n");
 
 	// Starting address is right after the kernel, adjust as necessary
 	unsigned int start_addr	= 0x180000;
-	unsigned int end_addr	= 0x360000; // Adjust as necessary
-	unsigned int addr; // Declare outside the for loop for compatibility
+	unsigned int end_addr	= 0x360000;
+	unsigned int addr;
 
-	debug("Searching SquashFS from 0x%X to 0x%X\n", start_addr, end_addr);
+	// Dynamically find the kernel start address
+	uint64_t kernel_start_addr = find_kernel_start(flash, 0x40000, 0x60000);  // Adjust search range as necessary
+	if (kernel_start_addr == 0) {
+		printf("SQ:    Kernel not found in specified range.\n");
+		return 1;  // Exit if kernel not found
+	}
+
+	printf("SQ:    Kernel start detected at address: 0x%llX\n", kernel_start_addr);
+
+	debug("SQ:    Searching SquashFS from 0x%X to 0x%X\n", start_addr, end_addr);
 
 	for (addr = start_addr; addr < end_addr; addr += ERASE_BLOCK_SIZE) {
 		char buf[64];
 
-		debug("Reading from address 0x%X\n", addr);
+		debug("SQ:    Reading from address 0x%X\n", addr);
 		if (spi_flash_read(flash, addr, sizeof(buf), buf)) {
 			printf("SQ:    Failed to read from SPI flash at 0x%X\n", addr);
 			continue; // Skip to the next block
@@ -41,26 +77,26 @@ int process_spi_flash_data(struct spi_flash *flash) {
 		uint32_t magic_number;
 		memcpy(&magic_number, buf + SQUASHFS_MAGIC_OFFSET, sizeof(magic_number));
 
-		debug("Magic number at 0x%X: 0x%08X\n", addr, magic_number);
+		debug("SQ:    SquashFS Magic number at 0x%X: 0x%08X\n", addr, magic_number);
 
 		if (magic_number == 0x73717368) {
 			printf("SQ:    SquashFS found at 0x%X\n", addr);
 
 			// Calculate kernel size
-			uint64_t kernel_size = addr - KERNEL_START_ADDR;
+			uint64_t kernel_size = addr - kernel_start_addr;
 			uint64_t aligned_kernel_size = align_to_erase_block(kernel_size);
 
 			// Store the size in kilobytes in 'kern_size'
 			char kern_size_str[32];
 			sprintf(kern_size_str, "%lluk", aligned_kernel_size / 1024); // Convert to kilobytes
 			setenv("kern_size", kern_size_str);
-			debug("kernel_size env updated");
+			debug("kernel_size env updated\n");
 
 			// Store the length in hexadecimal in 'kern_length'
 			char kern_length_str[32];
-			sprintf(kern_length_str, "%llx", aligned_kernel_size); // Format as hexadecimal
+			sprintf(kern_length_str, "%llx", aligned_kernel_size); // Format as hexadecimfal
 			setenv("kern_len", kern_length_str);
-			debug("kernel_len env updated");
+			debug("kernel_len env updated\n");
 
 			// Extract and process SquashFS size
 			uint32_t bytes_used_low, bytes_used_high;
@@ -75,7 +111,7 @@ int process_spi_flash_data(struct spi_flash *flash) {
 			char size_str[32];
 			sprintf(size_str, "%lluk", aligned_bytes_used / 1024);
 			setenv("rootfs_size", size_str);
-			debug("rootfs_size env updated");
+			debug("rootfs_size env updated\n");
 
 			// Set rootsize based on actual file size in memory
 			uint64_t file_size = getenv_ulong("filesize", 16, 0);
@@ -83,15 +119,15 @@ int process_spi_flash_data(struct spi_flash *flash) {
 				uint64_t aligned_file_size = align_to_erase_block(file_size);
 				sprintf(size_str, "%lluk", aligned_file_size / 1024);
 				setenv("root_size", size_str);
-				debug("root_size env updated");
+				debug("root_size env updated\n");
 			} else {
 				sprintf(size_str, "%lluk", aligned_bytes_used / 1024);
 				setenv("root_size", size_str);
-				debug("root_size env updated");
+				debug("root_size env updated\n");
 			}
 
 			// Calculate and set 'updatesize', which is from KERNEL_START_ADDR to the end of the chip
-			uint64_t updatesize = flash->size - KERNEL_START_ADDR;
+			uint64_t updatesize = flash->size - kernel_start_addr;
 			char updatesize_str[32];
 			sprintf(updatesize_str, "%lluk", updatesize / 1024); // Convert to kilobytes
 			setenv("updatesize", updatesize_str);
