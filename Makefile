@@ -490,7 +490,7 @@ CONFIG_SYS_UBOOT_START := 0
 endif
 
 $(obj)u-boot-lzo.img:		$(obj)u-boot.bin
-		lzop -f -o u-boot-lzo.bin $(obj)u-boot.bin
+		lzop -9 -f -o u-boot-lzo.bin $(obj)u-boot.bin
 		mkimage -A mips -O u-boot -T firmware -C lzo -a $(CONFIG_SYS_TEXT_BASE) -e $(CONFIG_SYS_UBOOT_START) \
 			-n "u-boot-lzo.img" -d u-boot-lzo.bin  $@
 
