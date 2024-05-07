@@ -83,6 +83,11 @@ static int update_kernel_env(struct spi_flash *flash, uint64_t *kernel_start_add
 	uint64_t kernel_size = s_start - k_start;
 	uint64_t aligned_kernel_size = align_to_erase_block(kernel_size);
 
+	char k_start_str[32];
+	sprintf(k_start_str, "%llx", k_start);
+	setenv("kern_addr", k_start_str);
+	debug("SQ:    kern_addr env updated\n");
+
 	char kern_size_str[32];
 	sprintf(kern_size_str, "%lluk", aligned_kernel_size / 1024);
 	setenv("kern_size", kern_size_str);
@@ -152,11 +157,10 @@ static void update_mtdparts_env(struct spi_flash *flash, uint64_t kernel_start_a
 	}
 }
 
-
 static void update_overlay_env(uint64_t overlay_addr) {
 	char overlay_str[32];
 	sprintf(overlay_str, "%llX", overlay_addr);
-	debug("SQ:    Overlay size: %s\n", overlay_str);
+	printf("SQ:    Overlay start detected at address 0x%s\n", overlay_str);
 	setenv("overlay", overlay_str);
 	debug("SQ:    Overlay env updated\n");
 }

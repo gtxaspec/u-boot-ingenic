@@ -257,12 +257,12 @@
 #elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND \
 "sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"sf read ${baseaddr} 0x50000 \\${kern_len};" \
+"sf read ${baseaddr} \\${kern_addr} \\${kern_len};" \
 "bootm ${baseaddr};"
 #elif defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND \
 "sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"sfcnand read 0x50000 0x200000 ${baseaddr};" \
+"sfcnand read \\${kern_addr} \\${kern_len} ${baseaddr};" \
 "bootm ${baseaddr};"
 #else
 #define CONFIG_BOOTCOMMAND \
