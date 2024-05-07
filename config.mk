@@ -95,7 +95,7 @@ HOSTCC		 = $(call os_x_before, 10, 5, "cc", "gcc")
 HOSTCFLAGS	+= $(call os_x_before, 10, 4, "-traditional-cpp")
 HOSTLDFLAGS	+= $(call os_x_before, 10, 5, "-multiply_defined suppress")
 else
-HOSTCC		= $(CCACHE) gcc
+HOSTCC		= gcc
 endif
 
 ifeq ($(HOSTOS),cygwin)
@@ -140,13 +140,13 @@ binutils-version = $(shell $(SHELL) $(SRCTREE)/tools/binutils-version.sh $(AS))
 #
 # Include the make variables (CC, etc...)
 #
-AS	= $(CCACHE) $(CROSS_COMPILE)as
+AS	= $(CROSS_COMPILE)as
 
 # Always use GNU ld
 LD	= $(shell if $(CROSS_COMPILE)ld.bfd -v > /dev/null 2>&1; \
 		then echo "$(CROSS_COMPILE)ld.bfd"; else echo "$(CROSS_COMPILE)ld"; fi;)
 
-CC	= $(CCACHE) $(CROSS_COMPILE)gcc
+CC	= $(CROSS_COMPILE)gcc
 CPP	= $(CC) -E
 AR	= $(CROSS_COMPILE)ar
 NM	= $(CROSS_COMPILE)nm
