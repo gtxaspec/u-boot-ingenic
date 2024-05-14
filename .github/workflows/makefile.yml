@@ -1,10 +1,26 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    # 01:15 PST / Nightly
+    - cron:  '00 9 * * *'
   workflow_dispatch:
+    inputs:
+      tg_disabled:
+        type: boolean
+        description: 'Disable Telegram notifications'
+        required: false
+        default: false
+      tg_scratch:
+        type: boolean
+        description: 'Use TG scratch channel'
+        required: false
+        default: false
+      t31x_only:
+        type: boolean
+        description: 'Only build T31X profile '
+        required: false
+        default: false
 
 env:
   TAG_NAME: latest
@@ -16,15 +32,21 @@ env:
 
 jobs:
   build-notify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       start_time: ${{ steps.set_output.outputs.time }}
+      tg_disabled: ${{ steps.set_env.outputs.tg_disabled }}
     steps:
+      - name: Setup Notify Environment
+        run: |
+          echo "TG_DISABLED=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_ENV
+          echo "tg_disabled=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_OUTPUT
+
       - name: Save workflow start time
         id: set_output
         run: echo "time=$(date +%s)" >> $GITHUB_OUTPUT
       - name: Send build start notifcation
-        if: env.TG_ENABLE== 'true'
+        if: env.TG_DISABLED == 'false'
         run: |
           TG_MSG="u-boot-ingenic build started:\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
           TG_ICON="\xF0\x9F\x9A\xA6 GitHub Actions"
@@ -34,43 +56,78 @@ jobs:
 
   build:
     needs: build-notify
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: 
       image: debian:sid
     strategy:
       fail-fast: false
       matrix:
-        u-boot-version:
-          - t10n
-          - t10l
-          - t10n_msc0
-          - t20n
-          - t20l
-          - t20x
-          - t20n_msc0
-          - t21n
-          - t21n_msc0
-          - t23n
-          - t23n_msc0
-          - t30n
-          - t30l
-          - t30x
-          - t30a
-          - t30a1
-          - t30n_msc0
-          - t31n
-          - t31l
-          - t31lc
-          - t31x
-          - t31a
-          - t31al
-          - t31l_msc0
-          - t31n_msc0
-          - t31x_msc0
-          - t31a_msc0
-          - t31al_msc0
+        include:
+          - u-boot-version: t10n
+            t31x_only: false
+          - u-boot-version: t10l
+            t31x_only: false
+          - u-boot-version: t10n_msc0
+            t31x_only: false
+          - u-boot-version: t20n
+            t31x_only: false
+          - u-boot-version: t20l
+            t31x_only: false
+          - u-boot-version: t20x
+            t31x_only: false
+          - u-boot-version: t20n_msc0
+            t31x_only: false
+          - u-boot-version: t21n
+            t31x_only: false
+          - u-boot-version: t21n_msc0
+            t31x_only: false
+          - u-boot-version: t23n
+            t31x_only: false
+          - u-boot-version: t23n_msc0
+            t31x_only: false
+          - u-boot-version: t30n
+            t31x_only: false
+          - u-boot-version: t30l
+            t31x_only: false
+          - u-boot-version: t30x
+            t31x_only: false
+          - u-boot-version: t30a
+            t31x_only: false
+          - u-boot-version: t30a1
+            t31x_only: false
+          - u-boot-version: t30n_msc0
+            t31x_only: false
+          - u-boot-version: t31n
+            t31x_only: false
+          - u-boot-version: t31l
+            t31x_only: false
+          - u-boot-version: t31lc
+            t31x_only: false
+          - u-boot-version: t31x
+            t31x_only: false
+          - u-boot-version: t31a
+            t31x_only: false
+          - u-boot-version: t31al
+            t31x_only: false
+          - u-boot-version: t31l_msc0
+            t31x_only: false
+          - u-boot-version: t31n_msc0
+            t31x_only: false
+          - u-boot-version: t31x_msc0
+            t31x_only: false
+          - u-boot-version: t31a_msc0
+            t31x_only: false
+          - u-boot-version: t31al_msc0
+            t31x_only: false
+          - u-boot-version: t31x_msc0
+            t31x_only: true
 
     steps:
+      - name: Setup cache directories
+        run: |
+          mkdir -p /tmp/ccache
+          ln -s /tmp/ccache ${HOME}/.ccache
+
       - name: Setup ccache
         uses: actions/cache@v4
         if: always()
@@ -86,12 +143,19 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get install -y --no-install-recommends --no-install-suggests build-essential gcc-13 gcc-13-mipsel-linux-gnu lzop u-boot-tools git make ca-certificates curl
-          CROSS_COMPILE=mipsel-linux-gnu-; VER=${1:-13}; for app in cpp gcc gcc-ar gcc-nm gcc-ranlib gcov gcov-dump gcov-tool lto-dump; do if update-alternatives --query ${CROSS_COMPILE}${app} >/dev/null; then update-alternatives --set ${CROSS_COMPILE}${app} /usr/bin/${CROSS_COMPILE}${app}-${VER}; else update-alternatives --install /usr/bin/${CROSS_COMPILE}${app} ${CROSS_COMPILE}${app} /usr/bin/${CROSS_COMPILE}${app}-${VER} 1; fi; done; echo "Done"
+          apt-get install -y --no-install-recommends --no-install-suggests build-essential ccache gcc-13 gcc-13-mipsel-linux-gnu libgcc-s1-mipsel-cross lzop u-boot-tools git make ca-certificates curl wget
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: "master"
+          fetch-depth: "1"
+
+      - name: Download toolchain
+        run: |
+          wget https://github.com/themactep/thingino-firmware/releases/download/toolchain/thingino-toolchain_xburst1_musl_gcc13-linux-mipsel.tar.gz -O ~/thingino-toolchain_xburst1_musl_gcc13-linux-mipsel.tar.gz
+          tar -xf ~/thingino-toolchain_xburst1_musl_gcc13-linux-mipsel.tar.gz -C ~/
 
       - name: u-boot-ingenic Build
         shell: bash
@@ -102,9 +166,6 @@ jobs:
           export GIT_BRANCH=${GITHUB_REF_NAME}
           echo "GIT_HASH=${GIT_HASH}" >> ${GITHUB_ENV}
           echo "GIT_BRANCH=${GIT_BRANCH}" >> ${GITHUB_ENV}
-
-          mkdir -p /tmp/ccache
-          ln -s /tmp/ccache ${HOME}/.ccache
 
           cp -f .github/scripts/build.sh build-ci.sh
           VERSION=${{ matrix.u-boot-version }}
@@ -139,9 +200,12 @@ jobs:
           files: ${{ env.UBOOTFW }}
 
       - name: Send build alert
-        if: github.event_name != 'pull_request' && env.UBOOTFW && env.TG_ENABLE== 'true'
+        if: ${{ github.event_name != 'pull_request' && env.UBOOTFW && env.TG_DISABLED == 'false' }}
         shell: bash
         run: |
+          if [[ "${{ github.event.inputs.tg_scratch }}" == 'true' ]]; then
+            TG_CHANNEL=${{ env.TG_CHANNEL_SCRATCH }}
+          fi
           echo "GIT_HASH: ${GIT_HASH}"
           echo "GIT_BRANCH: ${GIT_BRANCH}"
           TG_MSG="u-boot-ingenic build finished\nCommit: ${GIT_HASH}\nBranch: ${GIT_BRANCH}\nTag: ${TAG_NAME}\nTime: ${TIME}\n\n"
@@ -151,9 +215,12 @@ jobs:
           echo Telegram response: ${HTTP}
 
       - name: Send error
-        if: github.event_name != 'pull_request' && failure()
+        if: ${{ github.event_name != 'pull_request' && failure() && env.TG_DISABLED == 'false' }}
         shell: bash
         run: |
+          if [[ "${{ github.event.inputs.tg_scratch }}" == 'true' ]]; then
+            TG_CHANNEL=${{ env.TG_CHANNEL_SCRATCH }}
+          fi
           TG_WARN="Error: u-boot-ingenic build failed!\n"
           TG_MSG="Commit: ${GIT_HASH}\nBranch: ${GIT_BRANCH}\nTag: ${TAG_NAME}\nhttps://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n"
           TG_ICON="\xE2\x9A\xA0 GitHub Actions"

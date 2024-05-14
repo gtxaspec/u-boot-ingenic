@@ -1,8 +1,9 @@
 #!/bin/bash
 
 export ARCH=mips
-export CROSS_COMPILE=mipsel-linux-gnu-
-#export CCACHE=/usr/bin/ccache
+export PATH=$PATH:~/mipsel-thingino-linux-musl_sdk-buildroot/bin/
+export CROSS_COMPILE=~/mipsel-thingino-linux-musl_sdk-buildroot/bin/mipsel-linux-
+export CCACHE=/usr/bin/ccache
 
 declare -A cfg
 
