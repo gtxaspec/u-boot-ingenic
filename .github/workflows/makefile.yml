@@ -119,8 +119,6 @@ jobs:
             t31x_only: false
           - u-boot-version: t31al_msc0
             t31x_only: false
-          - u-boot-version: t31x
-            t31x_only: true
 
     steps:
       - name: Setup cache directories
