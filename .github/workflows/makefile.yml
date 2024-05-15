@@ -119,7 +119,7 @@ jobs:
             t31x_only: false
           - u-boot-version: t31al_msc0
             t31x_only: false
-          - u-boot-version: t31x_msc0
+          - u-boot-version: t31x
             t31x_only: true
 
     steps:
