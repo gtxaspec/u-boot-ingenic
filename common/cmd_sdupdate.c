@@ -218,23 +218,24 @@ static int au_do_update(int idx, long sz)
 
 	hdr = (image_header_t *)LOAD_ADDR;
 
-	// For full image, use the size of the loaded image directly
-	if (idx == IDX_FW) {
-		start = AU_FL_FW_ST; // Adjust start address if needed
-		len = sz; // Use the actual size of the loaded image
-	} else {
-		start = ntohl(hdr->ih_load);
-		len = ntohl(hdr->ih_ep) - ntohl(hdr->ih_load);
-	}
-
+	// Probe the SPI flash and ensure it initializes correctly
 	flash = spi_flash_probe(0, 0, 1000000, 0x3);
 	if (!flash) {
 		printf("Failed to initialize SPI flash\n");
 		return -1;
 	}
+
+	if (idx == IDX_FW) {
+		start = 0; // Start at the beginning of the flash
+		len = flash->size; // Use the total size of the flash
+	} else {
+		// For other images, use the image-specific defined flash layout
+		start = ntohl(hdr->ih_load);
+		len = ntohl(hdr->ih_ep) - ntohl(hdr->ih_load);
+	}
 	
-	/* erase the address range. */
-	printf("flash erase...\n");
+	/* Erase the address range. */
+	printf("Erasing flash from address 0x%lx to 0x%lx (length: 0x%lx)\n", start, start + len, len);
 	rc = flash->erase(flash, start, len);
 	if (rc) {
 		printf("SPI flash sector erase failed\n");
@@ -256,7 +257,7 @@ static int au_do_update(int idx, long sz)
 		write_len = ntohl(hdr->ih_size);
 	}
 
-	/* copy the data from RAM to FLASH */
+	/* Copy the data from RAM to FLASH */
 	printf("flash write...\n");
 	rc = flash->write(flash, start, write_len, pbuf);
 	if (rc) {
