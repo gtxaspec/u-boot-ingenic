@@ -589,8 +589,6 @@ struct spi_flash *spi_flash_probe(unsigned int bus, unsigned int cs,
 	if (!flash) {
 		printf("SF:    Vendor unsupported: %02x\n", *idp);
 		goto err_manufacturer_probe;
-	}else{
-		printf("SF:    Vendor: %02x\n", *idp);
 	}
 
 #ifdef CONFIG_SPI_FLASH_BAR
@@ -609,7 +607,7 @@ struct spi_flash *spi_flash_probe(unsigned int bus, unsigned int cs,
 
 
 #ifndef CONFIG_BURNER
-	printf("SF:    Detected %s\n", flash->name);
+	printf("SF:    Detected %s (%02x %02x %02x %02x %02x)\n", flash->name, idcode[0], idcode[1], idcode[2], idcode[3], idcode[4]);
 #endif
 
 #ifdef DEBUG
