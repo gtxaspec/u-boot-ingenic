@@ -20,9 +20,7 @@ ifdef CONFIG_SYS_BIG_ENDIAN
 ENDIANNESS := -EB
 endif
 
-# Default to EB if no endianess is configured
-ENDIANNESS ?= -EB
-
+PLATFORM_CPPFLAGS += -msoft-float -std=gnu89
 PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
 
 #
@@ -47,7 +45,6 @@ PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
 # used as gp.
 #
 PLATFORM_CPPFLAGS		+= -G 0 $(ENDIANNESS)
-PLATFORM_CPPFLAGS		+= -msoft-float -std=gnu89
 PLATFORM_LDFLAGS		+= -G 0 -static -n -nostdlib $(ENDIANNESS)
 PLATFORM_RELFLAGS		+= -ffunction-sections -fdata-sections
 LDFLAGS_FINAL			+= --gc-sections

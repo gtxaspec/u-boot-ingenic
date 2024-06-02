@@ -142,7 +142,6 @@
 #define CONFIG_MTD_DEVICE
 #define CONFIG_CMD_UBI
 #define CONFIG_CMD_UBIFS
-#define CONFIG_CMD_MTDPARTS
 #define CONFIG_MTD_PARTITIONS
 #define MTDIDS_DEFAULT			"nand0=nand"
 #define MTDPARTS_DEFAULT		"mtdparts=nand:1M(boot),8M(kernel),40M(rootfs),-(data)"
@@ -175,7 +174,6 @@
 #endif
 
 /* MTD */
-#define CONFIG_CMD_MTDPARTS
 #define CONFIG_MTD_PARTITIONS
 #define CONFIG_MTD_DEVICE
 
@@ -197,6 +195,7 @@
  */
 
 #define CONFIG_GPIO_SETTINGS \
-"gpio_default=25ID 26IDU 48o\0"
+"gpio_default=25ID 26IDU\0" \
+"gpio_default_net=39o\0"
 
 #endif /*__CONFIG_ISVP_T31_H__*/

@@ -657,11 +657,11 @@
 #define CONFIG_CMD_GETTIME
 #define CONFIG_CMD_GPIO
 #define CONFIG_CMD_LOADB
-#define CONFIG_CMD_LOADS
 #define CONFIG_CMD_MEMORY
 #define CONFIG_CMD_MISC
 #define CONFIG_CMD_MMC
 #define CONFIG_CMD_NET
+#define CONFIG_CMD_NFS
 #define CONFIG_CMD_PING
 #define CONFIG_CMD_RUN
 #define CONFIG_CMD_SAVEENV
@@ -848,12 +848,12 @@
 #elif defined(CONFIG_SFC_NOR)
 #define CONFIG_BOOTCOMMAND \
 "sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"sf read ${baseaddr} 0x50000 \\${kern_len};" \
+"sf read ${baseaddr} \\${kern_addr} \\${kern_len};" \
 "bootm ${baseaddr};"
 #elif defined(CONFIG_SFC_NAND)
 #define CONFIG_BOOTCOMMAND \
 "sf probe;sq probe;setenv setargs setenv bootargs ${bootargs};run setargs;" \
-"sfcnand read 0x50000 0x200000 ${baseaddr};" \
+"sfcnand read \\${kern_addr} \\${kern_len} ${baseaddr};" \
 "bootm ${baseaddr};"
 #else
 #define CONFIG_BOOTCOMMAND \
@@ -876,6 +876,7 @@ BOOTARGS_COMMON \
 "disable_eth=false\0" \
 "disable_sd=false\0" \
 "enable_updates=false\0" \
+"boot_complete=false\0" \
 "soc="CONFIG_SOC"\0" \
 CONFIG_EXTRA_SETTINGS \
 CONFIG_GPIO_SETTINGS \

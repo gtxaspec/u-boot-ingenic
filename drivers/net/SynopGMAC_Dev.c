@@ -1269,6 +1269,28 @@ s32 synopGMAC_check_phy_init(synopGMACdevice * gmacdev) {
 	u16 id1 = 0;
 	u16 id2 = 0;
 
+#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_OMNI)
+	/* enable MII mode */
+	status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase, 0x12, &data);
+	if(status)
+		return status;
+	data &= ~(0x3<<14);
+	data |= (0x00<<14);
+	status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase, 0x12 , data);
+	if(status)
+		return status;
+#if 0
+	status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase, 0x00, &data);
+	if(status)
+		return status;
+	data &= ~(0x1<<8 | 0x1<<12 | 0x1<<13);
+	data |= (0x1<<8 | 0x1<<13);
+	status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase, 0x00 , data);
+	if(status)
+		return status;
+#endif
+#endif
+
 	status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, PHY_CONTROL_REG, &data);
 	if (status)
 		return status;
@@ -1299,6 +1321,69 @@ s32 synopGMAC_check_phy_init(synopGMACdevice * gmacdev) {
 			return status;
 
 #if (CONFIG_NET_PHY_TYPE == PHY_TYPE_DM9161) || (CONFIG_NET_PHY_TYPE == PHY_TYPE_8710A) || (CONFIG_NET_PHY_TYPE == PHY_TYPE_IP101G)
+		/* RTL8201F */
+		if ((0x1c == id1) && (0xc816 == id2)) {
+			if((data & 1) == 0){
+				TR("No Link\n");
+				gmacdev->LinkState = LINKDOWN;
+				return -ESYNOPGMACPHYERR;
+			}
+			else{
+				gmacdev->LinkState = LINKUP;
+				TR("Link UP\n");
+			}
+			status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase,0x0, &data);
+			if(status)
+				return status;
+			if(data&0x0100) {
+				gmacdev->DuplexMode = FULLDUPLEX;
+			}
+			else {
+				gmacdev->DuplexMode = HALFDUPLEX;
+			}
+			if(data&0x2000) {
+				gmacdev->Speed      =   SPEED100;
+			}
+			else {
+				gmacdev->Speed = SPEED10;
+			}
+		}
+		else
+		{
+			if((data & 1) == 0){
+				TR("No Link\n");
+				gmacdev->LinkState = LINKDOWN;
+				return -ESYNOPGMACPHYERR;
+			}
+			else{
+				gmacdev->LinkState = LINKUP;
+				TR("Link UP\n");
+			}
+			status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase,0x1f, &data);
+			if(status)
+				return status;
+			if((data&(6<<2))==(6<<2)) {
+				gmacdev->DuplexMode = FULLDUPLEX;
+				gmacdev->Speed      =   SPEED100;
+			}
+			else if((data&(2<<2))==(2<<2)) {
+				gmacdev->DuplexMode = HALFDUPLEX;
+				gmacdev->Speed      =   SPEED100;
+
+			}
+			else if((data&(5<<2))==(5<<2)) {
+				gmacdev->DuplexMode = FULLDUPLEX;
+				gmacdev->Speed      =   SPEED10;
+
+			}
+			else if((data&(1<<2))==(1<<2)) {
+				gmacdev->DuplexMode = HALFDUPLEX;
+				gmacdev->Speed = SPEED10;
+			}
+
+		}
+
+#elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_DM9161) || (CONFIG_NET_PHY_TYPE == PHY_TYPE_8710A) || (CONFIG_NET_PHY_TYPE == PHY_TYPE_IP101G)
 		/* RTL8201F */
 		if ((data & 1) == 0) {
 			TR("No Link\n");
@@ -1359,6 +1444,78 @@ s32 synopGMAC_check_phy_init(synopGMACdevice * gmacdev) {
 		} else {
 			gmacdev->DuplexMode = HALFDUPLEX;
 		}
+#elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_OMNI)
+		if ((0x1c == id1) && (0xc816 == id2)) {
+			if((data & 0x4) == 0){
+				TR("No Link\n");
+				gmacdev->LinkState = LINKDOWN;
+				return -ESYNOPGMACPHYERR;
+			}
+			else{
+				gmacdev->LinkState = LINKUP;
+				TR("Link UP\n");
+			}
+			status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase, 0x1f, &data);
+			if(status)
+				return status;
+			if(data&0x10) {
+				gmacdev->DuplexMode = FULLDUPLEX;
+			}
+			else {
+				gmacdev->DuplexMode = HALFDUPLEX;
+			}
+			if(data&0x8) {
+				gmacdev->Speed      =   SPEED100;
+			}
+			else {
+				gmacdev->Speed = SPEED10;
+			}
+		}
+		else
+		{
+			if((data & 1) == 0){
+				TR("No Link\n");
+				gmacdev->LinkState = LINKDOWN;
+				return -ESYNOPGMACPHYERR;
+			}
+			else{
+				gmacdev->LinkState = LINKUP;
+				TR("Link UP\n");
+			}
+			status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase,0x1f, &data);
+			if(status)
+				return status;
+			if((data&(6<<2))==(6<<2)) {
+				gmacdev->DuplexMode = FULLDUPLEX;
+				gmacdev->Speed      =   SPEED100;
+				printf("====> PHY 100M full\n");
+			}
+			else if((data&(2<<2))==(2<<2)) {
+				gmacdev->DuplexMode = HALFDUPLEX;
+				gmacdev->Speed      =   SPEED100;
+
+			}
+			else if((data&(5<<2))==(5<<2)) {
+				gmacdev->DuplexMode = FULLDUPLEX;
+				gmacdev->Speed      =   SPEED10;
+
+			}
+			else if((data&(1<<2))==(1<<2)) {
+				gmacdev->DuplexMode = HALFDUPLEX;
+				gmacdev->Speed = SPEED10;
+			}
+
+		}
+#if 0
+		{
+			int index  = 0;
+			for(index = 0; index < 32; index++){
+				status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase,gmacdev->PhyBase, index, &data);
+				printf("PHY reg = %d, value = 0x%04x\n", index, data);
+			}
+		}
+#endif
+
 #endif //CONFIG_NET_PHY_TYPE
 	} else {
 		status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, gmacdev->PhyBase, PHY_STATUS_REG, &data);

@@ -139,7 +139,6 @@
 #endif
 
 /* MTD */
-#define CONFIG_CMD_MTDPARTS
 #define CONFIG_MTD_PARTITIONS
 #define CONFIG_MTD_DEVICE
 

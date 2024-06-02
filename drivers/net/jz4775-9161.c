@@ -521,11 +521,38 @@ int jz_net_initialize(bd_t *bis)
 	u16 data;
 	s32 status = -ESYNOPGMACNOERR;
 
+#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_OMNI)
+	clk_set_rate(MACPHY,25000000);
+
+	cpm_mphyc = read_cpm_mphyc();
+	cpm_mphyc |= (0x1<<21);
+	write_cpm_mphyc(cpm_mphyc);
+
+	udelay(50000);
+	*(volatile unsigned int *)(0xb0011018) = 1<<7 | 1 << 15;
+	*(volatile unsigned int *)(0xb0011028) = 1<<7 | 1 << 15;
+	*(volatile unsigned int *)(0xb0011034) = 1<<7 | 1 << 15;
+	*(volatile unsigned int *)(0xb0011048) = 1<<7 | 1 << 15;
+
+#if 0
+	/* PB13 PB14 fun0 */
+	*(volatile unsigned int *)(0xb0011018) = 1<<13 | 1 << 14;
+	*(volatile unsigned int *)(0xb0011028) = 1<<13 | 1 << 14;
+	*(volatile unsigned int *)(0xb0011038) = 1<<13 | 1 << 14;
+	*(volatile unsigned int *)(0xb0011048) = 1<<13 | 1 << 14;
+#endif
+#else /* other PHY type */
+	clk_set_rate(MACPHY,50000000);
+	udelay(50000);
+#endif /*  PHY_TYPE_OMNI */
+
+#ifndef PHY_TYPE_OMNI
 #ifndef CONFIG_FPGA
 	clk_set_rate(MACPHY, CONFIG_GMAC_PHY_RATE);
 	udelay(50000);
 #endif
 
+#endif
 #if defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21) || defined (CONFIG_T23) || defined (CONFIG_T31)
 	/* initialize gmac gpio */
 	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x1EFC0);
@@ -536,6 +563,7 @@ int jz_net_initialize(bd_t *bis)
 	gmacdev->DmaBase =  JZ_GMAC_BASE + DMABASE;
 	gmacdev->MacBase =  JZ_GMAC_BASE + MACBASE;
 
+#ifndef CONFIG_FPGA
 #if (CONFIG_NET_PHY_TYPE == PHY_TYPE_IP101G)
 	/* gpio reset IP101G */
 #ifdef CONFIG_GPIO_IP101G_RESET
@@ -572,10 +600,148 @@ int jz_net_initialize(bd_t *bis)
 	gpio_direction_output(CONFIG_GPIO_8710A_RESET, !CONFIG_GPIO_8710A_RESET_ENLEVEL);
 	mdelay(10);
 	udelay(100000);
+#elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_IP101G)
+
+	/* enable ext phy */
+	cpm_mphyc = read_cpm_mphyc();
+	cpm_mphyc &= ~(0x3<<22);
+	write_cpm_mphyc(cpm_mphyc);
+
+	/* power on IP101G */
+#ifdef CONFIG_GPIO_IP101G_POWER
+	gpio_direction_output(CONFIG_GPIO_IP101G_POWER, CONFIG_GPIO_IP101G_POWER_ENLEVEL);
+	mdelay(10);
+#endif/*CONFIG_GPIO_IP101G_POWER*/
+
+	/* reset IP101G */
+#ifdef CONFIG_GPIO_IP101G_RESET
+	gpio_direction_output(CONFIG_GPIO_IP101G_RESET, CONFIG_GPIO_IP101G_RESET_ENLEVEL);
+	mdelay(50);
+	//gpio_direction_output(32*1+13, 1);
+
+	gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
+	mdelay(10);
+#endif/*CONFIG_GPIO_IP101G_RESET*/
+#elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_OMNI)
+	{
+		u32 status = 0;
+		u16 data = 0;
+		*(volatile unsigned int *)(0xB0000050) = 0xc8007016;
+		/* reset PHY */
+		int retry_cnt = 1000;
+		u32 cpm_mphyc_rst = 0;
+		/* enable internal phy */
+		cpm_mphyc = read_cpm_mphyc();
+		cpm_mphyc |= 0x3<<22;
+		write_cpm_mphyc(cpm_mphyc);
+		/* reset phy */
+		cpm_mphyc = read_cpm_mphyc();
+		cpm_mphyc_rst = cpm_mphyc & (1 << 24);
+		cpm_mphyc &= ~0x8;
+		cpm_mphyc |= 0x8;
+		write_cpm_mphyc(cpm_mphyc);
+		mdelay(1);
+		cpm_mphyc = read_cpm_mphyc();
+		cpm_mphyc &= ~0x8;
+		write_cpm_mphyc(cpm_mphyc);
+
+		/* */
+		status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, 0x0, 0x18, &data);
+		if(status){
+			printf("GMAC read phy failed\n");
+			return 1;
+		}
+
+		/*printf("-- PHY power reset; 0x%04x\n", data);*/
+		data |= 1<<1;
+
+		status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, 0x0, 0x18, data);
+
+		status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, 0x0, 0x18, &data);
+		if(status){
+			printf("GMAC read phy failed\n");
+			return 1;
+		}
+		/*printf("++ PHY power reset; 0x%04x\n", data);*/
+
+		cpm_mphyc = read_cpm_mphyc();
+		cpm_mphyc_rst = cpm_mphyc & (1 << 24);
+		cpm_mphyc &= ~0x8;
+		cpm_mphyc |= 0x8;
+		write_cpm_mphyc(cpm_mphyc);
+		mdelay(1);
+		cpm_mphyc = read_cpm_mphyc();
+		cpm_mphyc &= ~0x8;
+		write_cpm_mphyc(cpm_mphyc);
+
+		/* wait for resetting successfully */
+		mdelay(1);
+		while(retry_cnt--){
+			cpm_mphyc = read_cpm_mphyc();
+			if((cpm_mphyc & (1 << 24)) ^ cpm_mphyc_rst)
+				break;
+			mdelay(1);
+		}
+		printf("cpm_mphyc_rst = 0x%08x cpm_mphyc = 0x%08x\n", cpm_mphyc_rst, cpm_mphyc & (1 << 24));
+		if(retry_cnt <= 0){
+			printf("====>GMAC failed to reset!\n");
+		}
+	}
 #endif /* CONFIG_NET_PHY_TYPE */
+
+#if defined (CONFIG_T15)
+	/* initialize t15 gmac gpio */
+	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0xFFEFFFC0);
+	gpio_set_func(GPIO_PORT_E, GPIO_FUNC_0, 3<<12); //new gmac GPIO(MT10_core_20140904_v1_hefei.bin)
+#elif defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21)
+	/* initialize t10 gmac gpio */
+#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_OMNI)
+#else
+	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x1EFC0);
+#endif
+#endif
+
+#else /* CONFIG_FPGA */
+
+#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_DM9161)
+	/* reset PE10 */
+	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	udelay(10);
+
+	gpio_direction_output(32*4+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+#if (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_MII)
+	gpio_direction_output(32*1+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+#elif(CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_RMII)
+	gpio_direction_output(32*1+13, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+#endif  /* CONFIG_NET_GMAC_PHY_MODE */
+	gpio_direction_output(32*1+10, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+15, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+24, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+25, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+26, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+27, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+6, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+8, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	udelay(10);
+#elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_88E1111)
+	/* reset PE10 */
+	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	udelay(10);
+	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	udelay(10);
+
+#endif /* CONFIG_NET_PHY_TYPE */
+	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0xFFFFFFC0);
+	gpio_set_func(GPIO_PORT_E, GPIO_FUNC_0, 3<<12); //new gmac GPIO(MT10_core_20140904_v1_hefei.bin)
+#endif /* CONFIG_FPGA */
+
 
 #if (CONFIG_NET_PHY_TYPE == PHY_TYPE_88E1111)
 
+	int phy_id;
+	u16 data;
+	s32 status = -ESYNOPGMACNOERR;
 #if (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_RGMII)
 
 	phy_id = check_phy_config(gmacdev);
@@ -660,6 +826,11 @@ int jz_net_initialize(bd_t *bis)
 	cpm_mphyc |= 0x1 << 31;
 	cpm_mphyc &= ~0x7;
 	cpm_mphyc |= 0x1;
+	write_cpm_mphyc(cpm_mphyc);
+#elif (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_MII)
+	cpm_mphyc = read_cpm_mphyc();
+	cpm_mphyc &= ~0x7;
+	cpm_mphyc |= 0x000;
 	write_cpm_mphyc(cpm_mphyc);
 #endif //CONFIG_NET_GMAC_PHY_MODE
 

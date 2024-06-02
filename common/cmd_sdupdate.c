@@ -218,23 +218,24 @@ static int au_do_update(int idx, long sz)
 
 	hdr = (image_header_t *)LOAD_ADDR;
 
-	// For full image, use the size of the loaded image directly
-	if (idx == IDX_FW) {
-		start = AU_FL_FW_ST; // Adjust start address if needed
-		len = sz; // Use the actual size of the loaded image
-	} else {
-		start = ntohl(hdr->ih_load);
-		len = ntohl(hdr->ih_ep) - ntohl(hdr->ih_load);
-	}
-
+	// Probe the SPI flash and ensure it initializes correctly
 	flash = spi_flash_probe(0, 0, 1000000, 0x3);
 	if (!flash) {
 		printf("Failed to initialize SPI flash\n");
 		return -1;
 	}
+
+	if (idx == IDX_FW) {
+		start = 0; // Start at the beginning of the flash
+		len = flash->size; // Use the total size of the flash
+	} else {
+		// For other images, use the image-specific defined flash layout
+		start = ntohl(hdr->ih_load);
+		len = ntohl(hdr->ih_ep) - ntohl(hdr->ih_load);
+	}
 	
-	/* erase the address range. */
-	printf("flash erase...\n");
+	/* Erase the address range. */
+	printf("Erasing flash from address 0x%lx to 0x%lx (length: 0x%lx)\n", start, start + len, len);
 	rc = flash->erase(flash, start, len);
 	if (rc) {
 		printf("SPI flash sector erase failed\n");
@@ -256,7 +257,7 @@ static int au_do_update(int idx, long sz)
 		write_len = ntohl(hdr->ih_size);
 	}
 
-	/* copy the data from RAM to FLASH */
+	/* Copy the data from RAM to FLASH */
 	printf("flash write...\n");
 	rc = flash->write(flash, start, write_len, pbuf);
 	if (rc) {
@@ -283,15 +284,34 @@ static int update_to_flash(void)
 	int uboot_updated = 0;
 	int full_updated = 0;
 	int image_found = 0;
+	int j;
 
 	if (file_fat_read("autoupdate-full.done", LOAD_ADDR, 1) >= 0) {
 		printf("MMC:   Flag file autoupdate-full.done exists, skipping %s\n", AU_FW);
 		return 0; // Skip this file
 	}
 
+	// Define which files to automatically update
+	int auto_update_files[] = {IDX_UBOOT, IDX_FW};  // Only auto-update u-boot and full
+	int num_auto_updates = sizeof(auto_update_files) / sizeof(auto_update_files[0]);
+
 	for (i = 0; i < AU_MAXFILES; i++) {
-		if (LOAD_ID != -1) {
-			i = LOAD_ID;
+		if (LOAD_ID != -1 && LOAD_ID != i) {
+			continue;  // Skip if a specific LOAD_ID is set and it's not the current file
+		}
+
+		// Check if this file should be auto-updated
+		int auto_update = 0;
+		for (j = 0; j < num_auto_updates; j++) {
+			if (auto_update_files[j] == i) {
+				auto_update = 1;
+				break;
+			}
+		}
+
+		// Skip files not marked for auto-update if in automatic mode (LOAD_ID == -1)
+		if (LOAD_ID == -1 && !auto_update) {
+			continue;
 		}
 
 		image_found = 1;
