@@ -4,24 +4,7 @@
  * (C) Copyright 2000-2005
  * Wolfgang Denk, DENX Software Engineering, wd@denx.de.
  *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
- *
+ * SPDX-License-Identifier:	GPL-2.0+
  ********************************************************************
  * NOTE: This header file defines an interface to U-Boot. Including
  * this (unmodified) header file in another file is considered normal
@@ -597,7 +580,7 @@ static inline void image_set_name(image_header_t *hdr, const char *name)
 	 * This is equivalent to: strncpy(image_get_name(hdr), name, IH_NMLEN);
 	 *
 	 * Use the tortured code below to avoid a warning with gcc 12. We do not
-	 * want to include a nul terminator if the name is of length IH_NMLEN
+	 * want to include a null terminator if the name is of length IH_NMLEN
 	 */
 	strncpy(image_get_name(hdr), name, strnlen(name, IH_NMLEN));
 }

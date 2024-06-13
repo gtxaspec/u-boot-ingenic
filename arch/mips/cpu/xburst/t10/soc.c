@@ -5,23 +5,11 @@
  * Author: Zoro <ykli@ingenic.cn>
  * Based on: arch/mips/cpu/xburst/jz4775/jz4775.c
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
- /*#define DEBUG */
+#define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -60,13 +48,11 @@ void board_init_f(ulong dummy)
 #else
 	gd->arch.gi = (struct global_info *)CONFIG_SPL_GINFO_BASE;
 #endif
-
 #ifdef CONFIG_BURNER
 	gd->arch.gi->ddr_div = ((gd->arch.gi->cpufreq % gd->arch.gi->ddrfreq) == 0)
-		               ? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
-		               : (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
+			       ? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
+			       : (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
 #endif
-
 	gpio_init();
 
 #ifndef CONFIG_FPGA
@@ -100,7 +86,7 @@ void board_init_f(ulong dummy)
 	sdram_init();
 	debug("SDRAM init ok\n");
 
-	 /*MUST access 0xa3fffffc address */
+	/* MUST access 0xa3fffffc address */
 	*(volatile unsigned int *)0xa3fffffc = 0x12345678;
 
 #ifdef CONFIG_DDR_TEST
@@ -135,20 +121,17 @@ void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
  * U-Boot common functions
  */
 
-void enable_interrupts(void)
-{
+void enable_interrupts(void) {
 }
 
-int disable_interrupts(void)
-{
+int disable_interrupts(void) {
 	return 0;
 }
 
-unsigned long do_go_exec(ulong (*entry)(int, char * const []), int argc,
-				 char * const argv[])
-{
+unsigned long do_go_exec(ulong (*entry)(int, char *const[]), int argc,
+			 char *const argv[]) {
 	printf("Flush cache all before jump. \n");
 	flush_cache_all();
 
-	return entry (argc, argv);
+	return entry(argc, argv);
 }

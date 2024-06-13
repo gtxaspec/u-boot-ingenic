@@ -3,20 +3,7 @@
  *
  * Copyright (c) 2019 Ingenic Semiconductor Co.,Ltd
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #include <config.h>
@@ -64,7 +51,6 @@ _start:
 	RESERVED_FOR_SC(0)
 #endif /* CONFIG_SPL_SFC_SUPPORT */
 
-
 #ifdef CONFIG_SPL_SPI_SUPPORT
 #define SSI_GR_BOOT (CONFIG_SYS_EXTAL / (CONFIG_SYS_SPI_BOOT_FREQ * 2) - 1)
 #ifdef CONFIG_SPI_NAND
@@ -94,7 +80,7 @@ _start:
 	la t9, 0xb0010144
 	sw t8, 0(t9)
 #ifdef CONFIG_NET_GMAC
-	la t8, 0xFCFFF000
+	la t8, 0xfcfff000
 	la t9, 0xb0011138
 	sw t8, 0(t9)
 
@@ -140,7 +126,9 @@ _start:
 	mtc0	t0, CP0_STATUS
 
 	/* CAUSE register */
-	/* IV=1, use the specical interrupt vector (0x200) */
+	/*
+	 * IV=1, use the special interrupt vector (0x200)
+	 * */
 	li	t1, 0x00800000
 	mtc0	t1, CP0_CAUSE
 

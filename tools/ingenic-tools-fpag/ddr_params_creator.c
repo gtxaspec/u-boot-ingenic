@@ -4,20 +4,7 @@
  * Copyright (C) 2013 Ingenic Semiconductor Co.,Ltd
  * Author: Zoro <ykli@ingenic.cn>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #ifndef CONFIG_SPL_BUILD
@@ -77,7 +64,7 @@ static int calc_nck(int x, int y)
 	return value;
 }
 
-static void caculate_tck(struct ddr_params *params)
+static void calculate_tck(struct ddr_params *params)
 {
 	params->tck.ps = (1000000000 / (params->freq / 1000));
 	params->tck.ns = (1000000000 % params->freq == 0)
@@ -877,7 +864,7 @@ void fill_in_params(struct ddr_params *ddr_params, int type)
 	ddr_params->type = type;
 	ddr_params->freq = CONFIG_SYS_MEM_FREQ;
 #endif /* !CONFIG_DDR_TYPE_VARIABLE */
-	caculate_tck(ddr_params);
+	calculate_tck(ddr_params);
 #ifndef CONFIG_DDR_TYPE_VARIABLE
 	ddr_params->div = DDR_CLK_DIV;
 	ddr_params->cs0 = CONFIG_DDR_CS0;

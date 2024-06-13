@@ -2,23 +2,7 @@
  * (C) Copyright 2003
  * Kyle Harris, kharris@nexus-tech.net
  *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #include <common.h>
@@ -96,23 +80,26 @@ enum mmc_state {
 static void print_mmcinfo(struct mmc *mmc)
 {
 	printf("Device: %s\n", mmc->name);
-	printf("Manufacturer ID: %x\n", mmc->cid[0] >> 24);
-	printf("OEM: %x\n", (mmc->cid[0] >> 8) & 0xffff);
-	printf("Name: %c%c%c%c%c \n", mmc->cid[0] & 0xff,
-			(mmc->cid[1] >> 24), (mmc->cid[1] >> 16) & 0xff,
-			(mmc->cid[1] >> 8) & 0xff, mmc->cid[1] & 0xff);
+	printf("Manufacturer ID: %x\n",   mmc->cid[0] >> 24);
+	printf("OEM: %x\n",              (mmc->cid[0] >> 8 ) & 0xffff);
+	printf("Name: %c%c%c%c%c \n",     mmc->cid[0]        & 0xff,
+				         (mmc->cid[1] >> 24),
+				         (mmc->cid[1] >> 16) & 0xff,
+				         (mmc->cid[1] >>  8) & 0xff,
+				          mmc->cid[1]        & 0xff);
 
-	printf("Tran Speed: %d\n", mmc->tran_speed);
-	printf("Rd Block Len: %d\n", mmc->read_bl_len);
+	printf("Tran Speed: %d\n",        mmc->tran_speed);
+	printf("Rd Block Len: %d\n",      mmc->read_bl_len);
 
-	printf("%s version %d.%d\n", IS_SD(mmc) ? "SD" : "MMC",
-			(mmc->version >> 8) & 0xf, mmc->version & 0xff);
+	printf("%s version %d.%d\n",      IS_SD(mmc) ? "SD" : "MMC",
+					 (mmc->version >> 8) & 0xf,
+			 		  mmc->version       & 0xff);
 
-	printf("High Capacity: %s\n", mmc->high_capacity ? "Yes" : "No");
+	printf("High Capacity: %s\n",     mmc->high_capacity ? "Yes" : "No");
 	puts("Capacity: ");
 	print_size(mmc->capacity, "\n");
 
-	printf("Bus Width: %d-bit\n", mmc->bus_width);
+	printf("Bus Width: %d-bit\n",     mmc->bus_width);
 }
 
 static int do_mmcinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])

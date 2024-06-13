@@ -2,23 +2,7 @@
  * (C) Copyright 2011
  * Holger Brunck, Keymile GmbH Hannover, holger.brunck@keymile.com
  *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #include <common.h>
@@ -26,7 +10,7 @@
 #include <i2c.h>
 #include "common.h"
 
-int ivm_calc_crc(unsigned char *buf, int len)
+static int ivm_calc_crc(unsigned char *buf, int len)
 {
 	const unsigned short crc_tab[16] = {
 		0x0000, 0xCC01, 0xD801, 0x1400,
@@ -252,7 +236,7 @@ static int ivm_analyze_block2(unsigned char *buf, int len)
 	return 0;
 }
 
-int ivm_analyze_eeprom(unsigned char *buf, int len)
+static int ivm_analyze_eeprom(unsigned char *buf, int len)
 {
 	unsigned short	val;
 	unsigned char	valbuf[CONFIG_SYS_IVM_EEPROM_PAGE_LEN];

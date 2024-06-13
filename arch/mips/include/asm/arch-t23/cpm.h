@@ -3,20 +3,7 @@
  *
  * Copyright (c) 2019 Ingenic Semiconductor Co.,Ltd
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #ifndef __CPM_H__
@@ -28,8 +15,8 @@
 #define CPM_CPPCR		(0x0c)
 #define CPM_CPAPCR		(0x10)
 #define CPM_CPMPCR		(0x14)
-#define CPM_CPAPACR		(0X18) // T23 add
-#define CPM_CPMPACR		(0X1c) // T23 add
+#define CPM_CPAPACR		(0x18) // T23 add
+#define CPM_CPMPACR		(0x1c) // T23 add
 #define CPM_DDRCDR		(0x2c)
 #define CPM_AVPUCDR		(0x30)
 //#define CPM_HELIXCDR		(0x30)

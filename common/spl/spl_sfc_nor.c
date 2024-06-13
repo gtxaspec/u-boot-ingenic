@@ -105,7 +105,8 @@ static int sfc_read_data(unsigned int *data, unsigned int len)
 static int sfc_read(unsigned int addr, unsigned int addr_plus,
 		unsigned int addr_len, unsigned int *data, unsigned int len)
 {
-	unsigned int cmd, ret, qread[1] = {0}, tmp;
+	unsigned int cmd, ret;
+	unsigned int qread[1] = {0}, tmp;
 
 	jz_sfc_writel(STOP, SFC_TRIG);
 	jz_sfc_writel(FLUSH, SFC_TRIG);
@@ -130,7 +131,6 @@ void sfc_init()
 #ifndef CONFIG_FPGA
 	clk_set_rate(SSI, 70000000);
 #endif
-
 	tmp = THRESHOLD << THRESHOLD_OFFSET;
 	jz_sfc_writel(tmp, SFC_GLB);
 

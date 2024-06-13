@@ -6,23 +6,7 @@
  * Copyright(c) 2002,2003 Motorola Inc.
  * Xianghua Xiao (x.xiao@motorola.com)
  *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #ifndef __IMMAP_85xx__
@@ -2387,8 +2371,8 @@ typedef struct ccsr_gur {
 #endif
 #if defined(CONFIG_BSC9131) || defined(CONFIG_BSC9132)
 #if defined(CONFIG_BSC9131)
-#define MPC85xx_PMUXCR2_UART_CTS_B0_SIM_PD		0X40000000
-#define MPC85xx_PMUXCR2_UART_CTS_B0_DSP_TMS		0X80000000
+#define MPC85xx_PMUXCR2_UART_CTS_B0_SIM_PD		0x40000000
+#define MPC85xx_PMUXCR2_UART_CTS_B0_DSP_TMS		0x80000000
 #define MPC85xx_PMUXCR2_UART_CTS_B0_GPIO42		0xC0000000
 #define MPC85xx_PMUXCR2_UART_RTS_B0_PWM2		0x10000000
 #define MPC85xx_PMUXCR2_UART_RTS_B0_DSP_TCK		0x20000000
@@ -3201,7 +3185,7 @@ struct ccsr_cluster_l2 {
 	(CONFIG_SYS_IMMR + CONFIG_SYS_FSL_CLUSTER_1_L2_OFFSET)
 #endif /* CONFIG_SYS_FSL_QORIQ_CHASSIS2 */
 
-#define	CONFIG_SYS_DCSR_DCFG_OFFSET	0X20000
+#define	CONFIG_SYS_DCSR_DCFG_OFFSET	0x20000
 struct dcsr_dcfg_regs {
 	u8  res_0[0x520];
 	u32 ecccr1;

@@ -4,72 +4,46 @@
  * Copyright (C) 2013 Ingenic Semiconductor Co.,Ltd
  * Based on: u-boot-1.1.6/tools/spi_checksum/spi_checksum.c
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
+#include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <config.h>
 #include <string.h>
-#include <unistd.h>
-
-#ifdef CONFIG_JZ4775
-#define SKIP_SIZE 16
-#endif
-#ifdef CONFIG_JZ4780
-#define SKIP_SIZE 16
-#endif
-#ifdef CONFIG_M200
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T5
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T10
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T15
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T15G
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T20
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T21
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T23
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T30
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T31
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T40
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T41
-#define SKIP_SIZE 2048
-#endif
+#include <config.h>
 
 #define BUFFER_SIZE 4
+
+#if defined(CONFIG_JZ4775)
+#define SKIP_SIZE 16
+#elif defined(CONFIG_JZ4780)
+#define SKIP_SIZE 16
+#elif defined(CONFIG_M200)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T5)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T10)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T15)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T15G)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T20)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T21)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T23)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T30)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T31)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T40)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T41)
+#define SKIP_SIZE 2048
+#endif
 
 #define le(a) (((a & 0xff)<<24) | ((a>>8 & 0xff)<< 16) | ((a>>16 & 0xff)<< 8) | ((a>>24 & 0xff)))
 

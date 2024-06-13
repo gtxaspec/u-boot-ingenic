@@ -1,12 +1,14 @@
-# Ingenic U-Boot
+# Thingino U-Boot for Ingenic SoC
 
-This repository hosts an enhanced U-Boot tailored for the Ingenic Xburst T10-T31 SoCs. It comes packed with a range of features to enhance usability and functionality for these specific SoCs.
+This repository hosts the unofficial, enhanced U-Boot tailored for the Ingenic Xburst1 SoCs.
+It comes packed with a range of features to enhance usability and functionality for these specific SoCs.
 
 ---
 
 ## Features
 
-- **Automatic Partition Recognition**: Seamless compatibility with thingino, OpenIPC, or other custom firmware, recognizing partitions automatically.
+- **Automatic Partition Recognition**: Seamless compatibility with Thingino, OpenIPC or a custom firmware,
+  recognizing partitions automatically.
 - **DHCP Client**: DHCP functionality for automatic network configuration.
 - **FAT-Write Capability**: Allows writing to FAT file systems, enhancing file management flexibility.
 - **Filesystem Compatibility**: Supports ext2 and ext4 filesystems for broader storage options.
@@ -26,5 +28,8 @@ This repository hosts an enhanced U-Boot tailored for the Ingenic Xburst T10-T31
 ---
 
 ## Disclaimer
+
 ### **USE AT YOUR OWN RISK**
-While this U-Boot version is designed to enhance functionality, its usage comes with inherent risks, particularly when modifying firmware or device settings. Users should proceed with caution and at their own risk.
+
+While this U-Boot version is designed to enhance functionality, its usage comes with inherent risks,
+particularly when modifying firmware or device settings. Users should proceed with caution and at their own risk.

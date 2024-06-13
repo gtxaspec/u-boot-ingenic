@@ -6,70 +6,71 @@ export CROSS_COMPILE=mipsel-linux-gnu-
 
 OUTPUT_DIR="./uboot_build"
 
-if command -v resize; then
-	eval $(resize)
-	size="$(( LINES - 4 )) $(( COLUMNS -4 )) $(( LINES - 12 ))"
-else
-	size="20 76 12"
-fi
-
-pick_a_soc() {
-	eval `resize`
-	soc=$(whiptail --title "U-Boot SoC selection" \
-		--menu "Choose a SoC model" $size \
-		"isvp_t10_sfcnor_lite"		"Ingenic T10L"		\
-		"isvp_t10_sfcnor"		"Ingenic T10N"		\
-		"isvp_t10_msc0"			"Ingenic T10N  MSC0"	\
-		"isvp_t20_sfcnor_lite"		"Ingenic T20L"		\
-		"isvp_t20_sfcnor"		"Ingenic T20N"		\
-		"isvp_t20_sfcnor_ddr128M"	"Ingenic T20X"		\
-		"isvp_t20_msc0"			"Ingenic T20N  MSC0"	\
-		"isvp_t21_sfcnor"		"Ingenic T21N"		\
-		"isvp_t21_msc0"			"Ingenic T21N  MSC0"	\
-		"isvp_t23n_sfcnor"		"Ingenic T23N"		\
-		"isvp_t23n_msc0"		"Ingenic T23N  MSC0"	\
-		"isvp_t30_sfcnor_lite"		"Ingenic T30L"		\
-		"isvp_t30_sfcnor"		"Ingenic T30N"		\
-		"isvp_t30_sfcnor_ddr128M"	"Ingenic T30X"		\
-		"isvp_t30a_sfcnor_ddr128M"	"Ingenic T30A"		\
-		"isvp_t30a1_sfcnor_ddr128M"	"Ingenic T30A1"		\
-		"isvp_t30_msc0"			"Ingenic T30N  MSC0"	\
-		"isvp_t31_sfcnor_lite"		"Ingenic T31L"		\
-		"isvp_t31lc_sfcnor"		"Ingenic T31LC"		\
-		"isvp_t31_sfcnor"		"Ingenic T31N"		\
-		"isvp_t31_sfcnor_ddr128M"	"Ingenic T31X"		\
-		"isvp_t31a_sfcnor_ddr128M"	"Ingenic T31A"		\
-		"isvp_t31al_sfcnor_ddr128M"	"Ingenic T31AL"		\
-		"isvp_t31_msc0"			"Ingenic T31N  MSC0"	\
-		"isvp_t31a_msc0_ddr128M"	"Ingenic T31A  MSC0"	\
-		"isvp_t31al_msc0_ddr128M"	"Ingenic T31AL MSC0"	\
-		"isvp_t31_msc0_lite"		"Ingenic T31L  MSC0"	\
-		"isvp_t31_msc0_ddr128M"		"Ingenic T31X  MSC0"	\
-		--notags 3>&1 1>&2 2>&3)
+profiles() {
+	awk '/^isvp_/ {sub(/isvp_/, "", $1); print $1}' boards.cfg | sort
 }
 
-# Function to build a specific version
+list_of_profiles() {
+	awk '/^isvp_/ {sub(/isvp_/, "", $1); print $1 " " $1 " "}' boards.cfg | sort
+}
+
+pick_a_soc() {
+	profiles=$(echo $(list_of_profiles))
+	whiptail --title "U-Boot SoC selection" --menu "Choose a SoC model" \
+		--notags 20 50 12 $profiles 3>&1 1>&2 2>&3
+}
+
 build_version() {
+	if [ -z "$profile" ]; then
+        echo "Profile is empty"
+        help_and_exit
+    fi
+
+	echo "Building U-Boot for $profile"
 	# Start timer
 	SECONDS=0
-
-	local soc=$1
-	echo "Building U-Boot for ${soc}"
-
 	make distclean
-	mkdir -p "${OUTPUT_DIR}" >/dev/null
-	make $soc
+	mkdir -p "$OUTPUT_DIR" >/dev/null
+	make isvp_$profile
 	make -j$(nproc)
-	cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
+	cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${profile}.bin"
+	make distclean
+
+	# End timer and report
+	duration=$SECONDS
+	echo "Done"
+	echo "u-boot-${profile}.bin": $(stat -c %s "${OUTPUT_DIR}/u-boot-${profile}.bin")
+	echo "Total build time: $(($duration / 60)) minutes and $(($duration % 60)) seconds."
+}
+
+help_and_exit() {
+	echo "Usage: $0 [<SoC>]"
+	echo "SoC:" $(profiles)
+	exit 1
 }
 
 soc="$1"
-[ -z "$soc" ] && pick_a_soc
-[ -z "$soc" ] && echo No SoC && exit 1
-build_version "$soc"
+boot="${2:-sfcnor}"
 
-# End timer and report
-duration=$SECONDS
-echo "Done"
-echo "Total build time: $(($duration / 60)) minutes and $(($duration % 60)) seconds."
+case "$soc" in
+	-a | all)
+		for profile in $(profiles); do
+			build_version $profile
+		done
+		;;
+	t10* | t20* | t21* | t23* | t30* | t31*)
+		if [ $(awk '/^isvp_'$soc'/ && /'$boot'/ {print $1}' boards.cfg | wc -l) -eq 1 ]; then
+			profile=$soc
+			build_version $profile
+		fi
+		;;
+	"")
+		profile=$(pick_a_soc)
+		build_version $profile
+		;;
+	*)
+        echo "Unknown SoC: $soc"
+		help_and_exit
+esac
+
 exit 0

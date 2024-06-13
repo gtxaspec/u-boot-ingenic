@@ -5,23 +5,11 @@
  * Author: Zoro <ykli@ingenic.cn>
  * Based on: arch/mips/cpu/xburst/jz4775/jz4775.c
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -64,8 +52,8 @@ void board_init_f(ulong dummy)
 
 #ifdef CONFIG_BURNER
 	gd->arch.gi->ddr_div = ((gd->arch.gi->cpufreq % gd->arch.gi->ddrfreq) == 0)
-		               ? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
-		               : (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
+			? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
+			: (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
 #endif
 
 	gpio_init();
@@ -100,7 +88,6 @@ void board_init_f(ulong dummy)
 	sdram_init();
 	debug("SDRAM init ok\n");
 
-
 #if 0 /* a simple ddr training */
 	/*MUST access 0xa3fffffc address */
 	//*(volatile unsigned int *)0xa3fffffc = 0x12345678;
@@ -125,7 +112,7 @@ void board_init_f(ulong dummy)
 	{
 		volatile u32 tmp = 0;
 		u32 data = 0;
-		for (tmp = 0xa0000000; tmp < 0xa0000000 + 0x8000000/4; tmp+=4) {
+		for (tmp = 0xa0000000; tmp < 0xa0000000 + 0x8000000 / 4; tmp+=4) {
 			u32 i = 0;
 			u32 td = 0x12345678;
 			for (i = 0; i < 16; i++) {
@@ -137,7 +124,7 @@ void board_init_f(ulong dummy)
 				}
 				td = td << 1;
 			}
-			//printf("#");
+			printf("#");
 		}
 	}
 #endif
@@ -158,12 +145,8 @@ extern void flush_cache_all(void);
 void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
 {
 	typedef void __noreturn (*image_entry_noargs_t)(void);
-
-	image_entry_noargs_t image_entry =
-			(image_entry_noargs_t) spl_image->entry_point;
-
+	image_entry_noargs_t image_entry = (image_entry_noargs_t) spl_image->entry_point;
 	flush_cache_all();
-
 	printf("image entry point: 0x%X\n", spl_image->entry_point);
 	image_entry();
 }
@@ -174,20 +157,16 @@ void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
  * U-Boot common functions
  */
 
-void enable_interrupts(void)
-{
+void enable_interrupts(void) {
 }
 
-int disable_interrupts(void)
-{
+int disable_interrupts(void) {
 	return 0;
 }
 
-unsigned long do_go_exec(ulong (*entry)(int, char * const []), int argc,
-				 char * const argv[])
-{
+unsigned long do_go_exec(ulong (*entry)(int, char *const[]), int argc, char *const argv[]) {
 	printf("Flush cache all before jump. \n");
 	flush_cache_all();
 
-	return entry (argc, argv);
+	return entry(argc, argv);
 }

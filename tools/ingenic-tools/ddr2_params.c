@@ -155,12 +155,12 @@ static void ddrp_params_creator_ddr2(struct ddrp_reg *ddrp, struct ddr_params *p
 
 	/* DTPR1 registers */
 	ddrp->dtpr1.b.tAOND_tAOFD = 0;  //non-standard DDR2 will be setting to 1.
+
 #if (defined(CONFIG_T10) || defined(CONFIG_T20))
 	DDRP_TIMING_SET(1,ddr2_params,tFAW,6,2,31);
 #else
 	DDRP_TIMING_SET(1,ddr2_params,tFAW,6,2,39);
 #endif
-
 
 	/* DTPR2 registers */
 	tmp = MAX(

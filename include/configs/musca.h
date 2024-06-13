@@ -6,20 +6,7 @@
  * Based on: include/configs/urboard.h
  *           Written by Paul Burton <paul.burton@imgtec.com>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #ifndef __CONFIG_MUSCA_H__
@@ -161,7 +148,7 @@
 #define CONFIG_SPI_SPL_CHECK
 #define CONFIG_JZ_SFC_PA
 #ifdef CONFIG_SPI_NAND
-#define CONFIG_UBOOT_OFFSET	(26  * 1024)
+#define CONFIG_UBOOT_OFFSET	(26 * 1024)
 #define CONFIG_SPI_NAND_BPP	(2048 +64)  /*Bytes Per Page*/
 #define CONFIG_SPI_NAND_PPB	(64)        /*Page Per Block*/
 #define CONFIG_SPL_SFC_NAND

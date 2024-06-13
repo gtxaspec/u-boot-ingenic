@@ -389,7 +389,9 @@ void sha1_hmac(const unsigned char *key, int keylen,
 	memset (&ctx, 0, sizeof (sha1_context));
 }
 
-/*static const char _sha1_src[] = "_sha1_src";*/
+#if defined(CONFIG_T23)
+static const char _sha1_src[] = "_sha1_src";
+#endif
 
 #ifdef SELF_TEST
 /*

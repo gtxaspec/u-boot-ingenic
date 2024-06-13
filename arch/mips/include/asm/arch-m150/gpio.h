@@ -3,20 +3,7 @@
  *
  * Copyright (c) 2013 Ingenic Semiconductor Co.,Ltd
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
+ * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #ifndef __GPIO_H__
@@ -40,7 +27,7 @@ enum gpio_function {
         GPIO_OUTPUT0    = 0x04,  //0100, GPIO output low  level
         GPIO_OUTPUT1    = 0x05,  //0101, GPIO output high level
 	GPIO_INPUT	= 0x06,	 //0110, GPIO as input
-	GPIO_RISE_EDGE  = 0x0b,	//1011, GPIO as rise edge interrupt 
+	GPIO_RISE_EDGE  = 0x0b,	//1011, GPIO as rise edge interrupt
 };
 
 enum gpio_port {
