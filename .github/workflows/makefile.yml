@@ -32,7 +32,7 @@ env:
 
 jobs:
   build-notify:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     outputs:
       start_time: ${{ steps.set_output.outputs.time }}
       tg_disabled: ${{ steps.set_env.outputs.tg_disabled }}
@@ -56,9 +56,9 @@ jobs:
 
   build:
     needs: build-notify
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     container: 
-      image: debian:sid
+      image: debian:trixie
     strategy:
       fail-fast: false
       matrix:
@@ -141,7 +141,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get install -y --no-install-recommends --no-install-suggests build-essential ccache gcc-13 gcc-13-mipsel-linux-gnu libgcc-s1-mipsel-cross lzop u-boot-tools git make ca-certificates curl wget
+          apt-get install -y --no-install-recommends --no-install-suggests build-essential bc ccache cpio curl ca-certificates file git make gawk lzop procps rsync unzip wget
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
