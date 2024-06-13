@@ -152,8 +152,8 @@ jobs:
 
       - name: Download toolchain
         run: |
-          wget https://github.com/themactep/thingino-firmware/releases/download/toolchain/thingino-toolchain_xburst1_musl_gcc13-linux-mipsel.tar.gz -O ~/thingino-toolchain_xburst1_musl_gcc13-linux-mipsel.tar.gz
-          tar -xf ~/thingino-toolchain_xburst1_musl_gcc13-linux-mipsel.tar.gz -C ~/
+          wget https://github.com/themactep/thingino-firmware/releases/download/toolchain/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -O ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz
+          tar -xf ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -C ~/
 
       - name: u-boot-ingenic Build
         shell: bash
