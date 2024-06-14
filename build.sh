@@ -1,8 +1,6 @@
 #!/bin/bash
 
-export ARCH=mips
-export CROSS_COMPILE=mipsel-linux-gnu-
-#export CCACHE=/usr/bin/ccache
+: ${CROSS_COMPILE:="mipsel-linux-"}
 
 OUTPUT_DIR="./uboot_build"
 
@@ -59,7 +57,7 @@ build_version() {
 	make distclean
 	mkdir -p "${OUTPUT_DIR}" >/dev/null
 	make $soc
-	make -j$(nproc)
+	make CROSS_COMPILE=$CROSS_COMPILE -j$(nproc)
 	cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
 }
 

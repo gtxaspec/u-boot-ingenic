@@ -31,7 +31,7 @@ env:
   TG_ENABLE: false
 
 jobs:
-  build-notify:
+  notify-begin:
     runs-on: ubuntu-latest
     outputs:
       start_time: ${{ steps.set_output.outputs.time }}
@@ -54,83 +54,52 @@ jobs:
           HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F parse_mode=MarkdownV2 -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
           echo Telegram response: ${HTTP}
 
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: setup env test
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          ref: "master"
+          fetch-depth: "1"
+
+      - name: Generate matrix
+        id: set-matrix
+        run: |
+          CONFIGS=$(cat boards.cfg | grep isvp | awk '{print $1}' | grep -v -e nand -e t23)
+          JSON_MATRIX="{\"u-boot-version\": ["
+          for CONFIG in $CONFIGS; do
+            JSON_MATRIX+="\"${CONFIG}\","
+          done
+          JSON_MATRIX="${JSON_MATRIX%,}]}"
+          echo "Matrix: $JSON_MATRIX"
+          echo "matrix=$JSON_MATRIX" >> $GITHUB_OUTPUT
+
   build:
-    needs: build-notify
+    name: ${{ matrix.u-boot-version }}
+    needs: [generate-matrix, notify-begin]
     runs-on: ubuntu-latest
     container: 
       image: debian:trixie
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - u-boot-version: t10n
-            t31x_only: false
-          - u-boot-version: t10l
-            t31x_only: false
-          - u-boot-version: t10n_msc0
-            t31x_only: false
-          - u-boot-version: t20n
-            t31x_only: false
-          - u-boot-version: t20l
-            t31x_only: false
-          - u-boot-version: t20x
-            t31x_only: false
-          - u-boot-version: t20n_msc0
-            t31x_only: false
-          - u-boot-version: t21n
-            t31x_only: false
-          - u-boot-version: t21n_msc0
-            t31x_only: false
-          - u-boot-version: t23n
-            t31x_only: false
-          - u-boot-version: t23n_msc0
-            t31x_only: false
-          - u-boot-version: t30n
-            t31x_only: false
-          - u-boot-version: t30l
-            t31x_only: false
-          - u-boot-version: t30x
-            t31x_only: false
-          - u-boot-version: t30a
-            t31x_only: false
-          - u-boot-version: t30a1
-            t31x_only: false
-          - u-boot-version: t30n_msc0
-            t31x_only: false
-          - u-boot-version: t31n
-            t31x_only: false
-          - u-boot-version: t31l
-            t31x_only: false
-          - u-boot-version: t31lc
-            t31x_only: false
-          - u-boot-version: t31x
-            t31x_only: false
-          - u-boot-version: t31a
-            t31x_only: false
-          - u-boot-version: t31al
-            t31x_only: false
-          - u-boot-version: t31l_msc0
-            t31x_only: false
-          - u-boot-version: t31n_msc0
-            t31x_only: false
-          - u-boot-version: t31x_msc0
-            t31x_only: false
-          - u-boot-version: t31a_msc0
-            t31x_only: false
-          - u-boot-version: t31al_msc0
-            t31x_only: false
+      matrix: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
 
     steps:
       - name: Setup cache directories
         run: |
-          mkdir -p /tmp/ccache
-          ln -s /tmp/ccache ${HOME}/.ccache
+          mkdir -p ~/.ccache
 
       - name: Setup ccache
         uses: actions/cache@v4
         if: always()
         with:
-          path: /tmp/ccache
+          path: ~/.ccache
           key: ${{ runner.os }}-ccache-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-ccache-$-
@@ -141,7 +110,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get install -y --no-install-recommends --no-install-suggests build-essential bc ccache cpio curl ca-certificates file git make gawk lzop procps rsync unzip wget
+          apt-get install -y --no-install-recommends --no-install-suggests build-essential bc ccache cpio curl ca-certificates file git make gawk lzop procps rsync u-boot-tools unzip wget
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Checkout
@@ -165,9 +134,9 @@ jobs:
           echo "GIT_HASH=${GIT_HASH}" >> ${GITHUB_ENV}
           echo "GIT_BRANCH=${GIT_BRANCH}" >> ${GITHUB_ENV}
 
-          cp -f .github/scripts/build.sh build-ci.sh
+          #cp -f .github/scripts/build.sh build-ci.sh
           VERSION=${{ matrix.u-boot-version }}
-          bash build-ci.sh $VERSION debug
+          CROSS_COMPILE=~/mipsel-thingino-linux-musl_sdk-buildroot/bin/mipsel-linux- bash build.sh $VERSION
 
           TIME=$(date -d @${SECONDS} +%M:%S)
           echo "TIME=${TIME}" >> ${GITHUB_ENV}
