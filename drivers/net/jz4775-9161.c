@@ -529,10 +529,16 @@ int jz_net_initialize(bd_t *bis)
 	write_cpm_mphyc(cpm_mphyc);
 
 	udelay(50000);
-	*(volatile unsigned int *)(0xb0011018) = 1<<7 | 1 << 15;
-	*(volatile unsigned int *)(0xb0011028) = 1<<7 | 1 << 15;
-	*(volatile unsigned int *)(0xb0011034) = 1<<7 | 1 << 15;
-	*(volatile unsigned int *)(0xb0011048) = 1<<7 | 1 << 15;
+
+	/* 	This register combination sets the function for pins PB07 and PB15 to function 2.
+		See sections 20.3 in the T21 programming manual for function tables and
+		section 20.4.1 on details of this function setting combination
+	*/
+
+	*(volatile unsigned int *)(0xb0011018) = 1<<7 | 1 << 15;	// Interrupt Clear
+	*(volatile unsigned int *)(0xb0011028) = 1<<7 | 1 << 15;	// Mask Clear	
+	*(volatile unsigned int *)(0xb0011034) = 1<<7 | 1 << 15;	// PAT1 Set
+	*(volatile unsigned int *)(0xb0011048) = 1<<7 | 1 << 15;	// PAT0 Clear
 
 #if 0
 	/* PB13 PB14 fun0 */
@@ -555,7 +561,16 @@ int jz_net_initialize(bd_t *bis)
 #endif
 #if defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21) || defined (CONFIG_T23) || defined (CONFIG_T31)
 	/* initialize gmac gpio */
-	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x1EFC0);
+	// gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x1EFC0);		// Original: Commenting this as it overwrites the function 2 settings of pins 7 and 15 above 
+
+	// gpio_set_func(GPIO_PORT_B, GPIO_FUNC_2, (1<<15));		// This can be used to reset PB15, or for efficiency use below
+
+	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x16FC0);			// This statement which has the 15th bit (in binary) left as a zero which was defined earlier so is not overwritten 
+
+	/* Note that this setting is tested only on the T21n. 
+		If this causes problems on other soc models then we may need to separate "defined (CONFIG_T21)" from the rest.
+		Note, PB15 is used for GMAC_RXD0 for RMII, so it may be required for that function (0) anyway...
+	*/
 #endif
 
 	gmacdev = &_gmacdev;
@@ -564,16 +579,31 @@ int jz_net_initialize(bd_t *bis)
 	gmacdev->MacBase =  JZ_GMAC_BASE + MACBASE;
 
 #ifndef CONFIG_FPGA
-#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_IP101G)
-	/* gpio reset IP101G */
-#ifdef CONFIG_GPIO_IP101G_RESET
-	gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
+
+#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_DM9161)
+	/* reset DM9161 */
+	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
 	mdelay(10);
-	gpio_direction_output(CONFIG_GPIO_IP101G_RESET, CONFIG_GPIO_IP101G_RESET_ENLEVEL);
-	mdelay(50);
-	gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
+#if (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_MII)
+	gpio_direction_output(32*1+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+#elif(CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_RMII)
+	gpio_direction_output(32*1+13, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+#endif  /* CONFIG_NET_GMAC_PHY_MODE */
+	gpio_direction_output(32*1+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+10, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+15, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+24, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+25, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+26, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+27, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+6, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(32*1+8, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	gpio_set_value(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
 	mdelay(10);
-#endif/*CONFIG_GPIO_IP101G_RESET*/
+
+	udelay(100000);
+
 #elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_8710A)
 
 	/* reset 8710A */
@@ -877,8 +907,6 @@ static int do_ethphy(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		mdelay(10);
 		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, CONFIG_GPIO_IP101G_RESET_ENLEVEL);
 		mdelay(50);
-		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
-		mdelay(10);
 #endif/*CONFIG_GPIO_IP101G_RESET*/
 	} else if (strcmp(cmd, "write") == 0) {
 		unsigned long addr;
