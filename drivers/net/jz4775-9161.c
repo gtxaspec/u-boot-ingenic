@@ -579,32 +579,7 @@ int jz_net_initialize(bd_t *bis)
 	gmacdev->MacBase =  JZ_GMAC_BASE + MACBASE;
 
 #ifndef CONFIG_FPGA
-
-#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_DM9161)
-	/* reset DM9161 */
-	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	mdelay(10);
-#if (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_MII)
-	gpio_direction_output(32*1+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-#elif(CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_RMII)
-	gpio_direction_output(32*1+13, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-#endif  /* CONFIG_NET_GMAC_PHY_MODE */
-	gpio_direction_output(32*1+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+10, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+15, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+24, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+25, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+26, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+27, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+6, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(32*1+8, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	gpio_set_value(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	mdelay(10);
-
-	udelay(100000);
-
-#elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_8710A)
+#if (CONFIG_NET_PHY_TYPE == PHY_TYPE_8710A)
 
 	/* reset 8710A */
 	gpio_direction_output(CONFIG_GPIO_8710A_RESET, CONFIG_GPIO_8710A_RESET_ENLEVEL);
@@ -734,10 +709,10 @@ int jz_net_initialize(bd_t *bis)
 #else /* CONFIG_FPGA */
 
 #if (CONFIG_NET_PHY_TYPE == PHY_TYPE_DM9161)
-	/* reset PE10 */
+	/* reset PE10 / DM9161 */
 	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	udelay(10);
-
+	mdelay(10);
+	
 	gpio_direction_output(32*4+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
 #if (CONFIG_NET_GMAC_PHY_MODE == GMAC_PHY_MII)
 	gpio_direction_output(32*1+13, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
@@ -753,7 +728,8 @@ int jz_net_initialize(bd_t *bis)
 	gpio_direction_output(32*1+6, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
 	gpio_direction_output(32*1+8, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
 	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
-	udelay(10);
+	gpio_set_value(CONFIG_GPIO_DM9161_RESET, !CONFIG_GPIO_DM9161_RESET_ENLEVEL);
+	mdelay(10);
 #elif (CONFIG_NET_PHY_TYPE == PHY_TYPE_88E1111)
 	/* reset PE10 */
 	gpio_direction_output(CONFIG_GPIO_DM9161_RESET, CONFIG_GPIO_DM9161_RESET_ENLEVEL);
@@ -907,6 +883,8 @@ static int do_ethphy(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		mdelay(10);
 		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, CONFIG_GPIO_IP101G_RESET_ENLEVEL);
 		mdelay(50);
+		gpio_direction_output(CONFIG_GPIO_IP101G_RESET, !CONFIG_GPIO_IP101G_RESET_ENLEVEL);
+		mdelay(10);
 #endif/*CONFIG_GPIO_IP101G_RESET*/
 	} else if (strcmp(cmd, "write") == 0) {
 		unsigned long addr;
