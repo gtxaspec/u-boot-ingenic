@@ -538,6 +538,14 @@ else
 		$(error "T31LC unsupported option")
 endif
 endif
+
+ifdef CONFIG_XIAOMI_SPL
+ifdef CONFIG_SPL_SFC_SUPPORT
+				cp $(TOPDIR)/firmware/t31_xiaomi_sfcnor.bin $(obj)spl/u-boot-spl-pad.bin
+else
+				$(error "T31_XIOAMI unsupported option")
+endif
+endif
 		cat $(obj)spl/u-boot-spl-pad.bin $(obj)u-boot.bin > $@
 		rm $(obj)spl/u-boot-spl-pad.bin
 endif

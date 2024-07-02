@@ -563,6 +563,7 @@
  */
 #define CONFIG_DOS_PARTITION
 
+
 #define CONFIG_LZO
 #define CONFIG_RBTREE
 #define CONFIG_LZMA
@@ -650,9 +651,13 @@
 #define CONFIG_SPL_TEXT_BASE		0x80001000
 #endif	/*CONFIG_SPL_NOR_SUPPORT*/
 
-#define CONFIG_SPL_LZOP
-#if defined(CONFIG_SPL_LZOP)
-#define CONFIG_DECMP_BUFFER_ADRS	0x80200000
+/* Check if neither CONFIG_T31LC nor CONFIG_XIAOMI_SPL is defined */
+#if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
+    #define CONFIG_SPL_LZOP
+#endif
+
+#ifdef CONFIG_SPL_LZOP
+    #define CONFIG_DECMP_BUFFER_ADRS        0x80200000
 #endif
 
 #if defined(CONFIG_SPL_MMC_SUPPORT)

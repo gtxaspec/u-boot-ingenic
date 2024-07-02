@@ -43,6 +43,7 @@ pick_a_soc() {
 		"isvp_t31al_msc0_ddr128M"	"Ingenic T31AL MSC0"	\
 		"isvp_t31_msc0_lite"		"Ingenic T31L  MSC0"	\
 		"isvp_t31_msc0_ddr128M"		"Ingenic T31X  MSC0"	\
+		"isvp_t31_xiaomi_sfcnor"	"Ingenic T31 XIAOMI SPL"	\
 		--notags 3>&1 1>&2 2>&3)
 }
 
@@ -58,7 +59,13 @@ build_version() {
 	mkdir -p "${OUTPUT_DIR}" >/dev/null
 	make $soc
 	make CROSS_COMPILE=$CROSS_COMPILE -j$(nproc)
-	cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
+	if [ -f u-boot-lzo-with-spl.bin ]; then
+		echo "u-boot-lzo-with-spl.bin exists, copying..."
+		cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
+	elif [ -f u-boot-with-spl.bin ]; then
+		echo "u-boot-with-spl.bin exists, copying..."
+		cp u-boot-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
+	fi
 }
 
 soc="$1"
