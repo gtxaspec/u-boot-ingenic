@@ -173,7 +173,10 @@
 
 #define CONFIG_BOOTDELAY		3
 #define CONFIG_FAT_WRITE
+
+#if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
 #define CONFIG_SYS_HUSH_PARSER
+#endif
 
 #define CONFIG_NETMASK			255.255.255.0
 #define CONFIG_GATEWAYIP		192.168.1.1
@@ -196,19 +199,25 @@
 #define CONFIG_CMD_CONSOLE
 #define CONFIG_CMD_DHCP
 #define CONFIG_CMD_ECHO
+#if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
 #define CONFIG_CMD_EXT2
 #define CONFIG_CMD_EXT4
+#endif
 #define CONFIG_CMD_FAT
 #define CONFIG_CMD_FS_GENERIC
 #define CONFIG_CMD_GETTIME
 #define CONFIG_CMD_GPIO
+#if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
 #define CONFIG_CMD_JFFS2
+#endif
 #define CONFIG_CMD_LOADB
 #define CONFIG_CMD_MEMORY
 #define CONFIG_CMD_MISC
 #define CONFIG_CMD_MMC
 #define CONFIG_CMD_NET
+#if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
 #define CONFIG_CMD_NFS
+#endif
 #define CONFIG_CMD_PING
 #define CONFIG_CMD_RUN
 #define CONFIG_CMD_SAVEENV
@@ -217,9 +226,11 @@
 #define CONFIG_CMD_SDUPDATE
 #define CONFIG_CMD_SOURCE
 #define CONFIG_CMD_SQUASH_PROBE
+#if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
 #define CONFIG_CMD_TFTPDOWNLOAD
 #define CONFIG_CMD_TFTPPUT
 #define CONFIG_CMD_TFTPSRV
+#endif
 #define CONFIG_CMD_WATCHDOG
 
 /* JFFS2 configuration */
