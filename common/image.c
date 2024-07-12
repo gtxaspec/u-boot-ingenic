@@ -95,9 +95,9 @@ static const table_entry_t uimage_os[] = {
 	{	IH_OS_PLAN9,	"plan9",	"Plan 9",		},
 	{	IH_OS_RTEMS,	"rtems",	"RTEMS",		},
 	{	IH_OS_U_BOOT,	"u-boot",	"U-Boot",		},
+	{	IH_OS_VXWORKS,	"vxworks",	"VxWorks",		},
 #if defined(CONFIG_CMD_ELF) || defined(USE_HOSTCC)
 	{	IH_OS_QNX,	"qnx",		"QNX",			},
-	{	IH_OS_VXWORKS,	"vxworks",	"VxWorks",		},
 #endif
 #if defined(CONFIG_INTEGRITY) || defined(USE_HOSTCC)
 	{	IH_OS_INTEGRITY,"integrity",	"INTEGRITY",		},
@@ -964,7 +964,7 @@ int boot_get_ramdisk(int argc, char * const argv[], bootm_headers_t *images,
  * @initrd_end: pointer to a ulong variable, will hold final init ramdisk
  *      end address (after possible relocation)
  *
- * boot_ramdisk_high() takes a relocation hint from "initrd_high" environement
+ * boot_ramdisk_high() takes a relocation hint from "initrd_high" environment
  * variable and if requested ramdisk data is moved to a specified location.
  *
  * Initrd_start and initrd_end are set to final (after relocation) ramdisk
