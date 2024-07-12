@@ -52,7 +52,7 @@ int rate_table[] = {0, 8000, 11025, 16000, 22050, 24000, 32000, 44100, 48000,
 static int max98095_i2c_write(unsigned int reg, unsigned char data)
 {
 	debug("%s: Write Addr : 0x%02X, Data :  0x%02X\n",
-		__func__, reg, data);
+	      __func__, reg, data);
 	return i2c_write(g_max98095_i2c_dev_addr, reg, 1, &data, 1);
 }
 
@@ -71,7 +71,7 @@ static unsigned int max98095_i2c_read(unsigned int reg, unsigned char *data)
 	ret = i2c_read(g_max98095_i2c_dev_addr, reg, 1, data, 1);
 	if (ret != 0) {
 		debug("%s: Error while reading register %#04x\n",
-			__func__, reg);
+		      __func__, reg);
 		return -1;
 	}
 

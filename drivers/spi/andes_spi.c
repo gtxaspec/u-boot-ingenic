@@ -4,9 +4,6 @@
  * (C) Copyright 2011 Andes Technology
  * Macpaul Lin <macpaul@andestech.com>
  *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
  * SPDX-License-Identifier:	GPL-2.0+
  */
 
