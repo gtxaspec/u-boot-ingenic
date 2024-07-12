@@ -1,6 +1,9 @@
 /*
  * Copyright 2006,2009 Freescale Semiconductor, Inc.
  *
+ * 2012, Heiko Schocher, DENX Software Engineering, hs@denx.de.
+ * Changes for multibus/multiadapter I2C support.
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 as published by the Free Software Foundation.

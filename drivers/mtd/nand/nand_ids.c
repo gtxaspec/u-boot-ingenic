@@ -185,4 +185,3 @@ const struct nand_manufacturers nand_manuf_ids[] = {
 #endif
 	{0x0, "Unknown"}
 };
-

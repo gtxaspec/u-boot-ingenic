@@ -2,23 +2,7 @@
 # (C) Copyright 2006
 # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
 #
-# See file CREDITS for list of people who contributed to this
-# project.
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of
-# the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-# MA 02111-1307 USA
+# SPDX-License-Identifier:	GPL-2.0+
 #
 
 include $(TOPDIR)/config.mk
@@ -30,11 +14,7 @@ COBJS-$(CONFIG_BFIN_SDH) += bfin_sdh.o
 COBJS-$(CONFIG_DAVINCI_MMC) += davinci_mmc.o
 COBJS-$(CONFIG_FSL_ESDHC) += fsl_esdhc.o
 COBJS-$(CONFIG_FTSDC010) += ftsdc010_mci.o
-ifndef CONFIG_SPL_BUILD
 COBJS-$(CONFIG_GENERIC_MMC) += mmc.o
-else
-COBJS-$(CONFIG_GENERIC_MMC) += mmc_spl.o
-endif
 COBJS-$(CONFIG_GENERIC_ATMEL_MCI) += gen_atmel_mci.o
 COBJS-$(CONFIG_MMC_SPI) += mmc_spi.o
 COBJS-$(CONFIG_ARM_PL180_MMCI) += arm_pl180_mmci.o
@@ -53,7 +33,9 @@ COBJS-$(CONFIG_DWMMC) += dw_mmc.o
 COBJS-$(CONFIG_EXYNOS_DWMMC) += exynos_dw_mmc.o
 COBJS-$(CONFIG_ZYNQ_SDHCI) += zynq_sdhci.o
 COBJS-$(CONFIG_JZ_MMC) += jz_mmc.o
-ifndef CONFIG_SPL_BUILD
+ifdef CONFIG_SPL_BUILD
+COBJS-$(CONFIG_GENERIC_MMC) += mmc_spl.o
+else
 COBJS-$(CONFIG_GENERIC_MMC) += mmc_write.o
 endif
 
