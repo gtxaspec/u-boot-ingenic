@@ -393,33 +393,33 @@ void process_gpio_token(char* token) {
 	#endif
 
 	gpio_request(gpio, "gpio_set");
-
+	printf(" ");
 	switch (mode) {
 		case 'i': // Input
 		case 'I': // Also treat uppercase 'I' as Input for consistency
 			gpio_direction_input(gpio);
-			printf("GPIO:  %u set to input\n", gpio);
-			#ifdef CONFIG_T31
+			printf("%ui", gpio);
+#if defined(CONFIG_T31)
 			if (disablePullUp) {
 				gpio_disable_pull_up(gpio);
-				printf("GPIO:  %u input pull-up disabled\n", gpio);
+				printf("u", gpio);
 			}
 			if (disablePullDown) {
 				gpio_disable_pull_down(gpio);
-				printf("GPIO:  %u input pull-down disabled\n", gpio);
+				printf("d", gpio);
 			}
 			#endif
 			break;
 		case 'o': // Output low
 			gpio_direction_output(gpio, 0);
-			printf("GPIO:  %u set to output low\n", gpio);
+			printf("%uo", gpio);
 			break;
 		case 'O': // Output high
 			gpio_direction_output(gpio, 1);
-			printf("GPIO:  %u set to output high\n", gpio);
+			printf("%uO", gpio);
 			break;
 		default:
-			printf("GPIO:  Unknown GPIO mode '%c' for GPIO %u\n", mode, gpio);
+			printf("%u?%c", gpio, mode);
 			break;
 	}
 }
@@ -442,8 +442,7 @@ void handle_gpio_settings(const char *env_var_name) {
 
 	char *token = strtok(gpio_str_copy, " ");
 
-	printf("GPIO:  Loading %s\n", env_var_name);
-
+	printf("GPIO:  %s:", env_var_name);
 	while (token) {
 		if (strncmp(token, "gpio", 4) == 0) {
 			token = strtok(NULL, " ");
@@ -453,4 +452,5 @@ void handle_gpio_settings(const char *env_var_name) {
 		udelay(1000); // Add a delay after setting each GPIO
 		token = strtok(NULL, " ");
 	}
+	printf("\n");
 }
