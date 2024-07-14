@@ -100,7 +100,7 @@ void clk_prepare(void)
 	}
 }
 
-/***************外设时钟源选择30 31位******************/
+/***************Peripheral clock source selection 30 31 bits******************/
 void cgu_clks_set(struct cgu *cgu_clks, int nr_cgu_clks)
 {
 	int i, j, id;
@@ -302,7 +302,7 @@ unsigned int clk_get_rate(int clk)
 }
 
 /*
- *  设置外设的分频值 以及 使能位
+ *  Sets the divider value of the peripheral and the enable bit.
  *
  ***/
 void clk_set_rate(int clk, unsigned long rate)
@@ -332,7 +332,7 @@ void clk_set_rate(int clk, unsigned long rate)
 	else
 		pll_rate -= ( pll_rate % rate );
 
-	/****************低7位 分频值**************/
+	/****************Lower 7 bits Crossover value**************/
 
 	if (clk == MSC0 || clk == MSC1 )
 		cdr = ((pll_rate/rate)/2 - 1) & 0xff;
@@ -340,7 +340,7 @@ void clk_set_rate(int clk, unsigned long rate)
 		cdr = (pll_rate/rate - 1 ) & 0xff;
 	//printf("pll_rate = %d, rate = %d, cdr = %d\n",pll_rate,rate,cdr);
 
-	/****************改变低30位****************/
+	/****************Changing the low 30s****************/
 	if (clk == DDR)
 		regval &= ~(0xf | 0x3f << 24);
 	else
@@ -358,7 +358,7 @@ void clk_set_rate(int clk, unsigned long rate)
 
 void clk_init(void)
 {
-	/*********打开外设时钟门控开关**********************/
+	/*********Turn on the peripheral clock gating switch**********************/
 	unsigned int reg_clkgr = cpm_inl(CPM_CLKGR0);
 	unsigned int reg_clkgr1 = cpm_inl(CPM_CLKGR1);
 	unsigned int gate = 0
@@ -385,11 +385,11 @@ void clk_init(void)
 	reg_clkgr1 &= ~gate;
 	cpm_outl(reg_clkgr1,CPM_CLKGR1);
 
-	/*************设置外设的时钟源 31:30 ***************/
+	/*************Setting the peripheral clock source 31:30 ***************/
 	cgu_clks_set(cgu_clk_sel, ARRAY_SIZE(cgu_clk_sel));
 }
 
-/*************开启串口时钟门控**********************/
+/*************Enable Serial Clock Gating**********************/
 void enable_uart_clk(void)
 {
 	unsigned int clkgr = cpm_inl(CPM_CLKGR0);

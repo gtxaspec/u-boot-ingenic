@@ -172,14 +172,15 @@ static void pll_set(int pll,int freq)
 }
 
 /*
- *bit 20 :22  使能分频值的写功能
- *
- * */
+ * bit 20:22 Enable write function for crossover value
+ */
 static void cpccr_init(void)
 {
 	unsigned int cpccr;
 
-	/* change div 改变低24位 改变 分频值 */
+	/* change div
+	 * Change low 24 bits
+	 * Change crossover value */
 	cpccr = (cpm_inl(CPM_CPCCR) & (0xff << 24))
 		| (CPCCR_CFG & ~(0xff << 24))
 		| (7 << 20);
@@ -188,7 +189,9 @@ static void cpccr_init(void)
 		/* do nothing, wait until resolves as false */
 	}
 
-	/* change sel 改变高8位 选择时钟源 */
+	/* change sel
+	 * Change high 8 bits
+	 * Select clock source */
 	cpccr = (CPCCR_CFG & (0xff << 24)) | (cpm_inl(CPM_CPCCR) & ~(0xff << 24));
 	cpm_outl(cpccr,CPM_CPCCR);
 	debug("cppcr 0x%x\n",cpm_inl(CPM_CPCCR));
@@ -229,8 +232,8 @@ static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
 */
 
 /*
- * ***********pll全局变量赋值*********************
- * ***********设置 CPCCR 寄存器所需***************
+ * ***********pll global variable assignment*********************
+ * ***********Required to set the CPCCR register***************
  * */
 static void final_fill_div(int cpll, int pclk)
 {
