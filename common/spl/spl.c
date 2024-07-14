@@ -242,7 +242,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 }
 
 /*
- * This requires UART clocks to be enabled.  In order for this to work the
+ * This requires UART clocks to be enabled. In order for this to work, the
  * caller must ensure that the gd pointer is valid.
  */
 void preloader_console_init(void)

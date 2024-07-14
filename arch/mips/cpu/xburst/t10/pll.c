@@ -84,19 +84,19 @@ static unsigned int get_pllreg_value(int freq)
 		pllfreq -= pllfreq%extal;
 	}
 
-	/*caculate nf*/
+	/*calculate nf*/
 	do {
 		nr++;
 		nf = (pllfreq*nr)/extal;
 	} while ((nf * extal != nr * pllfreq || nf >= 4096) && nr < 63);
 
-	/*caculate od1*/
+	/*calculate od1*/
 	while ((nr%od1) && od1 > 1) {
 		od1--;
 	}
 	nr = nr/od1;
 
-	/*caculate od0*/
+	/*calculate od0*/
 	od0 = od1;
 	while((nr%od0) && od0 > 1) {
 		od0--;
@@ -201,7 +201,7 @@ static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
 	unsigned int lcm_resv = a > b ? b : a;
 	unsigned int lcm = lcm_unit;;
 
-	debug("caculate lcm :a(cpu:%d) and b(ddr%d) 's\t", a, b);
+	debug("calculate lcm :a(cpu:%d) and b(ddr%d) 's\t", a, b);
 	while (lcm%lcm_resv &&  lcm < limit)
 		lcm += lcm_unit;
 

@@ -48,14 +48,14 @@ int do_sfcnand(cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 				printf("  %08llx\n", (unsigned long long)off);
 				return CMD_RET_FAILURE;
 			}
-		/* modify partion table : sfcnand pt index name offset size manger_mode */
+		/* modify partition table: sfcnand pt index name offset size manger_mode */
 		/* nand pt index name offset size manager_mode */
 		index = (unsigned int)simple_strtoul(argv[2], NULL, 0);
 		memcpy(name, argv[3], strlen(argv[3]));
 		offset = (unsigned int)simple_strtoul(argv[4], NULL, 16);
 		size = (unsigned int)simple_strtoul(argv[5], NULL, 16);
 		manager_mode = (unsigned int)simple_strtoul(argv[6], NULL, 0);
-		printf("set partion: index = %d, name = %s, offset = 0x%x, size = 0x%x, manager_mode = %d.\n",
+		printf("set partition: index = %d, name = %s, offset = 0x%x, size = 0x%x, manager_mode = %d.\n",
 			   index, name, offset, size, manager_mode);
 		set_one_partition_to_nand(index, name, offset, size, 0, manager_mode);
 		return CMD_RET_SUCCESS;
@@ -65,8 +65,8 @@ int do_sfcnand(cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 	return CMD_RET_USAGE;
 }
 U_BOOT_CMD(sfcnand, 7, 1, do_sfcnand,
-		"sfcnand    - SFC_NAND sub-system",
-		"\nsfcnand pt show   -Displays the current partition information\n"
+		"sfcnand    - SFC_NAND sub-system\n",
+		"sfcnand pt show   -Displays the current partition information\n"
 		"sfcnand pt [index] [name] [offset] [len] [manager_mode]\n"
 		"-`index' Which partition, starting from 0\n"
 		"`name' the name of the partition\n"

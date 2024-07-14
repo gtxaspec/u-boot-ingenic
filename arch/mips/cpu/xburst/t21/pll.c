@@ -85,9 +85,10 @@ static unsigned int get_pllreg_value(int freq)
 	unsigned int pllout;
 	/*Unset*/
 	if (freq < 25000000 || freq >3000000000UL){
-		error("uboot pll freq  not in range \n");
+		error("uboot pll freq is  not in range \n");
 		return -EINVAL;
 	}
+
 	/*Align to extal clk*/
 	if (pllfreq%extal  >= extal/2) {
 		pllfreq += (extal - pllfreq%extal);

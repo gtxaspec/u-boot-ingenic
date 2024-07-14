@@ -127,7 +127,7 @@ int fat_register_device(block_dev_desc_t *dev_desc, int part_no)
 }
 
 /*
- * Get the first occurence of a directory delimiter ('/' or '\') in a string.
+ * Get the first occurrence of a directory delimiter ('/' or '\') in a string.
  * Return index into string if found, -1 otherwise.
  */
 static int dirdelim(char *str)

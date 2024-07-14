@@ -82,7 +82,7 @@ static unsigned int get_pllreg_value(int freq)
 
 	/*Unset*/
 	if (freq < 25000000 || freq > 5000000000UL){
-		error("uboot pll freq  not in range \n");
+		error("uboot pll freq is not in range \n");
 		return -EINVAL;
 	}
 
@@ -93,19 +93,19 @@ static unsigned int get_pllreg_value(int freq)
 		pllfreq -= pllfreq%extal;
 	}
 
-	/*caculate nf*/
+	/*calculate nf*/
 	do {
 		nr++;
 		nf = (pllfreq*nr)/extal;
 	} while ((nf * extal != nr * pllfreq || nf > 2500) && nr < 63);
 
-	/*caculate od1*/
+	/*calculate od1*/
 	while ((nr%od1) && od1 > 2) {
 		od1--;
 	}
 	nr = nr/od1;
 
-	/*caculate od0*/
+	/*calculate od0*/
 	od0 = od1;
 	while((nr%od0) && od0 > 1) {
 		od0--;

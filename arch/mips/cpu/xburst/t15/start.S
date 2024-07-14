@@ -103,7 +103,9 @@ _start:
 	mtc0	t0, CP0_STATUS
 
 	/* CAUSE register */
-	/* IV=1, use the specical interrupt vector (0x200) */
+	/*
+	 * IV=1, use the special interrupt vector (0x200)
+	 * */
 	li	t1, 0x00800000
 	mtc0	t1, CP0_CAUSE
 

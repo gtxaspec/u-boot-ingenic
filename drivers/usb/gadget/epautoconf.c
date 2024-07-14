@@ -5,8 +5,6 @@
  *
  * SPDX-License-Identifier:	GPL-2.0+
  *
- * SPDX-License-Identifier:	GPL-2.0+
- *
  * Ported to U-boot by: Thomas Smits <ts.smits@gmail.com> and
  *                      Remy Bohmer <linux@bohmer.net>
  */

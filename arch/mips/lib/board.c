@@ -584,7 +584,7 @@ if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
 	run_command("sdstart",0);
 #endif
 
-	printf("MMC:   Checking for for boot / env files...\n");
+	printf("MMC:   Checking for boot/env files...\n");
 	if (!run_command("fatload mmc 0 ${baseaddr} boot.scr", 0)) {
 		printf("MMC:   Loading boot.scr\n");
 		run_command(BOOT_SCRIPT, 0);
