@@ -1,5 +1,5 @@
 /*
- * T30 common routines
+ * T21 common routines
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  * Author: Zoro <ykli@ingenic.cn>

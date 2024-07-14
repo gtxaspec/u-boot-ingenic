@@ -1,5 +1,5 @@
 /*
- * T30 clock common interface
+ * T21 clock common interface
  *
  * Copyright (C) 2017 Ingenic Semiconductor Co.,Ltd
  * Author: Zoro <ykli@ingenic.cn>

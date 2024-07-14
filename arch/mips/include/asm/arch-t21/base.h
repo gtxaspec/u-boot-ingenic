@@ -1,5 +1,5 @@
 /*
- * T30 REG_BASE definitions
+ * T21 REG_BASE definitions
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *

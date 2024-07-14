@@ -1,5 +1,5 @@
 /*
- * T30  NAND (NEMC/BCH) driver definitions
+ * T21  NAND (NEMC/BCH) driver definitions
  *
  * Copyright (c) 2017 Imagination Technologies
  * Author: Paul Burton <paul.burton@imgtec.com>

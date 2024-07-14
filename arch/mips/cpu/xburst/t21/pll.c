@@ -1,5 +1,5 @@
 /*
- * T30 pll configuration
+ * T21 pll configuration
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  * Author: Zoro <ykli@ingenic.cn>

@@ -1,5 +1,5 @@
 /*
- * T30  TCU definitions
+ * T21  TCU definitions
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *

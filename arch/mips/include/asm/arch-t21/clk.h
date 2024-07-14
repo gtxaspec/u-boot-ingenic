@@ -1,5 +1,5 @@
 /*
- * T30 clock definitions
+ * T21 clock definitions
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *

@@ -1,5 +1,5 @@
 /*
- * T30 WDT definitions
+ * T21 WDT definitions
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *

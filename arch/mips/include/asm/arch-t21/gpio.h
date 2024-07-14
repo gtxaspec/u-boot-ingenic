@@ -1,5 +1,5 @@
 /*
- * T30 GPIO definitions
+ * T21 GPIO definitions
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *
  * SPDX-License-Identifier:	GPL-2.0+

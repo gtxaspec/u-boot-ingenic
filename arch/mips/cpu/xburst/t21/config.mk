@@ -1,5 +1,5 @@
 #
-# Ingenic T30 configuration
+# Ingenic T21 configuration
 #
 # Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
 # Author: Zoro <ykli@ingenic.cn>

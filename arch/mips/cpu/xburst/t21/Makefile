@@ -1,5 +1,5 @@
 #
-# Ingenic T30 makefile
+# Ingenic T21 makefile
 #
 # Copyright (c) 2017  Ingenic Semiconductor Co.,Ltd
 # Author: Zoro <ykli@ingenic.cn>

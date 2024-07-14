@@ -1,5 +1,5 @@
 /*
- * T30 sadc definitions
+ * T21 sadc definitions
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *

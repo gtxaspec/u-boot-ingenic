@@ -1,5 +1,5 @@
 /*
- * T30 rtc definitions
+ * T21 rtc definitions
  *
  * Copyright (c) 2017  Ingenic Semiconductor Co.,Ltd
  *

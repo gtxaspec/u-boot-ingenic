@@ -1,5 +1,5 @@
 /*
- * T30 LCDC definitions
+ * T21 LCDC definitions
  *
  * Copyright (c) 2017 Ingenic Semiconductor Co.,Ltd
  *
