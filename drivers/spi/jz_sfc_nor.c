@@ -1053,29 +1053,30 @@ unsigned int get_partition_index(u32 offset, int *pt_offset, int *pt_size)
 
 int sfc_nor_init(unsigned int idcode)
 {
+	debug("sfc_nor_init() at %s, %d\n", __FILE__, __LINE__);
 
-		int i = 0;
+	if (idcode == 0 || idcode == 0xff) {
+		printf("JZ SFC: Invalid ID: %x\n", idcode);
+		return -1;
+	}
+	printf("JZ SFC: Flash chip ID: %x\n", idcode);
 
-		for (i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
-			gparams = jz_spi_support_table[i];
-			if (gparams.id_manufactory == idcode){
-				if(sfc_quad_mode == 1){
-					quad_mode = &jz_spi_support_table[i].quad_mode;
-				}
-				break;
-			}
+	for (int i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
+		gparams = jz_spi_support_table[i];
+		if (gparams.id_manufactory == idcode) {
+			if (sfc_quad_mode == 1)
+				quad_mode = &jz_spi_support_table[i].quad_mode;
+			return 0;
 		}
+	}
 
-		if (i == ARRAY_SIZE(jz_spi_support_table)) {
-			if ((idcode != 0)&&(idcode != 0xff)&&(sfc_quad_mode == 0)){
-				printf("the id code = %x\n",idcode);
-				printf("unsupport ID is if the id not be 0x00,the flash is ok for burner\n");
-			}else{
-				printf("ingenic: sfc quad mode Unsupported ID %x\n", idcode);
-				return -1;
-			}
-		}
-	return 0;
+	if (sfc_quad_mode == 0) {
+		printf("JZ SFC: Unsupported ID, but still maybe good for flashing\n");
+		return 1;
+	} else {
+		printf("JZ SFC: Quad-mode Unsupported ID %x\n", idcode);
+		return -1;
+	}
 }
 
 int sfc_nor_read(struct spi_flash *flash, unsigned int src_addr, unsigned int count,unsigned int dst_addr)
