@@ -80,7 +80,7 @@ _start:
 	la t9, 0xb0010144
 	sw t8, 0(t9)
 #ifdef CONFIG_NET_GMAC
-	la t8, 0xFCFFF000
+	la t8, 0xfcfff000
 	la t9, 0xb0011138
 	sw t8, 0(t9)
 

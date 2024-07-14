@@ -29,7 +29,7 @@ struct pll_cfg {
 } pll_cfg;
 
 #ifndef CONFIG_SYS_CPCCR_SEL
-#define SEL_SRC		0X2
+#define SEL_SRC		0x2
 #define SEL_CPLL	((CONFIG_CPU_SEL_PLL == APLL) ? 0x1 : 0x2)
 #define SEL_H0CLK	((CONFIG_DDR_SEL_PLL == APLL) ? 0x1 : 0x2)
 #define SEL_H2CLK	SEL_H0CLK

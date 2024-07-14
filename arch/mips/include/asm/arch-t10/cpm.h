@@ -35,8 +35,8 @@
 #define CPM_CPPCR		(0x0c)
 #define CPM_CPAPCR		(0x10)
 #define CPM_CPMPCR		(0x14)
-#define CPM_CPAPACR		(0X18)
-#define CPM_CPMPACR		(0X1c)
+#define CPM_CPAPACR		(0x18)
+#define CPM_CPMPACR		(0x1c)
 
 #define CPM_INTR		(0xb0)
 #define CPM_INTRE		(0xb4)

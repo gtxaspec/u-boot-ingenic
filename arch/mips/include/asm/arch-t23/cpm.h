@@ -15,8 +15,8 @@
 #define CPM_CPPCR		(0x0c)
 #define CPM_CPAPCR		(0x10)
 #define CPM_CPMPCR		(0x14)
-#define CPM_CPAPACR		(0X18) // T23 add
-#define CPM_CPMPACR		(0X1c) // T23 add
+#define CPM_CPAPACR		(0x18) // T23 add
+#define CPM_CPMPACR		(0x1c) // T23 add
 #define CPM_DDRCDR		(0x2c)
 #define CPM_AVPUCDR		(0x30)
 //#define CPM_HELIXCDR		(0x30)

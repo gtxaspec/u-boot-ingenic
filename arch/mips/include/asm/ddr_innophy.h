@@ -3,9 +3,9 @@
 
 #include <asm/io.h>
 
-#define PHY_BASE			(0xB3011000)
-#define APB_BASE			(0xB3012000)
-#define AHB_BASE			(0xB34F0000)
+#define PHY_BASE			(0xb3011000)
+#define APB_BASE			(0xb3012000)
+#define AHB_BASE			(0xb34f0000)
 
 /**********          PHY ADDR  ********************/
 #define INNO_CHANNEL_EN			0x0
@@ -38,23 +38,23 @@
 #define XBURST1_CHANNEL_EN		(PHY_BASE + 0x0)
 #define XBURST1_MEM_CFG			(PHY_BASE + 0x04)
 #define XBURST1_TRANING_CTRL		(PHY_BASE + 0x08)
-#define XBURST1_WRITE_LEVEL_MODE1	(PHY_BASE + 0x0C)
+#define XBURST1_WRITE_LEVEL_MODE1	(PHY_BASE + 0x0c)
 #define XBURST1_WRITE_LEVEL_MODE2	(PHY_BASE + 0x10)
 #define XBURST1_CL			(PHY_BASE + 0x14)
 #define XBURST1_AL			(PHY_BASE + 0x18)
 
-#define XBURST1_CWL			(PHY_BASE + 0x1C)
-#define XBURST1_DQ_WIDTH		(PHY_BASE + 0x7C)
+#define XBURST1_CWL			(PHY_BASE + 0x1c)
+#define XBURST1_DQ_WIDTH		(PHY_BASE + 0x7c)
 
 #define XBURST1_PLL_FBDIV		(PHY_BASE + 0x80)
 #define XBURST1_PLL_CTRL		(PHY_BASE + 0x84)
 #define XBURST1_PLL_PDIV		(PHY_BASE + 0x88)
 
 #define XBURST1_WL_DONE			(PHY_BASE + 0xc0)
-#define XBURST1_DDR_PLL_LOCK		(PHY_BASE + 0xC8)
-#define XBURST1_CALIB_DONE		(PHY_BASE + 0xCC)
+#define XBURST1_DDR_PLL_LOCK		(PHY_BASE + 0xc8)
+#define XBURST1_CALIB_DONE		(PHY_BASE + 0xcc)
 
-#define XBURST1_INIT_COMP		(PHY_BASE + 0xD0)
+#define XBURST1_INIT_COMP		(PHY_BASE + 0xd0)
 /**************        PHY ADDR  END    ****************/
 
 /**************        PHY Additional Registers   ******/
@@ -66,7 +66,7 @@
 #define XBURST1_REG46			(PHY_BASE + 0x118)
 #define XBURST1_REG56			(PHY_BASE + 0x158)
 
-#define DDR_APB_PHY_INIT		(APB_BASE + 0x8C)
+#define DDR_APB_PHY_INIT		(APB_BASE + 0x8c)
 
 #define REG_DDR_CTRL			(AHB_BASE + 0x008)
 #define REG_DDR_CFG			(AHB_BASE + 0x004)
