@@ -513,7 +513,6 @@ void phy_calibration(int al8_1x, int ah8_1x, int al8_2x, int ah8_2x)
 /* DDR sdram init */
 void sdram_init(void)
 {
-
 	int type = VARIABLE;
 	unsigned int mode;
 	unsigned int bypass = 0;

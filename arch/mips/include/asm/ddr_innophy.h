@@ -1,5 +1,6 @@
 #ifndef XBURST1_PHY
 #define XBURST1_PHY
+
 #include <asm/io.h>
 
 #define PHY_BASE			(0xB3011000)
@@ -49,7 +50,7 @@
 #define XBURST1_PLL_CTRL		(PHY_BASE + 0x84)
 #define XBURST1_PLL_PDIV		(PHY_BASE + 0x88)
 
-#define XBURST1_WL_DONE			(PHY_BASE + 0xC0)
+#define XBURST1_WL_DONE			(PHY_BASE + 0xc0)
 #define XBURST1_DDR_PLL_LOCK		(PHY_BASE + 0xC8)
 #define XBURST1_CALIB_DONE		(PHY_BASE + 0xCC)
 

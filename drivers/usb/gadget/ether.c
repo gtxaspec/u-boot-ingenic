@@ -1219,7 +1219,6 @@ static void eth_setup_complete(struct usb_ep *ep, struct usb_request *req)
 }
 
 #ifdef CONFIG_USB_ETH_RNDIS
-
 static void rndis_response_complete(struct usb_ep *ep, struct usb_request *req)
 {
 #ifdef CONFIG_USB_ETH_HALT
