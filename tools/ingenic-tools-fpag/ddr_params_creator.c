@@ -64,7 +64,7 @@ static int calc_nck(int x, int y)
 	return value;
 }
 
-static void caculate_tck(struct ddr_params *params)
+static void calculate_tck(struct ddr_params *params)
 {
 	params->tck.ps = (1000000000 / (params->freq / 1000));
 	params->tck.ns = (1000000000 % params->freq == 0)
@@ -864,7 +864,7 @@ void fill_in_params(struct ddr_params *ddr_params, int type)
 	ddr_params->type = type;
 	ddr_params->freq = CONFIG_SYS_MEM_FREQ;
 #endif /* !CONFIG_DDR_TYPE_VARIABLE */
-	caculate_tck(ddr_params);
+	calculate_tck(ddr_params);
 #ifndef CONFIG_DDR_TYPE_VARIABLE
 	ddr_params->div = DDR_CLK_DIV;
 	ddr_params->cs0 = CONFIG_DDR_CS0;
