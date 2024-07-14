@@ -74,15 +74,21 @@ void clk_prepare(void)
 		regval = readl(reg);
 		/*set div max*/
 		regval |= 0xff | (1 << cgu->ce);
-		while (readl(reg) & (1 << cgu->busy));
+		while (readl(reg) & (1 << cgu->busy)) {
+			/* do nothing, wait until resolves as false */
+		}
 		writel(regval, reg);
 
 		/*stop clk*/
-		while (readl(reg) & (1 << cgu->busy));
+		while (readl(reg) & (1 << cgu->busy)) {
+			/* do nothing, wait until resolves as false */
+		}
 		regval = readl(reg);
 		regval |= ((1 << cgu->stop) | (1 << cgu->ce));
 		writel(regval, reg);
-		while (readl(reg) & (1 << cgu->busy));
+		while (readl(reg) & (1 << cgu->busy)) {
+			/* do nothing, wait until resolves as false */
+		}
 
 		/*clear ce*/
 		regval = readl(reg);
@@ -341,8 +347,9 @@ void clk_set_rate(int clk, unsigned long rate)
 		regval &= ~(3 << cgu->stop | 0xff);
 	regval |= ((1 << cgu->ce) | cdr);
 	cpm_outl(regval, cgu->off);
-	while (cpm_inl(cgu->off) & (1 << cgu->busy))
-		;
+	while (cpm_inl(cgu->off) & (1 << cgu->busy)) {
+		/* do nothing, wait until resolves as false */
+	}
 #ifdef DUMP_CGU_SELECT
 	printf("%s(0x%x) :0x%x\n",clk_name[clk] ,regval,  cpm_inl(cgu->off));
 #endif
@@ -437,7 +444,9 @@ void otg_phy_init(enum otg_mode_t mode, unsigned extclk)
 		tmp_reg |= (cdr & USBCDR_USBCDR_MSK) | USBCDR_CE_USB;
 		tmp_reg &= ~USBCDR_USB_STOP;
 		cpm_outl(tmp_reg, CPM_USBCDR);
-		while ((cpm_inl(CPM_USBCDR) & USBCDR_USB_BUSY) || timeout--);
+		while ((cpm_inl(CPM_USBCDR) & USBCDR_USB_BUSY) || timeout--) {
+			/* do nothing, wait until resolves as false */
+		}
 		tmp_reg = cpm_inl(CPM_USBCDR);
 		tmp_reg &= ~USBCDR_UPCS_MPLL;
 		tmp_reg |= USBCDR_UCS_PLL;
@@ -445,7 +454,9 @@ void otg_phy_init(enum otg_mode_t mode, unsigned extclk)
 	} else {
 		tmp_reg |= USBCDR_USB_STOP;
 		cpm_outl(tmp_reg, CPM_USBCDR);
-		while ((cpm_inl(CPM_USBCDR) & USBCDR_USB_BUSY) || timeout--);
+		while ((cpm_inl(CPM_USBCDR) & USBCDR_USB_BUSY) || timeout--) {
+			/* do nothing, wait until resolves as false */
+		}
 	}
 	tmp_reg = cpm_inl(CPM_USBCDR);
 	tmp_reg &= ~USBCDR_USB_DIS;

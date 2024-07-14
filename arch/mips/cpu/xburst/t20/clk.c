@@ -301,8 +301,9 @@ void clk_set_rate(int clk, unsigned long rate)
 		regval &= ~(3 << cgu->stop | 0xff);
 	regval |= ((1 << cgu->ce) | cdr);
 	cpm_outl(regval, cgu->off);
-	while (cpm_inl(cgu->off) & (1 << cgu->busy))
-		;
+	while (cpm_inl(cgu->off) & (1 << cgu->busy)) {
+		/* do nothing, wait until resolves as false */
+	}
 #ifdef DUMP_CGU_SELECT
 	printf("%s(0x%x) :0x%x\n",clk_name[clk] ,reg,  cpm_inl(cgu->off));
 #endif

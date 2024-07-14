@@ -171,7 +171,9 @@ static void pll_set(int pll,int freq)
 			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_APLL_MNOD */
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
-			while(!(cpm_inl(CPM_CPAPCR) & (0x1 << 3)));
+			while(!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
 			debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
 			break;
 		case MPLL:
@@ -182,7 +184,9 @@ static void pll_set(int pll,int freq)
 			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_MPLL_MNOD */
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
-			while(!(cpm_inl(CPM_CPMPCR) & (0x1 << 3)));
+			while(!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
 			debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
 			break;
 		case VPLL:
@@ -193,8 +197,9 @@ static void pll_set(int pll,int freq)
 			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_VPLL_MNOD */
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPVPCR);
-			while(!(cpm_inl(CPM_CPVPCR) & (0x1 << 3)))
-				;
+			while (!(cpm_inl(CPM_CPVPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
 			debug("CPM_CPVPCR %x\n", cpm_inl(CPM_CPVPCR));
 			break;
 		default:
@@ -215,7 +220,9 @@ static void cpccr_init(void)
 		| (CPCCR_CFG & ~(0xff << 24))
 		| (7 << 20);
 	cpm_outl(cpccr,CPM_CPCCR);
-	while(cpm_inl(CPM_CPCSR) & 0x7);
+	while(cpm_inl(CPM_CPCSR) & 0x7) {
+		/* do nothing, wait until resolves as false */
+	}
 
 	/* change sel 改变高8位 选择时钟源 */
 	cpccr = (CPCCR_CFG & (0xff << 24)) | (cpm_inl(CPM_CPCCR) & ~(0xff << 24));
@@ -246,7 +253,7 @@ static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
 
 	debug("calculate lcm :a(cpu:%d) and b(ddr%d) 's\t", a, b);
 	while (lcm%lcm_resv &&  lcm < limit)
-	lcm += lcm_unit;
+		lcm += lcm_unit;
 
 	if (lcm%lcm_resv){
 		error("\n a(cpu %d), b(ddr %d) : Can not find Least Common Multiple in range of limit\n", a, b);

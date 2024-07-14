@@ -104,8 +104,9 @@ static void pll_set(int pll,int freq)
 		case APLL:
 			/* Init APLL */
 			cpm_outl(regvalue | (0x1 << 0), CPM_CPAPCR);
-			while(!(cpm_inl(CPM_CPAPCR) & (0x1 << 3)))
-				;
+			while (!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
 			debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
 			break;
 		case MPLL:
@@ -118,8 +119,9 @@ static void pll_set(int pll,int freq)
 
 			}
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
-			while(!(cpm_inl(CPM_CPMPCR) & (0x1 << 3)))
-				;
+			while (!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
 			debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
 			break;
 	}

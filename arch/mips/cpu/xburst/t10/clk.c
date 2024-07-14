@@ -381,8 +381,9 @@ static unsigned int set_ssi_rate(int clk, unsigned long rate)
 	ssicdr &= ~(3 << 27 | 0xff);
 	ssicdr |= ((1 << 29) | cdr);
 	cpm_outl(ssicdr, CPM_SSICDR);
-	while (cpm_inl(CPM_SSICDR) & (1 << 28))
-		;
+	while (cpm_inl(CPM_SSICDR) & (1 << 28)) {
+		/* do nothing, wait until resolves as false */
+	}
 	debug("CPM_SSICDR(%x) = %x\n",CPM_SSICDR, cpm_inl(CPM_SSICDR));
 	return 0;
 }

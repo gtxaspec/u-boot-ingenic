@@ -323,16 +323,19 @@ void ddr_inno_phy_init()
 	debug("phy 0x134 0x%x\n", phy_readl(0x134*4));
 #endif
 	writel(0, DDR_APB_PHY_INIT); // start high
-	while (!(readl(DDR_APB_PHY_INIT) & (1 << 2)))
-		; // pll locked
+	while (!(readl(DDR_APB_PHY_INIT) & (1 << 2))) {
+		/* do nothing, wait until resolves as false */
+	} // pll locked
 	debug("ddr_inno_phy_init ..! 11:  %X\n", readl(DDR_APB_PHY_INIT));
 	writel(0, REG_DDR_CTRL);
 
-	while (!(readl(DDR_APB_PHY_INIT) & (1 << 1)))
-		; // init_complete
+	while (!(readl(DDR_APB_PHY_INIT) & (1 << 1))) {
+		/* do nothing, wait until resolves as false */
+	} // init_complete
 	debug("ddr_inno_phy_init ..! 22:  %X\n", readl(DDR_APB_PHY_INIT));
-	while (!readl(XBURST1_INIT_COMP))
-		;
+	while (!readl(XBURST1_INIT_COMP)) {
+		/* do nothing, wait until resolves as false */
+	}
 	debug("ddr_inno_phy_init ..! 33:  %X\n", readl(DDR_APB_PHY_INIT));
 	writel(0, REG_DDR_CTRL);
 
@@ -371,42 +374,50 @@ void ddr_inno_phy_init()
 	writel(0, REG_DDR_LMR);
 #else
 	writel(0x400001, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 
 	writel(0x211, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 
 	writel(0x311, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 
 	writel(0x111, REG_DDR_LMR);
 	debug("REG_DDR_LMR: %x\n", readl(REG_DDR_LMR));
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 
 	reg = ((DDRP_MR0_VALUE) << 12) | 0x011;
 	writel(reg, REG_DDR_LMR);
 	debug("REG_DDR_LMR, MR0: %x\n", reg);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 	udelay(5 * 1000);
 
 	writel(0x400001, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 
 	writel(0x400009, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 
 	writel(0x400009, REG_DDR_LMR);
-	while ((0x1 & readl(REG_DDR_LMR)) == 1)
-		;
+	while ((0x1 & readl(REG_DDR_LMR)) == 1) {
+		/* do nothing, wait until resolves as false */
+	}
 	udelay(5 * 1000);
 
 #endif
@@ -422,8 +433,9 @@ void ddr_inno_phy_init()
 	writel(0x40, 0xb3011010);
 	writel(0xa4, 0xb3011008);
 
-	while (0x3 != readl((PHY_BASE + 0xc0)))
-		;
+	while (0x3 != readl((PHY_BASE + 0xc0))) {
+		/* do nothing, wait until resolves as false */
+	}
 	debug("XBURST1_c0: %x\n", readl((PHY_BASE + 0xc0)));
 
 	writel(0xa1, 0xb3011008);
