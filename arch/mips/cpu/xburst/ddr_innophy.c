@@ -325,13 +325,13 @@ void ddr_inno_phy_init()
 	writel(0, DDR_APB_PHY_INIT); // start high
 	while (!(readl(DDR_APB_PHY_INIT) & (1 << 2))) {
 		/* do nothing, wait until resolves as false */
-	} // pll locked
+	} /* pll locked */
 	debug("ddr_inno_phy_init ..! 11:  %X\n", readl(DDR_APB_PHY_INIT));
 	writel(0, REG_DDR_CTRL);
 
 	while (!(readl(DDR_APB_PHY_INIT) & (1 << 1))) {
 		/* do nothing, wait until resolves as false */
-	} // init_complete
+	} /* init_complete */
 	debug("ddr_inno_phy_init ..! 22:  %X\n", readl(DDR_APB_PHY_INIT));
 	while (!readl(XBURST1_INIT_COMP)) {
 		/* do nothing, wait until resolves as false */
