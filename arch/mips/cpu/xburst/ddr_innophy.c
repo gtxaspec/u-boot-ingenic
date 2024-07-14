@@ -285,7 +285,7 @@ void ddr_inno_phy_init()
 
 	phy_writel(0x0, INNO_TRAINING_CTRL); // ADDR:9’h002
 	phy_writel(0x03, INNO_DQ_WIDTH);     // ADDR:9’h01f
-#ifdef CONFIG_DDR_TYPE_DDR3
+#if defined(CONFIG_DDR_TYPE_DDR3)
 	phy_writel(0x30, INNO_MEM_CFG);                                                    // ADDR:9’h011 MEMSEL = DDR3, BURSEL = burst8
 	phy_writel((readl(PHY_BASE + 0x154) & 0xffffff8f), 0x154); // ADDR:9’h055
 	phy_writel((readl(PHY_BASE + 0x114) & 0xffffff8f), 0x114); // ADDR:9’h045
