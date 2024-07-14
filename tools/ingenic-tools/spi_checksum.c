@@ -13,50 +13,37 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef CONFIG_JZ4775
-#define SKIP_SIZE 16
-#endif
-#ifdef CONFIG_JZ4780
-#define SKIP_SIZE 16
-#endif
-#ifdef CONFIG_M200
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T5
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T10
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T15
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T15G
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T20
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T21
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T23
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T30
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T31
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T40
-#define SKIP_SIZE 2048
-#endif
-#ifdef CONFIG_T41
-#define SKIP_SIZE 2048
-#endif
-
 #define BUFFER_SIZE 4
+
+#if defined(CONFIG_JZ4775)
+#define SKIP_SIZE 16
+#elif defined(CONFIG_JZ4780)
+#define SKIP_SIZE 16
+#elif defined(CONFIG_M200)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T5)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T10)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T15)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T15G)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T20)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T21)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T23)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T30)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T31)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T40)
+#define SKIP_SIZE 2048
+#elif defined(CONFIG_T41)
+#define SKIP_SIZE 2048
+#endif
 
 #define le(a) (((a & 0xff)<<24) | ((a>>8 & 0xff)<< 16) | ((a>>16 & 0xff)<< 8) | ((a>>24 & 0xff)))
 
