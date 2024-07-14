@@ -10,7 +10,6 @@
 #include <common.h>
 #include <serial.h>
 #include <linux/compiler.h>
-
 #include <asm/io.h>
 #include <asm/jz_uart.h>
 #include <asm/arch/base.h>
@@ -26,7 +25,6 @@ DECLARE_GLOBAL_DATA_PTR;
  *
  * RETURNS: N/A
  */
-
 struct jz_uart *uart __attribute__ ((section(".data")));
 
 static int jz_serial_init(void)

@@ -922,7 +922,7 @@ static const void *boot_get_kernel(cmd_tbl_t *cmdtp, int flag, int argc,
 	buf = map_sysmem(img_addr, 0);
 	switch (genimg_get_format(buf)) {
 	case IMAGE_FORMAT_LEGACY:
-		printf("###### Booting kernel from Legacy Image at 0x%08lx ######\n",
+		printf("## Booting kernel from Legacy Image at 0x%08lx ...\n",
 				img_addr);
 		hdr = image_get_kernel(img_addr, images->verify);
 		if (!hdr)

@@ -51,7 +51,6 @@ _start:
 	RESERVED_FOR_SC(0)
 #endif /* CONFIG_SPL_SFC_SUPPORT */
 
-
 #ifdef CONFIG_SPL_SPI_SUPPORT
 #define SSI_GR_BOOT (CONFIG_SYS_EXTAL / (CONFIG_SYS_SPI_BOOT_FREQ * 2) - 1)
 #ifdef CONFIG_SPI_NAND
@@ -165,4 +164,3 @@ cache_alloc_a_line:
 #endif
 	j	board_init_f
 	nop
-

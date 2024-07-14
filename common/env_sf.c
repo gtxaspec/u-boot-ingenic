@@ -56,6 +56,7 @@ int saveenv(void)
 		env_flash = spi_flash_probe(CONFIG_ENV_SPI_BUS,
 			CONFIG_ENV_SPI_CS,
 			CONFIG_ENV_SPI_MAX_HZ, CONFIG_ENV_SPI_MODE);
+
 		if (!env_flash) {
 			set_default_env("!spi_flash_probe() failed");
 			return 1;

@@ -118,12 +118,10 @@ void cgu_clks_set(struct cgu *cgu_clks, int nr_cgu_clks)
 				reg = CPM_BASE + cgu_clks[i].off;
 				xcdr = readl(reg);
 				xcdr &= ~(3 << 30);
-
 				xcdr |= j << cgu_clks[i].sel_bit;
 				if (i == SSI)//fix ssi to extal
 					xcdr &= ~(1 << 29);
 				writel(xcdr, reg);
-
 #ifdef DUMP_CGU_SELECT
 				printf("%s: 0x%X: value=0x%X j = %d\n", cgu_name(i), reg, readl(reg), j);
 #endif

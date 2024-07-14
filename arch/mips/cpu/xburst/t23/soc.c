@@ -9,6 +9,7 @@
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -151,12 +152,8 @@ extern void flush_cache_all(void);
 void __noreturn jump_to_image_no_args(struct spl_image_info *spl_image)
 {
 	typedef void __noreturn (*image_entry_noargs_t)(void);
-
-	image_entry_noargs_t image_entry =
-			(image_entry_noargs_t) spl_image->entry_point;
-
+	image_entry_noargs_t image_entry = (image_entry_noargs_t) spl_image->entry_point;
 	flush_cache_all();
-
 	printf("image entry point: 0x%X\n", spl_image->entry_point);
 	image_entry();
 }

@@ -83,14 +83,17 @@ static void print_mmcinfo(struct mmc *mmc)
 	printf("Manufacturer ID: %x\n", mmc->cid[0] >> 24);
 	printf("OEM: %x\n", (mmc->cid[0] >> 8) & 0xffff);
 	printf("Name: %c%c%c%c%c \n", mmc->cid[0] & 0xff,
-			(mmc->cid[1] >> 24), (mmc->cid[1] >> 16) & 0xff,
-			(mmc->cid[1] >> 8) & 0xff, mmc->cid[1] & 0xff);
+			(mmc->cid[1] >> 24),
+			(mmc->cid[1] >> 16) & 0xff,
+			(mmc->cid[1] >> 8) & 0xff,
+			 mmc->cid[1] & 0xff);
 
 	printf("Tran Speed: %d\n", mmc->tran_speed);
 	printf("Rd Block Len: %d\n", mmc->read_bl_len);
 
 	printf("%s version %d.%d\n", IS_SD(mmc) ? "SD" : "MMC",
-			(mmc->version >> 8) & 0xf, mmc->version & 0xff);
+			(mmc->version >> 8) & 0xf,
+			 mmc->version & 0xff);
 
 	printf("High Capacity: %s\n", mmc->high_capacity ? "Yes" : "No");
 	puts("Capacity: ");

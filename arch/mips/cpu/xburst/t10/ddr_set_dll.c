@@ -15,6 +15,7 @@
 #include <asm/io.h>
 #include <asm/ddr_dwc.h>
 #include <asm/arch/cpm.h>
+
 #ifndef CONFIG_FPGA
 void reset_dllA(int bypass,enum ddr_type type)
 {
@@ -28,6 +29,7 @@ void reset_dllA(int bypass,enum ddr_type type)
 	cpm_writel(0x71 | (1 << 6), CPM_DRCG);
 	mdelay(1);
 }
+
 void dynamic_clk_gate_enable(int bypass,enum ddr_type type)
 {
 	unsigned int val;
@@ -37,11 +39,13 @@ void dynamic_clk_gate_enable(int bypass,enum ddr_type type)
 		cpm_outl(val, CPM_DDRCDR);
 	}
 }
+
 static struct jzsoc_ddr_hook ddr_hook={
 	.prev_ddr_init = reset_dllA,
 	.post_ddr_init = NULL,
 //	.post_ddr_init = dynamic_clk_gate_enable,
 };
+
 void soc_ddr_init(void)
 {
 	register_ddr_hook(&ddr_hook);

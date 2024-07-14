@@ -8,6 +8,7 @@
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -101,6 +102,7 @@ static void pll_set(int pll,int freq)
 
 	if (regvalue == -EINVAL)
 		return;
+
 	switch (pll) {
 	case APLL:
 		/* Init APLL */
@@ -205,9 +207,7 @@ static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
 		lcm += lcm_unit;
 
 	if (lcm%lcm_resv) {
-		error("\n a(cpu %d), b(ddr %d) :	\
-				Can not find Least Common Multiple in range of limit\n",
-				a, b);
+		error("\n a(cpu %d), b(ddr %d) : Can not find Least Common Multiple in range of limit\n", a, b);
 		asm volatile ("wait\n\t");
 	}
 	debug("lcm is %d\n",lcm);
@@ -298,6 +298,7 @@ static int freq_correcting(void)
 		final_fill_div(MPLL, APLL);
 		break;
 	}
+
 #undef SEL_MAP
 #undef PLL_MAXVAL
 	return 0;
@@ -331,6 +332,7 @@ int pll_init(void)
 	pll_set(VPLL,pll_cfg.vpll_freq);
 	pll_set(EPLL,pll_cfg.epll_freq);
 #endif
+
 	cpccr_init();
 	{
 		unsigned apll, mpll, cclk, l2clk, h0clk,h2clk,pclk, pll_tmp;

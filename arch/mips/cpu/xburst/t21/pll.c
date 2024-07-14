@@ -8,6 +8,7 @@
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -70,6 +71,7 @@ static unsigned int get_pllreg_value(int freq)
 	unsigned int fvco;
 	unsigned int range,pfd_val;
 	unsigned int pllout;
+
 	/*Unset*/
 	if (freq < 25000000 || freq >3000000000UL){
 		error("uboot pll freq is  not in range \n");
@@ -87,7 +89,6 @@ static unsigned int get_pllreg_value(int freq)
 	for (fbdiv = 1 ; fbdiv <= (512 + 1) ; fbdiv ++ ) {
 		for (refdiv = 1 ; refdiv <=( 64 + 1); refdiv++ ) {
 			for (pllod = 0; pllod <= 6; pllod++) {
-
 				if (pllod == 0) {
 					fdivq = 1;
 				} else {
@@ -169,7 +170,6 @@ static void pll_set(int pll,int freq)
 #else /* !CONFIG_SYS_APLL_MNOD */
 			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_APLL_MNOD */
-
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
 			while(!(cpm_inl(CPM_CPAPCR) & (0x1 << 3)));
 			debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
@@ -192,7 +192,6 @@ static void pll_set(int pll,int freq)
 #else /* !CONFIG_SYS_VPLL_MNOD */
 			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_VPLL_MNOD */
-
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPVPCR);
 			while(!(cpm_inl(CPM_CPVPCR) & (0x1 << 3)))
 				;
@@ -230,8 +229,7 @@ static int inline align_pll(unsigned pllfreq, unsigned alfreq)
 	int div = 0;
 	if (!(pllfreq%alfreq)){
 		div = pllfreq/alfreq ? pllfreq/alfreq : 1;
-	}
-	else{
+	} else {
 		error("pll freq is not integer times than cpu freq or/and ddr freq");
 		asm volatile ("wait\n\t");
 	}
@@ -240,26 +238,24 @@ static int inline align_pll(unsigned pllfreq, unsigned alfreq)
 
 /* Least Common Multiple */
 /*
-   static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
-   {
-   unsigned int lcm_unit = a > b ? a : b;
-   unsigned int lcm_resv = a > b ? b : a;
-   unsigned int lcm = lcm_unit;;
+static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
+{
+	unsigned int lcm_unit = a > b ? a : b;
+	unsigned int lcm_resv = a > b ? b : a;
+	unsigned int lcm = lcm_unit;;
 
-   debug("caculate lcm :a(cpu:%d) and b(ddr%d) 's\t", a, b);
-   while (lcm%lcm_resv &&  lcm < limit)
-   lcm += lcm_unit;
+	debug("calculate lcm :a(cpu:%d) and b(ddr%d) 's\t", a, b);
+	while (lcm%lcm_resv &&  lcm < limit)
+	lcm += lcm_unit;
 
-   if (lcm%lcm_resv){
-   error("\n a(cpu %d), b(ddr %d) :	\
-   Can not find Least Common Multiple in range of limit\n",
-   a, b);
-   asm volatile ("wait\n\t");
-   }
-   debug("lcm is %d\n",lcm);
-   return lcm;
-   }
-   */
+	if (lcm%lcm_resv){
+		error("\n a(cpu %d), b(ddr %d) : Can not find Least Common Multiple in range of limit\n", a, b);
+		asm volatile ("wait\n\t");
+	}
+	debug("lcm is %d\n",lcm);
+	return lcm;
+}
+*/
 
 /*
  * ***********pll全局变量赋值*********************
@@ -336,7 +332,8 @@ static int freq_correcting(void)
 #define SEL_MAP(cpu,ddr) ((cpu<<16)|(ddr&0xffff))
 #define PLL_MAXVAL (3000000000UL)
 	switch (SEL_MAP(CONFIG_CPU_SEL_PLL,CONFIG_DDR_SEL_PLL)) {
-		/*	case SEL_MAP(APLL,APLL):
+/*
+		case SEL_MAP(APLL,APLL):
 			pll_freq = lcm(gd->arch.gi->cpufreq, gd->arch.gi->ddrfreq, PLL_MAXVAL);
 			pll_cfg.apll_freq = align_pll(pll_cfg.apll_freq,pll_freq);
 			final_fill_div(APLL, APLL);
@@ -345,7 +342,8 @@ static int freq_correcting(void)
 			pll_freq = lcm(gd->arch.gi->cpufreq, gd->arch.gi->ddrfreq, PLL_MAXVAL);
 			pll_cfg.mpll_freq = align_pll(pll_cfg.mpll_freq, pll_freq);
 			final_fill_div(MPLL, MPLL);
-			break;   */
+			break;
+*/
 		case SEL_MAP(APLL,MPLL):
 			pll_cfg.mpll_freq = align_pll(pll_cfg.mpll_freq, gd->arch.gi->ddrfreq);
 			pll_cfg.apll_freq = align_pll(pll_cfg.apll_freq, gd->arch.gi->cpufreq);
@@ -361,7 +359,6 @@ static int freq_correcting(void)
 #undef PLL_MAXVAL
 #undef SEL_MAP
 	return 0;
-
 }
 
 #if 0
@@ -389,6 +386,7 @@ int pll_init(void)
 	pll_set(APLL,pll_cfg.apll_freq);
 	pll_set(MPLL,pll_cfg.mpll_freq);
 	pll_set(VPLL,pll_cfg.vpll_freq);
+
 	cpccr_init();
 	{
 		unsigned apll, mpll, vpll, cclk, l2clk, h0clk,h2clk,pclk, pll_tmp;

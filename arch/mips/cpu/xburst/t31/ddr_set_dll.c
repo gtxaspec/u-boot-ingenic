@@ -15,6 +15,7 @@
 #include <asm/io.h>
 #include <asm/ddr_dwc.h>
 #include <asm/arch/cpm.h>
+
 #ifndef CONFIG_FPGA
 
 void reset_dll(void)

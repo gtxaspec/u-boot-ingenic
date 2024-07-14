@@ -7,8 +7,8 @@
  *
  * with the reference on libata and ahci drvier in kernel
  */
-#include <common.h>
 
+#include <common.h>
 #include <command.h>
 #include <pci.h>
 #include <asm/processor.h>

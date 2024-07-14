@@ -39,22 +39,22 @@ static void jz_spi_writel(unsigned int value, unsigned int offset)
 	writel(value, SSI_BASE + offset);
 }
 
-static void jz_spi_flush(void )
+static void jz_spi_flush(void)
 {
 	jz_spi_writel(jz_spi_readl(SSI_CR0) | SSI_CR0_TFLUSH | SSI_CR0_RFLUSH, SSI_CR0);
 }
 
-static unsigned int spi_rxfifo_empty(void )
+static unsigned int spi_rxfifo_empty(void)
 {
 	return (jz_spi_readl(SSI_SR) & SSI_SR_RFE);
 }
 
-static unsigned int spi_txfifo_full(void )
+static unsigned int spi_txfifo_full(void)
 {
 	return (jz_spi_readl(SSI_SR) & SSI_SR_TFF);
 }
 
-static unsigned int spi_get_rxfifo_count(void )
+static unsigned int spi_get_rxfifo_count(void)
 {
 	return ((jz_spi_readl(SSI_SR) & SSI_SR_RFIFONUM_MASK) >> SSI_SR_RFIFONUM_BIT);
 }
@@ -118,7 +118,7 @@ static int mem_compare(const void *buf0, const void *buf1, int len) {
 	return errflag;
 }
 
-void spi_init(void )
+void spi_init(void)
 {
 #if DEBUG
 	unsigned int errorpc;
@@ -247,7 +247,7 @@ int  spi_xfer(struct spi_slave *slave, unsigned int bitlen,
 	return 0;
 }
 
-static void jz_cs_reversal(void )
+static void jz_cs_reversal(void)
 {
 	spi_release_bus(NULL);
 
@@ -641,6 +641,7 @@ int jz_erase(struct spi_flash *flash, u32 offset, size_t len)
 
 	return 0;
 }
+
 #ifdef CONFIG_SPI_FLASH_INGENIC
 static void jz_spi_nand_init(void )
 {

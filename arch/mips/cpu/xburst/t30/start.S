@@ -163,4 +163,3 @@ cache_alloc_a_line:
 #endif
 	j	board_init_f
 	nop
-

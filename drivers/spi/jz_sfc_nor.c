@@ -453,7 +453,8 @@ static int sfc_read(unsigned int addr, unsigned int addr_plus,
 
 #define CPM_SSICDR (0xb0000000 + 0x74)
 #define CPM_CLKGR0 (0xb0000000 + 0x20)
-int sfc_init(void )
+
+int sfc_init(void)
 {
 	unsigned int i;
 	volatile unsigned int tmp;
@@ -462,9 +463,9 @@ int sfc_init(void )
 	sfc_rate = 50000000;
 	clk_set_rate(SSI, sfc_rate);
 #else
-	if(sfc_rate !=0 )
+	if (sfc_rate != 0) {
 		clk_set_rate(SSI, sfc_rate);
-	else{
+	} else {
 		printf("this will be an error that the sfc rate is 0\n");
 		sfc_rate = 70000000;
 		clk_set_rate(SSI, sfc_rate);

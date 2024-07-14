@@ -95,9 +95,7 @@
 #define PHY_INIT_COMP		(*(volatile unsigned int *)XBURST1_INIT_COMP        )
 /***********                  PHY REGISTER  END                    ****************/
 
-
 #define phy_writel(value, reg)		writel((value), PHY_BASE+reg)
 #define phy_readl(reg)			readl(PHY_BASE+reg)
-
 
 #endif

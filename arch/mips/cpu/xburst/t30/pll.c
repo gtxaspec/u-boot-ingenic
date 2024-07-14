@@ -8,6 +8,7 @@
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -240,8 +241,7 @@ static int inline align_pll(unsigned pllfreq, unsigned alfreq)
 	int div = 0;
 	if (!(pllfreq%alfreq)){
 		div = pllfreq/alfreq ? pllfreq/alfreq : 1;
-	}
-	else{
+	} else {
 		error("pll freq is not integer times than cpu freq or/and ddr freq");
 		asm volatile ("wait\n\t");
 	}

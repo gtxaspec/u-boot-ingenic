@@ -40,7 +40,7 @@
 #include <version.h>
 
 #if defined(CONFIG_HARD_I2C) || \
-    defined(CONFIG_SOFT_I2C)
+	defined(CONFIG_SOFT_I2C)
 #include <i2c.h>
 #endif
 

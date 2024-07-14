@@ -44,8 +44,7 @@ static int do_jbootrom_part(unsigned long bootrom_addr)
 	/* Copy bootrom.bin to bootram*/
 	src = (unsigned int *)store_addr;
 	dst = (unsigned int *)ram_addr;
-	printf("copy %d byte data fromt %p to %p\n", BOOT_ROM_SIZE,
-			src, dst);
+	printf("copy %d byte data fromt %p to %p\n", BOOT_ROM_SIZE, src, dst);
 	while (count < (BOOT_ROM_SIZE/sizeof(int))) {
 		*dst++  = src[count++];
 	}

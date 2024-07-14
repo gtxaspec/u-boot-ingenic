@@ -8,6 +8,7 @@
  */
 
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -125,12 +126,10 @@ static void pll_set(int pll,int freq)
 #else /* !CONFIG_SYS_APLL_MNOD */
 		cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_APLL_MNOD */
-
 		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
 		while(!(cpm_inl(CPM_CPAPCR) & (0x1 << 3)));
 		debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
 		break;
-
 	case MPLL:
 		/* Init MPLL */
 #ifdef CONFIG_SYS_MPLL_MNOD
@@ -141,7 +140,6 @@ static void pll_set(int pll,int freq)
 #else /* !CONFIG_SYS_MPLL_MNOD */
 		cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_MPLL_MNOD */
-
 		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
 		while(!(cpm_inl(CPM_CPMPCR) & (0x1 << 3)));
 		debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
@@ -193,9 +191,7 @@ static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
 		lcm += lcm_unit;
 
 	if (lcm%lcm_resv) {
-		error("\n a(cpu %d), b(ddr %d) :	\
-				Can not find Least Common Multiple in range of limit\n",
-				a, b);
+		error("\n a(cpu %d), b(ddr %d) : Can not find Least Common Multiple in range of limit\n", a, b);
 		asm volatile ("wait\n\t");
 	}
 	debug("lcm is %d\n",lcm);
@@ -261,12 +257,10 @@ static int freq_correcting(void)
 			int i, val;					\
 			int index = 0;					\
 			int gpio_cnt = sizeof(gpio_cpufreq_table) / sizeof(gpio_cpufreq_table[0]); \
-									\
 			for (i = 0; i < gpio_cnt; i++) {		\
 				val = gpio_get_value(gpio_cpufreq_table[i]); \
 				index |= val << i;			\
 			}						\
-									\
 			index;						\
 		})
 
@@ -335,6 +329,7 @@ int pll_init(void)
 	freq_correcting();
 	pll_set(APLL,pll_cfg.apll_freq);
 	pll_set(MPLL,pll_cfg.mpll_freq);
+
 	cpccr_init();
 	{
 		unsigned apll, mpll, cclk, l2clk, h0clk,h2clk,pclk, pll_tmp;

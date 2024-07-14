@@ -8,6 +8,7 @@
  * SPDX-License-Identifier:	GPL-2.0+
  */
 #define DEBUG
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -115,8 +116,7 @@ void cgu_clks_set(struct cgu *cgu_clks, int nr_cgu_clks)
 
 	for(i = 0; i < nr_cgu_clks; i++) {
 		for (j = 0; j < 4; j++) {
-			if (cgu_clks[i].sel_src == cgu_clks[i].sel[j] &&
-					cgu_clks[i].en == 1) {
+			if (cgu_clks[i].sel_src == cgu_clks[i].sel[j] && cgu_clks[i].en == 1) {
 				reg = CPM_BASE + cgu_clks[i].off;
 				xcdr = readl(reg);
 				xcdr &= ~(3 << 30);
@@ -240,7 +240,6 @@ unsigned int clk_get_rate(int clk)
 		return pll_get_rate(APLL);
 	case MPLL:
 		return pll_get_rate(MPLL);
-
 	}
 
 	return 0;

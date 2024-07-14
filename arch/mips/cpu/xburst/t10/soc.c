@@ -8,7 +8,8 @@
  * SPDX-License-Identifier:	GPL-2.0+
  */
 
- /*#define DEBUG */
+/*#define DEBUG */
+
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -47,13 +48,11 @@ void board_init_f(ulong dummy)
 #else
 	gd->arch.gi = (struct global_info *)CONFIG_SPL_GINFO_BASE;
 #endif
-
 #ifdef CONFIG_BURNER
 	gd->arch.gi->ddr_div = ((gd->arch.gi->cpufreq % gd->arch.gi->ddrfreq) == 0)
 		               ? (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq)
 		               : (gd->arch.gi->cpufreq / gd->arch.gi->ddrfreq + 1);
 #endif
-
 	gpio_init();
 
 #ifndef CONFIG_FPGA

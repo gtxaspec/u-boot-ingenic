@@ -18,6 +18,7 @@
  * Copyright (C) 2003-2005 Nokia Corporation
  * Written by Juha Yrjölä <juha.yrjola@nokia.com>
  */
+
 #include <common.h>
 #include <asm/gpio.h>
 #include <asm/io.h>

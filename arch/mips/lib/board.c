@@ -323,7 +323,6 @@ void board_init_f(ulong bootflag)
  */
 void board_init_r(gd_t *id, ulong dest_addr)
 {
-
 #ifndef CONFIG_SYS_NO_FLASH
 	ulong size;
 #endif
@@ -418,7 +417,7 @@ void board_init_r(gd_t *id, ulong dest_addr)
 
 	/* Initialize the console (after the relocation and devices init) */
 	console_init_r();
-/** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
+	/** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
 
 	/* Initialize from environment */
 	load_addr = getenv_ulong("loadaddr", 16, load_addr);
@@ -547,7 +546,6 @@ extern void board_usb_init(void);
 		/* MMC specific user GPIO set */
 		handle_gpio_settings("gpio_mmc_power");
 	}
-
 #endif
 
 /* IRCUT GPIO set */

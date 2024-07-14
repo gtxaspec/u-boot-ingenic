@@ -358,7 +358,7 @@ void process_gpio_token(char* token) {
 	// Check if the mode character is present and valid
 	char mode = (*endptr) ? *endptr : 'i'; // Default to 'i' (input) if no mode specified
 
-	#ifdef CONFIG_T31
+#if defined(CONFIG_T31)
 	bool disablePullUp = false;
 	bool disablePullDown = false;
 
@@ -377,7 +377,7 @@ void process_gpio_token(char* token) {
 		}
 		ptr++;
 	}
-	#endif
+#endif
 
 	gpio_request(gpio, "gpio_set");
 	printf(" ");
