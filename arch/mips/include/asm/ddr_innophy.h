@@ -1,5 +1,5 @@
-#ifndef XBURST1_PHY
-#define XBURST1_PHY
+#ifndef _XBURST1_PHY_
+#define _XBURST1_PHY_
 
 #include <asm/io.h>
 
