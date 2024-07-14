@@ -70,7 +70,6 @@ static int do_jbootrom_part(unsigned long bootrom_addr)
 
 static int do_jbootrom(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
-	unsigned int bootram_addr;
 	unsigned int bootrom_addr;
 
 #ifndef BOOT_RAM_LOADADDR
