@@ -1366,8 +1366,15 @@ struct spi_flash *spi_flash_probe_ingenic(struct spi_slave *spi, u8 *idcode)
 	struct spi_flash *flash;
 
 	id = (idcode[0] << 16) | (idcode[1] << 8) | (idcode[2]);
-	if (sfc_nor_init(id) < 0)
+
+	int ret = sfc_nor_init(id);
+	if (ret < 0)
 		return NULL;
+
+	if (ret > 0) {
+		printf("ingenic: Attention! The chip is not recognized! \n");
+//		return NULL;
+	}
 
 	flash = spi_flash_alloc_base(spi, gparams.name);
 	if (!flash) {
