@@ -20,7 +20,7 @@ DECLARE_GLOBAL_DATA_PTR;
 
 /* --------------------------------------------------------------- */
 
-void get_sys_info (sys_info_t * sysInfo)
+void get_sys_info(sys_info_t *sysInfo)
 {
 	volatile ccsr_gur_t *gur = (void *)(CONFIG_SYS_MPC85xx_GUTS_ADDR);
 #ifdef CONFIG_FSL_IFC

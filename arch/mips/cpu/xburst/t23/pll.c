@@ -338,7 +338,7 @@ int pll_init(void)
 	pll_set(MPLL,pll_cfg.mpll_freq);
 	cpccr_init();
 	{
-		unsigned apll, mpll, cclk, l2clk, h0clk,h2clk,pclk, pll_tmp;
+		unsigned apll, mpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
 
@@ -363,8 +363,7 @@ int pll_init(void)
 		debug("ddr sel %s, cpu sel %s\n", CONFIG_DDR_SEL_PLL == APLL ? "apll" : "mpll",
 				CONFIG_CPU_SEL_PLL == APLL ? "apll" : "mpll");
 		debug("ddrfreq %d\ncclk  %d\nl2clk %d\nh0clk %d\nh2clk %d\npclk  %d\n",
-				gd->arch.gi->ddrfreq,
-				cclk,l2clk,h0clk,h2clk,pclk);
+				gd->arch.gi->ddrfreq, cclk, l2clk, h0clk, h2clk, pclk);
 #endif
 	}
 	return 0;

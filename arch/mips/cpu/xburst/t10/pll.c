@@ -300,8 +300,9 @@ static int freq_correcting(void)
 		final_fill_div(MPLL, APLL);
 		break;
 	}
-#undef SEL_MAP
+
 #undef PLL_MAXVAL
+#undef SEL_MAP
 	return 0;
 }
 

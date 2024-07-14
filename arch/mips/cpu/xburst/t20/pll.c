@@ -325,8 +325,8 @@ static int freq_correcting(void)
 		break;
 	}
 
-#undef SEL_MAP
 #undef PLL_MAXVAL
+#undef SEL_MAP
 	return 0;
 }
 
@@ -358,11 +358,11 @@ int pll_init(void)
 
 	cpccr_init();
 	{
-		unsigned apll, mpll, vpll,cclk, l2clk, h0clk,h2clk,pclk, pll_tmp;
+		unsigned apll, mpll, vpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
 		vpll = clk_get_rate(VPLL);
-		printf("apll_freq %d \nmpll_freq %d \nvpll_freq = %d\n",apll,mpll,vpll);
+		printf("apll_freq %d \nmpll_freq %d \nvpll_freq = %d\n", apll, mpll, vpll);
 
 		if (CONFIG_DDR_SEL_PLL == APLL)
 			pll_tmp = apll;
@@ -383,8 +383,7 @@ int pll_init(void)
 		printf("ddr sel %s, cpu sel %s\n", CONFIG_DDR_SEL_PLL == APLL ? "apll" : "mpll",
 				CONFIG_CPU_SEL_PLL == APLL ? "apll" : "mpll");
 		printf("ddrfreq %d\ncclk  %d\nl2clk %d\nh0clk %d\nh2clk %d\npclk  %d\n",
-				gd->arch.gi->ddrfreq,
-				cclk,l2clk,h0clk,h2clk,pclk);
+				gd->arch.gi->ddrfreq, cclk, l2clk, h0clk, h2clk, pclk);
 	}
 	return 0;
 }
