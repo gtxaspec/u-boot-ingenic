@@ -202,7 +202,7 @@ static unsigned int lcm(unsigned int a, unsigned int b, unsigned int limit)
 	unsigned int lcm_resv = a > b ? b : a;
 	unsigned int lcm = lcm_unit;;
 
-	debug("caculate lcm :a(cpu:%d) and b(ddr%d) 's\t", a, b);
+	debug("calculate lcm :a(cpu:%d) and b(ddr%d) 's\t", a, b);
 	while (lcm%lcm_resv &&  lcm < limit)
 		lcm += lcm_unit;
 
