@@ -74,10 +74,10 @@ static int do_jbootrom(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]
 	unsigned int bootrom_addr;
 
 #ifndef BOOT_RAM_LOADADDR
-#error  "Not define BOOT_RAM_LOADADDR"
+#error  "BOOT_RAM_LOADADDR is not defined"
 #endif
 #ifndef BOOT_ROM_SIZE
-#error  "Not define BOOT_ROM_SIZE"
+#error  "BOOT_ROM_SIZE is not defined"
 #endif
 	if (argc != 2)
 		bootrom_addr = BOOT_ROM_ADDR;
