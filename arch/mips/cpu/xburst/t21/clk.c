@@ -115,8 +115,7 @@ void cgu_clks_set(struct cgu *cgu_clks, int nr_cgu_clks)
 
 	for(i = 0; i < nr_cgu_clks; i++) {
 		for (j = 0; j < 4; j++) {
-			if (cgu_clks[i].sel_src == cgu_clks[i].sel[j] &&
-					cgu_clks[i].en == 1) {
+			if (cgu_clks[i].sel_src == cgu_clks[i].sel[j] && cgu_clks[i].en == 1) {
 				reg = CPM_BASE + cgu_clks[i].off;
 				xcdr = readl(reg);
 				xcdr &= ~(3 << 30);

@@ -316,12 +316,10 @@ static int freq_correcting(void)
 		 int i, val;					\
 		 int index = 0;					\
 		 int gpio_cnt = sizeof(gpio_cpufreq_table) / sizeof(gpio_cpufreq_table[0]); \
-		 \
 		 for (i = 0; i < gpio_cnt; i++) {		\
 		 val = gpio_get_value(gpio_cpufreq_table[i]); \
 		 index |= val << i;			\
 		 }						\
-		 \
 		 index;						\
 		 })
 
