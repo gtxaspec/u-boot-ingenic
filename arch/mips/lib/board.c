@@ -521,6 +521,10 @@ extern void board_usb_init(void);
 #ifdef CONFIG_BITBANGMII
 	bb_miiphy_init();
 #endif
+
+	/* Try to get the value of the 'disable_sd' environment variable */
+	char* disable_sd = getenv("disable_sd");
+
 #if defined(CONFIG_CMD_NET)
 	int ret = 0;
 	char* disable_eth = getenv("disable_eth");
@@ -533,9 +537,6 @@ extern void board_usb_init(void);
 		}
 	}
 #endif
-
-	/* Try to get the value of the 'disable_sd' environment variable */
-	char* disable_sd = getenv("disable_sd");
 	int networkInitializationAttempted = 0;
 
 	/* Check if disable_eth is set to "true" */
