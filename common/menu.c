@@ -1,7 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * Copyright 2010-2011 Calxeda, Inc.
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ * Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
  */
 
 #include <common.h>

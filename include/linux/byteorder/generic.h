@@ -3,7 +3,7 @@
 #define _LINUX_BYTEORDER_GENERIC_H
 
 /*
- * linux/byteorder_generic.h
+ * linux/byteorder/generic.h
  * Generic Byte-reordering support
  *
  * Francois-Rene Rideau <fare@tunes.org> 19970707

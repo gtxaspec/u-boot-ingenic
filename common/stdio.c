@@ -1,8 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * (C) Copyright 2000
  * Paolo Scaffardi, AIRVENT SAM s.p.a - RIMINI(ITALY), arsenio@tin.it
- *
- * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #include <config.h>
@@ -115,7 +114,6 @@ struct stdio_dev* stdio_clone(struct stdio_dev *dev)
 		return NULL;
 
 	_dev = calloc(1, sizeof(struct stdio_dev));
-
 	if(!_dev)
 		return NULL;
 
@@ -124,7 +122,7 @@ struct stdio_dev* stdio_clone(struct stdio_dev *dev)
 	return _dev;
 }
 
-int stdio_register (struct stdio_dev * dev)
+int stdio_register(struct stdio_dev * dev)
 {
 	struct stdio_dev *_dev;
 

@@ -103,7 +103,8 @@ static char remcomOutBuffer[BUFMAX];
 static char remcomRegBuffer[BUFMAX];
 
 static int initialized = 0;
-static int kgdb_active = 0, first_entry = 1;
+static int kgdb_active = 0;
+static int first_entry = 1;
 static struct pt_regs entry_regs;
 static long error_jmp_buf[BUFMAX/2];
 static int longjmp_on_fault = 0;
@@ -326,7 +327,7 @@ handle_exception (struct pt_regs *regs)
 		return (0);
 	}
 
-	/* probably should check which exception occured as well */
+	/* probably should check which exception occurred as well */
 	if (longjmp_on_fault) {
 		longjmp_on_fault = 0;
 		kgdb_longjmp(error_jmp_buf, KGDBERR_MEMFAULT);

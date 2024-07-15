@@ -1,8 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
  * (C) Copyright 2004
  * Wolfgang Denk, DENX Software Engineering, wd@denx.de.
- *
- * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #include <config.h>
@@ -46,8 +45,7 @@ long get_ram_size(long *base, long maxsize)
 
 	sync ();
 	if ((val = *addr) != 0) {
-		/* Restore the original data before leaving the function.
-		 */
+		/* Restore the original data before leaving the function. */
 		sync ();
 		*addr = save[i];
 		for (cnt = 1; cnt < maxsize / sizeof(long); cnt <<= 1) {
@@ -64,9 +62,13 @@ long get_ram_size(long *base, long maxsize)
 		*addr = save[--i];
 		if (val != ~cnt) {
 			size = cnt * sizeof (long);
-			/* Restore the original data before leaving the function.
+			/*
+			 * Restore the original data
+			 * before leaving the function.
 			 */
-			for (cnt <<= 1; cnt < maxsize / sizeof (long); cnt <<= 1) {
+			for (cnt <<= 1;
+			     cnt < maxsize / sizeof(long);
+			     cnt <<= 1) {
 				addr  = base + cnt;
 				*addr = save[--i];
 			}

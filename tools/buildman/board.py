@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0+
 # Copyright (c) 2012 The Chromium OS Authors.
 
+
+"""A single board which can be selected and built"""
+
 class Board:
     """A particular board that we can build"""
     def __init__(self, target, arch, cpu, board_name, vendor, soc, options):
