@@ -1053,6 +1053,8 @@ unsigned int get_partition_index(u32 offset, int *pt_offset, int *pt_size)
 
 int sfc_nor_init(unsigned int idcode)
 {
+	int i;
+
 	debug("sfc_nor_init() at %s, %d\n", __FILE__, __LINE__);
 
 	if (idcode == 0 || idcode == 0xff) {
@@ -1061,7 +1063,7 @@ int sfc_nor_init(unsigned int idcode)
 	}
 	printf("JZ SFC: Flash chip ID: %x\n", idcode);
 
-	for (int i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
+	for (i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
 		gparams = jz_spi_support_table[i];
 		if (gparams.id_manufactory == idcode) {
 			if (sfc_quad_mode == 1)
