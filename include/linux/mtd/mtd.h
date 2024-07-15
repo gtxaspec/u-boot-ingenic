@@ -1,7 +1,7 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
 /*
  * Copyright (C) 1999-2003 David Woodhouse <dwmw2@infradead.org> et al.
  *
- * Released under GPL
  */
 
 #ifndef __MTD_MTD_H__

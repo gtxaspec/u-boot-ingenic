@@ -1,9 +1,9 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
 /*
  * MTD device concatenation layer definitions
  *
- * (C) 2002 Robert Kaiser <rkaiser@sysgo.de>
+ * Copyright © 2002      Robert Kaiser <rkaiser@sysgo.de>
  *
- * This code is GPL
  */
 
 #ifndef MTD_CONCAT_H

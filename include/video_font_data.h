@@ -1,11 +1,7 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
 /*
  * (C) Copyright 2000
  * Paolo Scaffardi, AIRVENT SAM s.p.a - RIMINI(ITALY), arsenio@tin.it
- *
- * See file CREDITS for list of people who contributed to this
- * project.
- *
- * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #ifndef _VIDEO_FONT_DATA_

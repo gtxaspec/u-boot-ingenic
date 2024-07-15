@@ -1,16 +1,16 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
 /*
  *  linux/include/linux/mtd/bbm.h
  *
  *  NAND family Bad Block Management (BBM) header file
  *    - Bad Block Table (BBT) implementation
  *
- *  Copyright (c) 2005-2007 Samsung Electronics
+ *  Copyright © 2005 Samsung Electronics
  *  Kyungmin Park <kyungmin.park@samsung.com>
  *
- *  Copyright (c) 2000-2005
+ *  Copyright © 2000-2005
  *  Thomas Gleixner <tglx@linuxtronix.de>
  *
- * SPDX-License-Identifier:	GPL-2.0+
  */
 #ifndef __LINUX_MTD_BBM_H
 #define __LINUX_MTD_BBM_H

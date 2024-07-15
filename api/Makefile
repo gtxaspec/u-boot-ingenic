@@ -1,8 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0+
 #
 # (C) Copyright 2007 Semihalf
-#
-# SPDX-License-Identifier:	GPL-2.0+
-#
 
 include $(TOPDIR)/config.mk
 
