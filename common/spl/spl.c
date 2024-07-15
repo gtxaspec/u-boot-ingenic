@@ -150,6 +150,7 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 #ifdef CONFIG_SPL_BOARD_INIT
 	spl_board_init();
 #endif
+
 	boot_device = spl_boot_device();
 	debug("boot device - %d\n", boot_device);
 #ifdef CONFIG_PALLADIUM
@@ -237,7 +238,6 @@ void board_init_r(gd_t *dummy1, ulong dummy2)
 	default:
 		debug("Unsupported OS image.. Jumping nevertheless..\n");
 	}
-
 	jump_to_image_no_args(&spl_image);
 }
 

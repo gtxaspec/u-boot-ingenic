@@ -259,7 +259,6 @@ static int sfc_read_data(unsigned int *data, unsigned int length)
 	return 0;
 }
 
-
 static int sfc_write_data(unsigned int *data, unsigned int length)
 {
 	unsigned int tmp_len = 0;
@@ -295,7 +294,6 @@ static int sfc_write_data(unsigned int *data, unsigned int length)
 
 	if ((jz_sfc_readl(SFC_SR)) & END)
 		jz_sfc_writel(CLR_END,SFC_SCR);
-
 
 	return 0;
 }
@@ -1081,7 +1079,6 @@ int sfc_nor_init(unsigned int idcode)
 
 int sfc_nor_read(struct spi_flash *flash, unsigned int src_addr, unsigned int count,unsigned int dst_addr)
 {
-
 	int i;
 	int ret = 0;
 
@@ -1110,7 +1107,6 @@ int sfc_nor_read(struct spi_flash *flash, unsigned int src_addr, unsigned int co
 
 int sfc_nor_write(struct spi_flash *flash, unsigned int src_addr, unsigned int count,unsigned int dst_addr)
 {
-
 	int i;
 	int ret = 0;
 

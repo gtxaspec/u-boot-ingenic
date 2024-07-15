@@ -24,7 +24,7 @@ struct mtd_oob_buf {
 	unsigned char __user *ptr;
 };
 
-/*
+/**
  * MTD operation modes
  *
  * @MTD_OPS_PLACE_OOB:	OOB data are placed at the given offset (default)

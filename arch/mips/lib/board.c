@@ -72,7 +72,7 @@ static int init_func_ram(void)
 
 	gd->ram_size = initdram(board_type);
 	if (gd->ram_size > 0) {
-		print_size(gd->ram_size, "\n\n");
+		print_size(gd->ram_size, "\n");
 		return 0;
 	}
 	puts(failed);

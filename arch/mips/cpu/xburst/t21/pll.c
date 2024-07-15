@@ -65,11 +65,11 @@ static unsigned int get_pllreg_value(int freq)
 	cpm_cpxpcr_t cppcr;
 	unsigned int pllfreq = freq / 1000000;
 	unsigned int extal = gd->arch.gi->extal / 1000000;
-	unsigned int fbdiv=0,refdiv=0,fdivq=1;
-	unsigned int pllm=0,plln=0,pllod=1;
-	unsigned int flag=0;
+	unsigned int fbdiv = 0, refdiv = 0, fdivq = 1;
+	unsigned int pllm = 0, plln = 0, pllod = 1;
+	unsigned int flag = 0;
 	unsigned int fvco;
-	unsigned int range,pfd_val;
+	unsigned int range, pfd_val;
 	unsigned int pllout;
 
 	/*Unset*/
@@ -148,7 +148,7 @@ static unsigned int get_pllreg_value(int freq)
 	cppcr.b.PLLN = plln;
 	cppcr.b.PLLOD = pllod;
 	cppcr.b.PLLRG = range;
-	printf("fbdiv = %d , refdiv = %d , fdivq = %d ,pllod = %d range = %d\n",fbdiv,refdiv,fdivq,pllod, range);
+	printf("fbdiv = %d , refdiv = %d , fdivq = %d ,pllod = %d range = %d\n", fbdiv, refdiv, fdivq, pllod, range);
 	printf("cppcr is %x\n",cppcr.d32);
 	return cppcr.d32;
 }
@@ -401,7 +401,7 @@ int pll_init(void)
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
 		vpll = clk_get_rate(VPLL);
-		printf("apll_freq %d \nmpll_freq %d \nvpll_freq = %d \n", apll, mpll, vpll);
+		printf("apll_freq %d\nmpll_freq %d\nvpll_freq = %d\n", apll, mpll, vpll);
 
 		if (CONFIG_DDR_SEL_PLL == APLL)
 			pll_tmp = apll;

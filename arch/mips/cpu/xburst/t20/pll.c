@@ -58,7 +58,7 @@ static unsigned int get_pllreg_value(int freq)
 	cpm_cpxpcr_t cppcr;
 	unsigned int pllfreq = freq / 1000000;
 	unsigned int extal = gd->arch.gi->extal / 1000000;
-	unsigned nr = 0,nf = 0,od1 =7 ,od0;
+	unsigned nr = 0, nf = 0, od1 = 7, od0;
 
 	/*Unset*/
 	if (freq < 600000000) {

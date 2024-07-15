@@ -101,7 +101,7 @@ static unsigned int get_pllreg_value(int freq)
 		cppcr.b.PLLOD1 *= 2;
 	}
 
-	printf("nf=%d nr = %d od0 = %d od1 = %d\n",nf,nr,od0,od1);
+	printf("nf=%d nr = %d od0 = %d od1 = %d\n", nf, nr, od0, od1);
 	printf("cppcr is %x\n",cppcr.d32);
 
 	return cppcr.d32;

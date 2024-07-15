@@ -71,6 +71,7 @@ void flush_dcache_range(ulong start_addr, ulong stop)
 	unsigned long addr = start_addr & ~(lsize - 1);
 	unsigned long aend = (stop - 1) & ~(lsize - 1);
 	unsigned int writebuffer;
+
 	for (; addr <= aend; addr += lsize)
 		cache_op(HIT_WRITEBACK_INV_D, addr);
 	__asm__ __volatile__("sync");

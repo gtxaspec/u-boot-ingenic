@@ -51,7 +51,7 @@ static unsigned int get_pllreg_value(int freq)
 	cpm_cpxpcr_t cppcr;
 	unsigned int pllfreq = freq / 1000000;
 	unsigned int extal = gd->arch.gi->extal / 1000000;
-	unsigned nr = 0,nf = 0,od1 =7 ,od0;
+	unsigned nr = 0, nf = 0, od1 = 7, od0;
 
 	/*Unset*/
 	if (freq < 600000000) {
@@ -89,7 +89,7 @@ static unsigned int get_pllreg_value(int freq)
 	cppcr.b.PLLN = nr;
 	cppcr.b.PLLOD0 = od0;
 	cppcr.b.PLLOD1 = od1;
-	printf("nf=%d nr = %d od0 = %d od1 = %d\n",nf,nr,od0,od1);
+	printf("nf=%d nr = %d od0 = %d od1 = %d\n", nf, nr, od0, od1);
 	printf("cppcr is %x\n",cppcr.d32);
 
 	return cppcr.d32;

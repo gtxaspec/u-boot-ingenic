@@ -439,8 +439,7 @@ static int bootm_load_os(bootm_headers_t *images, unsigned long *load_end,
 	case IH_COMP_LZO:
 		printf("   Uncompressing %s ... ", type_name);
 
-		ret = lzop_decompress(image_buf, image_len, load_buf,
-				      &unc_len);
+		ret = lzop_decompress(image_buf, image_len, load_buf, &unc_len);
 		if (ret != LZO_E_OK) {
 			printf("LZO: uncompress or overwrite error %d "
 			      "- must RESET board to recover\n", ret);
@@ -797,8 +796,9 @@ int do_bootm(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	return do_bootm_states(cmdtp, flag, argc, argv, BOOTM_STATE_START |
 		BOOTM_STATE_FINDOS | BOOTM_STATE_FINDOTHER |
-		BOOTM_STATE_LOADOS | BOOTM_STATE_OS_PREP |
-		BOOTM_STATE_OS_FAKE_GO | BOOTM_STATE_OS_GO, &images, 1);
+		BOOTM_STATE_LOADOS |
+		BOOTM_STATE_OS_PREP | BOOTM_STATE_OS_FAKE_GO |
+		BOOTM_STATE_OS_GO, &images, 1);
 }
 
 int bootm_maybe_autostart(cmd_tbl_t *cmdtp, const char *cmd)
@@ -1385,7 +1385,9 @@ static void fixup_silent_linux(void)
 	const char *env_val;
 	char *cmdline = getenv("bootargs");
 
-	/* Only fix cmdline when requested */
+	/* 
+	 * Only fix cmdline when requested
+	 */
 	if (!(gd->flags & GD_FLG_SILENT))
 		return;
 

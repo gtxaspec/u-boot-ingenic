@@ -79,7 +79,7 @@ struct norflash_params {
 	/* Flash status register num, Max support 3 register */
 	int st_regnum;
 	/* Some NOR flash has different blocksize and block erase command,
-	 *          * One command with One blocksize. */
+	 * One command with One blocksize. */
 	struct spi_nor_block_info block_info;
 	struct spi_quad_mode quad_mode;
 };
