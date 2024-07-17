@@ -154,7 +154,7 @@ void sfc_set_addr_length(int channel, unsigned int value)
 
 void sfc_cmd_en(int channel, unsigned int value)
 {
-	if(value == 1) {
+	if (value == 1) {
 		unsigned int tmp;
 		tmp = jz_sfc_readl(SFC_TRAN_CONF(channel));
 		tmp |= CMD_EN;
@@ -169,7 +169,7 @@ void sfc_cmd_en(int channel, unsigned int value)
 
 void sfc_data_en(int channel, unsigned int value)
 {
-	if(value == 1) {
+	if (value == 1) {
 		unsigned int tmp;
 		tmp = jz_sfc_readl(SFC_TRAN_CONF(channel));
 		tmp |= DATEEN;
@@ -203,7 +203,7 @@ void sfc_dev_addr_plus(int channel, unsigned int value)
 
 void sfc_set_transfer(struct jz_sfc *hw,int dir)
 {
-	if(dir == 1)
+	if (dir == 1)
 		sfc_transfer_direction(GLB_TRAN_DIR_WRITE);
 	else
 		sfc_transfer_direction(GLB_TRAN_DIR_READ);
@@ -227,7 +227,7 @@ static int sfc_read_data(unsigned int *data, unsigned int length)
 	unsigned int reg_tmp = 0;
 	unsigned int  len = (length + 3) / 4 ;
 
-	while(1){
+	while (1) {
 		reg_tmp = jz_sfc_readl(SFC_SR);
 		if (reg_tmp & RECE_REQ) {
 			jz_sfc_writel(CLR_RREQ,SFC_SCR);
@@ -267,13 +267,13 @@ static int sfc_write_data(unsigned int *data, unsigned int length)
 	unsigned int reg_tmp = 0;
 	unsigned int  len = (length + 3) / 4 ;
 
-	while(1){
+	while (1) {
 		reg_tmp = jz_sfc_readl(SFC_SR);
 		if (reg_tmp & TRAN_REQ) {
 			jz_sfc_writel(CLR_TREQ,SFC_SCR);
-			if ((len - tmp_len) > THRESHOLD)
+			if ((len - tmp_len) > THRESHOLD) {
 				fifo_num = THRESHOLD;
-			else {
+			} else {
 				fifo_num = len - tmp_len;
 			}
 
@@ -283,8 +283,9 @@ static int sfc_write_data(unsigned int *data, unsigned int length)
 				tmp_len++;
 			}
 		}
-		if (tmp_len == len)
+		if (tmp_len == len) {
 			break;
+		}
 	}
 
 	reg_tmp = jz_sfc_readl(SFC_SR);
@@ -292,8 +293,9 @@ static int sfc_write_data(unsigned int *data, unsigned int length)
 		reg_tmp = jz_sfc_readl(SFC_SR);
 	}
 
-	if ((jz_sfc_readl(SFC_SR)) & END)
+	if ((jz_sfc_readl(SFC_SR)) & END) {
 		jz_sfc_writel(CLR_END,SFC_SCR);
+	}
 
 	return 0;
 }
@@ -481,8 +483,7 @@ int sfc_init(void)
 	jz_sfc_writel(tmp,SFC_GLB);
 
 	tmp = jz_sfc_readl(SFC_DEV_CONF);
-	tmp &= ~(CMD_TYPE | CPHA | CPOL | SMP_DELAY_MSK |
-			THOLD_MSK | TSETUP_MSK | TSH_MSK);
+	tmp &= ~(CMD_TYPE | CPHA | CPOL | SMP_DELAY_MSK | THOLD_MSK | TSETUP_MSK | TSH_MSK);
 	tmp |= (CEDL | HOLDDL | WPDL | 1 << SMP_DELAY_OFFSET);
 	jz_sfc_writel(tmp,SFC_DEV_CONF);
 
@@ -515,9 +516,9 @@ void sfc_send_cmd(unsigned char *cmd,unsigned int len,unsigned int addr ,unsigne
 	sfc.daten = daten;
 	sfc.len = len;
 
-	if((daten == 1)&&(addr_len != 0)){
+	if ((daten == 1) && (addr_len != 0)) {
 		sfc.sfc_mode = mode;
-	}else{
+	} else {
 		sfc.sfc_mode = 0;
 	}
 	sfc_set_transfer(&sfc,dir);
@@ -525,9 +526,9 @@ void sfc_send_cmd(unsigned char *cmd,unsigned int len,unsigned int addr ,unsigne
 	jz_sfc_writel(START,SFC_TRIG);
 
 	/*this must judge the end status*/
-	if((daten == 0)){
+	if ((daten == 0)) {
 		reg_tmp = jz_sfc_readl(SFC_SR);
-		while (!(reg_tmp & END)){
+		while (!(reg_tmp & END)) {
 			reg_tmp = jz_sfc_readl(SFC_SR);
 		}
 
@@ -1052,29 +1053,35 @@ unsigned int get_partition_index(u32 offset, int *pt_offset, int *pt_size)
 
 int sfc_nor_init(unsigned int idcode)
 {
+	int i;
 
-		int i = 0;
+	if (idcode == 0 || idcode == 0xff) {
+		printf("JZ SFC: Invalid ID: %x\n", idcode);
+		return -1;
+	}
+	printf("JZ SFC: Flash chip ID: %x\n", idcode);
 
-		for (i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
-			gparams = jz_spi_support_table[i];
-			if (gparams.id_manufactory == idcode){
-				if(sfc_quad_mode == 1){
-					quad_mode = &jz_spi_support_table[i].quad_mode;
-				}
-				break;
+	for (i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
+		gparams = jz_spi_support_table[i];
+		if (gparams.id_manufactory == idcode){
+			if (sfc_quad_mode == 1) {
+				quad_mode = &jz_spi_support_table[i].quad_mode;
 			}
+			return 0;
 		}
+	}
 
-		if (i == ARRAY_SIZE(jz_spi_support_table)) {
-			if ((idcode != 0)&&(idcode != 0xff)&&(sfc_quad_mode == 0)){
-				printf("the id code = %x\n",idcode);
-				printf("unsupport ID is if the id not be 0x00,the flash is ok for burner\n");
-			}else{
-				printf("ingenic: sfc quad mode Unsupported ID %x\n", idcode);
-				return -1;
-			}
-		}
-	return 0;
+	if (sfc_quad_mode == 0) {
+		printf("JZ SFC: Unsupported ID, but still maybe good for flashing\n");
+		// compute size from id
+		// 0x17 is 8MB, 0x18 is 16MB, 0x19 is 32MB
+		gparams.size = (8 << ((idcode & 0xff) - 0x17)) * 1024 * 1024;
+		printf("JZ SFC: Unsupported ID, but still maybe good for flashing, size set to %d\n", gparams.size);
+		return 1;
+	} else {
+		printf("JZ SFC: Quad-mode Unsupported ID %x\n", idcode);
+		return -1;
+	}
 }
 
 int sfc_nor_read(struct spi_flash *flash, unsigned int src_addr, unsigned int count,unsigned int dst_addr)
@@ -1098,7 +1105,7 @@ int sfc_nor_read(struct spi_flash *flash, unsigned int src_addr, unsigned int co
 
 	ret = jz_sfc_read(flash,src_addr,count,dst_addr);
 	if (ret) {
-		printf("sfc read error\n");
+		printf("SF: sfc read error\n");
 		return -1;
 	}
 
@@ -1130,7 +1137,7 @@ int sfc_nor_write(struct spi_flash *flash, unsigned int src_addr, unsigned int c
 
 	ret = jz_sfc_write(flash,src_addr,count,dst_addr);
 	if (ret) {
-		printf("sfc write error\n");
+		printf("SF: sfc write error\n");
 		return -1;
 	}
 
@@ -1156,7 +1163,7 @@ int sfc_nor_erase(struct spi_flash *flash, unsigned int src_addr, unsigned int c
 	jz_sfc_writel(1 << 2,SFC_TRIG);
 	ret = jz_sfc_erase(flash,src_addr,count);
 	if (ret) {
-		printf("sfc erase error\n");
+		printf("SF: sfc erase error\n");
 		return -1;
 	}
 
@@ -1169,14 +1176,15 @@ static inline struct jz_sfc_slave *to_jz_sfc(struct spi_slave *slave)
 	return container_of(slave, struct jz_sfc_slave, slave);
 }
 
-struct spi_slave *spi_setup_slave(unsigned int bus, unsigned int cs,
-		unsigned int max_hz, unsigned int mode)
+struct spi_slave *spi_setup_slave(unsigned int bus, unsigned int cs, unsigned int max_hz, unsigned int mode)
 {
 	struct jz_sfc_slave *ss;
 
 	ss = spi_alloc_slave(struct jz_sfc_slave, bus, cs);
-	if (!ss)
+	if (!ss) {
+		debug("SF: spi_alloc_slave failed!\n");
 		return NULL;
+	}
 
 	ss->mode = mode;
 	ss->max_hz = max_hz;
@@ -1225,14 +1233,13 @@ void sfc_for_nand_init(int sfc_quad_mode)
 	jz_sfc_writel(tmp,SFC_DEV_CONF);
 	for (i = 0; i < 6; i++) {
 		jz_sfc_writel((jz_sfc_readl(SFC_TRAN_CONF(i))& (~(TRAN_MODE_MSK | PHASE_FORMAT))),SFC_TRAN_CONF(i));
-	     if(sfc_quad_mode==1)
-	     {
-		unsigned int temp=0;
-		temp=jz_sfc_readl(SFC_TRAN_CONF(i));
-		temp&=~(7<<29);
-		temp|=(5<<29);
-		jz_sfc_writel(temp,SFC_TRAN_CONF(i));
-	     }
+		if (sfc_quad_mode==1) {
+			unsigned int temp=0;
+			temp=jz_sfc_readl(SFC_TRAN_CONF(i));
+			temp&=~(7<<29);
+			temp|=(5<<29);
+			jz_sfc_writel(temp,SFC_TRAN_CONF(i));
+		}
 	}
 	jz_sfc_writel((CLR_END | CLR_TREQ | CLR_RREQ | CLR_OVER | CLR_UNDR),SFC_INTC);
 	jz_sfc_writel(0,SFC_CGE);
@@ -1263,8 +1270,8 @@ void read_sfcnand_id(u8 *response,size_t len)
 /* To be continued */
 int spi_xfer(struct spi_slave *slave, unsigned int bitlen, const void *dout, void *din, unsigned long flags)
 {
-		/*unsigned int idcode;*/
-		/*sfc_nor_RDID(&idcode);*/
+	/*unsigned int idcode;*/
+	/*sfc_nor_RDID(&idcode);*/
 	unsigned int ret;
 	unsigned int addr;
 	unsigned int addr_len;
@@ -1272,9 +1279,9 @@ int spi_xfer(struct spi_slave *slave, unsigned int bitlen, const void *dout, voi
 	unsigned int wordlen = (bytelen + 3) / 4;
 	unsigned char *cmd = (unsigned char *)dout;
 
-	if(flags == SPI_XFER_BEGIN) {
+	if (flags == SPI_XFER_BEGIN) {
 		spi_xfer_cmd_len = bytelen;
-		if(spi_xfer_cmd_len > CMD_LEN) {
+		if (spi_xfer_cmd_len > CMD_LEN) {
 			printf("cmd(%x) len more %d\n", *(unsigned char *)dout, CMD_LEN);
 			return -1;
 		}
@@ -1285,7 +1292,7 @@ int spi_xfer(struct spi_slave *slave, unsigned int bitlen, const void *dout, voi
 		jz_sfc_writel(FLUSH, SFC_TRIG);
 	}
 
-	if(flags == 0) {
+	if (flags == 0) {
 		sfc_transfer_direction(0);
 		switch (spi_xfer_cmd_len) {
 			case 1:
@@ -1303,7 +1310,7 @@ int spi_xfer(struct spi_slave *slave, unsigned int bitlen, const void *dout, voi
 			return ret;
 	}
 
-	if(flags == (SPI_XFER_BEGIN | SPI_XFER_END)) {
+	if (flags == (SPI_XFER_BEGIN | SPI_XFER_END)) {
 		switch (bytelen) {
 			case 1:
 				addr = 0;
@@ -1320,13 +1327,13 @@ int spi_xfer(struct spi_slave *slave, unsigned int bitlen, const void *dout, voi
 		sfc_send_cmd(&spi_xfer_cmd[0],bytelen,addr,addr_len,0,1,0);
 	}
 
-	if(flags == SPI_XFER_END) {
+	if (flags == SPI_XFER_END) {
 		jz_sfc_writel((wordlen * 4), SFC_TRAN_LEN);
-		if(dout != NULL) { /* write */
+		if (dout != NULL) { /* write */
 			printf("????");
 		}
 
-		if(din != NULL) { /* read */
+		if (din != NULL) { /* read */
 			switch (spi_xfer_cmd_len) {
 				case 1:
 					addr = 0;
@@ -1362,14 +1369,22 @@ struct spi_flash *spi_flash_probe_ingenic(struct spi_slave *spi, u8 *idcode)
 	struct spi_flash *flash;
 
 	id = (idcode[0] << 16) | (idcode[1] << 8) | (idcode[2]);
-	if (sfc_nor_init(id) < 0)
+
+	int ret = sfc_nor_init(id);
+	if (ret < 0)
 		return NULL;
+
+	if (ret > 0) {
+		printf("ingenic: Attention! The chip is not recognized! \n");
+//		return NULL;
+	}
 
 	flash = spi_flash_alloc_base(spi, gparams.name);
 	if (!flash) {
 		printf("ingenic: Failed to allocate memory\n");
 		return NULL;
 	}
+
 	flash->read = sfc_nor_read;
 	flash->erase = sfc_nor_erase;
 	flash->write = sfc_nor_write;
@@ -1396,8 +1411,8 @@ int  sfc_flash_lock(int argc, char * const argv[])
 	cmd[1] = CMD_WRSR;
 	cmd[2] = CMD_RDSR;
 
-	if(strcmp(argv[1], "RR")  == 0){
-		if(argc < 3)return -1;
+	if (strcmp(argv[1], "RR") == 0) {
+		if (argc < 3) return -1;
 		cmd[3] = simple_strtoul(argv[2], NULL, 16);
 		sfc_send_cmd(&cmd[3],1,0,0,0,1,0);
 		udelay(25000);
@@ -1407,8 +1422,8 @@ int  sfc_flash_lock(int argc, char * const argv[])
 		return 0;
 	}
 
-	if(strcmp(argv[1], "FR")  == 0){
-		if(argc < 5)return -1;
+	if (strcmp(argv[1], "FR") == 0){
+		if (argc < 5) return -1;
 		cmd[3] = simple_strtoul(argv[2], NULL, 16);
 		cmd[4] = simple_strtoul(argv[3], NULL, 16);
 		WRFR_DATA = simple_strtoul(argv[4], NULL, 16);
@@ -1428,7 +1443,7 @@ int  sfc_flash_lock(int argc, char * const argv[])
 	last_tmp &= 0xc3;
 //	printf("%#x\n",last_tmp);
 
-	if(strcmp(argv[1], "status") == 0){
+	if (strcmp(argv[1], "status") == 0) {
 		tmp &= 0xff;
 		printf("-->Lock Status:	%#04x\n",tmp);
 		return 0;
