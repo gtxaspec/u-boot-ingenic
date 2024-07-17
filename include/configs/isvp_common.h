@@ -422,8 +422,10 @@
 #elif defined(DDR_500M) && (defined(CONFIG_T21) || defined(CONFIG_T30))
 #define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((124 << 20) | (2 << 14) | (1 << 11) | (1 << 5))
-//#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If MPLL is not used, it must be set to 0*/
-//#define CONFIG_SYS_MPLL_MNOD		((249 << 20) | (3 << 14) | (1 << 11) | (1 << 5))
+#if 0
+#define CONFIG_SYS_MPLL_FREQ		1500000000	/*If MPLL is not used, it must be set to 0*/
+#define CONFIG_SYS_MPLL_MNOD		((249 << 20) | (3 << 14) | (1 << 11) | (1 << 5))
+#endif
 #elif defined(DDR_500M)
 #define CONFIG_SYS_MPLL_FREQ		1000000000	/*If MPLL is not used, it must be set to 0*/
 #define CONFIG_SYS_MPLL_MNOD		((125 << 20) | (1 << 14) | (3 << 11) | (1 << 8))
@@ -675,9 +677,9 @@
 #define CONFIG_CMD_PING
 #define CONFIG_CMD_RUN
 #define CONFIG_CMD_SAVEENV
-#define CONFIG_CMD_SOC_INFO
 #define CONFIG_CMD_SDSTART
 #define CONFIG_CMD_SDUPDATE
+#define CONFIG_CMD_SOC_INFO
 #define CONFIG_CMD_SOURCE
 #define CONFIG_CMD_SQUASH_PROBE
 #if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
