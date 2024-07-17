@@ -14,7 +14,6 @@ COBJS-$(CONFIG_BFIN_SDH) += bfin_sdh.o
 COBJS-$(CONFIG_DAVINCI_MMC) += davinci_mmc.o
 COBJS-$(CONFIG_FSL_ESDHC) += fsl_esdhc.o
 COBJS-$(CONFIG_FTSDC010) += ftsdc010_mci.o
-COBJS-$(CONFIG_GENERIC_MMC) += mmc.o
 COBJS-$(CONFIG_GENERIC_ATMEL_MCI) += gen_atmel_mci.o
 COBJS-$(CONFIG_MMC_SPI) += mmc_spi.o
 COBJS-$(CONFIG_ARM_PL180_MMCI) += arm_pl180_mmci.o
@@ -36,6 +35,7 @@ COBJS-$(CONFIG_JZ_MMC) += jz_mmc.o
 ifdef CONFIG_SPL_BUILD
 COBJS-$(CONFIG_GENERIC_MMC) += mmc_spl.o
 else
+COBJS-$(CONFIG_GENERIC_MMC) += mmc.o
 COBJS-$(CONFIG_GENERIC_MMC) += mmc_write.o
 endif
 
