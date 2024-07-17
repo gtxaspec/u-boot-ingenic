@@ -334,6 +334,14 @@ void gpio_init(void)
 	pca953x_init();
 #endif
 #endif
+
+#if defined(CONFIG_T23)
+	gpio_enable_pull_up(GPIO_PB(0));
+	gpio_enable_pull_up(GPIO_PB(1));
+	gpio_enable_pull_up(GPIO_PB(2));
+	gpio_enable_pull_up(GPIO_PB(3));
+	gpio_enable_pull_up(GPIO_PB(5));
+#endif
 }
 
 void dump_gpio_func(unsigned int gpio)

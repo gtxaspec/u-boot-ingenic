@@ -553,7 +553,9 @@ int jz_net_initialize(bd_t *bis)
 #endif
 
 #endif
-#if defined (CONFIG_T10) || defined (CONFIG_T20) || defined (CONFIG_T30) || defined (CONFIG_T21) || defined (CONFIG_T23) || defined (CONFIG_T31)
+#if defined (CONFIG_T10) || \
+	defined (CONFIG_T20) || defined (CONFIG_T21) || defined (CONFIG_T23) || \
+	defined (CONFIG_T30) || defined (CONFIG_T31)
 	/* initialize gmac gpio */
 	gpio_set_func(GPIO_PORT_B, GPIO_FUNC_0, 0x1EFC0);
 #endif
@@ -749,6 +751,8 @@ int jz_net_initialize(bd_t *bis)
 		printf("ETH:   Error: Invalid PHY configuration.\n");
 		printf("ETH:   PHY not found!\n");
 		return -1; // Return error
+	} else {
+		gmacdev->PhyBase = phy_id;
 	}
 
 	/* configure 88e1111 in rgmii to copper mode
@@ -794,6 +798,8 @@ int jz_net_initialize(bd_t *bis)
 		printf("ETH:   Error: Invalid PHY configuration.\n");
 		printf("ETH:   PHY not found!\n");
 		return -1;  // Return error
+	} else {
+		gmacdev->PhyBase = phy_id;
 	}
 #endif //CONFIG_NET_PHY_TYPE
 	udelay(100000);

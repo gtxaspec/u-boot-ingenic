@@ -13,10 +13,17 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#if defined(CONFIG_T23)
+#include <config.h>
+#endif
 
 #define FPGA
 
+#if defined(CONFIG_T23)
+#define SEL_SCLKA		2
+#else
 #define SEL_SCLKA		1
+#endif
 #define SEL_CPU			1
 #define SEL_H0			1
 #define SEL_H2			1
@@ -45,8 +52,13 @@
 #endif
 
 struct desc {
+#if defined(CONFIG_T23)
+	unsigned set_addr:32;
+	unsigned poll_addr:32;
+#else
 	unsigned set_addr:16;
 	unsigned poll_addr:16;
+#endif
 	unsigned value:32;
 	unsigned poll_h_mask:32;
 	unsigned poll_l_mask:32;
@@ -106,6 +118,41 @@ struct params {
 	struct desc cpm_desc[0];
 };
 
+#if defined(CONFIG_T23)
+struct desc descriptors[11] = {
+	/*
+	 * saddr,		paddr,		value,	poll_h_mask,	poll_l_mask
+	 */
+#ifdef CONFIG_FPGA
+	/* fpga test gpio Drive Strength */
+	//{0xb0011160,        0xb0011160,     0x5A5A5A5A, 0,    0},
+	//{0xb0011120,        0xb0011120,     0x5A5A5A5A, 0,    0},
+#else
+	/* APLL 600MHZ(M=75,N=1,OD1=3,OD0=1) =>0x04B05901 */
+	{0xb0000010,        0xb0000010,     0x04B05901, 0x8,    0},
+
+	/* MPLL 1200MHZ(M=100,N=1,OD1=2,OD0=1) =>0x06405101 */
+	{0xb0000014,        0xb0000014,     0x06405101, 0x8,    0},
+
+	/* CPCCR */
+	{0xb0000000,        0xb00000d4,     0x95773310,	0,      0x7}, /* gate clk */
+	{0xb0000000,        0xffffffff,     0x9a7b5510, 0,      0}, /* conf select */
+
+#if defined(CONFIG_SPL_SFC_SUPPORT)
+	/* SFC SSICDR[7:0]=>120M(0x9), 80M(0xe), 48M(0x18), 24M(0x31)*/
+	{0xb0000074,        0xb0000074,     0x50000018, 0,      0x8000000},
+#elif defined(CONFIG_SPL_MMC_SUPPORT) && defined(CONFIG_JZ_MMC_MSC0)
+	/* MSC0 MSC0CDR[7:0]=>24M(0x18)*/
+	{0xb0000068,        0xb0000068,     0x60000018, 0,      0x10000000},
+#elif defined(CONFIG_SPL_MMC_SUPPORT) && defined(CONFIG_JZ_MMC_MSC1)
+	/* MSC1 MSC1CDR[7:0]=>24M(0x18)*/
+	{0xb0000068,        0xb0000068,     0x60000018, 0,      0},
+	{0xb00000A4,        0xb00000A4,     0x60000018, 0,      0x10000000},
+#endif
+#endif /* CONFIG_FPGA */
+	{0xffffffff,        0xffffffff,     0,          0,      0},
+};
+#else
 struct desc descriptors[14] = {
 	/*
 	 * saddr,		paddr,		value,	poll_h_mask,	poll_l_mask
@@ -131,6 +178,8 @@ struct desc descriptors[14] = {
 #endif /* FPGA */
 	{0xffff,		0xffff, 	0,		0,		0},
 };
+#endif
+
 
 void dump_params(struct params *p)
 {
@@ -150,7 +199,11 @@ void dump_params(struct params *p)
 		printf("nand_timing[%d]:\t0x%08X\n", i, p->nand_timing.nand_timing[i]);
 
 	printf("descriptors:\n");
+#if defined(CONFIG_T23)
+	for (i = 0; i < 11; i++) {
+#else
 	for (i = 0; i < 14; i++) {
+#endif
 		struct desc *desc = &p->cpm_desc[i];
 
 		if ((desc->set_addr == 0xffff) && (desc->poll_addr = 0xffff))
@@ -158,8 +211,13 @@ void dump_params(struct params *p)
 
 		printf("NO.%d:\n", i);
 		printf("\tsaddr = 0x%04X\n", desc->set_addr);
+#if defined(CONFIG_T23)
+		printf("\tpaddr = 0x%04X\n", desc->poll_addr);
+		printf("\tvalue = 0x%08X\n", desc->value);
+#else
 		printf("\tsaddr = 0x%04X\n", desc->poll_addr);
 		printf("\tpaddr = 0x%08X\n", desc->value);
+#endif
 		printf("\tpoll_h_mask = 0x%08X\n", desc->poll_h_mask);
 		printf("\tpoll_l_mask = 0x%08X\n", desc->poll_l_mask);
 	}
@@ -207,6 +265,7 @@ int main(int argc, char *argv[])
 	params->pll_freq = CONFIG_BOOTROM_PLLFREQ;
 	params->cpccr.d32 = CONFIG_BOOTROM_CPMCPCCR;
 
+#if !defined(CONFIG_T23)
 	params->nand_timing.b.set_rw = 3;
 	params->nand_timing.b.wait_rw = 14;
 	params->nand_timing.b.hold_rw = 6;
@@ -223,13 +282,33 @@ int main(int argc, char *argv[])
 	params->nand_timing.b.trhw = 30;
 	params->nand_timing.b.t1 = 0;
 	params->nand_timing.b.t2 = 0;
+#endif
+
+#if defined(CONFIG_T23)
+#if 1 /* < 50M sfc keep default */
+	params->nand_timing.nand_timing[0] = 0;
+#endif
+
+#if 0 /* > 50M sfc */
+	params->nand_timing.nand_timing[0] = 0x00010007;
+#endif
+	params->nand_timing.nand_timing[1] = 0;
+	params->nand_timing.nand_timing[2] = 0;
+	params->nand_timing.nand_timing[3] = 0;
+#endif
 
 	desc = params->cpm_desc;
 
+#if defined(CONFIG_T23)
+	for (i = 0; i < 11; i++) {
+#else
 	for (i = 0; i < 14; i++) {
+#endif
 		memcpy(&desc[i], &descriptors[i], sizeof(struct desc));
 	}
+#if !defined(CONFIG_T23)
 	dump_params(params);
+#endif
 
 	fd = open(fix_file, O_RDWR);
 	if (fd < 0) {

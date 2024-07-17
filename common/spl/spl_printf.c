@@ -119,3 +119,23 @@ void puts(const char *s)
 	serial_puts(s);
 #endif
 }
+
+int getc(void)
+{
+#ifdef CONFIG_SPL_SERIAL_SUPPORT
+	return serial_getc();
+#endif
+}
+
+void putc(const char c)
+{
+#ifdef CONFIG_SPL_SERIAL_SUPPORT
+	serial_putc(c);
+#endif
+}
+int tstc(void)
+{
+#ifdef CONFIG_SPL_SERIAL_SUPPORT
+	return serial_tstc();
+#endif
+}
