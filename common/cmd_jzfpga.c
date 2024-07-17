@@ -10,9 +10,33 @@
 #elif defined(CONFIG_M200)
 #define BOOT_RAM_LOADADDR (0xb3418000)
 #define BOOT_ROM_SIZE (32 * 1024)
+#elif defined(CONFIG_T10)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (32 * 1024)
+#elif defined(CONFIG_T5)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (16 * 1024)
+#elif defined(CONFIG_T15G)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (16 * 1024)
+#elif defined(CONFIG_T30)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (16 * 1024)
+#elif defined(CONFIG_T21)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (32 * 1024)
 #elif defined(CONFIG_T23)
 #define BOOT_RAM_LOADADDR (0xb3418000)
 #define BOOT_ROM_SIZE (16 * 1024)
+#elif defined(CONFIG_T31)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (16 * 1024)
+#elif defined(CONFIG_T40)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (22 * 1024)
+#elif defined(CONFIG_T41)
+#define BOOT_RAM_LOADADDR (0xb3418000)
+#define BOOT_ROM_SIZE (22 * 1024)
 #endif
 
 static int do_jbootrom_part(unsigned long bootrom_addr)
@@ -63,6 +87,7 @@ static int do_jbootrom_part(unsigned long bootrom_addr)
 	/* Jump bootrom */
 	printf("jump to :0x%x\n", rom_addr);
 	bootrom = (void (*)(void))rom_addr;
+	flush_cache_all();
 	(*bootrom)();
 	return 0;
 }
