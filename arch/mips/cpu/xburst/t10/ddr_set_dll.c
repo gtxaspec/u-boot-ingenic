@@ -17,7 +17,7 @@
 #include <asm/arch/cpm.h>
 
 #ifndef CONFIG_FPGA
-void reset_dllA(int bypass,enum ddr_type type)
+void reset_dllA(int bypass, enum ddr_type type)
 {
 /*
  * WARNING: 2015-01-08
@@ -30,7 +30,7 @@ void reset_dllA(int bypass,enum ddr_type type)
 	mdelay(1);
 }
 
-void dynamic_clk_gate_enable(int bypass,enum ddr_type type)
+void dynamic_clk_gate_enable(int bypass, enum ddr_type type)
 {
 	unsigned int val;
 	if(bypass) {

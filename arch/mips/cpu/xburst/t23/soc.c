@@ -95,9 +95,9 @@ void board_init_f(ulong dummy)
 		hello_word();
 	}
 #endif
-
+	//debug("SDRAM init\n");
 	sdram_init();
-
+	//debug("SDRAM init ok\n");
 
 #if 0 /* a simple ddr training */
 	/*MUST access 0xa3fffffc address */
@@ -173,7 +173,7 @@ int disable_interrupts(void)
 	return 0;
 }
 
-unsigned long do_go_exec(ulong (*entry)(int, char * const []), int argc, char * const argv[])
+unsigned long do_go_exec(ulong (*entry)(int, char *const[]), int argc, char *const argv[])
 {
 	printf("Flush cache all before jump. \n");
 	flush_cache_all();

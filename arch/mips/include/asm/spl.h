@@ -20,6 +20,7 @@
 #define BOOT_DEVICE_RAM		6
 #define BOOT_DEVICE_SFC_NOR	7
 #define BOOT_DEVICE_SFC_NAND	8
+#define BOOT_DEVICE_UART	9
 
 extern char __bss_start[];
 extern ulong __bss_end;
@@ -32,6 +33,12 @@ static inline u32 spl_boot_device(void)
 #if defined(CONFIG_SPL_NAND_SUPPORT) || defined(CONFIG_JZ_NAND_MGR)
 	return BOOT_DEVICE_NAND;
 #endif
+
+/* When serial port download is supported, it should be directly before other downloads */
+#ifdef CONFIG_SPL_YMODEM_SUPPORT
+	return BOOT_DEVICE_UART;
+#endif
+
 #ifdef CONFIG_SPL_MMC_SUPPORT
 	return BOOT_DEVICE_MMC1;
 #endif

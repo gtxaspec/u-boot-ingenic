@@ -93,7 +93,7 @@ static unsigned int get_pllreg_value(int freq)
 	return cppcr.d32;
 }
 
-static void pll_set(int pll,int freq)
+static void pll_set(int pll, int freq)
 {
 	unsigned int regvalue = get_pllreg_value(freq);
 	cpm_cpxpcr_t cppcr;

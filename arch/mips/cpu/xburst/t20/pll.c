@@ -102,13 +102,16 @@ static unsigned int get_pllreg_value(int freq)
 		cppcr.b.PLLOD1 *= 2;
 	}
 
-	printf("nf=%d nr = %d od0 = %d od1 = %d\n",nf,nr,od0,od1);
+	printf("nf = %d, ", nf);
+	printf("nr = %d, ", nr);
+	printf("od0 = %d, ", od0);
+	printf("od1 = %d\n", od1);
 	printf("cppcr is %x\n",cppcr.d32);
 
 	return cppcr.d32;
 }
 
-static void pll_set(int pll,int freq)
+static void pll_set(int pll, int freq)
 {
 	unsigned int regvalue = get_pllreg_value(freq);
 	cpm_cpxpcr_t cppcr;
@@ -117,56 +120,56 @@ static void pll_set(int pll,int freq)
 		return;
 
 	switch (pll) {
-	case APLL:
-		/* Init APLL */
+		case APLL:
+			/* Init APLL */
 #ifdef CONFIG_SYS_APLL_MNOD
 #ifdef CONFIG_SYS_APLL_FRAC
-		cpm_outl(CONFIG_SYS_APLL_FRAC, CPM_CPAPACR);
+			cpm_outl(CONFIG_SYS_APLL_FRAC, CPM_CPAPACR);
 #endif /* CONFIG_SYS_APLL_FRAC */
-		cppcr.d32 = CONFIG_SYS_APLL_MNOD;
+			cppcr.d32 = CONFIG_SYS_APLL_MNOD;
 #else /* !CONFIG_SYS_APLL_MNOD */
-		cppcr.d32 = regvalue;
+			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_APLL_MNOD */
-		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
-		while(!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
-			/* do nothing, wait until resolves as false */
-		}
-		debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
-		break;
-	case MPLL:
-		/* Init MPLL */
+			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
+			while (!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
+			debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
+			break;
+		case MPLL:
+			/* Init MPLL */
 #ifdef CONFIG_SYS_MPLL_MNOD
 #ifdef CONFIG_SYS_MPLL_FRAC
-		cpm_outl(CONFIG_SYS_MPLL_FRAC, CPM_CPMPACR);
+			cpm_outl(CONFIG_SYS_MPLL_FRAC, CPM_CPMPACR);
 #endif /* CONFIG_SYS_MPLL_FRAC */
-		cppcr.d32 = CONFIG_SYS_MPLL_MNOD;
+			cppcr.d32 = CONFIG_SYS_MPLL_MNOD;
 #else /* !CONFIG_SYS_MPLL_MNOD */
-		cppcr.d32 = regvalue;
+			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_MPLL_MNOD */
-		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
-		while(!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
-			/* do nothing, wait until resolves as false */
-		}
-		debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
-		break;
-	case VPLL:
-		/* Init VPLL */
+			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
+			while (!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
+			debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
+			break;
+		case VPLL:
+			/* Init VPLL */
 #ifdef CONFIG_SYS_VPLL_MNOD
 #ifdef CONFIG_SYS_VPLL_FRAC
-		cpm_outl(CONFIG_SYS_VPLL_FRAC, CPM_CPVPACR);
+			cpm_outl(CONFIG_SYS_VPLL_FRAC, CPM_CPVPACR);
 #endif /* CONFIG_SYS_VPLL_FRAC */
-		cppcr.d32 = CONFIG_SYS_VPLL_MNOD;
+			cppcr.d32 = CONFIG_SYS_VPLL_MNOD;
 #else /* !CONFIG_SYS_VPLL_MNOD */
-		cppcr.d32 = regvalue;
+			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_VPLL_MNOD */
-		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPVPCR);
-		while (!(cpm_inl(CPM_CPVPCR) & (0x1 << 3))) {
-			/* do nothing, wait until resolves as false */
-		}
-		debug("CPM_CPVPCR %x\n", cpm_inl(CPM_CPVPCR));
-		break;
-	default:
-		break;
+			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPVPCR);
+			while (!(cpm_inl(CPM_CPVPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
+			debug("CPM_CPVPCR %x\n", cpm_inl(CPM_CPVPCR));
+			break;
+		default:
+			break;
 	}
 }
 
@@ -179,7 +182,7 @@ static void cpccr_init(void)
 		| (CPCCR_CFG & ~(0xff << 24))
 		| (7 << 20);
 	cpm_outl(cpccr,CPM_CPCCR);
-	while(cpm_inl(CPM_CPCSR) & 0x7) {
+	while (cpm_inl(CPM_CPCSR) & 0x7) {
 		/* do nothing, wait until resolves as false */
 	}
 
@@ -358,11 +361,14 @@ int pll_init(void)
 
 	cpccr_init();
 	{
-		unsigned apll, mpll, vpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
+		unsigned apll, mpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
+		unsigned vpll;
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
 		vpll = clk_get_rate(VPLL);
-		printf("apll_freq %d \nmpll_freq %d \nvpll_freq = %d\n", apll, mpll, vpll);
+		printf("apll_freq = %d\n", apll);
+		printf("mpll_freq = %d\n", mpll);
+		printf("vpll_freq = %d\n", vpll);
 
 		if (CONFIG_DDR_SEL_PLL == APLL)
 			pll_tmp = apll;
@@ -383,7 +389,7 @@ int pll_init(void)
 		printf("ddr sel %s, cpu sel %s\n", CONFIG_DDR_SEL_PLL == APLL ? "apll" : "mpll",
 				CONFIG_CPU_SEL_PLL == APLL ? "apll" : "mpll");
 		printf("ddrfreq %d\ncclk  %d\nl2clk %d\nh0clk %d\nh2clk %d\npclk  %d\n",
-				gd->arch.gi->ddrfreq, cclk, l2clk, h0clk, h2clk, pclk);
+			gd->arch.gi->ddrfreq, cclk, l2clk, h0clk, h2clk, pclk);
 	}
 	return 0;
 }

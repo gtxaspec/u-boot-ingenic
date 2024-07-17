@@ -8,9 +8,9 @@
 
 #include <config.h>
 #include <common.h>
+#include <asm/io.h>
 #include <serial.h>
 #include <linux/compiler.h>
-#include <asm/io.h>
 #include <asm/jz_uart.h>
 #include <asm/arch/base.h>
 

@@ -17,7 +17,6 @@
 #include <asm/arch/cpm.h>
 
 #ifndef CONFIG_FPGA
-
 void reset_dll(void)
 {
 /*
@@ -37,5 +36,4 @@ void reset_dll(void)
 	mdelay(1);
 #endif
 }
-
 #endif

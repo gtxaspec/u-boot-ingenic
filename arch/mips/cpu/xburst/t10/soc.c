@@ -8,8 +8,6 @@
  * SPDX-License-Identifier:	GPL-2.0+
  */
 
-/*#define DEBUG */
-
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -130,8 +128,7 @@ int disable_interrupts(void)
 	return 0;
 }
 
-unsigned long do_go_exec(ulong (*entry)(int, char * const []), int argc,
-				 char * const argv[])
+unsigned long do_go_exec(ulong (*entry)(int, char * const []), int argc, char *const argv[])
 {
 	printf("Flush cache all before jump. \n");
 	flush_cache_all();

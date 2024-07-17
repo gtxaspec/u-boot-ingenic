@@ -95,7 +95,7 @@ static unsigned int get_pllreg_value(int freq)
 	return cppcr.d32;
 }
 
-static void pll_set(int pll,int freq)
+static void pll_set(int pll, int freq)
 {
 	unsigned int regvalue = get_pllreg_value(freq);
 	cpm_cpxpcr_t cppcr;
@@ -104,68 +104,68 @@ static void pll_set(int pll,int freq)
 		return;
 
 	switch (pll) {
-	case APLL:
-		/* Init APLL */
-		cppcr.d32 = regvalue;
-		if(freq <= 800000000) {
-			cppcr.b.PLLM *= 2;
-			cppcr.b.PLLOD1 *= 2;
-		} else {
+		case APLL:
+			/* Init APLL */
+			cppcr.d32 = regvalue;
+			if(freq <= 800000000) {
+				cppcr.b.PLLM *= 2;
+				cppcr.b.PLLOD1 *= 2;
+			} else {
 
-		}
-		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
-		while (!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
-			/* do nothing, wait until resolves as false */
-		}
-		debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
-		break;
-	case MPLL:
-		/* Init MPLL */
-		cppcr.d32 = regvalue;
-		if(freq <= 800000000) {
-			cppcr.b.PLLM *= 2;
-			cppcr.b.PLLOD1 *= 2;
-		} else {
+			}
+			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
+			while (!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
+			debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
+			break;
+		case MPLL:
+			/* Init MPLL */
+			cppcr.d32 = regvalue;
+			if(freq <= 800000000) {
+				cppcr.b.PLLM *= 2;
+				cppcr.b.PLLOD1 *= 2;
+			} else {
 
-		}
-		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
-		while (!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
-			/* do nothing, wait until resolves as false */
-		}
-		debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
-		break;
-	case VPLL:
-		/* Init VPLL */
-		cppcr.d32 = regvalue;
-		if(freq <= 800000000) {
-			cppcr.b.PLLM *= 2;
-			cppcr.b.PLLOD1 *= 2;
-		} else {
+			}
+			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
+			while (!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
+			debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
+			break;
+		case VPLL:
+			/* Init VPLL */
+			cppcr.d32 = regvalue;
+			if(freq <= 800000000) {
+				cppcr.b.PLLM *= 2;
+				cppcr.b.PLLOD1 *= 2;
+			} else {
 
-		}
-		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPVPCR);
-		while (!(cpm_inl(CPM_CPVPCR) & (0x1 << 3))) {
-			/* do nothing, wait until resolves as false */
-		}
-		debug("CPM_CPVPCR %x\n", cpm_inl(CPM_CPVPCR));
-		break;
-	case EPLL:
-		/* Init EPLL */
-		cppcr.d32 = regvalue;
-		if(freq <= 800000000) {
-			cppcr.b.PLLM *= 2;
-			cppcr.b.PLLOD1 *= 2;
-		} else {
+			}
+			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPVPCR);
+			while (!(cpm_inl(CPM_CPVPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
+			debug("CPM_CPVPCR %x\n", cpm_inl(CPM_CPVPCR));
+			break;
+		case EPLL:
+			/* Init EPLL */
+			cppcr.d32 = regvalue;
+			if(freq <= 800000000) {
+				cppcr.b.PLLM *= 2;
+				cppcr.b.PLLOD1 *= 2;
+			} else {
 
-		}
-		cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPEPCR);
-		while (!(cpm_inl(CPM_CPEPCR) & (0x1 << 3))) {
-			/* do nothing, wait until resolves as false */
-		}
-		debug("CPM_CPEPCR %x\n", cpm_inl(CPM_CPEPCR));
-		break;
-	default:
-		break;
+			}
+			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPEPCR);
+			while (!(cpm_inl(CPM_CPEPCR) & (0x1 << 3))) {
+				/* do nothing, wait until resolves as false */
+			}
+			debug("CPM_CPEPCR %x\n", cpm_inl(CPM_CPEPCR));
+			break;
+		default:
+			break;
 	}
 }
 
@@ -178,7 +178,7 @@ static void cpccr_init(void)
 		| (CPCCR_CFG & ~(0xff << 24))
 		| (7 << 20);
 	cpm_outl(cpccr,CPM_CPCCR);
-	while(cpm_inl(CPM_CPCSR) & 0x7) {
+	while (cpm_inl(CPM_CPCSR) & 0x7) {
 		/* do nothing, wait until resolves as false */
 	}
 
@@ -344,7 +344,8 @@ int pll_init(void)
 		unsigned apll, mpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
-		printf("apll_freq %d \nmpll_freq %d \n", apll, mpll);
+		printf("apll_freq %d\n", apll);
+		printf("mpll_freq %d\n", mpll);
 
 		if (CONFIG_DDR_SEL_PLL == APLL)
 			pll_tmp = apll;

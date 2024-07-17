@@ -65,16 +65,21 @@ static unsigned int get_pllreg_value(int freq)
 	cpm_cpxpcr_t cppcr;
 	unsigned int pllfreq = freq / 1000000;
 	unsigned int extal = gd->arch.gi->extal / 1000000;
-	unsigned int fbdiv = 0, refdiv = 0, fdivq = 1;
-	unsigned int pllm = 0, plln = 0, pllod = 1;
+	unsigned int fbdiv = 0;
+	unsigned int refdiv = 0;
+	unsigned int fdivq = 1;
+	unsigned int pllm = 0;
+	unsigned int plln = 0;
+	unsigned int pllod = 1;
 	unsigned int flag = 0;
 	unsigned int fvco;
-	unsigned int range, pfd_val;
+	unsigned int range;
+	unsigned int pfd_val;
 	unsigned int pllout;
 
 	/*Unset*/
 	if (freq < 25000000 || freq >3000000000UL){
-		error("uboot pll freq is  not in range \n");
+		error("uboot pllfreq is  not in range \n");
 		return -EINVAL;
 	}
 
@@ -148,13 +153,17 @@ static unsigned int get_pllreg_value(int freq)
 	cppcr.b.PLLN = plln;
 	cppcr.b.PLLOD = pllod;
 	cppcr.b.PLLRG = range;
-	printf("fbdiv = %d , refdiv = %d , fdivq = %d ,pllod = %d range = %d\n", fbdiv, refdiv, fdivq, pllod, range);
+	printf("fbdiv = %d, ", fbdiv);
+	printf("refdiv = %d, ", refdiv);
+	printf("fdivq = %d, ", fdivq);
+	printf("pllod = %d, ", pllod);
+	printf("range = %d\n", range);
 	printf("cppcr is %x\n",cppcr.d32);
 	return cppcr.d32;
 }
 
 /*********set CPXPCR register************/
-static void pll_set(int pll,int freq)
+static void pll_set(int pll, int freq)
 {
 	unsigned int regvalue = get_pllreg_value(freq);
 	cpm_cpxpcr_t cppcr;
@@ -171,7 +180,7 @@ static void pll_set(int pll,int freq)
 			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_APLL_MNOD */
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPAPCR);
-			while(!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
+			while (!(cpm_inl(CPM_CPAPCR) & (0x1 << 3))) {
 				/* do nothing, wait until resolves as false */
 			}
 			debug("CPM_CPAPCR %x\n", cpm_inl(CPM_CPAPCR));
@@ -184,7 +193,7 @@ static void pll_set(int pll,int freq)
 			cppcr.d32 = regvalue;
 #endif /* CONFIG_SYS_MPLL_MNOD */
 			cpm_outl(cppcr.d32 | (0x1 << 0), CPM_CPMPCR);
-			while(!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
+			while (!(cpm_inl(CPM_CPMPCR) & (0x1 << 3))) {
 				/* do nothing, wait until resolves as false */
 			}
 			debug("CPM_CPMPCR %x\n", cpm_inl(CPM_CPMPCR));
@@ -221,7 +230,7 @@ static void cpccr_init(void)
 		| (CPCCR_CFG & ~(0xff << 24))
 		| (7 << 20);
 	cpm_outl(cpccr,CPM_CPCCR);
-	while(cpm_inl(CPM_CPCSR) & 0x7) {
+	while (cpm_inl(CPM_CPCSR) & 0x7) {
 		/* do nothing, wait until resolves as false */
 	}
 
@@ -397,11 +406,14 @@ int pll_init(void)
 
 	cpccr_init();
 	{
-		unsigned apll, mpll, vpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
+		unsigned apll, mpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
+		unsigned vpll;
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
 		vpll = clk_get_rate(VPLL);
-		printf("apll_freq %d\nmpll_freq %d\nvpll_freq = %d\n", apll, mpll, vpll);
+		printf("apll_freq = %d\n", apll);
+		printf("mpll_freq = %d\n", mpll);
+		printf("vpll_freq = %d\n", vpll);
 
 		if (CONFIG_DDR_SEL_PLL == APLL)
 			pll_tmp = apll;

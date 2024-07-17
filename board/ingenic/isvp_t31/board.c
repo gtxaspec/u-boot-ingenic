@@ -31,6 +31,8 @@
 #include <asm/arch/clk.h>
 #include <power/d2041_core.h>
 
+extern int jz_net_initialize(bd_t *bis);
+
 struct cgu_clk_src cgu_clk_src[] = {
 	{AVPU, MPLL},
 	{MACPHY, MPLL},
@@ -102,7 +104,14 @@ void board_nand_init(void)
 
 int board_eth_init(bd_t *bis)
 {
-	return 0;
+	int ret = 0;
+#ifdef CONFIG_USB_ETHER_ASIX
+	if (0 == strncmp(getenv("ethact"), "asx", 3)) {
+		run_command("usb start", 0);
+	}
+#endif
+	ret += jz_net_initialize(bis);
+	return ret;
 }
 
 #ifdef CONFIG_SPL_NOR_SUPPORT
@@ -111,6 +120,12 @@ int spl_start_uboot(void)
 	return 1;
 }
 #endif
+/* U-Boot common routines */
+int checkboard(void)
+{
+	puts("Board: ISVP (Ingenic XBurst T31 SoC)\n");
+	return 0;
+}
 
 #ifdef CONFIG_SPL_BUILD
 

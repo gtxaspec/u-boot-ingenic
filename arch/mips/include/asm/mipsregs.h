@@ -951,6 +951,9 @@ do {									\
 #define read_c0_taglo()		__read_32bit_c0_register($28, 0)
 #define write_c0_taglo(val)	__write_32bit_c0_register($28, 0, val)
 
+#define read_c0_datalo()	__read_32bit_c0_register($28, 1)
+#define write_c0_datalo(val)	__write_32bit_c0_register($28, 1, val)
+
 #define read_c0_dtaglo()	__read_32bit_c0_register($28, 2)
 #define write_c0_dtaglo(val)	__write_32bit_c0_register($28, 2, val)
 

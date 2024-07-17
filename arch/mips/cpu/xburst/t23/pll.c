@@ -7,8 +7,6 @@
  * SPDX-License-Identifier:	GPL-2.0+
  */
 
-// #define DEBUG
-
 #include <config.h>
 #include <common.h>
 #include <asm/io.h>
@@ -66,11 +64,14 @@ static unsigned int get_pllreg_value(int freq)
 	cpm_cpxpcr_t cppcr;
 	unsigned int pllfreq = freq / 1000000;
 	unsigned int extal = gd->arch.gi->extal / 1000000;
-	unsigned nr = 1, nf = 16, od1 = 7, od0 = 1;
+	unsigned nr = 1;
+	unsigned nf = 16;
+	unsigned od1 = 7;
+	unsigned od0 = 1;
 
 	/*Unset*/
 	if (freq < 25000000 || freq > 5000000000UL){
-		error("uboot pll freq is not in range \n");
+		error("uboot pllfreq is not in range \n");
 		return -EINVAL;
 	}
 
@@ -110,14 +111,17 @@ static unsigned int get_pllreg_value(int freq)
 		cppcr.b.PLLOD1 *= 2;
 	}
 
-	debug("nf=%d nr = %d od0 = %d od1 = %d\n",nf,nr,od0,od1);
-	debug("cppcr is %x\n",cppcr.d32);
+	printf("nf = %d ", nf);
+	printf("nr = %d ", nr);
+	printf("od0 = %d ", od0);
+	printf("od1 = %d\n", od1);
+	printf("cppcr is %x\n", cppcr.d32);
 
 	return cppcr.d32;
 }
 
 /*********set CPXPCR register************/
-static void pll_set(int pll,int freq)
+static void pll_set(int pll, int freq)
 {
 	unsigned int regvalue = get_pllreg_value(freq);
 	cpm_cpxpcr_t cppcr;
@@ -309,6 +313,7 @@ static int freq_correcting(void)
 
 #undef PLL_MAXVAL
 #undef SEL_MAP
+
 	return 0;
 }
 
@@ -332,7 +337,7 @@ void pll_test(int pll)
 
 int pll_init(void)
 {
-	debug("%s:%d\n",__func__,__LINE__);
+	debug("%s:%d\n", __func__, __LINE__);
 	freq_correcting();
 	pll_set(APLL,pll_cfg.apll_freq);
 	pll_set(MPLL,pll_cfg.mpll_freq);
@@ -341,8 +346,8 @@ int pll_init(void)
 		unsigned apll, mpll, cclk, l2clk, h0clk, h2clk, pclk, pll_tmp;
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
-
-		printf("\napll_freq = %d \nmpll_freq = %d \n", apll, mpll);
+		printf("apll_freq = %d\n", apll);
+		printf("mpll_freq = %d\n", mpll);
 
 		if (CONFIG_DDR_SEL_PLL == APLL)
 			pll_tmp = apll;

@@ -101,13 +101,16 @@ static unsigned int get_pllreg_value(int freq)
 		cppcr.b.PLLOD1 *= 2;
 	}
 
-	printf("nf=%d nr = %d od0 = %d od1 = %d\n", nf, nr, od0, od1);
+	printf("nf = %d, ", nf);
+	printf("nr = %d, ", nr);
+	printf("od0 = %d, ", od0);
+	printf("od1 = %d\n", od1);
 	printf("cppcr is %x\n",cppcr.d32);
 
 	return cppcr.d32;
 }
 
-static void pll_set(int pll,int freq)
+static void pll_set(int pll, int freq)
 {
 	unsigned int regvalue = get_pllreg_value(freq);
 	cpm_cpxpcr_t cppcr;
@@ -336,7 +339,8 @@ int pll_init(void)
 		unsigned apll, mpll, cclk, l2clk, h0clk,h2clk,pclk, pll_tmp;
 		apll = clk_get_rate(APLL);
 		mpll = clk_get_rate(MPLL);
-		printf("apll_freq %d \nmpll_freq %d \n",apll,mpll);
+		printf("apll_freq = %d\n", apll);
+		printf("mpll_freq = %d\n", mpll);
 
 		if (CONFIG_DDR_SEL_PLL == APLL)
 			pll_tmp = apll;

@@ -92,6 +92,12 @@ int spl_start_uboot(void)
 }
 #endif
 
+int checkboard(void)
+{
+	puts("Board: ISVP (Ingenic XBurst T10 SoC)\n");
+	return 0;
+}
+
 #ifdef CONFIG_SPL_BUILD
 
 void spl_board_init(void)
