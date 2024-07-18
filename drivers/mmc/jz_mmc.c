@@ -356,7 +356,11 @@ static void jz_mmc_init_one(int idx, int controller, uintptr_t base, int clock)
 #ifdef CONFIG_JZ_MMC_MSC0_PA_8BIT
 	mmc->host_caps = MMC_MODE_8BIT | MMC_MODE_HS_52MHz | MMC_MODE_HS | MMC_MODE_HC;
 #else
+#ifdef CONFIG_JZ_MMC_1BIT
+	mmc->host_caps = MMC_MODE_HS_52MHz | MMC_MODE_HS | MMC_MODE_HC;
+#else
 	mmc->host_caps = MMC_MODE_4BIT | MMC_MODE_HS_52MHz | MMC_MODE_HS | MMC_MODE_HC;
+#endif
 #endif
 #else /* CONFIG_FPGA */
 	mmc->host_caps = MMC_MODE_HS_52MHz | MMC_MODE_HS | MMC_MODE_HC;
