@@ -765,7 +765,7 @@
 #define CONFIG_SPL
 #define CONFIG_SPL_FRAMEWORK
 
-#ifndef CONFIG_T31LC
+#if !defined(CONFIG_T31LC) && !defined(CONFIG_XIAOMI_SPL)
 #define CONFIG_SPL_LZOP
 #endif
 
