@@ -115,12 +115,20 @@ static void increment_mac_address(uint8_t *mac) {
 }
 
 static void generate_mac_from_serial(uint8_t *mac, uint32_t base1, uint32_t base2, uint32_t base3, uint32_t base4) {
-	// Generate MAC address using parts of the serial number
-	mac[0] = 0x02; // Locally administered and unicast
-	mac[1] = (base4 >> 24) & 0xFF;
-	mac[2] = (base4 >> 16) & 0xFF;
-	mac[3] = (base4 >> 8) & 0xFF;
-	mac[4] = base4 & 0xFF;
+	// Use base4 if it is not all zeros, otherwise use a combination of other bases
+	if (base4 != 0) {
+		mac[0] = 0x02; // Locally administered and unicast
+		mac[1] = (base4 >> 24) & 0xFF;
+		mac[2] = (base4 >> 16) & 0xFF;
+		mac[3] = (base4 >> 8) & 0xFF;
+		mac[4] = base4 & 0xFF;
+	} else {
+		mac[0] = 0x02; // Locally administered and unicast
+		mac[1] = (base1 >> 24) & 0xFF;
+		mac[2] = (base1 >> 16) & 0xFF;
+		mac[3] = (base2 >> 24) & 0xFF;
+		mac[4] = (base2 >> 16) & 0xFF;
+	}
 	// Use a combination of serial parts for the last byte
 	mac[5] = ((base1 ^ base2 ^ base3 ^ base4) & 0xFF) | 0x01; // Ensure the last bit is 1 for unicast
 }
