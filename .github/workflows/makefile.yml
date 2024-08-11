@@ -71,7 +71,7 @@ jobs:
       - name: Generate matrix
         id: set-matrix
         run: |
-          CONFIGS=$(cat boards.cfg | grep isvp | awk '{print $1}' | grep -v -e nand -e t23)
+          CONFIGS=$(cat boards.cfg | grep isvp | awk '{print $1}' | grep -v -e nand)
           JSON_MATRIX="{\"u-boot-version\": ["
           for CONFIG in $CONFIGS; do
             JSON_MATRIX+="\"${CONFIG}\","
