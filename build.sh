@@ -36,6 +36,7 @@ pick_a_soc() {
 		"isvp_t31lc_sfcnor"		"Ingenic T31LC"		\
 		"isvp_t31_sfcnor"		"Ingenic T31N"		\
 		"isvp_t31_sfcnor_ddr128M"	"Ingenic T31X"		\
+		"isvp_t31_sfcnor_msc1_ddr128M"	"Ingenic T31X  MSC1"	\
 		"isvp_t31a_sfcnor_ddr128M"	"Ingenic T31A"		\
 		"isvp_t31al_sfcnor_ddr128M"	"Ingenic T31AL"		\
 		"isvp_t31_msc0"			"Ingenic T31N  MSC0"	\

@@ -96,10 +96,16 @@
 #define CONFIG_JZ_MMC			1
 #endif  /* JZ_MMC_MSC0 || JZ_MMC_MSC1 */
 
+#if defined(CONFIG_JZ_MMC_MSC0) && defined(CONFIG_JZ_MMC_MSC1)
+#define CONFIG_JZ_MMC_SPLMSC		1
+#define CONFIG_JZ_MMC_MSC0_PB		1
+#define CONFIG_JZ_MMC_MSC1_PB		1
+#else
 #if defined(CONFIG_JZ_MMC_MSC0)
 #define CONFIG_JZ_MMC_SPLMSC		0
 #define CONFIG_JZ_MMC_MSC0_PB		1
 #endif
+#endif /* JZ_MMC_MSC0 && JZ_MMC_MSC1 */
 
 /*
 #if defined(CONFIG_SFC_COMMAND)
