@@ -428,9 +428,7 @@ int do_auto_update(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	LOAD_ID = -1;
 
 	if (state == 1) {
-		printf("MMC:   Auto-update completed successfully. Saving environment...\n");
-		saveenv();
-		printf("MMC:   Environment saved.\n");
+		printf("MMC:   Auto-update completed successfully.\n");
 	}
 
 	return (state == -1) ? CMD_RET_FAILURE : CMD_RET_SUCCESS;
