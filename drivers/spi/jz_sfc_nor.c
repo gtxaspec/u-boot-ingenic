@@ -860,19 +860,19 @@ int jz_sfc_erase(struct spi_flash *flash, u32 offset, size_t len)
 		 *
 		 * */
 
-		switch(erase_size) {
-		case 0x1000 :
-			cmd[1] = CMD_ERASE_4K;
-			break;
-		case 0x8000 :
-			cmd[1] = CMD_ERASE_32K;
-			break;
-		case 0x10000 :
-			cmd[1] = CMD_ERASE_64K;
-			break;
-		default:
-			printf("unknown erase size !\n");
-			return -1;
+		switch (erase_size) {
+			case 0x1000 :
+				cmd[1] = CMD_ERASE_4K;
+				break;
+			case 0x8000 :
+				cmd[1] = CMD_ERASE_32K;
+				break;
+			case 0x10000 :
+				cmd[1] = CMD_ERASE_64K;
+				break;
+			default:
+				printf("unknown erase size %x!\n", erase_size);
+				return -1;
 		}
 
 		sfc_send_cmd(&cmd[0],0,0,0,0,0,1);
