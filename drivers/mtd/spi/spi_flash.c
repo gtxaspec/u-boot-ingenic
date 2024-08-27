@@ -635,7 +635,7 @@ struct spi_flash *spi_flash_probe(unsigned int bus, unsigned int cs, unsigned in
 #endif
 
 #ifndef CONFIG_BURNER
-	printf(SF"Detected %s (%02x %02x %02x %02x %02x)\n",
+	printf(SF"Detected %s (%02x %02x %02x %02x %02x)",
            flash->name, idcode[0], idcode[1], idcode[2], idcode[3], idcode[4]);
 #endif
 
