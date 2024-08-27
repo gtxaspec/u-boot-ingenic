@@ -2,8 +2,8 @@ name: Build
 
 on:
   schedule:
-    # 01:15 PST / Nightly
-    - cron:  '00 9 * * *'
+    # 00:15 PST / Nightly
+    - cron:  '00 7 * * *'
   workflow_dispatch:
     inputs:
       tg_disabled:
@@ -27,8 +27,8 @@ env:
   TERM: linux
   TG_TOKEN: ${{secrets.TELEGRAM_TOKEN_BOT_THINGINO}}
   TG_CHANNEL: ${{secrets.TELEGRAM_CHANNEL_THINGINO_BUILD}}
-  TG_OPTIONS: -s -o /dev/null -w %{http_code}
-  TG_ENABLE: false
+  TG_CHANNEL_SCRATCH: ${{secrets.TELEGRAM_CHANNEL_THINGINO_SCRATCH}}
+  TG_OPTIONS: -s
 
 jobs:
   notify-begin:
@@ -37,18 +37,22 @@ jobs:
       start_time: ${{ steps.set_output.outputs.time }}
       tg_disabled: ${{ steps.set_env.outputs.tg_disabled }}
     steps:
+      - name: Save workflow start time
+        id: set_output
+        run: echo "time=$(date +%s)" >> $GITHUB_OUTPUT
+
       - name: Setup Notify Environment
         run: |
           echo "TG_DISABLED=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_ENV
           echo "tg_disabled=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_OUTPUT
 
-      - name: Save workflow start time
-        id: set_output
-        run: echo "time=$(date +%s)" >> $GITHUB_OUTPUT
       - name: Send build start notifcation
         if: env.TG_DISABLED == 'false'
         run: |
-          TG_MSG="u-boot-ingenic build started:\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
+          if [[ "${{ github.event.inputs.tg_scratch }}" == 'true' ]]; then
+            TG_CHANNEL=${{ env.TG_CHANNEL_SCRATCH }}
+          fi
+          TG_MSG="u\\-boot\\-ingenic build started:\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
           TG_ICON="\xF0\x9F\x9A\xA6 GitHub Actions"
           TG_HEADER=$(echo -e ${TG_MSG}${TG_ICON})
           HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F parse_mode=MarkdownV2 -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
@@ -167,30 +171,53 @@ jobs:
           files: ${{ env.UBOOTFW }}
 
       - name: Send build alert
-        if: ${{ github.event_name != 'pull_request' && env.UBOOTFW && env.TG_DISABLED == 'false' }}
+        if: ${{ env.TG_DISABLED != 'true' && env.UBOOTFW }}
         shell: bash
         run: |
           if [[ "${{ github.event.inputs.tg_scratch }}" == 'true' ]]; then
             TG_CHANNEL=${{ env.TG_CHANNEL_SCRATCH }}
           fi
-          echo "GIT_HASH: ${GIT_HASH}"
-          echo "GIT_BRANCH: ${GIT_BRANCH}"
-          TG_MSG="u-boot-ingenic build finished\nCommit: ${GIT_HASH}\nBranch: ${GIT_BRANCH}\nTag: ${TAG_NAME}\nTime: ${TIME}\n\n"
-          TG_ICON="\xE2\x9C\x85 GitHub Actions"
-          TG_HEADER=$(echo -e ${TG_MSG}${TG_ICON})
-          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
-          echo Telegram response: ${HTTP}
+            TG_MSG="Commit: [${GIT_HASH}](https://github.com/${GITHUB_REPOSITORY}/commit/${GIT_HASH})\nBranch: [${GIT_BRANCH}](https://github.com/${GITHUB_REPOSITORY}/tree/${GIT_BRANCH})\nTag: [${TAG_NAME}](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME})\nTime: ${TIME}\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
+            TG_HEADER=$(echo -e "${TG_MSG}\xE2\x9C\x85 GitHub Actions")
+            HTTP_FULL=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendDocument -F parse_mode=MarkdownV2 -F chat_id=${TG_CHANNEL} -F caption="${TG_HEADER}" -F document=@${UBOOTFW} -F disable_web_page_preview=true)
+            echo "Telegram response Full Firmware: $HTTP_FULL"
 
       - name: Send error
-        if: ${{ github.event_name != 'pull_request' && failure() && env.TG_DISABLED == 'false' }}
+        if: ${{ env.TG_DISABLED != 'true' && failure() }}
         shell: bash
         run: |
           if [[ "${{ github.event.inputs.tg_scratch }}" == 'true' ]]; then
             TG_CHANNEL=${{ env.TG_CHANNEL_SCRATCH }}
           fi
-          TG_WARN="Error: u-boot-ingenic build failed!\n"
+          TG_WARN="Error: u\\-boot\\-ingenic build failed!\n"
           TG_MSG="Commit: ${GIT_HASH}\nBranch: ${GIT_BRANCH}\nTag: ${TAG_NAME}\nhttps://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n"
           TG_ICON="\xE2\x9A\xA0 GitHub Actions"
           TG_HEADER=$(echo -e ${TG_WARN}${TG_MSG}${TG_ICON})
           HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
+          echo Telegram response: ${HTTP}
+  
+  notify-completion:
+    needs: [build, notify-begin]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Setup Environment
+        run: |
+          echo "TG_DISABLED=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_ENV
+
+      - name: Send completion summary
+        if: ${{ env.TG_DISABLED == 'false' }}
+        run: |
+          if [[ "${{ github.event.inputs.tg_scratch }}" == 'true' ]]; then
+            TG_CHANNEL=${{ env.TG_CHANNEL_SCRATCH }}
+          fi
+          START_TIME=${{ needs.notify-begin.outputs.start_time }}
+          END_TIME=$(date -u +%s)
+          ELAPSED=$((END_TIME - START_TIME))
+          ELAPSED_MIN=$((ELAPSED / 60))
+          ELAPSED_SEC=$((ELAPSED % 60))
+          TG_MSG="u\\-boot\\-ingenic build completed:\nTotal elapsed time: ${ELAPSED_MIN}m ${ELAPSED_SEC}s\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
+          TG_ICON="\xF0\x9F\x9A\xA9 GitHub Actions"
+          TG_HEADER=$(echo -e ${TG_MSG}${TG_ICON})
+          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F parse_mode=MarkdownV2 -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
           echo Telegram response: ${HTTP}
