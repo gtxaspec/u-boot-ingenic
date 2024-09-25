@@ -1,6 +1,12 @@
 #!/bin/bash
 
-: ${CROSS_COMPILE:="mipsel-linux-"}
+if command -v ccache &> /dev/null; then
+	CROSS_COMPILE="${CROSS_COMPILE:-ccache mipsel-linux-}"
+	HOSTCC="${HOSTCC:-ccache gcc}"
+else
+	CROSS_COMPILE="${CROSS_COMPILE:-mipsel-linux-}"
+	HOSTCC="${HOSTCC:-gcc}"
+fi
 
 OUTPUT_DIR="./uboot_build"
 
@@ -58,8 +64,7 @@ build_version() {
 
 	make distclean
 	mkdir -p "${OUTPUT_DIR}" >/dev/null
-	make $soc
-	make CROSS_COMPILE=$CROSS_COMPILE -j$(nproc)
+	make CROSS_COMPILE="$CROSS_COMPILE" $soc -j$(nproc) HOSTCC="$HOSTCC"
 	if [ -f u-boot-lzo-with-spl.bin ]; then
 		echo "u-boot-lzo-with-spl.bin exists, copying..."
 		cp u-boot-lzo-with-spl.bin "${OUTPUT_DIR}/u-boot-${soc}.bin"
