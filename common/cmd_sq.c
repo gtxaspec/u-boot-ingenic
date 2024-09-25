@@ -6,54 +6,50 @@
 
 extern struct spi_flash *get_flash(void);
 
-#define ERASE_BLOCK_SIZE            0x8000
+#define SEARCH_SECTOR_SIZE          0x1000
 #define KERNEL_MAGIC_NUMBER         0x56190527
 #define KERNEL_MAGIC_OFFSET         0
 #define SQUASHFS_BYTES_USED_OFFSET  40
 #define SQUASHFS_MAGIC              0x73717368
 #define SQUASHFS_MAGIC_OFFSET       0
 
-// Declare function prototypes
-static uint64_t find_kernel_start(struct spi_flash *flash, unsigned int start_addr, unsigned int end_addr);
-static uint64_t align_to_erase_block(uint64_t size);
-static uint64_t find_squashfs_start(struct spi_flash *flash, uint64_t start_search_addr);
-
-// Function definitions
-static uint64_t align_to_erase_block(uint64_t size) {
-	if (size % ERASE_BLOCK_SIZE == 0) {
+// Function to align using the erase block size
+static uint64_t align_to_erase_block(uint64_t size, uint64_t erase_block_size) {
+	if (size % erase_block_size == 0) {
 		return size; // Already aligned
 	}
-	return ((size / ERASE_BLOCK_SIZE) + 1) * ERASE_BLOCK_SIZE;
+	return ((size / erase_block_size) + 1) * erase_block_size;
 }
 
+// Function to find the start of the kernel
 static uint64_t find_kernel_start(struct spi_flash *flash, unsigned int start_addr, unsigned int end_addr) {
 	uint32_t magic_number;
 	char buf[256];  // Buffer size as needed based on expected header size
 	unsigned int addr;
 
-	for (addr = start_addr; addr < end_addr; addr += ERASE_BLOCK_SIZE) {
+	for (addr = start_addr; addr < end_addr; addr += SEARCH_SECTOR_SIZE) {
 		if (spi_flash_read(flash, addr, sizeof(buf), buf)) {
 			printf("SQ:    Failed to read from SPI flash at address 0x%X\n", addr);
 			continue;  // Skip to the next block
 		}
 
 		memcpy(&magic_number, buf + KERNEL_MAGIC_OFFSET, sizeof(magic_number));
-
 		if (magic_number == KERNEL_MAGIC_NUMBER) {
 			printf("SQ:    Kernel start detected at address 0x%X\n", addr);
 			return addr;  // Return the address where the kernel is found
 		}
 	}
 
-	return 0;  // Return 0 if not found
+	return 0; // Kernel not found
 }
 
+// Function to find the start of the SquashFS
 static uint64_t find_squashfs_start(struct spi_flash *flash, uint64_t start_search_addr) {
 	uint32_t magic_number;
 	char buf[4];  // Buffer to read potential magic numbers
 	uint64_t addr;
 
-	for (addr = start_search_addr; ; addr += ERASE_BLOCK_SIZE) {
+	for (addr = start_search_addr; addr < flash->size; addr += SEARCH_SECTOR_SIZE) {
 		if (spi_flash_read(flash, addr, sizeof(buf), buf) != 0) {
 			printf("SQ:    Failed to read from SPI flash at address 0x%llX\n", addr);
 			continue;
@@ -66,9 +62,10 @@ static uint64_t find_squashfs_start(struct spi_flash *flash, uint64_t start_sear
 		}
 	}
 
-	return start_search_addr; // Return the starting search address if no SquashFS is found
+	return 0; // SquashFS not found
 }
 
+// Function to update kernel environment variables
 static int update_kernel_env(struct spi_flash *flash, uint64_t *kernel_start_addr, uint64_t *squashfs_start_addr) {
 	uint64_t k_start = find_kernel_start(flash, 0x40000, 0x60000);
 	if (k_start == 0) {
@@ -78,26 +75,24 @@ static int update_kernel_env(struct spi_flash *flash, uint64_t *kernel_start_add
 
 	*kernel_start_addr = k_start;  // Set the kernel start address
 
-	uint64_t s_start = find_squashfs_start(flash, k_start + ERASE_BLOCK_SIZE);
+	uint64_t s_start = find_squashfs_start(flash, k_start + SEARCH_SECTOR_SIZE);
 	*squashfs_start_addr = s_start;  // Set the SquashFS start address
 	uint64_t kernel_size = s_start - k_start;
-	uint64_t aligned_kernel_size = align_to_erase_block(kernel_size);
-
+	// No alignment for the environment variables, use raw size
 	char k_start_str[32];
 	sprintf(k_start_str, "%llx", k_start);
 	setenv("kern_addr", k_start_str);
-	debug("SQ:    kern_addr env updated\n");
+	debug("SQ:    kern_addr env set to: %s\n", k_start_str);
 
 	char kern_size_str[32];
-	sprintf(kern_size_str, "%lluk", aligned_kernel_size / 1024);
+	sprintf(kern_size_str, "%lluk", kernel_size / 1024); // Report raw size in kilobytes
 	setenv("kern_size", kern_size_str);
-	debug("SQ:    kernel_size env updated\n");
+	debug("SQ:    kern_size env set to: %llu kB\n", kernel_size / 1024);
 
 	char kern_length_str[32];
-	sprintf(kern_length_str, "%llx", aligned_kernel_size);
+	sprintf(kern_length_str, "%llx", kernel_size); // Report raw size in hex
 	setenv("kern_len", kern_length_str);
-	debug("SQ:    kernel_len env updated\n");
-
+	debug("SQ:    kernel_len env set to: %s\n", kern_length_str);
 	return 0;  // Success
 }
 
@@ -105,41 +100,40 @@ static uint64_t update_squashfs_env(struct spi_flash *flash, uint64_t squashfs_s
 	char buf[64];
 	if (spi_flash_read(flash, squashfs_start_addr, sizeof(buf), buf)) {
 		printf("SQ:    Failed to read from SPI flash at 0x%llX\n", squashfs_start_addr);
-		return; // Handle error appropriately
+		return 0; // Handle error appropriately and return 0
 	}
 
+	// Extract bytes used from the SquashFS header
 	uint32_t bytes_used_low, bytes_used_high;
 	memcpy(&bytes_used_low, buf + SQUASHFS_BYTES_USED_OFFSET, sizeof(uint32_t));
 	memcpy(&bytes_used_high, buf + SQUASHFS_BYTES_USED_OFFSET + sizeof(uint32_t), sizeof(uint32_t));
 	uint64_t bytes_used = ((uint64_t)bytes_used_high << 32) | bytes_used_low;
-	uint64_t aligned_bytes_used = align_to_erase_block(bytes_used);
+	// Align the size using the erase block size
+	uint64_t aligned_bytes_used = align_to_erase_block(bytes_used, flash->sector_size);
 
+	// Set the rootfs size environment variable using the aligned size
 	char size_str[32];
 	sprintf(size_str, "%lluk", aligned_bytes_used / 1024);
 	setenv("rootfs_size", size_str);
-	debug("SQ:    rootfs_size env updated\n");
+	debug("SQ:    rootfs size env set to: %llu kB\n", aligned_bytes_used / 1024);
 
-	return aligned_bytes_used;  // Return the aligned size
+	// Return the aligned size for further calculations
+	return aligned_bytes_used;
 }
 
+// Function to update MTD partition information
 static void update_mtdparts_env(struct spi_flash *flash, uint64_t kernel_start_addr) {
 	uint64_t flashsize = flash->size;
 	uint64_t upgrade_offset = kernel_start_addr;
+	char flashlen_str[32], flashsize_str[32], upgrade_offset_str[32], upgrade_size_str[32];
 
-	char flashlen_str[32];
 	sprintf(flashlen_str, "%llx", flashsize);
 	setenv("flash_len", flashlen_str);
-	char flashsize_str[32];
 	sprintf(flashsize_str, "%lluk", flashsize / 1024); // Convert to kilobytes
-	debug("SQ:    Flash size reported as %s\n", flashsize_str);
 	setenv("flash_size", flashsize_str);
-	debug("SQ:    flash_size env updated\n");
+	debug("SQ:    flash_size env to to %s\n", flashsize_str);
 
-	// Calculate upgrade size from the upgrade_offset to the end of the flash
 	uint64_t upgrade_size = flashsize - upgrade_offset;
-
-	char upgrade_offset_str[32], upgrade_size_str[32];
-
 	// Convert the flash size to kilobytes and format
 	sprintf(upgrade_offset_str, "0x%llX", upgrade_offset);
 	sprintf(upgrade_size_str, "%lluk", upgrade_size / 1024);
@@ -157,16 +151,18 @@ static void update_mtdparts_env(struct spi_flash *flash, uint64_t kernel_start_a
 	}
 }
 
+// Function to update overlay partition
 static void update_overlay_env(uint64_t overlay_addr) {
 	char overlay_str[32];
 	sprintf(overlay_str, "%llX", overlay_addr);
-	printf("SQ:    Overlay start detected at address 0x%s\n", overlay_str);
 	setenv("overlay", overlay_str);
-	debug("SQ:    Overlay env updated\n");
+	printf("SQ:    Overlay start set to address 0x%s\n", overlay_str);
 }
 
+// Function to process SPI flash data and update environment variables
 int process_spi_flash_data(struct spi_flash *flash) {
 	debug("SQ:    Starting process_spi_flash_data\n");
+	debug("SQ:    Erase sector size: 0x%X bytes\n", flash->sector_size);
 
 	uint64_t kernel_start_addr = 0, squashfs_start_addr = 0;
 	if (update_kernel_env(flash, &kernel_start_addr, &squashfs_start_addr) != 0) {
@@ -183,7 +179,10 @@ int process_spi_flash_data(struct spi_flash *flash) {
 
 	update_mtdparts_env(flash, kernel_start_addr);  // Use the actual kernel start address
 
+	// Calculate the overlay start address without over-aligning
 	uint64_t overlay_start_addr = squashfs_start_addr + aligned_bytes_used;
+	// Correct alignment: ensure you are not adding extra alignment
+	overlay_start_addr = overlay_start_addr & ~(flash->sector_size - 1); // Align overlay start
 	update_overlay_env(overlay_start_addr);
 
 	return 0;  // Success
