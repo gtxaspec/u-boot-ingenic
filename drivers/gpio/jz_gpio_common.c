@@ -397,11 +397,11 @@ void process_gpio_token(char* token) {
 #if defined(CONFIG_T31)
 			if (disablePullUp) {
 				gpio_disable_pull_up(gpio);
-				printf("u", gpio);
+				printf("u");
 			}
 			if (disablePullDown) {
 				gpio_disable_pull_down(gpio);
-				printf("d", gpio);
+				printf("d");
 			}
 			#endif
 			break;
