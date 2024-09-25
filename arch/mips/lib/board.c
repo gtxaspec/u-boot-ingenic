@@ -16,6 +16,7 @@
 #include <nand.h>
 #include <onenand_uboot.h>
 #include <spi.h>
+#include <spi_flash.h>
 #include <mmc.h>
 
 #ifdef CONFIG_BITBANGMII
@@ -446,10 +447,10 @@ extern void board_usb_init(void);
 	misc_init_r();
 
 	/* Reset */
-	#define ERASE_BLOCK_SIZE 0x8000 // 64KB
+	extern struct spi_flash *get_flash(void);
 
 	char *overlay_str, *flashsize_str;
-	unsigned long overlay, flashsize, length_to_erase, erase_block_size = 0x8000;
+	unsigned long overlay, flashsize, length_to_erase, erase_block_size;
 	char cmd[64]; // Buffer for command
 
 	char* gpio_button_str = getenv("gpio_button");
@@ -465,7 +466,19 @@ extern void board_usb_init(void);
 			/* Carry over the gpio between resets if desired */
 			/* setenv("gpio_button", gpio_number); */
 			saveenv();
-			run_command("sf probe; sq probe", 0); // Initialize SPI flash and probe to set ENV variables
+
+			run_command("sf probe", 0); // Initialize SPI flash
+
+			// Probe SPI flash and get sector size
+			struct spi_flash *flash = get_flash();
+			if (!flash) {
+				printf("RST:   Error: No SPI flash device available.\n");
+			}
+			debug("SQ:    SPI flash sector size: 0x%llx\n", (unsigned long long)flash->sector_size);
+
+			erase_block_size = flash->sector_size; // Use the flash's sector size
+
+			run_command("sq probe", 0); // Probe flash to set ENV variables
 
 			overlay_str = getenv("overlay");
 			flashsize_str = getenv("flash_len");
@@ -473,21 +486,24 @@ extern void board_usb_init(void);
 				overlay = simple_strtoul(overlay_str, NULL, 16);
 				flashsize = simple_strtoul(flashsize_str, NULL, 16);
 
+				// Align overlay address to the sector size
+				unsigned long aligned_overlay = (overlay + erase_block_size - 1) & ~(erase_block_size - 1);
+
 				// Calculate the initial length to erase before alignment
-				length_to_erase = flashsize - overlay;
+				length_to_erase = flashsize - aligned_overlay;
 
 				// Align length to the next block size without exceeding flash size
 				unsigned long aligned_length = (length_to_erase + erase_block_size - 1) & ~(erase_block_size - 1);
-				if (overlay + aligned_length > flashsize) {
+				if (aligned_overlay + aligned_length > flashsize) {
 					// If alignment exceeds flash size, adjust length to not exceed flash
-					aligned_length = flashsize - overlay;
+					aligned_length = flashsize - aligned_overlay;
 					// Ensure adjusted length is also aligned to block size
 					aligned_length = aligned_length & ~(erase_block_size - 1);
 				}
 
-				if (overlay + aligned_length <= flashsize) {
-					debug("RST:   Overlay: 0x%lX, Flash size: 0x%lX, Length to erase: 0x%lX\n", overlay, flashsize, flashsize - overlay);
-					sprintf(cmd, "sf erase 0x%lX 0x%lX", overlay, aligned_length);
+				if (aligned_overlay + aligned_length <= flashsize) {
+					debug("RST:   Aligned Overlay: 0x%lX, Flash size: 0x%lX, Length to erase: 0x%lX\n", aligned_overlay, flashsize, aligned_length);
+					sprintf(cmd, "sf erase 0x%lX 0x%lX", aligned_overlay, aligned_length);
 					debug("Executing command: %s\n", cmd);
 					if (run_command(cmd, 0) != 0) {
 						printf("RST:   Error: Failed to execute erase command.\n");
