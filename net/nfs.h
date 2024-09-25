@@ -79,7 +79,7 @@ struct rpc_t {
 		} reply;
 	} u;
 } __attribute__((packed));
-void nfs_start(void);	/* Begin NFS */
+void NfsStart(void);	/* Begin NFS */
 
 
 /**********************************************************************/
