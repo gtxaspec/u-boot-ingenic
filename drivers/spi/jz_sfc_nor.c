@@ -823,18 +823,18 @@ int jz_sfc_erase(struct spi_flash *flash, u32 offset, size_t len)
 		erase_size = 0x1000;
 	}
 
-	if(offset % CONFIG_SFC_MIN_ALIGN) {
-		printf("Error: Address (0x%X) is not aligned to the required sector size (0x%lX)!\n", offset, flash->sector_size);
+	if (offset % CONFIG_SFC_MIN_ALIGN) {
+		printf("Error: Address (0x%X) is not aligned to the required sector size (0x%X)!\n", offset, flash->sector_size);
 		return -1;
 	}
 
-	if(len % CONFIG_SFC_MIN_ALIGN) {
-		printf("Error: Length (0x%lX) is not aligned to the required sector size (0x%lX)!\n", len, flash->sector_size);
+	if (len % CONFIG_SFC_MIN_ALIGN) {
+		printf("Error: Length (0x%X) is not aligned to the required sector size (0x%X)!\n", len, flash->sector_size);
 		return -1;
 	}
 
-	if((offset + len) > flash->size) {
-		printf("Error: The sum of offset (0x%X) and length (0x%lX) exceeds the flash size (0x%lX)!\n", offset, len, flash->size);
+	if ((offset + len) > flash->size) {
+		printf("Error: The sum of offset (0x%X) and length (0x%X) exceeds the flash size (0x%X)!\n", offset, len, flash->size);
 		return -1;
 	}
 
@@ -871,7 +871,7 @@ int jz_sfc_erase(struct spi_flash *flash, u32 offset, size_t len)
 				cmd[1] = CMD_ERASE_64K;
 				break;
 			default:
-				printf("unknown erase size %x!\n", erase_size);
+				printf("unknown erase size %lx!\n", erase_size);
 				return -1;
 		}
 
