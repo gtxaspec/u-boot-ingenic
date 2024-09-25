@@ -824,17 +824,17 @@ int jz_sfc_erase(struct spi_flash *flash, u32 offset, size_t len)
 	}
 
 	if(offset % CONFIG_SFC_MIN_ALIGN) {
-		printf("addr align as %x !\n", flash->sector_size);
+		printf("Error: Address (0x%X) is not aligned to the required sector size (0x%lX)!\n", offset, flash->sector_size);
 		return -1;
 	}
 
 	if(len % CONFIG_SFC_MIN_ALIGN) {
-		printf("len align as %x !\n", flash->sector_size);
+		printf("Error: Length (0x%lX) is not aligned to the required sector size (0x%lX)!\n", len, flash->sector_size);
 		return -1;
 	}
 
 	if((offset + len) > flash->size) {
-		printf("len plus offset more than flash size!\n");
+		printf("Error: The sum of offset (0x%X) and length (0x%lX) exceeds the flash size (0x%lX)!\n", offset, len, flash->size);
 		return -1;
 	}
 
