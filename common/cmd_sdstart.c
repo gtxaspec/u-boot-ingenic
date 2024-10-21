@@ -36,30 +36,36 @@ static unsigned char *LOAD_ADDR = NULL;
 
 // Macro to generate kernel filenames based on SoC
 #define SDSTART_KERNEL_FILENAMES(soc) \
+	"thingino_" #soc "_kernel", \
+	NULL  // sentinel value
+
+// Legacy macro for backward compatibility
+#ifdef LEGACY_COMPAT
+#define LEGACY_KERNEL_FILENAMES(soc) \
+	"thingino_" #soc "_kernel", \
 	"factory_" #soc "_kernel", \
 	"factory_" #soc "_ZMC6tiIDQN", \
 	"factory_ZMC6tiIDQN", \
 	NULL  // sentinel value
+#else
+#define LEGACY_KERNEL_FILENAMES(soc) SDSTART_KERNEL_FILENAMES(soc)
+#endif
 
 // Kernel filenames based on SoC
 #ifdef CONFIG_T10
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t10) };
+static const char* kernel_filenames[] = { LEGACY_KERNEL_FILENAMES(t10) };
 #elif defined(CONFIG_T15)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t15) };
+static const char* kernel_filenames[] = { LEGACY_KERNEL_FILENAMES(t15) };
 #elif defined(CONFIG_T20)
-// Special case for T20 to match factory
-static const char* kernel_filenames[] = {
-	"factory_ZMC6tiIDQN",
-	NULL
-};
+static const char* kernel_filenames[] = { LEGACY_KERNEL_FILENAMES(t20) };
 #elif defined(CONFIG_T21)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t21) };
+static const char* kernel_filenames[] = { LEGACY_KERNEL_FILENAMES(t21) };
 #elif defined(CONFIG_T30)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t30) };
+static const char* kernel_filenames[] = { LEGACY_KERNEL_FILENAMES(t30) };
 #elif defined(CONFIG_T31)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t31) };
+static const char* kernel_filenames[] = { LEGACY_KERNEL_FILENAMES(t31) };
 #elif defined(CONFIG_T40)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t40) };
+static const char* kernel_filenames[] = { LEGACY_KERNEL_FILENAMES(t40) };
 #else
 static const char* kernel_filenames[] = { NULL };  // Default case, do not load anything
 #endif
