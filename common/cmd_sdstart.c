@@ -34,32 +34,35 @@ static unsigned char *LOAD_ADDR = NULL;
 // The countdown will only start if a kernel image is found.
 #define SDSTART_DEFAULT_DELAY	1
 
-// Macro to generate kernel filenames based on SoC
-#define SDSTART_KERNEL_FILENAMES(soc) \
+// Macro to conditionally add legacy filenames if LEGACY_COMPAT is defined
+#ifdef LEGACY_COMPAT
+#define OPTIONAL_LEGACY_FILENAMES(soc) \
 	"factory_" #soc "_kernel", \
 	"factory_" #soc "_ZMC6tiIDQN", \
-	"factory_ZMC6tiIDQN", \
+	"factory_ZMC6tiIDQN",
+#else
+#define OPTIONAL_LEGACY_FILENAMES(soc)
+#endif
+
+// Unified macro to generate kernel filenames based on SoC with optional legacy support
+#define KERNEL_FILENAMES(soc) \
+	"thingino_" #soc "_kernel", \
+	OPTIONAL_LEGACY_FILENAMES(soc) \
 	NULL  // sentinel value
 
-// Kernel filenames based on SoC
+// Kernel filenames based on SoC configuration
 #ifdef CONFIG_T10
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t10) };
+static const char* kernel_filenames[] = { KERNEL_FILENAMES(t10) };
 #elif defined(CONFIG_T15)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t15) };
+static const char* kernel_filenames[] = { KERNEL_FILENAMES(t15) };
 #elif defined(CONFIG_T20)
-// Special case for T20 to match factory
-static const char* kernel_filenames[] = {
-	"factory_ZMC6tiIDQN",
-	NULL
-};
+static const char* kernel_filenames[] = { KERNEL_FILENAMES(t20) };
 #elif defined(CONFIG_T21)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t21) };
+static const char* kernel_filenames[] = { KERNEL_FILENAMES(t21) };
 #elif defined(CONFIG_T30)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t30) };
+static const char* kernel_filenames[] = { KERNEL_FILENAMES(t30) };
 #elif defined(CONFIG_T31)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t31) };
-#elif defined(CONFIG_T40)
-static const char* kernel_filenames[] = { SDSTART_KERNEL_FILENAMES(t40) };
+static const char* kernel_filenames[] = { KERNEL_FILENAMES(t31) };
 #else
 static const char* kernel_filenames[] = { NULL };  // Default case, do not load anything
 #endif
