@@ -45,8 +45,11 @@ static unsigned char *LOAD_ADDR = NULL;
 #endif
 
 // Unified macro to generate kernel filenames based on SoC with optional legacy support
+// Needs a minimum of 3 entries, or fails on SPL patched builds
 #define KERNEL_FILENAMES(soc) \
 	"thingino_" #soc "_kernel", \
+	"thingino_" #soc "_kernel_1", \
+	"thingino_" #soc "_kernel_2", \
 	OPTIONAL_LEGACY_FILENAMES(soc) \
 	NULL  // sentinel value
 
