@@ -594,7 +594,7 @@ if (disable_sd != NULL && strcmp(disable_sd, "false") == 0) {
 	if (!run_command("fatload mmc 0 ${baseaddr} boot.scr", 0)) {
 		printf("MMC:   Loading boot.scr\n");
 		run_command(BOOT_SCRIPT, 0);
-		run_command("source", 0);
+		run_command("source ${baseaddr}", 0);
 	}
 
 	if (!run_command("fatload mmc 0 ${baseaddr} uEnv.txt", 0)) {
