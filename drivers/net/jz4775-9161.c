@@ -793,6 +793,7 @@ int jz_net_initialize(bd_t *bis)
 		}
 	}
 #else
+	udelay(100000);
 	phy_id = check_phy_config(gmacdev);
 	if (phy_id < 0) {
 		printf("ETH:   Error: Invalid PHY configuration.\n");
