@@ -91,7 +91,7 @@
 #define SOC_VAR T30L
 #elif defined(CONFIG_T30)
 #define SOC_VAR T30N
-#elif defined(CONFIG_T31) && defined(CONFIG_DDR2_128M) && defined(CONFIG_T31A)
+#elif defined(CONFIG_T31) && defined(CONFIG_DDR3_128M) && defined(CONFIG_T31A)
 #define SOC_VAR T31A
 #elif defined(CONFIG_T31) && defined(CONFIG_DDR2_128M) && defined(CONFIG_T31AL)
 #define SOC_VAR T31AL
