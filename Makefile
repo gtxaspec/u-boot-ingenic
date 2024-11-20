@@ -513,7 +513,7 @@ $(obj)u-boot-with-spl.bin: $(obj)spl/u-boot-spl.bin $(obj)u-boot.bin
 			-I binary -O binary $< $(obj)spl/u-boot-spl-pad.bin
 ifdef CONFIG_T31LC
 ifdef CONFIG_SPL_SFC_SUPPORT
-		cp $(TOPDIR)/firmware/t31lc_sfcnor.bin $(obj)spl/u-boot-spl-pad.bin
+		cp $(TOPDIR)/spl/binary/t31lc_sfcnor.bin $(obj)spl/u-boot-spl-pad.bin
 else
 		$(error "T31LC unsupported option")
 endif
@@ -521,7 +521,11 @@ endif
 
 ifdef CONFIG_XIAOMI_SPL
 ifdef CONFIG_SPL_SFC_SUPPORT
-				cp $(TOPDIR)/firmware/t31_xiaomi_sfcnor.bin $(obj)spl/u-boot-spl-pad.bin
+ifdef CONFIG_XIAOMI_SPL_ALT
+				cp $(TOPDIR)/spl/binary/t31_xiaomi_sfcnor_2.bin $(obj)spl/u-boot-spl-pad.bin
+else
+				cp $(TOPDIR)/spl/binary/t31_xiaomi_sfcnor.bin $(obj)spl/u-boot-spl-pad.bin
+endif
 else
 				$(error "T31_XIOAMI unsupported option")
 endif

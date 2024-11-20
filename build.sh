@@ -51,6 +51,7 @@ pick_a_soc() {
 		"isvp_t31_msc0_lite"		"Ingenic T31L  MSC0"	\
 		"isvp_t31_msc0_ddr128M"		"Ingenic T31X  MSC0"	\
 		"isvp_t31_xiaomi_sfcnor"	"Ingenic T31 XIAOMI SPL"	\
+		"isvp_t31_xiaomi_alt_sfcnor"	"Ingenic T31 XIAOMI SPL-ALT"	\
 		--notags 3>&1 1>&2 2>&3)
 }
 
