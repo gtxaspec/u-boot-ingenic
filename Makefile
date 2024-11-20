@@ -827,7 +827,7 @@ $(VERSION_FILE):
 		@( localvers='$(shell $(TOPDIR)/tools/setlocalversion $(TOPDIR))' ; \
 		   printf '#define PLAIN_VERSION "%s%s"\n' \
 			"$(U_BOOT_VERSION)" "$${localvers}" ; \
-		   printf '#define U_BOOT_VERSION "Ingenic U-Boot Flex %s%s"\n' \
+		   printf '#define U_BOOT_VERSION "Thingino U-Boot for Ingenic %s%s"\n' \
 			"$(U_BOOT_VERSION)" "$${localvers}" ; \
 		) > $@.tmp
 		@( printf '#define CC_VERSION_STRING "%s"\n' \
