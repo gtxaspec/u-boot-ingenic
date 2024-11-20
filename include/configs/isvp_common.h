@@ -204,18 +204,21 @@
 #elif defined(CONFIG_T30)
 #define APLL_900M
 #define DDR_500M
-#elif defined(CONFIG_T31) && defined(CONFIG_LITE_VERSION)
-#define APLL_1008M
-#define DDR_500M
-#elif defined(CONFIG_T31) && defined(CONFIG_DDR2_128M)
-#define APLL_1392M
-#define DDR_600M
-#elif defined(CONFIG_T31) && defined(CONFIG_T31A)
-#define APLL_1392M
-#define DDR_750M
 #elif defined(CONFIG_T31) && defined(CONFIG_T31LC)
 #define APLL_1104M
 #define DDR_500M
+#elif defined(CONFIG_T31) && defined(CONFIG_LITE_VERSION)
+#define APLL_1008M
+#define DDR_500M
+#elif defined(CONFIG_T31) && defined(CONFIG_T31A)
+#define APLL_1500M
+#define DDR_750M
+#elif defined(CONFIG_T31) && defined(CONFIG_T31AL)
+#define APLL_1500M
+#define DDR_750M
+#elif defined(CONFIG_T31) && defined(CONFIG_DDR2_128M)
+#define APLL_1392M
+#define DDR_600M
 #elif defined(CONFIG_T31)
 #define APLL_1400M
 #define DDR_500M
