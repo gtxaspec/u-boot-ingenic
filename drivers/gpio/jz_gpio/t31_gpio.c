@@ -17,7 +17,7 @@ static struct jz_gpio_func_def uart_gpio_func[] = {
 
 static struct jz_gpio_func_def gpio_func[] = {
 #if defined(CONFIG_JZ_MMC_MSC0_PB)
-	{.port = GPIO_PORT_B, .func = GPIO_FUNC_0, .pins = (0x3 << 4 | 0xf << 0)},
+	{.port = GPIO_PORT_B, .func = GPIO_FUNC_0, .pins = (0x3 << 4 | 0xf << 0), .driver_strength = 8},
 #endif
 #if defined(CONFIG_JZ_MMC_MSC1_PB)
 	{.port = GPIO_PORT_B, .func = GPIO_FUNC_1, .pins = (0x3 << 13|0xf << 8)},
