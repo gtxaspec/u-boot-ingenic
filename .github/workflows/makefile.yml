@@ -27,6 +27,7 @@ env:
   TERM: linux
   TG_TOKEN: ${{secrets.TELEGRAM_TOKEN_BOT_THINGINO}}
   TG_CHANNEL: ${{secrets.TELEGRAM_CHANNEL_THINGINO_BUILD}}
+  TG_TOPIC: ${{secrets.TELEGRAM_TOPIC_THINGINO_BUILD}}
   TG_CHANNEL_SCRATCH: ${{secrets.TELEGRAM_CHANNEL_THINGINO_SCRATCH}}
   TG_OPTIONS: -s
 
@@ -46,6 +47,11 @@ jobs:
           echo "TG_DISABLED=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_ENV
           echo "tg_disabled=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_OUTPUT
 
+      - name: Setup Notification Channel
+        if: ${{ github.event.inputs.tg_scratch == 'true' }}
+        run: |
+          echo "TG_TOPIC=" >> $GITHUB_ENV
+
       - name: Send build start notifcation
         if: env.TG_DISABLED == 'false'
         run: |
@@ -55,7 +61,7 @@ jobs:
           TG_MSG="u\\-boot\\-ingenic build started:\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
           TG_ICON="\xF0\x9F\x9A\xA6 GitHub Actions"
           TG_HEADER=$(echo -e ${TG_MSG}${TG_ICON})
-          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F parse_mode=MarkdownV2 -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
+          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F parse_mode=MarkdownV2 -F message_thread_id=${TG_TOPIC} -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
           echo Telegram response: ${HTTP}
 
   generate-matrix:
@@ -179,7 +185,7 @@ jobs:
           fi
             TG_MSG="Commit: [${GIT_HASH}](https://github.com/${GITHUB_REPOSITORY}/commit/${GIT_HASH})\nBranch: [${GIT_BRANCH}](https://github.com/${GITHUB_REPOSITORY}/tree/${GIT_BRANCH})\nTag: [${TAG_NAME}](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME})\nTime: ${TIME}\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
             TG_HEADER=$(echo -e "${TG_MSG}\xE2\x9C\x85 GitHub Actions")
-            HTTP_FULL=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendDocument -F parse_mode=MarkdownV2 -F chat_id=${TG_CHANNEL} -F caption="${TG_HEADER}" -F document=@${UBOOTFW} -F disable_web_page_preview=true)
+            HTTP_FULL=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendDocument -F parse_mode=MarkdownV2 -F message_thread_id=${TG_TOPIC} -F chat_id=${TG_CHANNEL} -F caption="${TG_HEADER}" -F document=@${UBOOTFW} -F disable_web_page_preview=true)
             echo "Telegram response Full Firmware: $HTTP_FULL"
 
       - name: Send error
@@ -193,7 +199,7 @@ jobs:
           TG_MSG="Commit: ${GIT_HASH}\nBranch: ${GIT_BRANCH}\nTag: ${TAG_NAME}\nhttps://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\n"
           TG_ICON="\xE2\x9A\xA0 GitHub Actions"
           TG_HEADER=$(echo -e ${TG_WARN}${TG_MSG}${TG_ICON})
-          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
+          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F message_thread_id=${TG_TOPIC} -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
           echo Telegram response: ${HTTP}
   
   notify-completion:
@@ -219,5 +225,5 @@ jobs:
           TG_MSG="u\\-boot\\-ingenic build completed:\nTotal elapsed time: ${ELAPSED_MIN}m ${ELAPSED_SEC}s\nJob: [${{ github.run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n"
           TG_ICON="\xF0\x9F\x9A\xA9 GitHub Actions"
           TG_HEADER=$(echo -e ${TG_MSG}${TG_ICON})
-          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F parse_mode=MarkdownV2 -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
+          HTTP=$(curl ${TG_OPTIONS} -H "Content-Type: multipart/form-data" -X POST https://api.telegram.org/bot${TG_TOKEN}/sendMessage -F parse_mode=MarkdownV2 -F message_thread_id=${TG_TOPIC} -F chat_id=${TG_CHANNEL} -F text="${TG_HEADER}" -F disable_web_page_preview=true)
           echo Telegram response: ${HTTP}
