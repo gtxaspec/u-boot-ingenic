@@ -72,7 +72,7 @@ static const char* get_soc_name(void) {
 
 int do_socinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
 	const char *soc_name = get_soc_name();
-	printf("SOC Name: %s\n", soc_name);
+	printf("SOC Model: %s\n", soc_name);
 	return CMD_RET_SUCCESS;
 }
 
