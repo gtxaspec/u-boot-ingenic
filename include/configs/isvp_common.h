@@ -214,8 +214,8 @@
 #define APLL_1500M
 #define DDR_750M
 #elif defined(CONFIG_T31) && defined(CONFIG_T31AL)
-#define APLL_1500M
-#define DDR_750M
+#define APLL_1392M
+#define DDR_600M
 #elif defined(CONFIG_T31) && defined(CONFIG_DDR2_128M)
 #define APLL_1392M
 #define DDR_600M
