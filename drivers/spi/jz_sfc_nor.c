@@ -1056,10 +1056,10 @@ int sfc_nor_init(unsigned int idcode)
 	int i;
 
 	if (idcode == 0 || idcode == 0xff) {
-		printf("JZ SFC: Invalid ID: %x\n", idcode);
+		printf("JZSFC: Invalid ID: %x\n", idcode);
 		return -1;
 	}
-	printf("JZ SFC: Flash chip ID: %x\n", idcode);
+	printf("JZSFC: Flash chip ID: %x\n", idcode);
 
 	for (i = 0; i < ARRAY_SIZE(jz_spi_support_table); i++) {
 		gparams = jz_spi_support_table[i];
@@ -1072,14 +1072,14 @@ int sfc_nor_init(unsigned int idcode)
 	}
 
 	if (sfc_quad_mode == 0) {
-		printf("JZ SFC: Unsupported ID, but still maybe good for flashing\n");
+		printf("JZSFC: Unsupported ID, but still maybe good for flashing\n");
 		// compute size from id
 		// 0x17 is 8MB, 0x18 is 16MB, 0x19 is 32MB
 		gparams.size = (8 << ((idcode & 0xff) - 0x17)) * 1024 * 1024;
-		printf("JZ SFC: Unsupported ID, but still maybe good for flashing, size set to %d\n", gparams.size);
+		printf("JZSFC: Unsupported ID, but still maybe good for flashing, size set to %d\n", gparams.size);
 		return 1;
 	} else {
-		printf("JZ SFC: Quad-mode Unsupported ID %x\n", idcode);
+		printf("JZSFC: Quad-mode Unsupported ID %x\n", idcode);
 		return -1;
 	}
 }

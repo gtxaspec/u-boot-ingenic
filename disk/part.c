@@ -414,14 +414,14 @@ int get_device(const char *ifname, const char *dev_str,
 
 	dev = simple_strtoul(dev_str, &ep, 16);
 	if (*ep) {
-		printf("** Bad device specification %s %s **\n",
+		printf("DSK:   Bad device specification %s %s\n",
 		       ifname, dev_str);
 		return -1;
 	}
 
 	*dev_desc = get_dev(ifname, dev);
 	if (!(*dev_desc) || ((*dev_desc)->type == DEV_TYPE_UNKNOWN)) {
-		printf("** Bad device %s %s **\n", ifname, dev_str);
+		printf("DSK:   Bad device %s %s\n", ifname, dev_str);
 		return -1;
 	}
 
@@ -561,7 +561,7 @@ int get_device_and_partition(const char *ifname, const char *dev_part_str,
 	if (part != PART_AUTO) {
 		ret = get_partition_info(*dev_desc, part, info);
 		if (ret) {
-			printf("** Invalid partition %d **\n", part);
+			printf("DSK:   Invalid partition %d\n", part);
 			goto cleanup;
 		}
 	} else {
@@ -603,7 +603,7 @@ int get_device_and_partition(const char *ifname, const char *dev_part_str,
 			if (p == MAX_SEARCH_PARTITIONS + 1)
 				*info = tmpinfo;
 		} else {
-			printf("** No valid partitions found **\n");
+			printf("DSK:   No valid partitions found\n");
 			ret = -1;
 			goto cleanup;
 		}

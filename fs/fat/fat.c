@@ -1236,7 +1236,7 @@ int file_fat_ls(const char *dir)
 long file_fat_read_at(const char *filename, unsigned long pos, void *buffer,
 		      unsigned long maxsize)
 {
-	printf("reading %s\n", filename);
+	printf("FAT:   loading %s\n", filename);
 	return do_fat_read_at(filename, pos, buffer, maxsize, LS_NO);
 }
 
@@ -1251,7 +1251,7 @@ int fat_read_file(const char *filename, void *buf, int offset, int len)
 
 	len_read = file_fat_read_at(filename, offset, buf, len);
 	if (len_read == -1) {
-		printf("** Unable to read file %s **\n", filename);
+		printf("FAT:   Unable to read file %s **\n", filename);
 		return -1;
 	}
 
