@@ -549,7 +549,7 @@ extern void board_usb_init(void);
 	/* Check if disable_eth is set to "true" */
 	if (disable_eth && strcmp(disable_eth, "true") == 0) {
 		/* disable_eth is true, so skip network initialization */
-		printf("Net:   Network disabled\n");
+		printf("Net:   Networking disabled (U-Boot)\n");
 		/* Handle GPIO settings since network init is skipped */
 		handle_gpio_settings("gpio_default_net");
 	} else {
