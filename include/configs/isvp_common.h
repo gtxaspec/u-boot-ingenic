@@ -581,7 +581,7 @@
 #define CONFIG_NET_PHY_TYPE		PHY_TYPE_IP101G
 #endif
 
-#if defined(CONFIG_T23)
+#if defined(CONFIG_T23) || defined(CONFIG_MOTORCOMM_YTXXXX)
 #define CONFIG_GMAC_PHY_RATE     25000000
 #else
 #define CONFIG_GMAC_PHY_RATE     50000000
