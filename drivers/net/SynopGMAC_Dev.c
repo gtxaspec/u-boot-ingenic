@@ -1115,7 +1115,7 @@ s32 synopGMAC_search_phy (synopGMACdevice * gmacdev) {
 			}
 			printf("ETH:   Found PHY %d:0x%x-0x%x\n", phy_id, id1, id2);
 			if ((0x0 == id1) && ((0x128 == id2) || (0x118 == id2))) {
-#if !defined(CONFIG_MOTORCOMM_YTXXXX)				
+#if !defined(CONFIG_MOTORCOMM_YT8512)				
 				status = synopGMAC_write_phy_reg((u32 *)gmacdev->MacBase, 0, 0x1e, 0x50);
 				status = synopGMAC_read_phy_reg((u32 *)gmacdev->MacBase, 0, 0x1f, &data);
 				/* bit6: clk devide to 25M */
