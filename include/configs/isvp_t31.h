@@ -199,9 +199,16 @@
  * 25 and 26 shall be set to only be set to input if
  * GMAC doesn't exist or is disabled.
  */
-
+#if defined(CONFIG_XIAOMI_SPL)
+#define CONFIG_GPIO_SETTINGS \
+"gpio_button=51i\0" \
+"gpio_mmc_power=54o\0" \
+"gpio_default=25ID 26IDU\0" \
+"gpio_default_net=39o\0"
+#else
 #define CONFIG_GPIO_SETTINGS \
 "gpio_default=25ID 26IDU\0" \
 "gpio_default_net=39o\0"
+#endif
 
 #endif /*__CONFIG_ISVP_T31_H__*/
