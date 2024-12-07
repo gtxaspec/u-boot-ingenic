@@ -31,7 +31,9 @@ pick_a_soc() {
 		"isvp_t21_sfcnor"		"Ingenic T21N"		\
 		"isvp_t21_msc0"			"Ingenic T21N  MSC0"	\
 		"isvp_t23n_sfcnor"		"Ingenic T23N"		\
+		"isvp_t23n_sfcnor_mmc1bit"	"Ingenic T23N 1BIT MMC"	\
 		"isvp_t23n_msc0"		"Ingenic T23N  MSC0"	\
+		"isvp_t23n_msc0_mmc1bit"	"Ingenic T23N  MSC0 1BIT MMC" \
 		"isvp_t30_sfcnor_lite"		"Ingenic T30L"		\
 		"isvp_t30_sfcnor"		"Ingenic T30N"		\
 		"isvp_t30_sfcnor_ddr128M"	"Ingenic T30X"		\
