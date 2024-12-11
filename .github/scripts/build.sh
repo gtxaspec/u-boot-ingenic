@@ -26,7 +26,6 @@ cfg[t30n]="isvp_t30_sfcnor"
 cfg[t30l]="isvp_t30_sfcnor_lite"
 cfg[t30x]="isvp_t30_sfcnor_ddr128M"
 cfg[t30a]="isvp_t30a_sfcnor_ddr128M"
-cfg[t30a1]="isvp_t30a1_sfcnor_ddr128M"
 cfg[t30n_msc0]="isvp_t30_msc0"
 
 cfg[t31n]="isvp_t31_sfcnor"
