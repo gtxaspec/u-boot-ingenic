@@ -33,7 +33,7 @@ env:
 
 jobs:
   notify-begin:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       start_time: ${{ steps.set_output.outputs.time }}
       tg_disabled: ${{ steps.set_env.outputs.tg_disabled }}
@@ -65,7 +65,7 @@ jobs:
           echo Telegram response: ${HTTP}
 
   generate-matrix:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -93,7 +93,7 @@ jobs:
   build:
     name: ${{ matrix.u-boot-version }}
     needs: [generate-matrix, notify-begin]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: 
       image: debian:bookworm
     strategy:
@@ -171,7 +171,7 @@ jobs:
 
       - name: Upload ${{ matrix.u-boot-version }}
         if: github.event_name != 'pull_request'
-        uses: softprops/action-gh-release@master
+        uses: softprops/action-gh-release@v2.1.0
         with:
           tag_name: ${{ env.TAG_NAME }}
           files: ${{ env.UBOOTFW }}
@@ -204,7 +204,7 @@ jobs:
   
   notify-completion:
     needs: [build, notify-begin]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: always()
     steps:
       - name: Setup Environment
