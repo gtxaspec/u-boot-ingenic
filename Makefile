@@ -843,7 +843,7 @@ $(VERSION_FILE):
 $(TIMESTAMP_FILE):
 		@mkdir -p $(dir $(TIMESTAMP_FILE))
 		@LC_ALL=C date +'#define U_BOOT_DATE "%b %d %C%y"' > $@.tmp
-		@LC_ALL=C date +'#define U_BOOT_TIME "%T"' >> $@.tmp
+		@LC_ALL=C date +'#define U_BOOT_TIME "%T %Z"' >> $@.tmp
 		@cmp -s $@ $@.tmp && rm -f $@.tmp || mv -f $@.tmp $@
 
 easylogo env gdb:
