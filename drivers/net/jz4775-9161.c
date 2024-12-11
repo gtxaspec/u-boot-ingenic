@@ -542,7 +542,7 @@ int jz_net_initialize(bd_t *bis)
 	*(volatile unsigned int *)(0xb0011048) = 1<<13 | 1 << 14;
 #endif
 #else /* other PHY type */
-	clk_set_rate(MACPHY,50000000);
+	clk_set_rate(MACPHY, CONFIG_GMAC_PHY_RATE);
 	udelay(50000);
 #endif /*  PHY_TYPE_OMNI */
 
