@@ -30,6 +30,7 @@ env:
   TG_TOPIC: ${{secrets.TELEGRAM_TOPIC_THINGINO_BUILD}}
   TG_CHANNEL_SCRATCH: ${{secrets.TELEGRAM_CHANNEL_THINGINO_SCRATCH}}
   TG_OPTIONS: -s
+  TZ: America/Los_Angeles
 
 jobs:
   notify-begin:
@@ -38,6 +39,10 @@ jobs:
       start_time: ${{ steps.set_output.outputs.time }}
       tg_disabled: ${{ steps.set_env.outputs.tg_disabled }}
     steps:
+      - name: Set timezone
+        run: |
+          sudo timedatectl set-timezone ${{ env.TZ }}
+
       - name: Save workflow start time
         id: set_output
         run: echo "time=$(date +%s)" >> $GITHUB_OUTPUT
@@ -69,6 +74,10 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
+      - name: Set timezone
+        run: |
+          sudo timedatectl set-timezone ${{ env.TZ }}
+
       - name: setup env test
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
@@ -120,8 +129,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get install -y --no-install-recommends --no-install-suggests build-essential bc ccache cpio curl ca-certificates file git make gawk lzop procps rsync u-boot-tools unzip wget
+          apt-get install -y --no-install-recommends --no-install-suggests build-essential bc ccache cpio curl ca-certificates file git make gawk lzop procps rsync tzdata u-boot-tools unzip wget
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Set timezone
+        run: |
+          ln -sf /usr/share/zoneinfo/${{ env.TZ }} /etc/localtime
+          echo ${{ env.TZ }} > /etc/timezone
+          DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive tzdata
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -207,6 +222,10 @@ jobs:
     runs-on: ubuntu-24.04
     if: always()
     steps:
+      - name: Set timezone
+        run: |
+          sudo timedatectl set-timezone ${{ env.TZ }}
+
       - name: Setup Environment
         run: |
           echo "TG_DISABLED=${{ github.event.inputs.tg_disabled || 'false' }}" >> $GITHUB_ENV
