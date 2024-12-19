@@ -227,7 +227,7 @@ jobs:
           TIME=$(date -d @${SECONDS} +%M:%S)
           echo "TIME=${TIME}" >> ${GITHUB_ENV}
 
-      - name: Generate debug dummy firmware for workflow testing
+      - name: Generate debug dummy uboot for workflow testing
         if: ${{ github.event.inputs.debug_enabled == 'true' }}
         run: |
           mkdir -p ./uboot_build
@@ -372,7 +372,7 @@ jobs:
             echo "Release not found, skipping latest release update"
           fi
 
-      - name: Send nofity completion summary
+      - name: Send notify completion summary
         if: ${{ env.TG_DISABLED == 'false' }}
         run: |
           if [[ "${{ github.event.inputs.tg_scratch }}" == 'true' ]]; then
