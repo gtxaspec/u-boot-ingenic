@@ -82,7 +82,7 @@ jobs:
           TAG_NAME="${{ env.TAG_NAME }}"
           if ! gh release view "$TAG_NAME" --repo "${{ github.repository }}" &>/dev/null; then
             echo "Release $TAG_NAME does not exist. Creating pre-release."
-            gh release create "$TAG_NAME" --repo "${{ github.repository }}" --title "$TAG_NAME" --notes "pre-release: \`\`\`$TAG_NAME\`\`\` is currently being built, please wait..." --prerelease  
+            gh release create "$TAG_NAME" --repo "${{ github.repository }}" --title "$TAG_NAME" --notes "pre-release: \`\`\`$TAG_NAME\`\`\` is currently being built, please wait..." --prerelease
             else
             echo "Release $TAG_NAME already exists."
           fi
@@ -165,7 +165,7 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          apt-get install -y --no-install-recommends --no-install-suggests 7zip build-essential bc ccache cpio curl ca-certificates file git gh jq make gawk lzop procps rsync tzdata u-boot-tools unzip wget
+          apt-get install -y --no-install-recommends --no-install-suggests 7zip build-essential bc ccache cpio curl ca-certificates file git gh jq make gawk lzop procps rsync tzdata u-boot-tools unzip
 
       - name: Set timezone
         run: |
@@ -203,27 +203,36 @@ jobs:
 
       - name: Setup cache directories
         run: |
-          mkdir -p ~/.ccache
+          mkdir -p /github/home/.ccache
 
       - name: Restore build cache
         uses: actions/cache@v4
         if: always()
         with:
-          path: ~/.ccache
-          key: ${{ runner.os }}-ccache-${{ github.sha }}
+          path: /github/home/.ccache
+          key: ${{ runner.os }}-ccache-${{ matrix.u-boot-version }}-${{ env.CURRENT_YEAR }}-week-${{ env.WEEK_NUMBER }}-${{ github.run_id }}
           restore-keys: |
-            ${{ runner.os }}-ccache-$-
+            ${{ runner.os }}-ccache-${{ matrix.u-boot-version }}-${{ env.CURRENT_YEAR }}-week-${{ env.WEEK_NUMBER }}
+            ${{ runner.os }}-ccache-${{ matrix.u-boot-version }}-${{ env.CURRENT_YEAR }}-week-
+            ${{ runner.os }}-ccache-${{ matrix.u-boot-version }}-
+            ${{ runner.os }}-ccache-shared-v1-${{ env.CURRENT_YEAR }}-week-${{ env.WEEK_NUMBER }}
+            ${{ runner.os }}-ccache-shared-v1-${{ env.CURRENT_YEAR }}-week-
 
       - name: Download toolchain
         run: |
-          wget https://github.com/themactep/thingino-firmware/releases/download/toolchain/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -O ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz
+          curl -L https://github.com/themactep/thingino-firmware/releases/download/toolchain/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -o ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz
           tar -xf ~/thingino-toolchain_xburst1_musl_gcc14-linux-mipsel.tar.gz -C ~/
+          ~/mipsel-thingino-linux-musl_sdk-buildroot/relocate-sdk.sh
 
       - name: u-boot-ingenic Build
         if: ${{ github.event.inputs.debug_enabled != 'true' }}
         shell: bash
         run: |
-          CROSS_COMPILE=~/mipsel-thingino-linux-musl_sdk-buildroot/bin/mipsel-linux- bash build.sh ${{ matrix.u-boot-version }}
+          export CCACHE_DIR=/github/home/.ccache
+          export PATH="/usr/lib/ccache:$PATH"
+          export PATH="/github/home/mipsel-thingino-linux-musl_sdk-buildroot/bin:$PATH"
+          ccache -M 4G
+          CROSS_COMPILE="ccache mipsel-linux-" bash build.sh ${{ matrix.u-boot-version }}
           TIME=$(date -d @${SECONDS} +%M:%S)
           echo "TIME=${TIME}" >> ${GITHUB_ENV}
 
@@ -337,15 +346,17 @@ jobs:
             /repos/${{ github.repository }}/compare/$LAST_RELEASE_TAG...$GIT_HASH \
             -q '.commits | sort_by(.commit.author.date) | reverse | .[] | "\(.sha[0:7]) \(.commit.message | gsub("\n"; " "))"')
 
-          RELEASE_NOTES="### Changes in this release:\n"
-
-          while IFS= read -r commit; do
-            if [ -n "$commit" ]; then
-              RELEASE_NOTES="${RELEASE_NOTES}- ${commit}\n"
-            fi
-          done <<< "$COMMITS"
-
-          echo -e "$RELEASE_NOTES" > release_notes.md
+          if [ -z "$COMMITS" ]; then
+            echo "### No changes, nightly rebuild" > release_notes.md
+          else
+            RELEASE_NOTES="### Changes in this release:\n"
+            while IFS= read -r commit; do
+              if [ -n "$commit" ]; then
+                RELEASE_NOTES="${RELEASE_NOTES}- ${commit}\n"
+              fi
+            done <<< "$COMMITS"
+            echo -e "$RELEASE_NOTES" > release_notes.md
+          fi
           echo "RELEASE_NOTES_FILE=$(pwd)/release_notes.md" >> $GITHUB_ENV
 
       - name: Get release ID and Mark as Latest
